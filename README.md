@@ -211,3 +211,13 @@ All extensions in this repository are MIT licensed.
 ---
 
 Built with ❤️ by Frame.dev and the AgentOS community
+## Links
+- Website: https://frame.dev
+- AgentOS: https://agentos.sh
+- Marketplace: https://vca.chat
+- GitHub: https://github.com/framersai/agentos-extensions
+- npm: https://www.npmjs.com/package/@framersai/agentos-extensions
+## Contributing & Security
+- Contributing: ./\.github/CONTRIBUTING.md
+- Code of Conduct: ./\.github/CODE_OF_CONDUCT.md
+- Security Policy: ./\.github/SECURITY.md
