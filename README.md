@@ -1,9 +1,9 @@
-<!-- BRANDING-LOGOS -->
 <p align="center">
-  <a href="https://agentos.sh"><img src="logos/agentos-primary-no-tagline.svg" alt="AgentOS" height="64" /></a>
-</p>
-<p align="center">
-  <a href="https://frame.dev"><img src="logos/frame-wordmark.svg" alt="Frame" height="28" /></a>
+  <a href="https://frame.dev" target="_blank" rel="noopener">
+    <img src="https://avatars.githubusercontent.com/u/184314983?s=400&u=02bc60d3f02d586a9ed526e394162651192670c1&v=4" alt="Frame.dev" width="120" style="border-radius: 12px;">
+  </a>
+  <br>
+  <small>by <a href="https://frame.dev" target="_blank" rel="noopener">Frame.dev</a></small>
 </p>
 
 # AgentOS Extensions
@@ -224,7 +224,7 @@ Built with ❤️ by Frame.dev and the AgentOS community
 - AgentOS: https://agentos.sh
 - Marketplace: https://vca.chat
 - GitHub: https://github.com/framersai/agentos-extensions
-- npm: https://www.npmjs.com/package/@framersai/agentos-extensions
+- npm: https://www.npmjs.com/package/@framers/agentos-extensions
 ## Contributing & Security
 - Contributing: ./\.github/CONTRIBUTING.md
 - Code of Conduct: ./\.github/CODE_OF_CONDUCT.md
