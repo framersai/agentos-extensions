@@ -1,0 +1,166 @@
+name: Release & Publish
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'packages/ext-*/package.json'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to release (e.g., ext-search)'
+        required: false
+        type: string
+
+jobs:
+  detect-releases:
+    runs-on: ubuntu-latest
+    outputs:
+      releases: ${{ steps.detect.outputs.releases }}
+      matrix: ${{ steps.detect.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Detect packages to release
+        id: detect
+        run: |
+          RELEASES=""
+          
+          # Manual trigger for specific package
+          if [ -n "${{ github.event.inputs.package }}" ]; then
+            RELEASES="${{ github.event.inputs.package }}"
+          else
+            # Check for version bumps in changed files
+            for pkg in packages/ext-*/package.json; do
+              DIR=$(dirname $pkg)
+              PKG_NAME=$(basename $DIR)
+              
+              # Check if version changed
+              if git diff HEAD~1 HEAD -- "$pkg" | grep -q '"version"'; then
+                RELEASES="$RELEASES $PKG_NAME"
+              fi
+            done
+          fi
+          
+          # Convert to JSON array for matrix
+          MATRIX_JSON=$(echo $RELEASES | tr ' ' '\n' | grep -v '^$' | jq -R -s -c 'split("\n")[:-1]')
+          echo "releases=$RELEASES" >> $GITHUB_OUTPUT
+          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+          
+          echo "Packages to release: $RELEASES"
+
+  test-before-release:
+    needs: detect-releases
+    if: needs.detect-releases.outputs.releases != ''
+    uses: ./.github/workflows/test-package.yml
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.detect-releases.outputs.matrix) }}
+    with:
+      package: ${{ matrix.package }}
+
+  publish-npm:
+    needs: [detect-releases, test-before-release]
+    if: needs.detect-releases.outputs.releases != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-releases.outputs.matrix) }}
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Get package info
+        id: pkg-info
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Publishing $NAME@$VERSION"
+      
+      - name: Install and build
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          npm ci || npm install
+          npm run build
+      
+      - name: Check if version exists
+        id: check-version
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          if npm view ${{ steps.pkg-info.outputs.name }}@${{ steps.pkg-info.outputs.version }} > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Version already published"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Version not yet published"
+          fi
+      
+      - name: Publish to NPM
+        if: steps.check-version.outputs.exists == 'false'
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Create GitHub Release
+        if: steps.check-version.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.pkg-info.outputs.name }}@${{ steps.pkg-info.outputs.version }}
+          name: ${{ steps.pkg-info.outputs.name }} v${{ steps.pkg-info.outputs.version }}
+          body: |
+            ## 📦 ${{ steps.pkg-info.outputs.name }} v${{ steps.pkg-info.outputs.version }}
+            
+            ### Installation
+            ```bash
+            npm install ${{ steps.pkg-info.outputs.name }}@${{ steps.pkg-info.outputs.version }}
+            ```
+            
+            ### Changes
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/master/packages/${{ matrix.package }}/CHANGELOG.md)
+            
+            ### NPM Package
+            https://www.npmjs.com/package/${{ steps.pkg-info.outputs.name }}/v/${{ steps.pkg-info.outputs.version }}
+          draft: false
+          prerelease: false
+
+  update-registry:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update registry.json
+        run: |
+          # Update the main registry with published packages
+          node scripts/update-registry.js || echo "Registry update skipped"
+      
+      - name: Commit registry updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if git diff --quiet; then
+            echo "No registry changes"
+          else
+            git add registry.json
+            git commit -m "chore: update extension registry [skip ci]"
+            git push
+          fi
