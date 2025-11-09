@@ -85,7 +85,7 @@ npm install @framers/agentos-productivity-tasks
 ### Basic Usage
 
 ```typescript
-import { AgentOS } from '@agentos/core';
+import { AgentOS } from '@framers/agentos';
 import webSearchExtension from '@framers/agentos-research-web-search';
 import telegramExtension from '@framers/agentos-integrations-telegram';
 
@@ -213,7 +213,7 @@ cp -r ../templates/basic-tool community/category/my-extension
 
 3. **Implement tools**:
 ```typescript
-import { ITool } from '@agentos/core';
+import { ITool } from '@framers/agentos';
 
 export class MyTool implements ITool {
   // Implementation

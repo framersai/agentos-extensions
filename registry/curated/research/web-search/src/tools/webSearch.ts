@@ -1,4 +1,4 @@
-import { ITool } from '@agentos/core';
+import { ITool } from '@framers/agentos';
 import { SearchProviderService } from '../services/searchProvider';
 
 /**

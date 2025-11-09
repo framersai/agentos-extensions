@@ -33,7 +33,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@agentos/core': path.resolve(__dirname, '../../packages/agentos/src')
+      '@framers/agentos': path.resolve(__dirname, '../../packages/agentos/src')
     }
   }
 });

@@ -8,7 +8,7 @@ import type {
   ToolExecutionContext, 
   ToolExecutionResult,
   JSONSchemaObject 
-} from '@agentos/core';
+} from '@framers/agentos';
 import type { ExampleToolInput, ExampleToolOutput } from '../types';
 
 export class ExampleTool implements ITool<ExampleToolInput, ExampleToolOutput> {

@@ -171,7 +171,7 @@ npm test
 
 ```typescript
 // test-integration.ts
-import { AgentOS } from '@agentos/core';
+import { AgentOS } from '@framers/agentos';
 import myExtension from './src/index';
 
 const agentos = new AgentOS();

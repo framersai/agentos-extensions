@@ -1,5 +1,5 @@
 {
-  "name": "@framersai/agentos-extensions",
+  "name": "@framers/agentos-extensions",
   "version": "1.0.0",
   "description": "Community registry of tools, workflows, and integrations for AgentOS",
   "type": "module",

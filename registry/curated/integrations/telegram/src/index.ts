@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import { ExtensionContext, ExtensionPack } from '@agentos/core';
+import { ExtensionContext, ExtensionPack } from '@framers/agentos';
 import { SendMessageTool } from './tools/sendMessage';
 import { SendPhotoTool } from './tools/sendPhoto';
 import { SendDocumentTool } from './tools/sendDocument';

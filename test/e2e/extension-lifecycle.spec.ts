@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { ExtensionManager, ExtensionRegistry } from '@agentos/core';
+import { ExtensionManager, ExtensionRegistry } from '@framers/agentos';
 import { createExtensionPack as createWebSearchPack } from '../../curated/research/web-search/src';
 
 describe('E2E: Extension Lifecycle', () => {

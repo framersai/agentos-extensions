@@ -3,7 +3,7 @@
  * @description Creates and exports the extension pack for AgentOS
  */
 
-import type { ExtensionPack, ExtensionPackContext } from '@agentos/core';
+import type { ExtensionPack, ExtensionPackContext } from '@framers/agentos';
 import { ExampleTool } from './tools/exampleTool';
 
 /**

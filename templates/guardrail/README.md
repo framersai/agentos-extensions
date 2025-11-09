@@ -29,7 +29,7 @@ src/
 
 ```typescript
 // src/guardrails/contentFilter.ts
-import { IGuardrailService } from '@agentos/core';
+import { IGuardrailService } from '@framers/agentos';
 
 export class ContentFilterGuardrail implements IGuardrailService {
   async evaluateInput(input: any): Promise<GuardrailResult> {

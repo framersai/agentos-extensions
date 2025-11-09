@@ -38,14 +38,14 @@
     "README.md"
   ],
   "peerDependencies": {
-    "@agentos/core": "^2.0.0"
+    "@framers/agentos": "^2.0.0"
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.64.0",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {
-    "@agentos/core": "^2.0.0",
+    "@framers/agentos": "^2.0.0",
     "@types/node": "^20.0.0",
     "@types/node-telegram-bot-api": "^0.64.0",
     "typescript": "^5.0.0",

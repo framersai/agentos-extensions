@@ -1,5 +1,5 @@
 {
-  "name": "@framersai/ext-web-search",
+  "name": "@framers/ext-web-search",
   "version": "1.0.0",
   "description": "Web search, research aggregation, and fact-checking tools for AgentOS",
   "main": "dist/index.js",
@@ -36,13 +36,13 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@agentos/core": "^0.1.0"
+    "@framers/agentos": "^0.1.0"
   },
   "dependencies": {
     "axios": "^1.7.7"
   },
   "devDependencies": {
-    "@agentos/core": "workspace:*",
+    "@framers/agentos": "workspace:*",
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",

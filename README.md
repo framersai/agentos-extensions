@@ -76,7 +76,7 @@ npm install @framers/agentos-productivity-task-manager
 ```
 
 ```typescript
-import { AgentOS } from '@agentos/core';
+import { AgentOS } from '@framers/agentos';
 import webSearch from '@framers/agentos-research-web-search';
 
 const agentos = new AgentOS();

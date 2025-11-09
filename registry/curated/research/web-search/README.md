@@ -18,7 +18,7 @@ npm install @framers/agentos-ext-search
 ## Quick Start
 
 ```typescript
-import { AgentOS } from '@agentos/core';
+import { AgentOS } from '@framers/agentos';
 import searchExtension from '@framers/agentos-ext-search';
 
 const agentos = new AgentOS();

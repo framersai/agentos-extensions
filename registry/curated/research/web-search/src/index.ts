@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import { ExtensionContext, ExtensionPack } from '@agentos/core';
+import { ExtensionContext, ExtensionPack } from '@framers/agentos';
 import { WebSearchTool } from './tools/webSearch';
 import { ResearchAggregatorTool } from './tools/researchAggregator';
 import { FactCheckTool } from './tools/factCheck';

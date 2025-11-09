@@ -228,7 +228,7 @@ const result = await tool.execute(input, context);
 ## Example: Complete Setup
 
 ```typescript
-import { AgentOS } from '@agentos/core';
+import { AgentOS } from '@framers/agentos';
 import searchExtension from '@framers/agentos-ext-search';
 import weatherExtension from '@framers/agentos-ext-weather';
 

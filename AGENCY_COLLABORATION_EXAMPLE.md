@@ -38,7 +38,7 @@ npm install @framers/agentos-integrations-telegram
 ### 3. Agency Configuration
 
 ```typescript
-import { AgentOS, AgencyRegistry, GMIManager } from '@agentos/core';
+import { AgentOS, AgencyRegistry, GMIManager } from '@framers/agentos';
 import { createExtensionPack as createSearchPack } from '@framers/agentos-research-web-search';
 import { createExtensionPack as createTelegramPack } from '@framers/agentos-integrations-telegram';
 

@@ -1,4 +1,4 @@
-import { ITool, ToolExecutionContext, ToolExecutionResult } from '@agentos/core';
+import { ITool, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
 import { TelegramBotService } from '../services/telegramBot';
 
 /**

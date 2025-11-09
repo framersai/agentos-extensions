@@ -4,7 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ExampleTool } from '../../src/tools/exampleTool';
-import type { ToolExecutionContext } from '@agentos/core';
+import type { ToolExecutionContext } from '@framers/agentos';
 
 describe('ExampleTool', () => {
   let tool: ExampleTool;

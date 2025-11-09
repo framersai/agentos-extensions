@@ -62,7 +62,7 @@ ext-template/
 ## Creating a Tool
 
 ```typescript
-import type { ITool, ToolExecutionContext, ToolExecutionResult } from '@agentos/core';
+import type { ITool, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
 
 export class MyTool implements ITool {
   readonly id = 'com.framers.ext.myext.myTool';
