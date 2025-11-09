@@ -236,6 +236,27 @@ onDeactivate: async (context) => {
 }
 ```
 
+## Secrets & API Keys
+
+Some descriptors depend on external API keys. Declare those requirements so AgentOS (and downstream UIs) can enforce them:
+
+```ts
+const descriptor: ExtensionDescriptor<ITool> = {
+  id: 'com.company.ext.search',
+  kind: EXTENSION_KIND_TOOL,
+  payload: searchTool,
+  requiredSecrets: [{ id: 'openai.apiKey' }],
+  onActivate: (ctx) => {
+    const apiKey = ctx.getSecret?.('openai.apiKey');
+    searchTool.setApiKey(apiKey);
+  },
+};
+```
+
+- The IDs come from `packages/agentos/src/config/extension-secrets.json` (OpenAI, OpenRouter, Anthropic, Serper...).
+- AgentOS skips descriptors whose non-optional secrets are missing.
+- `context.getSecret(secretId)` resolves the configured value at runtime, allowing descriptors to avoid reading process environment variables directly.
+
 ## Best Practices
 
 ### 1. Single Responsibility

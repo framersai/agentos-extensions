@@ -105,6 +105,26 @@ const config: AgentOSConfig = {
 };
 ```
 
+### Secrets & API Keys
+
+When a descriptor needs a credential, declare it and read the value from the lifecycle context:
+
+```ts
+const descriptor = {
+  id: 'example.search',
+  kind: EXTENSION_KIND_TOOL,
+  payload: searchTool,
+  requiredSecrets: [{ id: 'openai.apiKey' }],
+  onActivate: (ctx) => {
+    searchTool.setApiKey(ctx.getSecret?.('openai.apiKey'));
+  },
+};
+```
+
+- Secret IDs correspond to entries in `packages/agentos/src/config/extension-secrets.json`.
+- Hosts can supply the values via environment variables or the AgentOS client UI.
+- Optional secrets can be marked with `optional: true` to allow degraded operation.
+
 ## Priority & Overriding
 
 ### Extension Priority

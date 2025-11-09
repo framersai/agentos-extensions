@@ -19,6 +19,8 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     ...options
   };
 
+  const tool = new ExampleTool(config);
+
   return {
     name: '@framers/agentos-ext-template',
     version: '1.0.0',
@@ -26,9 +28,10 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
       {
         id: 'exampleTool',
         kind: 'tool',
-        payload: new ExampleTool(config),
+        payload: tool,
         priority: 10,
         enableByDefault: true,
+        requiredSecrets: [{ id: 'openai.apiKey' }],
         metadata: {
           category: 'utility',
           requiresApiKey: true,
@@ -37,6 +40,10 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
         source: context.source,
         onActivate: async (ctx) => {
           ctx.logger?.info('[Template Extension] Example tool activated');
+          const secret = ctx.getSecret?.('openai.apiKey');
+          if (secret) {
+            tool.setApiKey(secret);
+          }
         },
         onDeactivate: async (ctx) => {
           ctx.logger?.info('[Template Extension] Example tool deactivated');

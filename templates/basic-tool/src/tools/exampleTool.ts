@@ -23,6 +23,12 @@ export class ExampleTool implements ITool<ExampleToolInput, ExampleToolOutput> {
   constructor(config: Record<string, any> = {}) {
     this.config = config;
   }
+
+  public setApiKey(apiKey?: string): void {
+    if (apiKey) {
+      this.config.apiKey = apiKey;
+    }
+  }
   
   /**
    * Input schema for validation

@@ -101,6 +101,19 @@ async execute(input: any, context: ToolExecutionContext) {
 }
 ```
 
+### Declaring Secrets
+
+If your tool needs an API key, declare it on the descriptor so hosts can surface the requirement:
+
+```ts
+requiredSecrets: [{ id: 'openai.apiKey' }],
+onActivate: (ctx) => {
+  exampleTool.setApiKey(ctx.getSecret?.('openai.apiKey'));
+},
+```
+
+Secret IDs correspond to `packages/agentos/src/config/extension-secrets.json` and are also visible inside the AgentOS client UI.
+
 ## Testing
 
 Write comprehensive tests:
