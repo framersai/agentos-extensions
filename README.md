@@ -1,4 +1,6 @@
 <p align="center">
+  <a href="https://agentos.sh"><img src="logos/agentos-primary-transparent-2x.png" alt="AgentOS" height="64" /></a>
+  &nbsp;&nbsp;&nbsp;
   <a href="https://frame.dev" target="_blank" rel="noopener">
     <img src="https://avatars.githubusercontent.com/u/184314983?s=400&u=02bc60d3f02d586a9ed526e394162651192670c1&v=4" alt="Frame.dev" width="120" style="border-radius: 12px;">
   </a>
@@ -229,3 +231,11 @@ Built with ❤️ by Frame.dev and the AgentOS community
 - Contributing: ./\.github/CONTRIBUTING.md
 - Code of Conduct: ./\.github/CODE_OF_CONDUCT.md
 - Security Policy: ./\.github/SECURITY.md
+
+<p align="center">
+  <a href="https://agentos.sh"><img src="logos/agentos-primary-transparent-2x.png" alt="AgentOS" height="48" /></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://frame.dev" target="_blank" rel="noopener">
+    <img src="https://avatars.githubusercontent.com/u/184314983?s=200&u=02bc60d3f02d586a9ed526e394162651192670c1&v=4" alt="Frame.dev" width="72" style="border-radius: 12px;">
+  </a>
+</p>
