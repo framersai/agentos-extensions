@@ -32,6 +32,6 @@
   "devDependencies": {
     "vitest": "^1.6.0",
     "typescript": "^5.4.5",
-    "typedoc": "^0.25.13"
+    "typedoc": "^0.28.14"
   }
 }
