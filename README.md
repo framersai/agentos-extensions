@@ -1,3 +1,11 @@
+<!-- BRANDING-LOGOS -->
+<p align="center">
+  <a href="https://agentos.sh"><img src="logos/agentos-primary-no-tagline.svg" alt="AgentOS" height="64" /></a>
+</p>
+<p align="center">
+  <a href="https://frame.dev"><img src="logos/frame-wordmark.svg" alt="Frame" height="28" /></a>
+</p>
+
 # AgentOS Extensions
 
 Official extension registry for the AgentOS ecosystem.
