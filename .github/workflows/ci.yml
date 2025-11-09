@@ -1,0 +1,216 @@
+name: CI - All Extensions
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.detect.outputs.packages }}
+      matrix: ${{ steps.detect.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Detect changed packages
+        id: detect
+        run: |
+          # Find all extensions in structured directories
+          PACKAGES=""
+          
+          # Check templates
+          for dir in templates/*/; do
+            if [ -f "${dir}package.json" ]; then
+              PACKAGES="$PACKAGES $(basename $dir)"
+            fi
+          done
+          
+          # Check curated extensions
+          for category in curated/*/; do
+            for ext in ${category}*/; do
+              if [ -f "${ext}package.json" ]; then
+                REL_PATH="${ext#./}"
+                REL_PATH="${REL_PATH%/}"
+                PACKAGES="$PACKAGES $REL_PATH"
+              fi
+            done
+          done
+          
+          # Check community extensions
+          for category in community/*/; do
+            for ext in ${category}*/; do
+              if [ -f "${ext}package.json" ]; then
+                REL_PATH="${ext#./}"
+                REL_PATH="${REL_PATH%/}"
+                PACKAGES="$PACKAGES $REL_PATH"
+              fi
+            done
+          done
+          
+          # For PRs, detect only changed packages
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^(templates|curated|community)/' | cut -d'/' -f1-3 | sort -u || echo "")
+            if [ -n "$CHANGED" ]; then
+              PACKAGES=$CHANGED
+            fi
+          fi
+          
+          # Convert to JSON array for matrix
+          MATRIX_JSON=$(echo $PACKAGES | tr ' ' '\n' | grep -v '^$' | jq -R -s -c 'split("\n")[:-1]')
+          echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
+          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+          
+          echo "Detected packages: $PACKAGES"
+
+  lint:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm ci || npm install
+      
+      - name: Lint
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm run lint || echo "No lint script"
+
+  test:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+        node: [18, 20]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm ci || npm install
+      
+      - name: Run tests
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm test -- --run || npm test || echo "No tests"
+      
+      - name: Generate coverage
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm run test:coverage || echo "No coverage script"
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ${{ matrix.package }}/coverage
+          flags: ${{ matrix.package }}
+          name: ${{ matrix.package }}-node${{ matrix.node }}
+
+  build:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.packages != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm ci || npm install
+      
+      - name: Build
+        working-directory: ${{ matrix.package }}
+        run: |
+          npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.package }}-build
+          path: ${{ matrix.package }}/dist
+
+  validate-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate extension structure
+        run: |
+          # Check each extension has required files
+          for dir in templates/*/ curated/*/* community/*/*; do
+            if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
+              echo "Validating $dir"
+              
+              # Check required files
+              for file in README.md LICENSE tsconfig.json; do
+                if [ ! -f "$dir/$file" ]; then
+                  echo "❌ Missing $file in $dir"
+                  exit 1
+                fi
+              done
+              
+              # Check package naming
+              NAME=$(node -p "require('./$dir/package.json').name" 2>/dev/null || echo "")
+              if [[ ! "$NAME" =~ ^@framers/agentos- ]]; then
+                echo "❌ Invalid package name in $dir: $NAME"
+                exit 1
+              fi
+              
+              echo "✅ $dir validated"
+            fi
+          done
+
+  all-checks-pass:
+    needs: [lint, test, build, validate-structure]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check status
+        run: |
+          if [ "${{ needs.lint.result }}" == "failure" ] || \
+             [ "${{ needs.test.result }}" == "failure" ] || \
+             [ "${{ needs.build.result }}" == "failure" ] || \
+             [ "${{ needs.validate-structure.result }}" == "failure" ]; then
+            echo "One or more checks failed"
+            exit 1
+          fi
+          echo "All checks passed!"

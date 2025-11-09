@@ -1,0 +1,37 @@
+{
+  "name": "@framersai/agentos-extensions",
+  "version": "1.0.0",
+  "description": "Community registry of tools, workflows, and integrations for AgentOS",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./registry.json",
+      "types": "./types.d.ts"
+    },
+    "./registry.json": "./registry.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "pnpm -r --filter './registry/**' test",
+    "test:coverage": "pnpm -r --filter './registry/**' test -- --coverage",
+    "build": "pnpm -r --filter './registry/**' build",
+    "lint": "pnpm -r --filter './registry/**' lint",
+    "clean": "pnpm -r --filter './registry/**' clean",
+    "create-extension": "node scripts/create-extension.js",
+    "update-registry": "node scripts/update-registry.js",
+    "docs": "pnpm -r --filter './registry/**' docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions.git"
+  },
+  "keywords": ["agentos", "extensions", "tools", "plugins"],
+  "author": "Framers AI",
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "typescript": "^5.4.5",
+    "typedoc": "^0.25.13"
+  }
+}

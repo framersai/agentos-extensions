@@ -1,0 +1,97 @@
+{
+  "version": "1.0.0",
+  "updated": "2024-12-01T00:00:00.000Z",
+  "categories": {
+    "templates": [
+      "basic-tool",
+      "multi-tool",
+      "guardrail",
+      "workflow"
+    ],
+    "curated": [
+      "core",
+      "research",
+      "productivity",
+      "ai-models",
+      "enterprise"
+    ],
+    "community": [
+      "research",
+      "productivity",
+      "development",
+      "integrations",
+      "utilities"
+    ]
+  },
+  "extensions": {
+    "curated": [
+      {
+        "id": "com.framers.research.web-search",
+        "name": "Web Search",
+        "package": "@framers/agentos-research-web-search",
+        "version": "1.0.0",
+        "category": "research",
+        "path": "curated/research/web-search",
+        "description": "Multi-provider web search with research aggregation and fact-checking",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Multi-provider support (Serper, SerpAPI, Brave)",
+          "Research aggregation",
+          "Fact checking",
+          "Rate limiting"
+        ],
+        "tools": [
+          "webSearch",
+          "researchAggregator",
+          "factCheck"
+        ],
+        "keywords": ["search", "web", "research", "fact-check", "serper", "serpapi", "brave"],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-search",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/curated/research/web-search",
+        "verified": true,
+        "downloads": 0
+      }
+    ],
+    "community": [],
+    "templates": [
+      {
+        "id": "com.framers.template.basic-tool",
+        "name": "Basic Tool Template",
+        "package": "@framers/agentos-template-basic-tool",
+        "version": "1.0.0",
+        "path": "templates/basic-tool",
+        "description": "Template for creating single-tool AgentOS extensions",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/basic-tool"
+      },
+      {
+        "id": "com.framers.template.multi-tool",
+        "name": "Multi-Tool Template",
+        "package": "@framers/agentos-template-multi-tool",
+        "version": "1.0.0",
+        "path": "templates/multi-tool",
+        "description": "Template for creating multi-tool AgentOS extensions",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/multi-tool"
+      },
+      {
+        "id": "com.framers.template.guardrail",
+        "name": "Guardrail Template",
+        "package": "@framers/agentos-template-guardrail",
+        "version": "1.0.0",
+        "path": "templates/guardrail",
+        "description": "Template for creating safety and compliance extensions",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/guardrail"
+      }
+    ]
+  },
+  "stats": {
+    "totalExtensions": 1,
+    "curatedCount": 1,
+    "communityCount": 0,
+    "templateCount": 3,
+    "totalDownloads": 0
+  }
+}
