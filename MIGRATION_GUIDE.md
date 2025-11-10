@@ -25,7 +25,7 @@ Move logic from `backend/src/tools/search.tools.ts` to extension:
 
 ```typescript
 // packages/agentos-extensions/ext-search/src/tools/webSearch.ts
-import type { ITool, ToolExecutionContext, ToolExecutionResult } from '@agentos/core';
+import type { ITool, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
 
 export class WebSearchTool implements ITool {
   readonly id = 'com.framers.ext.search.webSearch';
@@ -120,3 +120,4 @@ If issues arise:
 1. Keep hardcoded tools as fallback
 2. Use feature flag to toggle between implementations
 3. Gradual migration persona by persona
+

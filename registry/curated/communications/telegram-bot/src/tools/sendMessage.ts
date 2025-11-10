@@ -2,7 +2,7 @@
  * Send message tool for Telegram Bot extension
  */
 
-import { ITool, ToolExecutionContext, ToolExecutionResult } from '@agentos/core';
+import { ITool, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
 import { TelegramBotService } from '../services/telegramBot';
 
 /**
@@ -163,3 +163,4 @@ export class SendMessageTool implements ITool {
     };
   }
 }
+

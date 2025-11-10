@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createExtensionPack } from '../src';
-import { ExtensionContext } from '@agentos/core';
+import { ExtensionContext } from '@framers/agentos';
 
 describe('Web Search Extension Integration', () => {
   let extensionPack: any;
@@ -170,3 +170,4 @@ describe('Web Search Extension Integration', () => {
     });
   });
 });
+
