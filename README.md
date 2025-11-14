@@ -187,6 +187,11 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 - [API Reference](./docs/API.md)
 - [Migration Guide](./MIGRATION_GUIDE.md)
 
+## ✅ Verified Program
+
+Extensions that meet AgentOS security, testing, and documentation standards can earn the “Verified” badge.
+See the verification policy and checklist in the workspace: [EXTENSIONS_VERIFICATION.md](../../docs/EXTENSIONS_VERIFICATION.md).
+
 ## 🏢 Partner Program
 
 Interested in becoming a verified extension partner?
@@ -195,7 +200,7 @@ Interested in becoming a verified extension partner?
 - Co-marketing opportunities
 - Revenue sharing for paid extensions
 
-Contact: partners@frame.dev
+Contact: team@frame.dev
 
 ## 📊 Stats
 
@@ -212,9 +217,9 @@ All extensions in this repository are MIT licensed.
 ## 🔗 Links
 
 - **NPM Organization**: [@framers](https://www.npmjs.com/org/framers)
-- **AgentOS Core**: [github.com/framersai/voice-chat-assistant](https://github.com/framersai/voice-chat-assistant)
+- **AgentOS Core**: [github.com/framersai/agentos](https://github.com/framersai/agentos)
 - **Documentation**: [agentos.sh](https://agentos.sh)
-- **Support**: support@frame.dev
+- **Support/Contact**: team@frame.dev
 
 ---
 
@@ -226,9 +231,9 @@ Built with ❤️ by Frame.dev and the AgentOS community
 - GitHub: https://github.com/framersai/agentos-extensions
 - npm: https://www.npmjs.com/package/@framers/agentos-extensions
 ## Contributing & Security
-- Contributing: ./\.github/CONTRIBUTING.md
-- Code of Conduct: ./\.github/CODE_OF_CONDUCT.md
-- Security Policy: ./\.github/SECURITY.md
+- Contributing: https://github.com/manicinc/voice-chat-assistant/blob/master/.github/CONTRIBUTING.md
+- Code of Conduct: https://github.com/manicinc/voice-chat-assistant/blob/master/.github/CODE_OF_CONDUCT.md
+- Security Policy: https://github.com/manicinc/voice-chat-assistant/blob/master/.github/SECURITY.md
 
 <p align="center">
   <a href="https://agentos.sh"><img src="logos/agentos-primary-transparent-2x.png" alt="AgentOS" height="48" /></a>

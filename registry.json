@@ -53,6 +53,9 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/curated/research/web-search",
         "verified": true,
+        "verifiedAt": "2025-11-13T00:00:00Z",
+        "verifiedBy": { "name": "AgentOS Admin", "email": "security@agentos.sh" },
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
     ],

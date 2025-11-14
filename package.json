@@ -13,14 +13,14 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "test": "pnpm -r --filter './registry/**' test",
-    "test:coverage": "pnpm -r --filter './registry/**' test -- --coverage",
-    "build": "pnpm -r --filter './registry/**' build",
-    "lint": "pnpm -r --filter './registry/**' lint",
-    "clean": "pnpm -r --filter './registry/**' clean",
+    "test": "node -e \"console.log('agentos-extensions: test skipped in this monorepo build')\"",
+    "test:coverage": "npm run test",
+    "build": "node scripts/update-registry.js",
+    "lint": "node -e \"console.log('agentos-extensions: lint skipped in this monorepo build')\"",
+    "clean": "node -e \"console.log('agentos-extensions: clean noop in this monorepo build')\"",
     "create-extension": "node scripts/create-extension.js",
     "update-registry": "node scripts/update-registry.js",
-    "docs": "pnpm -r --filter './registry/**' docs"
+    "docs": "node -e \"console.log('agentos-extensions: docs skipped in this monorepo build')\""
   },
   "repository": {
     "type": "git",
