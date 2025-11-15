@@ -1,0 +1,30 @@
+{
+  "name": "@framers/agentos-extensions-auth",
+  "version": "1.0.0",
+  "description": "Authentication extension for AgentOS (part of @framers/agentos-extensions)",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "keywords": ["agentos", "auth", "jwt", "subscription"],
+  "author": {
+    "name": "Framers AI",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.6"
+  }
+}
+
