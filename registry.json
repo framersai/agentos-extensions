@@ -10,10 +10,12 @@
     ],
     "curated": [
       "core",
+      "safety",
       "research",
       "productivity",
       "ai-models",
-      "enterprise"
+      "enterprise",
+      "communications"
     ],
     "community": [
       "research",
@@ -25,6 +27,34 @@
   },
   "extensions": {
     "curated": [
+      {
+        "id": "com.framers.core.auth",
+        "name": "Authentication & Subscription",
+        "version": "1.0.0",
+        "category": "core",
+        "path": "curated/auth",
+        "description": "JWT authentication and subscription tier management for AgentOS",
+        "author": {
+          "name": "Framers AI",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "JWT token authentication",
+          "BCrypt password hashing",
+          "Multi-tier subscriptions",
+          "Tool permission integration",
+          "Persona tier gating"
+        ],
+        "provides": ["authService", "subscriptionService"],
+        "keywords": ["auth", "jwt", "subscription", "permissions", "tiers"],
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/auth",
+        "verified": true,
+        "verifiedAt": "2025-11-14T00:00:00Z",
+        "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
       {
         "id": "com.framers.research.web-search",
         "name": "Web Search",
@@ -91,8 +121,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 1,
-    "curatedCount": 1,
+    "totalExtensions": 2,
+    "curatedCount": 2,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0
