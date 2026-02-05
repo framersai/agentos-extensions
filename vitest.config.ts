@@ -27,7 +27,7 @@ export default defineConfig({
         branches: 50
       }
     },
-    include: ['test/**/*.spec.ts'],
+    include: ['test/**/*.spec.ts', 'registry/**/test/**/*.spec.ts'],
     exclude: ['**/node_modules/**', '**/dist/**'],
     testTimeout: 15000
   },

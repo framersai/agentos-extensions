@@ -15,7 +15,8 @@
       "productivity",
       "ai-models",
       "enterprise",
-      "communications"
+      "communications",
+      "provenance"
     ],
     "community": [
       "research",
@@ -30,6 +31,7 @@
       {
         "id": "com.framers.core.auth",
         "name": "Authentication & Subscription",
+        "package": "@framers/agentos-core-auth",
         "version": "1.0.0",
         "category": "core",
         "path": "curated/auth",
@@ -87,6 +89,42 @@
         "verifiedBy": { "name": "AgentOS Admin", "email": "security@agentos.sh" },
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
+      },
+      {
+        "id": "com.framers.provenance.anchor-providers",
+        "name": "Provenance Anchor Providers",
+        "package": "@framers/agentos-provenance-anchor-providers",
+        "version": "1.0.0",
+        "category": "provenance",
+        "path": "curated/provenance/anchor-providers",
+        "description": "External anchor providers for AgentOS provenance — WORM storage, transparency logs, and blockchain timestamping",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "S3 Object Lock / WORM storage anchoring",
+          "Sigstore Rekor transparency log integration",
+          "OpenTimestamps Bitcoin-anchored timestamping",
+          "Ethereum on-chain anchor publishing",
+          "Composite multi-provider support",
+          "Config-driven factory registration"
+        ],
+        "providers": [
+          "wormSnapshotProvider",
+          "rekorProvider",
+          "openTimestampsProvider",
+          "ethereumProvider"
+        ],
+        "keywords": ["provenance", "anchor", "blockchain", "ethereum", "opentimestamps", "rekor", "sigstore", "worm", "s3-object-lock", "tamper-evidence"],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-provenance-anchor-providers",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
+        "verified": true,
+        "verifiedAt": "2025-02-03T00:00:00Z",
+        "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
       }
     ],
     "community": [],
@@ -121,8 +159,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 2,
-    "curatedCount": 2,
+    "totalExtensions": 3,
+    "curatedCount": 3,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0
