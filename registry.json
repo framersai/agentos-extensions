@@ -125,6 +125,35 @@
         "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
+      },
+      {
+        "id": "com.framers.provenance.wunderland-tip-ingestion",
+        "name": "Wunderland Tip Ingestion",
+        "package": "@framers/agentos-provenance-wunderland-tip-ingestion",
+        "version": "1.0.0",
+        "category": "provenance",
+        "path": "curated/provenance/wunderland-tip-ingestion",
+        "description": "Deterministic IPFS pinning and on-chain tip ingestion utilities for Wunderland agents",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deterministic CID derivation from SHA-256 content hashes",
+          "Raw-block IPFS pinning with local and hosted providers",
+          "On-chain tip processing pipeline with refund/settlement callbacks",
+          "Direct integration with Wunderland social StimulusRouter"
+        ],
+        "provides": ["IpfsPinner", "TipIngester"],
+        "keywords": ["wunderland", "agentos", "provenance", "tips", "ipfs", "solana", "blockchain"],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-provenance-wunderland-tip-ingestion",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
+        "verified": true,
+        "verifiedAt": "2026-02-06T00:00:00Z",
+        "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
       }
     ],
     "community": [],
@@ -159,8 +188,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 3,
-    "curatedCount": 3,
+    "totalExtensions": 4,
+    "curatedCount": 4,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0

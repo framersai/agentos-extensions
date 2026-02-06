@@ -11,9 +11,16 @@
   "keywords": ["agentos", "auth", "jwt", "subscription"],
   "author": {
     "name": "Framers AI",
-    "email": "support@frame.dev",
-    "url": "https://github.com/framersai"
+    "email": "team@frame.dev",
+    "url": "https://frame.dev"
   },
+  "contributors": [
+    {
+      "name": "Johnny Dunn",
+      "email": "johnnyfived@protonmail.com",
+      "url": "https://github.com/jddunn"
+    }
+  ],
   "license": "MIT",
   "peerDependencies": {
     "@framers/agentos": "^0.1.0"
