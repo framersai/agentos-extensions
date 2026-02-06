@@ -2,7 +2,7 @@
  * Scrape Tool
  * Extract content from web pages using CSS selectors.
  *
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  */
 
 import type { ITool } from '@framers/agentos';

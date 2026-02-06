@@ -1,12 +1,12 @@
 ---
-"@framers/agentos-extensions-auth": minor
-"@framers/agentos-provenance-anchor-providers": minor
-"@framers/agentos-provenance-wunderland-tip-ingestion": minor
-"@framers/agentos-research-web-search": minor
-"@framers/agentos-research-web-browser": minor
-"@framers/agentos-integrations-telegram": minor
-"@framers/agentos-telegram-bot": minor
-"@framers/agentos-system-cli-executor": minor
+"@framers/agentos-ext-auth": minor
+"@framers/agentos-ext-anchor-providers": minor
+"@framers/agentos-ext-tip-ingestion": minor
+"@framers/agentos-ext-web-search": minor
+"@framers/agentos-ext-web-browser": minor
+"@framers/agentos-ext-telegram": minor
+"@framers/agentos-ext-telegram-bot": minor
+"@framers/agentos-ext-cli-executor": minor
 ---
 
 Initial release of AgentOS extension packages.

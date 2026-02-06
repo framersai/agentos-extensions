@@ -1,6 +1,6 @@
 /**
  * @file index.ts
- * @description Main entry point for @framers/agentos-provenance-anchor-providers.
+ * @description Main entry point for @framers/agentos-ext-anchor-providers.
  *
  * External anchor providers for the AgentOS provenance system:
  * - **WormSnapshotProvider** — S3 Object Lock / WORM storage (externally-archived)
@@ -13,7 +13,7 @@
  *
  * ### Option 1: Config-driven (via registry)
  * ```typescript
- * import { registerExtensionProviders } from '@framers/agentos-provenance-anchor-providers';
+ * import { registerExtensionProviders } from '@framers/agentos-ext-anchor-providers';
  * import { createAnchorProvider } from '@framers/agentos';
  *
  * registerExtensionProviders();
@@ -22,12 +22,12 @@
  *
  * ### Option 2: Direct construction
  * ```typescript
- * import { RekorProvider } from '@framers/agentos-provenance-anchor-providers';
+ * import { RekorProvider } from '@framers/agentos-ext-anchor-providers';
  *
  * const provider = new RekorProvider({ serverUrl: 'https://rekor.sigstore.dev' });
  * ```
  *
- * @module @framers/agentos-provenance-anchor-providers
+ * @module @framers/agentos-ext-anchor-providers
  */
 
 // Registry

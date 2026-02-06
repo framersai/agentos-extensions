@@ -14,13 +14,13 @@ Browser automation capabilities for AgentOS agents - navigate pages, scrape cont
 ## Installation
 
 ```bash
-npm install @framers/agentos-research-web-browser
+npm install @framers/agentos-ext-web-browser
 ```
 
 ## Quick Start
 
 ```typescript
-import { createExtensionPack } from '@framers/agentos-research-web-browser';
+import { createExtensionPack } from '@framers/agentos-ext-web-browser';
 import { ExtensionManager } from '@framers/agentos';
 
 const extensionManager = new ExtensionManager();

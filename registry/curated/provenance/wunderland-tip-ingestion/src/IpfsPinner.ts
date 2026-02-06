@@ -7,7 +7,7 @@
  * Key property: CID = bafkrei + base32(sha256(content))
  * This allows on-chain content_hash to serve as verifiable commitment.
  *
- * @module @framers/agentos-provenance-wunderland-tip-ingestion/IpfsPinner
+ * @module @framers/agentos-ext-tip-ingestion/IpfsPinner
  */
 
 import { createHash } from 'crypto';

@@ -15,7 +15,7 @@ Professional Telegram Bot API integration for AgentOS agents.
 ## Installation
 
 ```bash
-npm install @framers/agentos-integrations-telegram
+npm install @framers/agentos-ext-telegram
 ```
 
 ## Configuration
@@ -43,7 +43,7 @@ TELEGRAM_SUPPORT_BOT=token2
 #### Basic Setup
 
 ```typescript
-import { createExtensionPack } from '@framers/agentos-integrations-telegram';
+import { createExtensionPack } from '@framers/agentos-ext-telegram';
 
 // Auto-detect from environment
 const telegramExt = createExtensionPack({

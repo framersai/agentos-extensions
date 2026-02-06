@@ -2,7 +2,7 @@
  * Browser Service
  * Manages browser lifecycle and provides page interaction methods.
  *
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  */
 
 import type {

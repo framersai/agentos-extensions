@@ -4,7 +4,7 @@
  * Monitors on-chain tip events, processes content (URL fetch or text sanitization),
  * pins to IPFS, routes to agents with priority, and triggers settlement/refund.
  *
- * @module @framers/agentos-provenance-wunderland-tip-ingestion/TipIngester
+ * @module @framers/agentos-ext-tip-ingestion/TipIngester
  */
 
 import { EventEmitter } from 'events';

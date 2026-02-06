@@ -10,7 +10,7 @@
  * Required runtime dependency: `@solana/web3.js`
  * Optional runtime dependency (only if using base58 secret keys): `bs58`
  *
- * @module @framers/agentos-provenance-anchor-providers
+ * @module @framers/agentos-ext-anchor-providers
  */
 
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';

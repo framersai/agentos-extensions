@@ -1,6 +1,6 @@
 /**
  * @fileoverview Tests for IpfsPinner — IPFS raw block pinning
- * @module @framers/agentos-provenance-wunderland-tip-ingestion/test/IpfsPinner.spec
+ * @module @framers/agentos-ext-tip-ingestion/test/IpfsPinner.spec
  */
 
 import { describe, it, expect } from 'vitest';

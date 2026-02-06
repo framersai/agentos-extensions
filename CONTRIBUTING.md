@@ -2,17 +2,6 @@
 
 Thank you for your interest in contributing to the AgentOS Extensions ecosystem!
 
-## 🎯 Free CI/CD for Contributors
-
-**We provide FREE GitHub Actions CI/CD for all community extensions!** You don't need to worry about:
-- Setting up test runners
-- Configuring npm publishing
-- Managing GitHub releases
-- Running coverage reports
-- Dependency updates
-
-We handle all the infrastructure - you focus on building great extensions!
-
 ## Getting Started
 
 1. **Fork the repository**: https://github.com/framersai/agentos-extensions
@@ -20,119 +9,122 @@ We handle all the infrastructure - you focus on building great extensions!
    ```bash
    git clone https://github.com/yourusername/agentos-extensions
    cd agentos-extensions
+   pnpm install
    ```
 3. **Create a feature branch**:
    ```bash
    git checkout -b feat/my-extension
    ```
 
-## Development Process
+## Creating a New Extension
 
-### Creating a New Extension
-
-1. **Copy the template**:
+1. **Use the scaffolding script** or copy a template:
    ```bash
-   cp -r packages/ext-template packages/ext-myextension
+   pnpm run create-extension
+   # or
+   cp -r templates/basic-tool registry/curated/category/my-extension
    ```
 
 2. **Configure your extension**:
-   - Update `package.json` with your extension details
-   - Modify `manifest.json` with proper metadata
+   - Update `package.json`:
+     - Set `"name"` to `@framers/agentos-ext-{name}`
+     - Set `"private": false`
+     - Add `"publishConfig": { "access": "public" }`
+   - Update `manifest.json` with proper metadata
    - Implement tools in `src/tools/`
 
-3. **Follow the standards**:
-   - Read [RFC_EXTENSION_STANDARDS.md](../packages/agentos/docs/RFC_EXTENSION_STANDARDS.md)
+3. **Add to the workspace**:
+   - Add your package path to `pnpm-workspace.yaml`
+
+4. **Follow the standards**:
    - Use TypeScript with strict mode
    - Implement the ITool interface correctly
-   - Include comprehensive tests
+   - Include comprehensive tests (>80% coverage)
+   - MIT license
+
+### Package Naming
+
+All extensions use the `@framers/agentos-ext-{name}` pattern:
+
+| Package | Name |
+|---------|------|
+| Auth | `@framers/agentos-ext-auth` |
+| Web Search | `@framers/agentos-ext-web-search` |
+| Web Browser | `@framers/agentos-ext-web-browser` |
+| Telegram | `@framers/agentos-ext-telegram` |
+| CLI Executor | `@framers/agentos-ext-cli-executor` |
+
+## Development
 
 ### Code Quality
 
-- **Linting**: Run `npm run lint` and fix all issues
-- **Type checking**: Ensure `npm run build` succeeds
-- **Testing**: Maintain >80% code coverage
-- **Documentation**: Update README with clear examples
+- **Linting**: `pnpm run lint`
+- **Type checking**: `pnpm run build`
+- **Testing**: `pnpm run test` (maintain >80% coverage)
+- **Documentation**: Update README with examples
 
-### Commit Messages
+### Testing Locally
 
-Follow conventional commits format:
-
+```bash
+cd registry/curated/category/my-extension
+pnpm test
 ```
-feat: add weather tool to search extension
-fix: handle missing api key gracefully  
-docs: update configuration examples
-test: add integration tests for search tool
-chore: update dependencies
+
+### Integration with AgentOS
+
+```typescript
+import { AgentOS } from '@framers/agentos';
+import myExtension from '@framers/agentos-ext-my-extension';
+
+const agentos = new AgentOS();
+await agentos.initialize({
+  extensionManifest: {
+    packs: [{
+      factory: () => myExtension({ /* options */ })
+    }]
+  }
+});
 ```
 
 ## Pull Request Process
 
-1. **Ensure all tests pass**:
+1. **Ensure all checks pass**:
    ```bash
-   npm test
-   npm run lint
-   npm run build
+   pnpm test
+   pnpm run lint
+   pnpm run build
    ```
 
-2. **Update documentation**:
-   - Add/update README in your extension folder
-   - Update registry.json with your extension
-   - Add examples in `examples/` folder
+2. **Add a changeset** describing your changes:
+   ```bash
+   pnpm changeset
+   ```
+   Select your package, choose the bump type (patch/minor/major), and describe the change.
 
-3. **Create pull request**:
+3. **Create pull request** with:
    - Title: `feat: add [extension-name] extension`
-   - Description should include:
-     - What the extension does
-     - Configuration required
-     - Example usage
-     - Test results
+   - What the extension does
+   - Configuration required
+   - Example usage
 
-4. **Automated checks**:
-   When you submit a PR, our CI will automatically:
-   - ✅ Validate extension structure
-   - ✅ Run linting
-   - ✅ Execute tests on Node 18 & 20
-   - ✅ Check test coverage
-   - ✅ Build the extension
-   - ✅ Generate documentation
-   - ✅ Security scanning
-
-5. **Code review checklist**:
-   - [ ] Follows naming conventions
-   - [ ] Implements ITool interface correctly
-   - [ ] Includes unit tests (>80% coverage)
-   - [ ] Has integration tests
-   - [ ] Documentation is complete
-   - [ ] No security vulnerabilities
-   - [ ] MIT licensed
-   - [ ] Uses semantic versioning
+4. **Automated CI checks** will:
+   - Validate extension structure
+   - Run linting and tests on Node 18 & 20
+   - Check test coverage
+   - Build the extension
+   - Security scanning
 
 ## After Your PR is Merged
 
-Once merged to `master`, our automation will:
+Once merged to `master`:
 
-1. **Run full CI suite** on all extensions
-2. **Auto-publish to npm** when version is bumped
-3. **Create GitHub release** with changelog
-4. **Update extension registry**
-5. **Deploy documentation**
+1. The **Release** workflow detects pending changesets
+2. A **"chore: version packages"** PR is auto-created with version bumps
+3. When that PR is merged, packages are **published to npm**
+4. **GitHub releases** are created with changelogs
+5. **registry.json** is updated
 
-### Version Bumping
-
-To release a new version:
-
-```bash
-cd packages/ext-myextension
-npm version patch  # or minor/major
-git add .
-git commit -m "chore(ext-myextension): bump version to x.y.z"
-git push
-```
-
-The CI/CD will automatically:
-- Publish to npm as `@framers/agentos-ext-myextension`
-- Create a GitHub release
-- Update the registry
+See [RELEASING.md](./RELEASING.md) for the full publishing workflow.
 
 ## Extension Guidelines
 
@@ -142,7 +134,6 @@ The CI/CD will automatically:
 - Use environment variables for sensitive data
 - Validate all inputs
 - Handle errors gracefully
-- Document required permissions
 
 ### Performance
 
@@ -153,99 +144,16 @@ The CI/CD will automatically:
 
 ### Compatibility
 
-- Test with latest AgentOS version
-- Specify minimum AgentOS version in manifest
+- Specify minimum AgentOS version in `peerDependencies`
 - Handle missing configuration gracefully
 - Provide sensible defaults
 
-## Testing Your Extension Locally
-
-### Unit Tests
-
-```bash
-cd packages/ext-myextension
-npm test
-```
-
-### Integration with AgentOS
-
-```typescript
-// test-integration.ts
-import { AgentOS } from '@framers/agentos';
-import myExtension from './src/index';
-
-const agentos = new AgentOS();
-await agentos.initialize({
-  extensionManifest: {
-    packs: [{
-      factory: () => myExtension({ /* options */ })
-    }]
-  }
-});
-
-// Test your tools
-const tool = agentos.toolExecutor.getTool('myTool');
-const result = await tool.execute({ /* input */ });
-```
-
-## Community
-
-- **Discord**: Join our Discord for discussions
-- **Issues**: Report bugs or request features on GitHub
-- **Discussions**: Use GitHub Discussions for questions
-
 ## Getting Help
 
-If you need help:
-1. Check existing issues and discussions
-2. Read the [RFC_EXTENSION_STANDARDS.md](../packages/agentos/docs/RFC_EXTENSION_STANDARDS.md)
-3. Ask in Discord or open a discussion
-4. Tag your PR with `help-wanted` if stuck
-
-## Recognition
-
-Contributors will be:
-- Listed in the extension's README
-- Mentioned in release notes
-- Given credit in the main AgentOS documentation
-- Invited to become maintainers for exceptional contributions
-
-## Infrastructure We Provide
-
-As a contributor, you get access to:
-
-### Free CI/CD
-- GitHub Actions for testing
-- Automated npm publishing
-- GitHub release creation
-- Codecov integration
-
-### Development Tools
-- ESLint configuration
-- TypeScript setup
-- Vitest for testing
-- TypeDoc for documentation
-
-### Support
-- Code reviews from core team
-- Help with implementation
-- Architecture guidance
-- Marketing support for your extension
+- **Issues**: Report bugs at https://github.com/framersai/agentos-extensions/issues
+- **Discussions**: Questions at https://github.com/framersai/agentos-extensions/discussions
+- **Email**: team@frame.dev
 
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
-
-## Questions?
-
-If you have questions about contributing, please:
-1. Check existing issues and discussions
-2. Read the documentation
-3. Ask in Discord: https://discord.gg/agentos
-4. Email: extensions@frame.dev
-
-Thank you for helping make AgentOS better! 🚀
-
----
-
-**Remember: We handle the infrastructure, you focus on the innovation!**

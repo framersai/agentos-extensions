@@ -1,4 +1,4 @@
-# @framers/agentos-provenance-anchor-providers
+# @framers/agentos-ext-anchor-providers
 
 External anchor providers for the [AgentOS](https://github.com/framersai/agentos) provenance system. Extends the built-in signed hash chain with external tamper-evidence backends — WORM storage, transparency logs, and blockchain timestamping.
 
@@ -16,7 +16,7 @@ Each provider advertises a proof level (ascending trust):
 ## Installation
 
 ```bash
-pnpm add @framers/agentos-provenance-anchor-providers
+pnpm add @framers/agentos-ext-anchor-providers
 ```
 
 Install the peer dependency for your chosen provider:
@@ -48,7 +48,7 @@ pnpm add bs58
 Register all providers once at startup, then use the core factory:
 
 ```typescript
-import { registerExtensionProviders } from '@framers/agentos-provenance-anchor-providers';
+import { registerExtensionProviders } from '@framers/agentos-ext-anchor-providers';
 import { createAnchorProvider } from '@framers/agentos';
 
 // Register once at startup
@@ -66,7 +66,7 @@ const provider = createAnchorProvider({
 Import and instantiate providers directly:
 
 ```typescript
-import { RekorProvider } from '@framers/agentos-provenance-anchor-providers';
+import { RekorProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new RekorProvider({
   serverUrl: 'https://rekor.sigstore.dev',
@@ -78,7 +78,7 @@ const provider = new RekorProvider({
 
 ```typescript
 import { AnchorManager, profiles } from '@framers/agentos';
-import { RekorProvider } from '@framers/agentos-provenance-anchor-providers';
+import { RekorProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new RekorProvider();
 const config = profiles.sealedAutonomous();
@@ -103,7 +103,7 @@ Archives anchor records to S3 with Object Lock retention. Provides compliance-gr
 **Peer dependency:** `@aws-sdk/client-s3`
 
 ```typescript
-import { WormSnapshotProvider } from '@framers/agentos-provenance-anchor-providers';
+import { WormSnapshotProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new WormSnapshotProvider({
   bucket: 'my-provenance-bucket',    // Required: S3 bucket with Object Lock enabled
@@ -124,7 +124,7 @@ Publishes anchor hashes to [Sigstore Rekor](https://rekor.sigstore.dev), a publi
 **Peer dependency:** `sigstore`
 
 ```typescript
-import { RekorProvider } from '@framers/agentos-provenance-anchor-providers';
+import { RekorProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new RekorProvider({
   serverUrl: 'https://rekor.sigstore.dev',  // Default: public Rekor instance
@@ -141,7 +141,7 @@ Creates [OpenTimestamps](https://opentimestamps.org) proofs anchored to the Bitc
 **Peer dependency:** `opentimestamps`
 
 ```typescript
-import { OpenTimestampsProvider } from '@framers/agentos-provenance-anchor-providers';
+import { OpenTimestampsProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new OpenTimestampsProvider({
   calendarUrls: [                           // Default: public OTS calendars
@@ -162,7 +162,7 @@ Publishes anchor Merkle roots as calldata in Ethereum transactions. Provides cry
 **Peer dependency:** `ethers`
 
 ```typescript
-import { EthereumProvider } from '@framers/agentos-provenance-anchor-providers';
+import { EthereumProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new EthereumProvider({
   rpcUrl: 'https://eth-mainnet.alchemyapi.io/v2/YOUR_KEY',  // Required
@@ -181,7 +181,7 @@ Use `CompositeAnchorProvider` from `@framers/agentos` to publish to multiple bac
 
 ```typescript
 import { CompositeAnchorProvider } from '@framers/agentos';
-import { RekorProvider, WormSnapshotProvider } from '@framers/agentos-provenance-anchor-providers';
+import { RekorProvider, WormSnapshotProvider } from '@framers/agentos-ext-anchor-providers';
 
 const provider = new CompositeAnchorProvider([
   new WormSnapshotProvider({ bucket: 'my-bucket', region: 'us-east-1' }),
@@ -225,7 +225,7 @@ const provider = createAnchorProvider({
 └──────────────────────┬───────────────────────────────────────────┘
                        │ (registry pattern)
 ┌──────────────────────▼───────────────────────────────────────────┐
-│            @framers/agentos-provenance-anchor-providers           │
+│            @framers/agentos-ext-anchor-providers           │
 │                                                                  │
 │  registerExtensionProviders()                                    │
 │       │                                                          │
@@ -286,7 +286,7 @@ registerAnchorProviderFactory('my-custom', (opts) => new MyCustomProvider(opts))
 HTTP fetch wrapper with exponential backoff retry. Used internally by providers that communicate over HTTP.
 
 ```typescript
-import { fetchWithRetry } from '@framers/agentos-provenance-anchor-providers';
+import { fetchWithRetry } from '@framers/agentos-ext-anchor-providers';
 
 const response = await fetchWithRetry('https://api.example.com/anchor', {
   method: 'POST',

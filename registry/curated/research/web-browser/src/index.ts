@@ -4,7 +4,7 @@
  * Provides browser automation capabilities for navigating pages, scraping content,
  * clicking elements, and capturing screenshots.
  *
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  * @version 1.0.0
  * @license MIT
  */
@@ -35,7 +35,7 @@ export interface WebBrowserExtensionOptions extends BrowserConfig {
  *
  * @example
  * ```typescript
- * import { createExtensionPack } from '@framers/agentos-research-web-browser';
+ * import { createExtensionPack } from '@framers/agentos-ext-web-browser';
  *
  * const pack = createExtensionPack({
  *   options: {
@@ -68,7 +68,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const snapshotTool = new SnapshotTool(browserService);
 
   return {
-    name: '@framers/agentos-research-web-browser',
+    name: '@framers/agentos-ext-web-browser',
     version: '1.0.0',
     descriptors: [
       {

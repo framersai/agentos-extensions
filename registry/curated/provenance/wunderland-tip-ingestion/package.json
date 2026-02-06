@@ -1,5 +1,5 @@
 {
-  "name": "@framers/agentos-provenance-wunderland-tip-ingestion",
+  "name": "@framers/agentos-ext-tip-ingestion",
   "version": "1.0.0",
   "description": "Deterministic IPFS pinning and on-chain tip ingestion utilities for Wunderland agents",
   "main": "dist/index.js",

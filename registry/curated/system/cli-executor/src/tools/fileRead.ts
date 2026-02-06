@@ -2,7 +2,7 @@
  * File Read Tool
  * Read file contents.
  *
- * @module @framers/agentos-system-cli-executor
+ * @module @framers/agentos-ext-cli-executor
  */
 
 import type { ITool } from '@framers/agentos';

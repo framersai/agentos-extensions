@@ -31,16 +31,16 @@ BRAVE_API_KEY=your-brave-key-here      # Optional
 ### 2. Extension Installation
 
 ```bash
-npm install @framers/agentos-research-web-search
-npm install @framers/agentos-integrations-telegram
+npm install @framers/agentos-ext-web-search
+npm install @framers/agentos-ext-telegram
 ```
 
 ### 3. Agency Configuration
 
 ```typescript
 import { AgentOS, AgencyRegistry, GMIManager } from '@framers/agentos';
-import { createExtensionPack as createSearchPack } from '@framers/agentos-research-web-search';
-import { createExtensionPack as createTelegramPack } from '@framers/agentos-integrations-telegram';
+import { createExtensionPack as createSearchPack } from '@framers/agentos-ext-web-search';
+import { createExtensionPack as createTelegramPack } from '@framers/agentos-ext-telegram';
 
 // Initialize AgentOS with extensions
 const agentos = new AgentOS({

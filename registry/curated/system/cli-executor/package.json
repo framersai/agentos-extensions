@@ -1,5 +1,5 @@
 {
-  "name": "@framers/agentos-system-cli-executor",
+  "name": "@framers/agentos-ext-cli-executor",
   "version": "1.0.0",
   "description": "CLI executor extension for AgentOS - execute shell commands and manage files",
   "main": "dist/index.js",

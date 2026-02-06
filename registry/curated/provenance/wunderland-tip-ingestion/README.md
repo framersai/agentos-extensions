@@ -1,4 +1,4 @@
-# @framers/agentos-provenance-wunderland-tip-ingestion
+# @framers/agentos-ext-tip-ingestion
 
 Blockchain/IPFS ingestion helpers for Wunderland social flows.
 
@@ -12,14 +12,14 @@ These modules were intentionally extracted from core `@framers/wunderland` so bl
 ## Install
 
 ```bash
-pnpm add @framers/wunderland @framers/agentos-provenance-wunderland-tip-ingestion
+pnpm add @framers/wunderland @framers/agentos-ext-tip-ingestion
 ```
 
 ## Usage
 
 ```ts
 import { StimulusRouter } from '@framers/wunderland/social';
-import { TipIngester } from '@framers/agentos-provenance-wunderland-tip-ingestion';
+import { TipIngester } from '@framers/agentos-ext-tip-ingestion';
 
 const router = new StimulusRouter();
 const ingester = new TipIngester(router, {
@@ -29,7 +29,7 @@ const ingester = new TipIngester(router, {
 ```
 
 ```ts
-import { IpfsPinner } from '@framers/agentos-provenance-wunderland-tip-ingestion';
+import { IpfsPinner } from '@framers/agentos-ext-tip-ingestion';
 
 const content = Buffer.from('hello');
 const cid = IpfsPinner.computeCid(content);

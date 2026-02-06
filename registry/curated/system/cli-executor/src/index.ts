@@ -4,7 +4,7 @@
  * Provides shell command execution, script running, and file management
  * capabilities for AgentOS agents.
  *
- * @module @framers/agentos-system-cli-executor
+ * @module @framers/agentos-ext-cli-executor
  * @version 1.0.0
  * @license MIT
  */
@@ -33,7 +33,7 @@ export interface CLIExecutorExtensionOptions extends ShellConfig {
  *
  * @example
  * ```typescript
- * import { createExtensionPack } from '@framers/agentos-system-cli-executor';
+ * import { createExtensionPack } from '@framers/agentos-ext-cli-executor';
  *
  * const pack = createExtensionPack({
  *   options: {
@@ -65,7 +65,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const listDirectoryTool = new ListDirectoryTool(shellService);
 
   return {
-    name: '@framers/agentos-system-cli-executor',
+    name: '@framers/agentos-ext-cli-executor',
     version: '1.0.0',
     descriptors: [
       {

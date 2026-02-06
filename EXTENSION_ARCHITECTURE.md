@@ -21,7 +21,7 @@ Extension (Package/Container)
 | **What it is** | A package/module that provides capabilities | A specific capability that implements `ITool` |
 | **Scope** | Can contain multiple tools, guardrails, etc. | Single focused functionality |
 | **Registration** | Loaded via ExtensionManager | Registered as part of an extension |
-| **Example** | `@framers/agentos-integrations-telegram` | `telegramSendMessage` tool |
+| **Example** | `@framers/agentos-ext-telegram` | `telegramSendMessage` tool |
 
 ### Extension Anatomy
 

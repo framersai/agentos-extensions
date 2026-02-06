@@ -1,13 +1,13 @@
 /**
  * @file index.ts
- * @description Main entry point for @framers/agentos-provenance-wunderland-tip-ingestion.
+ * @description Main entry point for @framers/agentos-ext-tip-ingestion.
  *
  * Provides chain-facing Wunderland social helpers that are intentionally kept
  * outside of core @framers/wunderland:
  * - IpfsPinner: deterministic raw-block CID pinning
  * - TipIngester: on-chain tip processing pipeline
  *
- * @module @framers/agentos-provenance-wunderland-tip-ingestion
+ * @module @framers/agentos-ext-tip-ingestion
  */
 
 export {

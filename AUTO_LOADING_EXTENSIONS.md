@@ -73,7 +73,7 @@ const extensions = await agentosClient.getExtensions();
 const tools = await agentosClient.getAvailableTools();
 
 // Install a new extension
-await agentosClient.installExtension('@framers/agentos-research-web-search');
+await agentosClient.installExtension('@framers/agentos-ext-web-search');
 
 // Execute a tool directly
 const result = await agentosClient.executeTool('webSearch', {
@@ -99,8 +99,8 @@ The client provides a full UI for:
 new AgentOS({
   extensionConfig: {
     whitelist: [
-      '@framers/agentos-research-web-search',
-      '@framers/agentos-integrations-telegram'
+      '@framers/agentos-ext-web-search',
+      '@framers/agentos-ext-telegram'
     ]
   }
 });

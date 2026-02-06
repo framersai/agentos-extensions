@@ -1,6 +1,6 @@
 /**
  * Web Browser Extension Types
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  */
 
 /**

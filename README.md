@@ -20,14 +20,14 @@ All extensions are published to npm under the `@framers` scope.
 
 | Package | Description | npm |
 |---------|-------------|-----|
-| [`@framers/agentos-extensions-auth`](./registry/curated/auth) | JWT authentication & subscription management | ![npm](https://img.shields.io/npm/v/@framers/agentos-extensions-auth) |
-| [`@framers/agentos-provenance-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | ![npm](https://img.shields.io/npm/v/@framers/agentos-provenance-anchor-providers) |
-| [`@framers/agentos-provenance-wunderland-tip-ingestion`](./registry/curated/provenance/wunderland-tip-ingestion) | Tip content processing pipeline | ![npm](https://img.shields.io/npm/v/@framers/agentos-provenance-wunderland-tip-ingestion) |
-| [`@framers/agentos-research-web-search`](./registry/curated/research/web-search) | Multi-provider web search & fact-checking | ![npm](https://img.shields.io/npm/v/@framers/agentos-research-web-search) |
-| [`@framers/agentos-research-web-browser`](./registry/curated/research/web-browser) | Browser automation & content extraction | ![npm](https://img.shields.io/npm/v/@framers/agentos-research-web-browser) |
-| [`@framers/agentos-integrations-telegram`](./registry/curated/integrations/telegram) | Telegram Bot API integration | ![npm](https://img.shields.io/npm/v/@framers/agentos-integrations-telegram) |
-| [`@framers/agentos-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | ![npm](https://img.shields.io/npm/v/@framers/agentos-telegram-bot) |
-| [`@framers/agentos-system-cli-executor`](./registry/curated/system/cli-executor) | Shell command execution & file management | ![npm](https://img.shields.io/npm/v/@framers/agentos-system-cli-executor) |
+| [`@framers/agentos-ext-auth`](./registry/curated/auth) | JWT authentication & subscription management | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-auth) |
+| [`@framers/agentos-ext-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-anchor-providers) |
+| [`@framers/agentos-ext-tip-ingestion`](./registry/curated/provenance/wunderland-tip-ingestion) | Tip content processing pipeline | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-tip-ingestion) |
+| [`@framers/agentos-ext-web-search`](./registry/curated/research/web-search) | Multi-provider web search & fact-checking | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-web-search) |
+| [`@framers/agentos-ext-web-browser`](./registry/curated/research/web-browser) | Browser automation & content extraction | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-web-browser) |
+| [`@framers/agentos-ext-telegram`](./registry/curated/integrations/telegram) | Telegram Bot API integration | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram) |
+| [`@framers/agentos-ext-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram-bot) |
+| [`@framers/agentos-ext-cli-executor`](./registry/curated/system/cli-executor) | Shell command execution & file management | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-cli-executor) |
 
 ## Repository Structure
 
@@ -61,14 +61,14 @@ agentos-extensions/
 ### Install an extension
 
 ```bash
-npm install @framers/agentos-research-web-search
+npm install @framers/agentos-ext-web-search
 ```
 
 ### Use in your agent
 
 ```typescript
 import { AgentOS } from '@framers/agentos';
-import webSearch from '@framers/agentos-research-web-search';
+import webSearch from '@framers/agentos-ext-web-search';
 
 const agentos = new AgentOS();
 await agentos.initialize({
@@ -118,8 +118,7 @@ Each extension is versioned and published independently. A change to `web-search
 
 | Type | Pattern | Example |
 |------|---------|---------|
-| Curated | `@framers/agentos-{category}-{name}` | `@framers/agentos-research-web-search` |
-| Community | `@framers/agentos-{category}-{name}` | `@framers/agentos-productivity-pomodoro` |
+| Extension | `@framers/agentos-ext-{name}` | `@framers/agentos-ext-web-search` |
 | Template | `@framers/agentos-template-{type}` | `@framers/agentos-template-basic-tool` |
 
 ## CI/CD

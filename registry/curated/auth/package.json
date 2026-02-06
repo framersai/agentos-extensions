@@ -1,5 +1,5 @@
 {
-  "name": "@framers/agentos-extensions-auth",
+  "name": "@framers/agentos-ext-auth",
   "version": "1.0.0",
   "description": "Authentication extension for AgentOS (part of @framers/agentos-extensions)",
   "private": false,

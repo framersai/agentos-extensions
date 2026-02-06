@@ -1,6 +1,6 @@
 /**
  * CLI Executor Extension Types
- * @module @framers/agentos-system-cli-executor
+ * @module @framers/agentos-ext-cli-executor
  */
 
 /**

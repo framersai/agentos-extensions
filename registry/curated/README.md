@@ -64,10 +64,10 @@ All curated extensions:
 
 ```bash
 # Install from npm
-npm install @framers/agentos-research-web-search
+npm install @framers/agentos-ext-web-search
 
 # Import in AgentOS
-import webSearch from '@framers/agentos-research-web-search';
+import webSearch from '@framers/agentos-ext-web-search';
 ```
 
 ## Version Policy

@@ -36,7 +36,7 @@ Extensions are modular packages that provide capabilities to AgentOS agents (GMI
 
 Example:
 ```
-Extension: @framers/agentos-integrations-telegram
+Extension: @framers/agentos-ext-telegram
 ├── Tool: telegramSendMessage
 ├── Tool: telegramSendPhoto
 ├── Tool: telegramGetChatInfo
@@ -92,7 +92,7 @@ registry/
 
 ```bash
 # Curated extension
-npm install @framers/agentos-research-web-search
+npm install @framers/agentos-ext-web-search
 
 # Community extension
 npm install @framers/agentos-productivity-tasks
@@ -102,8 +102,8 @@ npm install @framers/agentos-productivity-tasks
 
 ```typescript
 import { AgentOS } from '@framers/agentos';
-import webSearchExtension from '@framers/agentos-research-web-search';
-import telegramExtension from '@framers/agentos-integrations-telegram';
+import webSearchExtension from '@framers/agentos-ext-web-search';
+import telegramExtension from '@framers/agentos-ext-telegram';
 
 const agentos = new AgentOS({
   extensionManifest: {

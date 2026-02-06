@@ -1,5 +1,5 @@
 {
-  "name": "@framers/agentos-telegram-bot",
+  "name": "@framers/agentos-ext-telegram-bot",
   "version": "1.0.0",
   "description": "Telegram Bot API extension for AgentOS - manage channels, send messages, and interact as a bot",
   "main": "dist/index.js",

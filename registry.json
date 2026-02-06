@@ -22,7 +22,7 @@
       {
         "id": "com.framers.communications.telegram",
         "name": "Telegram Bot Extension",
-        "package": "@framers/agentos-telegram-bot",
+        "package": "@framers/agentos-ext-telegram-bot",
         "version": "1.0.0",
         "category": "communications",
         "path": "registry/curated/communications/telegram-bot",
@@ -55,7 +55,7 @@
           "chat",
           "channels"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-telegram-bot",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
         "downloads": 0
@@ -63,7 +63,7 @@
       {
         "id": "com.framers.integrations.telegram",
         "name": "Telegram Bot Extension",
-        "package": "@framers/agentos-integrations-telegram",
+        "package": "@framers/agentos-ext-telegram",
         "version": "1.0.0",
         "category": "integrations",
         "path": "registry/curated/integrations/telegram",
@@ -98,7 +98,7 @@
           "communication",
           "integration"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-integrations-telegram",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
         "downloads": 0
@@ -106,7 +106,7 @@
       {
         "id": "com.framers.provenance.anchor-providers",
         "name": "Provenance Anchor Providers",
-        "package": "@framers/agentos-provenance-anchor-providers",
+        "package": "@framers/agentos-ext-anchor-providers",
         "version": "1.0.0",
         "category": "provenance",
         "path": "registry/curated/provenance/anchor-providers",
@@ -137,7 +137,7 @@
           "transparency-log",
           "tamper-evidence"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-provenance-anchor-providers",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
         "downloads": 0
@@ -145,7 +145,7 @@
       {
         "id": "com.framers.provenance.wunderland-tip-ingestion",
         "name": "Wunderland Tip Ingestion",
-        "package": "@framers/agentos-provenance-wunderland-tip-ingestion",
+        "package": "@framers/agentos-ext-tip-ingestion",
         "version": "1.0.0",
         "category": "provenance",
         "path": "registry/curated/provenance/wunderland-tip-ingestion",
@@ -166,7 +166,7 @@
           "solana",
           "blockchain"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-provenance-wunderland-tip-ingestion",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
         "downloads": 0
@@ -174,7 +174,7 @@
       {
         "id": "com.framers.research.web-browser",
         "name": "Web Browser Extension",
-        "package": "@framers/agentos-research-web-browser",
+        "package": "@framers/agentos-ext-web-browser",
         "version": "1.0.0",
         "category": "research",
         "path": "registry/curated/research/web-browser",
@@ -201,7 +201,7 @@
           "web",
           "navigate"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-browser",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
         "downloads": 0
@@ -209,7 +209,7 @@
       {
         "id": "com.framers.research.web-search",
         "name": "Web Search Extension",
-        "package": "@framers/agentos-research-web-search",
+        "package": "@framers/agentos-ext-web-search",
         "version": "1.0.0",
         "category": "research",
         "path": "registry/curated/research/web-search",
@@ -234,7 +234,7 @@
           "serpapi",
           "brave"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-search",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
         "downloads": 0
@@ -242,7 +242,7 @@
       {
         "id": "com.framers.system.cli-executor",
         "name": "CLI Executor Extension",
-        "package": "@framers/agentos-system-cli-executor",
+        "package": "@framers/agentos-ext-cli-executor",
         "version": "1.0.0",
         "category": "system",
         "path": "registry/curated/system/cli-executor",
@@ -270,7 +270,7 @@
           "powershell",
           "script"
         ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-system-cli-executor",
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
         "downloads": 0

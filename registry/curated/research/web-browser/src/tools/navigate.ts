@@ -2,7 +2,7 @@
  * Navigate Tool
  * Navigate browser to a URL and retrieve page content.
  *
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  */
 
 import type { ITool } from '@framers/agentos';

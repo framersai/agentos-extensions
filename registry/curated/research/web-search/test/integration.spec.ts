@@ -26,7 +26,7 @@ describe('Web Search Extension Integration', () => {
   
   describe('Extension Pack Creation', () => {
     it('should create extension pack with correct metadata', () => {
-      expect(extensionPack.name).toBe('@framers/agentos-research-web-search');
+      expect(extensionPack.name).toBe('@framers/agentos-ext-web-search');
       expect(extensionPack.version).toBe('1.0.0');
       expect(extensionPack.descriptors).toHaveLength(3);
     });

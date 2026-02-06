@@ -1,5 +1,5 @@
 {
-  "name": "@framers/agentos-provenance-anchor-providers",
+  "name": "@framers/agentos-ext-anchor-providers",
   "version": "1.0.0",
   "description": "External anchor providers for AgentOS provenance — blockchain, WORM storage, and transparency log integrations",
   "main": "dist/index.js",

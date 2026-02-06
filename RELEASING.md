@@ -42,7 +42,7 @@ The `release.yml` GitHub Action detects pending changesets and opens a PR titled
 
 When you merge the "Version Packages" PR, the action runs `pnpm run release` which:
 - Publishes each bumped package to npm under the `@framers` scope
-- Creates GitHub releases with tags like `@framers/agentos-research-web-search@1.2.0`
+- Creates GitHub releases with tags like `@framers/agentos-ext-web-search@1.2.0`
 - Updates `registry.json` with the latest versions
 
 ## Version bump guide
@@ -60,11 +60,11 @@ You can include multiple changesets in a single commit or PR. Each changeset can
 ```bash
 # First changeset: patch for web-search
 pnpm changeset
-# Select @framers/agentos-research-web-search, patch
+# Select @framers/agentos-ext-web-search, patch
 
 # Second changeset: minor for telegram
 pnpm changeset
-# Select @framers/agentos-integrations-telegram, minor
+# Select @framers/agentos-ext-telegram, minor
 ```
 
 ## Manual publishing (emergency)

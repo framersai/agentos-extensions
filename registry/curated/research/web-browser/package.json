@@ -1,5 +1,5 @@
 {
-  "name": "@framers/agentos-research-web-browser",
+  "name": "@framers/agentos-ext-web-browser",
   "version": "1.0.0",
   "description": "Browser automation extension for AgentOS",
   "main": "dist/index.js",

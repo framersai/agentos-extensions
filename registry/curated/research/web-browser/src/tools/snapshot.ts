@@ -2,7 +2,7 @@
  * Snapshot Tool
  * Get accessibility snapshot of the current page.
  *
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  */
 
 import type { ITool } from '@framers/agentos';

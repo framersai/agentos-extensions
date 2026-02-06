@@ -3,7 +3,7 @@
  * 
  * Provides web search capabilities through multiple providers with automatic fallback.
  * 
- * @module @framers/agentos-research-web-search
+ * @module @framers/agentos-ext-web-search
  * @version 1.0.0
  * @license MIT
  */
@@ -43,7 +43,7 @@ export interface WebSearchExtensionOptions {
  * 
  * @example
  * ```typescript
- * import { createExtensionPack } from '@framers/agentos-research-web-search';
+ * import { createExtensionPack } from '@framers/agentos-ext-web-search';
  * 
  * const pack = createExtensionPack({
  *   options: {
@@ -71,7 +71,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const factCheckTool = new FactCheckTool(searchService);
   
   return {
-    name: '@framers/agentos-research-web-search',
+    name: '@framers/agentos-ext-web-search',
     version: '1.0.0',
     descriptors: [
       {

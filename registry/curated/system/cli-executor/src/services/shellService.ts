@@ -2,7 +2,7 @@
  * Shell Service
  * Manages command execution with security validation.
  *
- * @module @framers/agentos-system-cli-executor
+ * @module @framers/agentos-ext-cli-executor
  */
 
 import { exec, spawn } from 'child_process';

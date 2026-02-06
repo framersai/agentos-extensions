@@ -3,7 +3,7 @@
  * 
  * Provides Telegram Bot API capabilities for AgentOS agents.
  * 
- * @module @framers/agentos-integrations-telegram
+ * @module @framers/agentos-ext-telegram
  * @version 1.0.0
  * @license MIT
  */
@@ -102,7 +102,7 @@ function resolveBotToken(options: TelegramExtensionOptions): string {
  * 
  * @example
  * ```typescript
- * import { createExtensionPack } from '@framers/agentos-integrations-telegram';
+ * import { createExtensionPack } from '@framers/agentos-ext-telegram';
  * 
  * // Using environment variable
  * const pack = createExtensionPack({
@@ -159,7 +159,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const handleCallbackTool = new HandleCallbackTool(telegramService);
   
   return {
-    name: '@framers/agentos-integrations-telegram',
+    name: '@framers/agentos-ext-telegram',
     version: '1.0.0',
     descriptors: [
       {

@@ -12,13 +12,13 @@ Execute shell commands, run scripts, and manage files for AgentOS agents. This i
 ## Installation
 
 ```bash
-npm install @framers/agentos-system-cli-executor
+npm install @framers/agentos-ext-cli-executor
 ```
 
 ## Quick Start
 
 ```typescript
-import { createExtensionPack } from '@framers/agentos-system-cli-executor';
+import { createExtensionPack } from '@framers/agentos-ext-cli-executor';
 import { ExtensionManager } from '@framers/agentos';
 
 const extensionManager = new ExtensionManager();

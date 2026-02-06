@@ -6,7 +6,7 @@
  * Proof level: `publicly-timestamped`
  * Required peer dependency: `opentimestamps`
  *
- * @module @framers/agentos-provenance-anchor-providers
+ * @module @framers/agentos-ext-anchor-providers
  */
 
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';

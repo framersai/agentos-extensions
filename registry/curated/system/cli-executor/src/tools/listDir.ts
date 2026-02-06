@@ -2,7 +2,7 @@
  * List Directory Tool
  * List directory contents.
  *
- * @module @framers/agentos-system-cli-executor
+ * @module @framers/agentos-ext-cli-executor
  */
 
 import type { ITool } from '@framers/agentos';

@@ -2,7 +2,7 @@
  * File Write Tool
  * Write content to files.
  *
- * @module @framers/agentos-system-cli-executor
+ * @module @framers/agentos-ext-cli-executor
  */
 
 import type { ITool } from '@framers/agentos';

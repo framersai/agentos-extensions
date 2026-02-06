@@ -4,7 +4,7 @@
  * Call `registerExtensionProviders()` once at startup to enable config-driven
  * provider creation via `createAnchorProvider()`.
  *
- * @module @framers/agentos-provenance-anchor-providers
+ * @module @framers/agentos-ext-anchor-providers
  */
 
 import { registerAnchorProviderFactory } from '@framers/agentos';
@@ -29,7 +29,7 @@ let registered = false;
  *
  * @example
  * ```typescript
- * import { registerExtensionProviders } from '@framers/agentos-provenance-anchor-providers';
+ * import { registerExtensionProviders } from '@framers/agentos-ext-anchor-providers';
  * import { createAnchorProvider } from '@framers/agentos';
  *
  * // Register at startup

@@ -2,7 +2,7 @@
  * Type Tool
  * Type text into input fields.
  *
- * @module @framers/agentos-research-web-browser
+ * @module @framers/agentos-ext-web-browser
  */
 
 import type { ITool } from '@framers/agentos';
