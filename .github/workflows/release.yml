@@ -44,10 +44,18 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Verify npm auth
+      - name: Verify npm auth and token type
         run: |
-          echo "NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-not set}"
-          npm whoami --registry https://registry.npmjs.org/ 2>&1 || echo "npm whoami failed - token may not be valid"
+          echo "=== npm whoami ==="
+          npm whoami --registry https://registry.npmjs.org/ 2>&1 || echo "npm whoami failed"
+
+          echo "=== npm token info ==="
+          npm token list 2>&1 || echo "token list failed (expected for automation tokens)"
+
+          echo "=== Test direct publish (auth package) ==="
+          cd registry/curated/auth
+          npm publish --access public 2>&1 && echo "DIRECT PUBLISH SUCCEEDED" || echo "DIRECT PUBLISH FAILED (exit $?)"
+          cd ../../..
 
       - name: Create Release PR or Publish
         id: changesets
