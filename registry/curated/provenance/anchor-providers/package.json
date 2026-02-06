@@ -89,7 +89,7 @@
     }
   },
   "devDependencies": {
-    "@framers/agentos": "workspace:*",
+    "@framers/agentos": "^0.1.0",
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
