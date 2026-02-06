@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -36,15 +35,19 @@ jobs:
 
       - name: Configure npm auth for publish
         run: |
-          cat > .npmrc << EOF
-          @framers:registry=https://registry.npmjs.org/
-          //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
-          access=public
-          EOF
-          echo "=== .npmrc configured (token masked) ==="
-          sed 's/_authToken=.*/_authToken=***/' .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > "$HOME/.npmrc"
+          echo "Project .npmrc:"
+          cat .npmrc
+          echo "---"
+          echo "User .npmrc (token masked):"
+          sed 's/_authToken=.*/_authToken=[MASKED]/' "$HOME/.npmrc"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify npm auth
+        run: |
+          echo "NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-not set}"
+          npm whoami --registry https://registry.npmjs.org/ 2>&1 || echo "npm whoami failed - token may not be valid"
 
       - name: Create Release PR or Publish
         id: changesets
