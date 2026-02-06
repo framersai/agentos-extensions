@@ -5,20 +5,35 @@
  * Scans all directories and updates registry.json
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const registryPath = path.join(__dirname, '../registry.json');
 const rootDir = path.join(__dirname, '..');
 
+function listSubdirectories(dirPath) {
+  if (!fs.existsSync(dirPath)) return [];
+  return fs
+    .readdirSync(dirPath, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+}
+
 function scanExtensions() {
+  const curatedDir = path.join(rootDir, 'registry', 'curated');
+  const communityDir = path.join(rootDir, 'registry', 'community');
+
   const registry = {
     version: '1.0.0',
     updated: new Date().toISOString(),
     categories: {
       templates: [],
-      curated: ['core', 'research', 'productivity', 'ai-models', 'enterprise'],
-      community: ['research', 'productivity', 'development', 'integrations', 'utilities']
+      curated: listSubdirectories(curatedDir),
+      community: listSubdirectories(communityDir)
     },
     extensions: {
       curated: [],
@@ -59,7 +74,6 @@ function scanExtensions() {
   }
   
   // Scan curated extensions
-  const curatedDir = path.join(rootDir, 'curated');
   if (fs.existsSync(curatedDir)) {
     registry.categories.curated.forEach(category => {
       const categoryPath = path.join(curatedDir, category);
@@ -81,14 +95,14 @@ function scanExtensions() {
               package: packageJson.name,
               version: packageJson.version,
               category,
-              path: `curated/${category}/${extension}`,
+              path: `registry/curated/${category}/${extension}`,
               description: manifest.description || packageJson.description,
               author: manifest.author || packageJson.author,
               features: manifest.features || [],
               tools: manifest.extensions?.map(e => e.id) || [],
               keywords: manifest.keywords || packageJson.keywords || [],
               npm: `https://www.npmjs.com/package/${packageJson.name}`,
-              repository: `https://github.com/framersai/agentos-extensions/tree/master/curated/${category}/${extension}`,
+              repository: `https://github.com/framersai/agentos-extensions/tree/master/registry/curated/${category}/${extension}`,
               verified: true,
               downloads: 0
             });
@@ -100,7 +114,6 @@ function scanExtensions() {
   }
   
   // Scan community extensions
-  const communityDir = path.join(rootDir, 'community');
   if (fs.existsSync(communityDir)) {
     registry.categories.community.forEach(category => {
       const categoryPath = path.join(communityDir, category);
@@ -122,12 +135,12 @@ function scanExtensions() {
               package: packageJson.name,
               version: packageJson.version,
               category,
-              path: `community/${category}/${extension}`,
+              path: `registry/community/${category}/${extension}`,
               description: manifest.description || packageJson.description,
               author: manifest.author || packageJson.author,
               keywords: manifest.keywords || packageJson.keywords || [],
               npm: `https://www.npmjs.com/package/${packageJson.name}`,
-              repository: `https://github.com/framersai/agentos-extensions/tree/master/community/${category}/${extension}`,
+              repository: `https://github.com/framersai/agentos-extensions/tree/master/registry/community/${category}/${extension}`,
               downloads: 0
             });
             registry.stats.communityCount++;
@@ -139,7 +152,8 @@ function scanExtensions() {
   
   registry.stats.totalExtensions = 
     registry.stats.curatedCount + 
-    registry.stats.communityCount;
+    registry.stats.communityCount +
+    registry.stats.templateCount;
   
   return registry;
 }

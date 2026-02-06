@@ -1,93 +1,106 @@
 {
   "version": "1.0.0",
-  "updated": "2024-12-01T00:00:00.000Z",
+  "updated": "2026-02-06T03:46:29.259Z",
   "categories": {
     "templates": [
       "basic-tool",
-      "multi-tool",
       "guardrail",
-      "workflow"
+      "multi-tool"
     ],
     "curated": [
-      "core",
-      "safety",
-      "research",
-      "productivity",
-      "ai-models",
-      "enterprise",
+      "auth",
       "communications",
-      "provenance"
-    ],
-    "community": [
-      "research",
-      "productivity",
-      "development",
       "integrations",
-      "utilities"
-    ]
+      "provenance",
+      "research",
+      "system"
+    ],
+    "community": []
   },
   "extensions": {
     "curated": [
       {
-        "id": "com.framers.core.auth",
-        "name": "Authentication & Subscription",
-        "package": "@framers/agentos-core-auth",
+        "id": "com.framers.communications.telegram",
+        "name": "Telegram Bot Extension",
+        "package": "@framers/agentos-telegram-bot",
         "version": "1.0.0",
-        "category": "core",
-        "path": "curated/auth",
-        "description": "JWT authentication and subscription tier management for AgentOS",
-        "author": {
-          "name": "Framers AI",
-          "email": "support@frame.dev",
-          "url": "https://github.com/framersai"
-        },
-        "features": [
-          "JWT token authentication",
-          "BCrypt password hashing",
-          "Multi-tier subscriptions",
-          "Tool permission integration",
-          "Persona tier gating"
-        ],
-        "provides": ["authService", "subscriptionService"],
-        "keywords": ["auth", "jwt", "subscription", "permissions", "tiers"],
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/auth",
-        "verified": true,
-        "verifiedAt": "2025-11-14T00:00:00Z",
-        "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.research.web-search",
-        "name": "Web Search",
-        "package": "@framers/agentos-research-web-search",
-        "version": "1.0.0",
-        "category": "research",
-        "path": "curated/research/web-search",
-        "description": "Multi-provider web search with research aggregation and fact-checking",
+        "category": "communications",
+        "path": "registry/curated/communications/telegram-bot",
+        "description": "Professional Telegram Bot API integration for AgentOS agents",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
           "url": "https://github.com/framersai"
         },
         "features": [
-          "Multi-provider support (Serper, SerpAPI, Brave)",
-          "Research aggregation",
-          "Fact checking",
-          "Rate limiting"
+          "Send text messages with formatting (Markdown/HTML)",
+          "Send photos, documents, and media",
+          "Manage chat settings and pins",
+          "Poll messages for context awareness",
+          "Rate limiting and retry logic",
+          "Environment variable support for credentials"
         ],
         "tools": [
-          "webSearch",
-          "researchAggregator",
-          "factCheck"
+          "telegramSendMessage",
+          "telegramSendPhoto",
+          "telegramSendDocument",
+          "telegramManageChat",
+          "telegramPollMessages"
         ],
-        "keywords": ["search", "web", "research", "fact-check", "serper", "serpapi", "brave"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-search",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/curated/research/web-search",
+        "keywords": [
+          "telegram",
+          "bot",
+          "messaging",
+          "communications",
+          "chat",
+          "channels"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-telegram-bot",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
-        "verifiedAt": "2025-11-13T00:00:00Z",
-        "verifiedBy": { "name": "AgentOS Admin", "email": "security@agentos.sh" },
-        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.integrations.telegram",
+        "name": "Telegram Bot Extension",
+        "package": "@framers/agentos-integrations-telegram",
+        "version": "1.0.0",
+        "category": "integrations",
+        "path": "registry/curated/integrations/telegram",
+        "description": "Professional Telegram Bot API integration for AgentOS - send messages, manage groups, handle callbacks",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Send messages, photos, and documents",
+          "Manage groups (pin, descriptions, titles)",
+          "Handle inline keyboard callbacks",
+          "Flexible bot token configuration (env vars)",
+          "Rate limiting and queue management",
+          "Webhook and polling support",
+          "Markdown and HTML formatting"
+        ],
+        "tools": [
+          "telegramSendMessage",
+          "telegramSendPhoto",
+          "telegramSendDocument",
+          "telegramGetChatInfo",
+          "telegramManageGroup",
+          "telegramHandleCallback"
+        ],
+        "keywords": [
+          "telegram",
+          "bot",
+          "messaging",
+          "chat",
+          "communication",
+          "integration"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-integrations-telegram",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
+        "verified": true,
         "downloads": 0
       },
       {
@@ -96,34 +109,37 @@
         "package": "@framers/agentos-provenance-anchor-providers",
         "version": "1.0.0",
         "category": "provenance",
-        "path": "curated/provenance/anchor-providers",
-        "description": "External anchor providers for AgentOS provenance — WORM storage, transparency logs, and blockchain timestamping",
+        "path": "registry/curated/provenance/anchor-providers",
+        "description": "External anchor providers for the AgentOS provenance system — WORM storage, transparency logs, and blockchain timestamping",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
           "url": "https://github.com/framersai"
         },
-        "features": [
-          "S3 Object Lock / WORM storage anchoring",
-          "Sigstore Rekor transparency log integration",
-          "OpenTimestamps Bitcoin-anchored timestamping",
-          "Ethereum on-chain anchor publishing",
-          "Composite multi-provider support",
-          "Config-driven factory registration"
-        ],
-        "providers": [
+        "features": [],
+        "tools": [
           "wormSnapshotProvider",
           "rekorProvider",
           "openTimestampsProvider",
-          "ethereumProvider"
+          "ethereumProvider",
+          "solanaProvider"
         ],
-        "keywords": ["provenance", "anchor", "blockchain", "ethereum", "opentimestamps", "rekor", "sigstore", "worm", "s3-object-lock", "tamper-evidence"],
+        "keywords": [
+          "provenance",
+          "anchor",
+          "blockchain",
+          "ethereum",
+          "opentimestamps",
+          "rekor",
+          "sigstore",
+          "worm",
+          "s3-object-lock",
+          "transparency-log",
+          "tamper-evidence"
+        ],
         "npm": "https://www.npmjs.com/package/@framers/agentos-provenance-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
-        "verifiedAt": "2025-02-03T00:00:00Z",
-        "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
-        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -132,27 +148,131 @@
         "package": "@framers/agentos-provenance-wunderland-tip-ingestion",
         "version": "1.0.0",
         "category": "provenance",
-        "path": "curated/provenance/wunderland-tip-ingestion",
+        "path": "registry/curated/provenance/wunderland-tip-ingestion",
         "description": "Deterministic IPFS pinning and on-chain tip ingestion utilities for Wunderland agents",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
           "url": "https://github.com/framersai"
         },
-        "features": [
-          "Deterministic CID derivation from SHA-256 content hashes",
-          "Raw-block IPFS pinning with local and hosted providers",
-          "On-chain tip processing pipeline with refund/settlement callbacks",
-          "Direct integration with Wunderland social StimulusRouter"
+        "features": [],
+        "tools": [],
+        "keywords": [
+          "wunderland",
+          "agentos",
+          "provenance",
+          "tip-ingestion",
+          "ipfs",
+          "solana",
+          "blockchain"
         ],
-        "provides": ["IpfsPinner", "TipIngester"],
-        "keywords": ["wunderland", "agentos", "provenance", "tips", "ipfs", "solana", "blockchain"],
         "npm": "https://www.npmjs.com/package/@framers/agentos-provenance-wunderland-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
-        "verifiedAt": "2026-02-06T00:00:00Z",
-        "verifiedBy": { "name": "AgentOS Core Team", "email": "security@agentos.sh" },
-        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.research.web-browser",
+        "name": "Web Browser Extension",
+        "package": "@framers/agentos-research-web-browser",
+        "version": "1.0.0",
+        "category": "research",
+        "path": "registry/curated/research/web-browser",
+        "description": "Browser automation capabilities for AgentOS - navigate pages, scrape content, click links, and capture screenshots",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "browserNavigate",
+          "browserScrape",
+          "browserClick",
+          "browserScreenshot",
+          "browserType"
+        ],
+        "keywords": [
+          "browser",
+          "scraping",
+          "automation",
+          "puppeteer",
+          "playwright",
+          "web",
+          "navigate"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-browser",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
+        "verified": true,
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.research.web-search",
+        "name": "Web Search Extension",
+        "package": "@framers/agentos-research-web-search",
+        "version": "1.0.0",
+        "category": "research",
+        "path": "registry/curated/research/web-search",
+        "description": "Professional web search, research aggregation, and fact-checking capabilities for AgentOS",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "webSearch",
+          "researchAggregator",
+          "factCheck"
+        ],
+        "keywords": [
+          "search",
+          "web",
+          "research",
+          "fact-check",
+          "serper",
+          "serpapi",
+          "brave"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-research-web-search",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
+        "verified": true,
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.system.cli-executor",
+        "name": "CLI Executor Extension",
+        "package": "@framers/agentos-system-cli-executor",
+        "version": "1.0.0",
+        "category": "system",
+        "path": "registry/curated/system/cli-executor",
+        "description": "Execute shell commands, run scripts, and manage processes for AgentOS agents",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "shellExecute",
+          "shellScript",
+          "fileRead",
+          "fileWrite",
+          "listDirectory"
+        ],
+        "keywords": [
+          "cli",
+          "shell",
+          "command",
+          "execute",
+          "terminal",
+          "bash",
+          "powershell",
+          "script"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-system-cli-executor",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
+        "verified": true,
         "downloads": 0
       }
     ],
@@ -160,36 +280,36 @@
     "templates": [
       {
         "id": "com.framers.template.basic-tool",
-        "name": "Basic Tool Template",
+        "name": "Template for creating AgentOS extensions",
         "package": "@framers/agentos-template-basic-tool",
         "version": "1.0.0",
         "path": "templates/basic-tool",
-        "description": "Template for creating single-tool AgentOS extensions",
+        "description": "Template for creating AgentOS extensions",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/basic-tool"
       },
       {
+        "id": "com.framers.template.guardrail",
+        "name": "Template for creating guardrail AgentOS extensions",
+        "package": "@framers/agentos-template-guardrail",
+        "version": "1.0.0",
+        "path": "templates/guardrail",
+        "description": "Template for creating guardrail AgentOS extensions",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/guardrail"
+      },
+      {
         "id": "com.framers.template.multi-tool",
-        "name": "Multi-Tool Template",
+        "name": "Template for creating multi-tool AgentOS extensions",
         "package": "@framers/agentos-template-multi-tool",
         "version": "1.0.0",
         "path": "templates/multi-tool",
         "description": "Template for creating multi-tool AgentOS extensions",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/multi-tool"
-      },
-      {
-        "id": "com.framers.template.guardrail",
-        "name": "Guardrail Template",
-        "package": "@framers/agentos-template-guardrail",
-        "version": "1.0.0",
-        "path": "templates/guardrail",
-        "description": "Template for creating safety and compliance extensions",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/templates/guardrail"
       }
     ]
   },
   "stats": {
-    "totalExtensions": 4,
-    "curatedCount": 4,
+    "totalExtensions": 10,
+    "curatedCount": 7,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0

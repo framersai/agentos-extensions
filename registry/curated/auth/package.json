@@ -2,7 +2,7 @@
   "name": "@framers/agentos-extensions-auth",
   "version": "1.0.0",
   "description": "Authentication extension for AgentOS (part of @framers/agentos-extensions)",
-  "private": true,
+  "private": false,
   "type": "module",
   "main": "src/index.ts",
   "exports": {
