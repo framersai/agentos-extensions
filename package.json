@@ -20,7 +20,7 @@
     "clean": "node -e \"console.log('agentos-extensions: clean noop in this monorepo build')\"",
     "create-extension": "node scripts/create-extension.js",
     "update-registry": "node scripts/update-registry.js",
-    "docs": "node -e \"console.log('agentos-extensions: docs skipped in this monorepo build')\""
+    "docs": "npx typedoc"
   },
   "repository": {
     "type": "git",
