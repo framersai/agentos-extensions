@@ -20,45 +20,28 @@ Official and verified extensions maintained by Frame.dev and trusted partners.
 
 ## Categories
 
-### 🎯 Core
-Essential extensions that ship with AgentOS.
-- Core utilities
-- Base tools
-- System integrations
+### 🔐 Auth
+Authentication and identity management.
+- **[@framers/agentos-ext-auth](auth/)**: JWT authentication & subscription management
 
 ### 🔬 Research
 Professional research and analysis tools.
-- **web-search**: Multi-provider web search with research aggregation
-- Advanced analytics (Coming)
-- Citation management (Coming)
+- **[@framers/agentos-ext-web-search](research/web-search/)**: Multi-provider web search with research aggregation & fact-checking
+- **[@framers/agentos-ext-web-browser](research/web-browser/)**: Browser automation & content extraction
 
-### 📊 Productivity
-Enterprise-grade productivity tools.
-- Project management integrations
-- Workflow automation
-- Team collaboration
+### 🔗 Provenance
+On-chain anchoring and data integrity.
+- **[@framers/agentos-ext-anchor-providers](provenance/anchor-providers/)**: Solana, Ethereum, Rekor, OpenTimestamps anchoring
+- **[@framers/agentos-ext-tip-ingestion](provenance/wunderland-tip-ingestion/)**: IPFS pinning & tip content processing
 
-### 🤖 AI Models
-Integrations with various AI providers.
-- OpenAI tools (Coming)
-- Anthropic tools (Coming)
-- Local model support (Coming)
+### 💬 Communications
+Messaging platform integrations.
+- **[@framers/agentos-ext-telegram](integrations/telegram/)**: Telegram Bot API integration
+- **[@framers/agentos-ext-telegram-bot](communications/telegram-bot/)**: Telegram bot communications handler
 
-### 🏢 Enterprise
-Enterprise-focused extensions with SLA support.
-- SSO integrations
-- Compliance tools
-- Audit logging
-
-## Quality Guarantee
-
-All curated extensions:
-- ✅ Professionally maintained
-- ✅ Security audited
-- ✅ Performance optimized
-- ✅ Comprehensive documentation
-- ✅ SLA support available
-- ✅ Regular updates
+### 🖥️ System
+System-level utilities.
+- **[@framers/agentos-ext-cli-executor](system/cli-executor/)**: Shell command execution & file management
 
 ## Using Curated Extensions
 
@@ -70,39 +53,14 @@ npm install @framers/agentos-ext-web-search
 import webSearch from '@framers/agentos-ext-web-search';
 ```
 
-## Version Policy
+## Quality Guarantee
 
-- **LTS versions**: Supported for 18 months
-- **Current versions**: Supported for 6 months
-- **Security patches**: Backported to LTS
-
-## Support Tiers
-
-### 🟢 Community Support (Free)
-- GitHub issues
-- Discord community
-- Documentation
-
-### 🟡 Professional Support ($)
-- Priority issue resolution
-- Direct email support
-- Implementation guidance
-
-### 🔴 Enterprise Support ($$$)
-- SLA guarantees
-- Dedicated support channel
-- Custom development
-
-## Partner Program
-
-Become a verified extension partner:
-- Professional code review
-- Security audit assistance
-- Co-marketing opportunities
-- Revenue sharing for paid extensions
-
-Contact: partners@frame.dev
+All curated extensions:
+- Professionally maintained
+- Security reviewed
+- Comprehensive documentation
+- Regular updates
 
 ---
 
-**Trust Badge**: All curated extensions are verified by Frame.dev 🛡️
+**All curated extensions are verified by Frame.dev.**
