@@ -7,3 +7,7 @@ packages:
   - "registry/curated/integrations/telegram"
   - "registry/curated/communications/telegram-bot"
   - "registry/curated/system/cli-executor"
+  - "registry/curated/media/giphy"
+  - "registry/curated/media/image-search"
+  - "registry/curated/media/voice-synthesis"
+  - "registry/curated/research/news-search"

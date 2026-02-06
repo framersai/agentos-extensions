@@ -129,6 +129,69 @@ importers:
         specifier: ^1.0.0
         version: 1.6.1(@types/node@20.19.32)
 
+  registry/curated/media/giphy:
+    devDependencies:
+      '@framers/agentos':
+        specifier: ^0.1.0
+        version: 0.1.6(socks@2.8.7)(typescript@5.9.3)
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.19.32
+      '@vitest/coverage-v8':
+        specifier: ^1.6.0
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.32))
+      rimraf:
+        specifier: ^5.0.7
+        version: 5.0.10
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.32)
+
+  registry/curated/media/image-search:
+    devDependencies:
+      '@framers/agentos':
+        specifier: ^0.1.0
+        version: 0.1.6(socks@2.8.7)(typescript@5.9.3)
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.19.32
+      '@vitest/coverage-v8':
+        specifier: ^1.6.0
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.32))
+      rimraf:
+        specifier: ^5.0.7
+        version: 5.0.10
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.32)
+
+  registry/curated/media/voice-synthesis:
+    devDependencies:
+      '@framers/agentos':
+        specifier: ^0.1.0
+        version: 0.1.6(socks@2.8.7)(typescript@5.9.3)
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.19.32
+      '@vitest/coverage-v8':
+        specifier: ^1.6.0
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.32))
+      rimraf:
+        specifier: ^5.0.7
+        version: 5.0.10
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.32)
+
   registry/curated/provenance/anchor-providers:
     dependencies:
       '@aws-sdk/client-s3':
@@ -186,6 +249,27 @@ importers:
       '@framers/wunderland':
         specifier: ^0.2.0
         version: 0.2.0(typescript@5.9.3)
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.19.32
+      '@vitest/coverage-v8':
+        specifier: ^1.6.0
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.32))
+      rimraf:
+        specifier: ^5.0.7
+        version: 5.0.10
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.32)
+
+  registry/curated/research/news-search:
+    devDependencies:
+      '@framers/agentos':
+        specifier: ^0.1.0
+        version: 0.1.6(socks@2.8.7)(typescript@5.9.3)
       '@types/node':
         specifier: ^20.12.12
         version: 20.19.32
