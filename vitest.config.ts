@@ -29,7 +29,8 @@ export default defineConfig({
     },
     include: ['test/**/*.spec.ts', 'registry/**/test/**/*.spec.ts'],
     exclude: ['**/node_modules/**', '**/dist/**'],
-    testTimeout: 15000
+    testTimeout: 15000,
+    passWithNoTests: true
   },
   resolve: {
     alias: {
