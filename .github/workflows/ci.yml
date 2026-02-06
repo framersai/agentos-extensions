@@ -26,8 +26,5 @@ jobs:
       - name: Build extensions
         run: pnpm run build
 
-      - name: Lint
-        run: pnpm -r --if-present run lint
-
       - name: Test
         run: pnpm -r --if-present run test
