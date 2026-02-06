@@ -12,68 +12,59 @@ Official extension registry for the AgentOS ecosystem.
 
 [![CI Status](https://github.com/framersai/agentos-extensions/workflows/CI%20-%20All%20Extensions/badge.svg)](https://github.com/framersai/agentos-extensions/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![API Docs](https://img.shields.io/badge/docs-TypeDoc-blue)](https://framersai.github.io/agentos-extensions/)
 
-## 📂 Repository Structure
+## Published Extensions
+
+All extensions are published to npm under the `@framers` scope.
+
+| Package | Description | npm |
+|---------|-------------|-----|
+| [`@framers/agentos-extensions-auth`](./registry/curated/auth) | JWT authentication & subscription management | ![npm](https://img.shields.io/npm/v/@framers/agentos-extensions-auth) |
+| [`@framers/agentos-provenance-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | ![npm](https://img.shields.io/npm/v/@framers/agentos-provenance-anchor-providers) |
+| [`@framers/agentos-provenance-wunderland-tip-ingestion`](./registry/curated/provenance/wunderland-tip-ingestion) | Tip content processing pipeline | ![npm](https://img.shields.io/npm/v/@framers/agentos-provenance-wunderland-tip-ingestion) |
+| [`@framers/agentos-research-web-search`](./registry/curated/research/web-search) | Multi-provider web search & fact-checking | ![npm](https://img.shields.io/npm/v/@framers/agentos-research-web-search) |
+| [`@framers/agentos-research-web-browser`](./registry/curated/research/web-browser) | Browser automation & content extraction | ![npm](https://img.shields.io/npm/v/@framers/agentos-research-web-browser) |
+| [`@framers/agentos-integrations-telegram`](./registry/curated/integrations/telegram) | Telegram Bot API integration | ![npm](https://img.shields.io/npm/v/@framers/agentos-integrations-telegram) |
+| [`@framers/agentos-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | ![npm](https://img.shields.io/npm/v/@framers/agentos-telegram-bot) |
+| [`@framers/agentos-system-cli-executor`](./registry/curated/system/cli-executor) | Shell command execution & file management | ![npm](https://img.shields.io/npm/v/@framers/agentos-system-cli-executor) |
+
+## Repository Structure
 
 ```
 agentos-extensions/
-├── 📁 templates/          # Starter templates for new extensions
+├── .changeset/            # Changesets for versioning & publishing
+├── .github/workflows/     # CI, release, TypeDoc pages
+├── logos/                 # Branding assets
+├── templates/             # Starter templates for new extensions
 │   ├── basic-tool/        # Single tool template
 │   ├── multi-tool/        # Multiple tools template
 │   ├── guardrail/         # Safety/compliance template
 │   └── workflow/          # Multi-step process template
-│
-└── 📁 registry/           # Official AgentOS Extension Registry
-    ├── 📁 curated/        # Official & verified extensions
-    │   ├── core/          # Essential AgentOS tools
-    │   ├── research/      # Research & analysis tools
-    │   ├── integrations/  # External service connectors
-    │   ├── productivity/  # Enterprise productivity
-    │   ├── ai-models/     # AI provider integrations
-    │   └── enterprise/    # Enterprise features
-    │
-    └── 📁 community/      # Community-contributed extensions
-        ├── research/      # Research tools
-        ├── productivity/  # Productivity tools
-        ├── development/   # Developer tools
-        ├── integrations/  # Service integrations
-        └── utilities/     # General utilities
+├── registry/
+│   ├── curated/           # Official & verified extensions
+│   │   ├── auth/          # Authentication & subscriptions
+│   │   ├── communications/# Messaging (Telegram bot)
+│   │   ├── integrations/  # External services (Telegram API)
+│   │   ├── provenance/    # On-chain anchoring & tip ingestion
+│   │   ├── research/      # Web search & browser automation
+│   │   └── system/        # CLI executor
+│   └── community/         # Community-contributed extensions
+├── scripts/               # Registry build & scaffolding tools
+├── registry.json          # Auto-generated extension manifest
+├── pnpm-workspace.yaml    # Workspace packages for publishing
+└── typedoc.json           # API docs config
 ```
 
-## 🎯 Extension Types
+## Quick Start
 
-### Templates
-Starting points for building new extensions. [Browse templates →](./templates)
-
-### Curated Extensions
-Professional extensions maintained by Frame.dev and verified partners.
-- 🛡️ Security audited
-- 📊 Performance optimized
-- 📚 Comprehensive documentation
-- 🎯 SLA support available
-
-[Browse curated extensions →](./curated)
-
-### Community Extensions
-Open-source extensions built by the community.
-- 🌟 Community reviewed
-- 🆓 Free to use
-- 🚀 Free CI/CD provided
-- 🤝 Community supported
-
-[Browse community extensions →](./community)
-
-## 🚀 Quick Start
-
-### Using an Extension
+### Install an extension
 
 ```bash
-# Curated extension
 npm install @framers/agentos-research-web-search
-
-# Community extension
-npm install @framers/agentos-productivity-task-manager
 ```
+
+### Use in your agent
 
 ```typescript
 import { AgentOS } from '@framers/agentos';
@@ -89,151 +80,106 @@ await agentos.initialize({
 });
 ```
 
-### Creating an Extension
+### Create a new extension
 
-1. **Choose a template**:
 ```bash
-cp -r templates/basic-tool community/category/my-extension
+# Use the scaffolding script
+pnpm run create-extension
+
+# Or copy a template
+cp -r templates/basic-tool registry/curated/category/my-extension
+cd registry/curated/category/my-extension
+pnpm install
+pnpm run dev
 ```
 
-2. **Develop your extension**:
+## Releasing & Publishing
+
+This repo uses [Changesets](https://github.com/changesets/changesets) for multi-package versioning and npm publishing. See [RELEASING.md](./RELEASING.md) for the full workflow.
+
+### TL;DR
+
 ```bash
-cd community/category/my-extension
-npm install
-npm run dev
+# 1. Make your changes to one or more extensions
+
+# 2. Add a changeset describing what changed
+pnpm changeset
+
+# 3. Commit and push to master
+git add . && git commit -m "feat: my changes" && git push
+
+# 4. The GitHub Action opens a "Version Packages" PR
+#    → Merge it to publish updated packages to npm
 ```
 
-3. **Submit for review**:
-```bash
-npm test
-npm run build
-# Create PR to this repository
-```
+Each extension is versioned and published independently. A change to `web-search` does not bump `telegram`.
 
-## 📦 Naming Convention
+## Naming Convention
 
-### Templates
-`@framers/agentos-template-{type}`
-- Example: `@framers/agentos-template-basic-tool`
+| Type | Pattern | Example |
+|------|---------|---------|
+| Curated | `@framers/agentos-{category}-{name}` | `@framers/agentos-research-web-search` |
+| Community | `@framers/agentos-{category}-{name}` | `@framers/agentos-productivity-pomodoro` |
+| Template | `@framers/agentos-template-{type}` | `@framers/agentos-template-basic-tool` |
 
-### Curated Extensions
-`@framers/agentos-{category}-{name}`
-- Example: `@framers/agentos-research-web-search`
-- Example: `@framers/agentos-core-utilities`
+## CI/CD
 
-### Community Extensions
-`@framers/agentos-{category}-{name}`
-- Example: `@framers/agentos-productivity-pomodoro`
-- Example: `@framers/agentos-development-snippet-manager`
+All extensions get free CI/CD via GitHub Actions:
 
-## 🎯 Free CI/CD for Contributors
+- **CI** (`ci.yml`): Lint, test, typecheck on every PR
+- **Release** (`release.yml`): Changesets auto-version PRs + npm publish on merge
+- **TypeDoc** (`pages-typedoc.yml`): API docs deployed to [framersai.github.io/agentos-extensions](https://framersai.github.io/agentos-extensions/)
+- **Extension validation** (`extension-validation.yml`): Manifest & structure checks
+- **Dependabot**: Automated dependency updates with auto-merge for patches
 
-We provide **FREE GitHub Actions CI/CD** for all extensions:
-- ✅ Automated testing (Node 18 & 20)
-- ✅ Code coverage reporting
-- ✅ npm publishing on version bump
-- ✅ GitHub releases
-- ✅ Documentation generation
-- ✅ Security scanning
-- ✅ Dependency updates
+## Quality Standards
 
-## 🏆 Featured Extensions
+### All Extensions
 
-### Curated
-| Extension | Category | Description | Weekly Downloads |
-|-----------|----------|-------------|------------------|
-| [web-search](./registry/curated/research/web-search) | Research | Multi-provider web search | ![npm](https://img.shields.io/npm/dw/@framers/agentos-research-web-search) |
-| [telegram](./registry/curated/integrations/telegram) | Integration | Telegram Bot API | ![npm](https://img.shields.io/npm/dw/@framers/agentos-integrations-telegram) |
+- TypeScript with strict mode
+- >80% test coverage
+- MIT license
+- No hardcoded secrets
 
-### Community
-| Extension | Category | Description | Weekly Downloads |
-|-----------|----------|-------------|------------------|
-| - | - | Be the first! | - |
+### Additional for Curated
 
-## 📋 Quality Standards
+- Professional code review
+- Performance benchmarks
+- Integration tests
+- Migration guides
 
-### All Extensions Must Have:
-- ✅ TypeScript with strict mode
-- ✅ >80% test coverage
-- ✅ Comprehensive documentation
-- ✅ MIT license
-- ✅ Security review passed
-- ✅ No hardcoded secrets
+## Documentation
 
-### Additional for Curated:
-- ✅ Professional code review
-- ✅ Performance benchmarks
-- ✅ Integration tests
-- ✅ Migration guides
-- ✅ SLA commitment
-
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
-
-### Quick Links
-- [Submit New Extension](https://github.com/framersai/agentos-extensions/issues/new?template=new-extension.yml)
-- [Report Bug](https://github.com/framersai/agentos-extensions/issues/new?template=bug-report.yml)
-- [Request Feature](https://github.com/framersai/agentos-extensions/discussions)
-- [Join Discord](https://discord.gg/agentos)
-
-## 📖 Documentation
-
-- [Extension Development Guide](./docs/DEVELOPMENT.md)
+- [API Reference (TypeDoc)](https://framersai.github.io/agentos-extensions/)
 - [How Extensions Work](./HOW_EXTENSIONS_WORK.md)
 - [Extension Architecture](./EXTENSION_ARCHITECTURE.md)
 - [Auto-Loading Extensions](./AUTO_LOADING_EXTENSIONS.md)
 - [Agency Collaboration Examples](./AGENCY_COLLABORATION_EXAMPLE.md)
-- [API Reference](./docs/API.md)
+- [Self-Hosted Registries](./SELF_HOSTED_REGISTRIES.md)
 - [Migration Guide](./MIGRATION_GUIDE.md)
+- [Releasing & Publishing](./RELEASING.md)
+- [Contributing](./CONTRIBUTING.md)
 
-## ✅ Verified Program
+## Contributing
 
-Extensions that meet AgentOS security, testing, and documentation standards can earn the “Verified” badge.
-See the verification policy and checklist in the workspace: [EXTENSIONS_VERIFICATION.md](../../docs/EXTENSIONS_VERIFICATION.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
-## 🏢 Partner Program
+- [Submit New Extension](https://github.com/framersai/agentos-extensions/issues/new?template=new-extension.yml)
+- [Report Bug](https://github.com/framersai/agentos-extensions/issues/new?template=bug-report.yml)
+- [Request Feature](https://github.com/framersai/agentos-extensions/discussions)
 
-Interested in becoming a verified extension partner?
-- Professional code review
-- Security audit assistance
-- Co-marketing opportunities
-- Revenue sharing for paid extensions
+## Links
 
-Contact: team@frame.dev
+- **Website**: [frame.dev](https://frame.dev)
+- **AgentOS**: [agentos.sh](https://agentos.sh)
+- **Marketplace**: [vca.chat](https://vca.chat)
+- **npm**: [@framers](https://www.npmjs.com/org/framers)
+- **API Docs**: [framersai.github.io/agentos-extensions](https://framersai.github.io/agentos-extensions/)
+- **Contact**: team@frame.dev
 
-## 📊 Stats
-
-- **Total Extensions**: 2 (Web Search, Telegram)
-- **Total Tools**: 9 (3 search + 6 telegram)
-- **Weekly Downloads**: ![npm](https://img.shields.io/npm/dw/@framers/agentos-research-web-search) + ![npm](https://img.shields.io/npm/dw/@framers/agentos-integrations-telegram)
-- **Contributors**: ![GitHub contributors](https://img.shields.io/github/contributors/framersai/agentos-extensions)
-- **Stars**: ![GitHub stars](https://img.shields.io/github/stars/framersai/agentos-extensions)
-
-## 📝 License
+## License
 
 All extensions in this repository are MIT licensed.
-
-## 🔗 Links
-
-- **NPM Organization**: [@framers](https://www.npmjs.com/org/framers)
-- **AgentOS Core**: [github.com/framersai/agentos](https://github.com/framersai/agentos)
-- **Documentation**: [agentos.sh](https://agentos.sh)
-- **Support/Contact**: team@frame.dev
-
----
-
-Built with ❤️ by Frame.dev and the AgentOS community
-## Links
-- Website: https://frame.dev
-- AgentOS: https://agentos.sh
-- Marketplace: https://vca.chat
-- GitHub: https://github.com/framersai/agentos-extensions
-- npm: https://www.npmjs.com/package/@framers/agentos-extensions
-## Contributing & Security
-- Contributing: https://github.com/manicinc/voice-chat-assistant/blob/master/.github/CONTRIBUTING.md
-- Code of Conduct: https://github.com/manicinc/voice-chat-assistant/blob/master/.github/CODE_OF_CONDUCT.md
-- Security Policy: https://github.com/manicinc/voice-chat-assistant/blob/master/.github/SECURITY.md
 
 <p align="center">
   <a href="https://agentos.sh"><img src="logos/agentos-primary-transparent-2x.png" alt="AgentOS" height="48" /></a>
