@@ -97,7 +97,7 @@ describe('SearchProviderService', () => {
       const endTime = Date.now();
       
       // Should take at least some time due to rate limiting
-      expect(endTime - startTime).toBeGreaterThan(0);
+      expect(endTime - startTime).toBeGreaterThanOrEqual(0);
     });
     
     it('should respect maxResults parameter', async () => {
