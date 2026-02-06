@@ -49,7 +49,7 @@
     "README.md"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^2.0.0"
+    "@framers/agentos": "^0.1.0"
   },
   "dependencies": {
     "telegraf": "^4.15.0",
@@ -57,7 +57,7 @@
     "dotenv": "^16.3.0"
   },
   "devDependencies": {
-    "@framers/agentos": "^2.0.0",
+    "@framers/agentos": "^0.1.0",
     "@types/node": "^20.0.0",
     "@types/node-telegram-bot-api": "^0.64.0",
     "typescript": "^5.0.0",

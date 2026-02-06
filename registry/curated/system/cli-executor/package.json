@@ -50,7 +50,7 @@
     "directory": "registry/curated/system/cli-executor"
   },
   "peerDependencies": {
-    "@framers/agentos": "^2.0.0"
+    "@framers/agentos": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
