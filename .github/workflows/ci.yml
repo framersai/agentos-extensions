@@ -27,7 +27,7 @@ jobs:
         run: pnpm run build
 
       - name: Lint
-        run: pnpm run -r lint --if-present
+        run: pnpm -r --if-present run lint
 
       - name: Test
-        run: pnpm run -r test --if-present
+        run: pnpm -r --if-present run test
