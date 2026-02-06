@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-ext-cli-executor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CLI executor extension for AgentOS - execute shell commands and manage files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -57,6 +57,3 @@
     "vitest": "^1.6.0"
   }
 }
-
-
-

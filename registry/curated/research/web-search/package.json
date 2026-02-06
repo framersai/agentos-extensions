@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-ext-web-search",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Web search, research aggregation, and fact-checking tools for AgentOS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,7 +24,13 @@
     "docs": "typedoc --out docs src/index.ts",
     "clean": "rimraf dist"
   },
-  "keywords": ["agentos", "extension", "search", "research", "web"],
+  "keywords": [
+    "agentos",
+    "extension",
+    "search",
+    "research",
+    "web"
+  ],
   "author": {
     "name": "Framers AI",
     "email": "team@frame.dev",
