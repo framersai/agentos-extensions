@@ -20,7 +20,6 @@
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src --ext .ts",
     "clean": "rm -rf dist"
   },
   "keywords": [
