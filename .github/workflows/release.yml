@@ -36,7 +36,13 @@ jobs:
 
       - name: Configure npm auth for publish
         run: |
-          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
+          cat > .npmrc << EOF
+          @framers:registry=https://registry.npmjs.org/
+          //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
+          access=public
+          EOF
+          echo "=== .npmrc configured (token masked) ==="
+          sed 's/_authToken=.*/_authToken=***/' .npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
