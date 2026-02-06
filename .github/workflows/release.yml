@@ -11,6 +11,7 @@ permissions:
   contents: write
   pull-requests: write
   packages: write
+  id-token: write
 
 jobs:
   release:
@@ -36,26 +37,11 @@ jobs:
       - name: Configure npm auth for publish
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > "$HOME/.npmrc"
-          echo "Project .npmrc:"
-          cat .npmrc
-          echo "---"
-          echo "User .npmrc (token masked):"
-          sed 's/_authToken=.*/_authToken=[MASKED]/' "$HOME/.npmrc"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Verify npm auth and token type
-        run: |
-          echo "=== npm whoami ==="
-          npm whoami --registry https://registry.npmjs.org/ 2>&1 || echo "npm whoami failed"
-
-          echo "=== npm token info ==="
-          npm token list 2>&1 || echo "token list failed (expected for automation tokens)"
-
-          echo "=== Test direct publish (auth package) ==="
-          cd registry/curated/auth
-          npm publish --access public 2>&1 && echo "DIRECT PUBLISH SUCCEEDED" || echo "DIRECT PUBLISH FAILED (exit $?)"
-          cd ../../..
+      - name: Verify npm auth
+        run: npm whoami --registry https://registry.npmjs.org/
 
       - name: Create Release PR or Publish
         id: changesets
@@ -69,6 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Update registry after publish
         if: steps.changesets.outputs.published == 'true'
