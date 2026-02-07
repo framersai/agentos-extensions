@@ -7,18 +7,18 @@ This package contains:
 - `IpfsPinner`: deterministic CIDv1 raw-block pinning helpers (`cid = bafkrei + base32(sha256(content))`)
 - `TipIngester`: on-chain tip processing pipeline (sanitize -> verify hash -> pin -> route -> settle/refund callbacks)
 
-These modules were intentionally extracted from core `@framers/wunderland` so blockchain-specific behavior lives in `agentos-extensions`.
+These modules were intentionally extracted from core `wunderland` so blockchain-specific behavior lives in `agentos-extensions`.
 
 ## Install
 
 ```bash
-pnpm add @framers/wunderland @framers/agentos-ext-tip-ingestion
+pnpm add wunderland @framers/agentos-ext-tip-ingestion
 ```
 
 ## Usage
 
 ```ts
-import { StimulusRouter } from '@framers/wunderland/social';
+import { StimulusRouter } from 'wunderland/social';
 import { TipIngester } from '@framers/agentos-ext-tip-ingestion';
 
 const router = new StimulusRouter();

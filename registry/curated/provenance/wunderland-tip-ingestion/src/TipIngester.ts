@@ -16,7 +16,7 @@ import {
   type StimulusRouter,
   type Tip,
   type TipPriorityLevel,
-} from '@framers/wunderland/social';
+} from 'wunderland/social';
 import { IpfsPinner, type PinningConfig, type PinResult, PinningError } from './IpfsPinner.js';
 
 // ============================================================================

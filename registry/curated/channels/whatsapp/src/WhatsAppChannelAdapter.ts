@@ -18,7 +18,6 @@ import type {
   ConversationType,
 } from '@framers/agentos';
 import { WhatsAppService } from './WhatsAppService';
-import type { WAMessage } from '@whiskeysockets/baileys';
 
 export class WhatsAppChannelAdapter implements IChannelAdapter {
   readonly platform: ChannelPlatform = 'whatsapp';
@@ -34,14 +33,16 @@ export class WhatsAppChannelAdapter implements IChannelAdapter {
   ] as const;
 
   private handlers = new Map<ChannelEventHandler, ChannelEventType[] | undefined>();
-  private msgHandler: ((message: WAMessage, isGroup: boolean) => void) | null = null;
+  // Baileys is an optional peer dependency. Keep types loose so this package can
+  // compile in environments where Baileys isn't installed.
+  private msgHandler: ((message: any, isGroup: boolean) => void) | null = null;
 
   constructor(private readonly service: WhatsAppService) {}
 
   async initialize(auth: ChannelAuthConfig): Promise<void> {
     // Service is initialized by the extension pack lifecycle, but
     // if called directly (e.g., standalone usage), we wire up here.
-    this.msgHandler = (message: WAMessage, isGroup: boolean) =>
+    this.msgHandler = (message: any, isGroup: boolean) =>
       this.handleInboundMessage(message, isGroup);
     this.service.onMessage(this.msgHandler);
   }
@@ -105,7 +106,7 @@ export class WhatsAppChannelAdapter implements IChannelAdapter {
 
   // ── Private ──
 
-  private handleInboundMessage(msg: WAMessage, isGroup: boolean): void {
+  private handleInboundMessage(msg: any, isGroup: boolean): void {
     const jid = msg.key.remoteJid ?? '';
     const participantJid = msg.key.participant ?? jid;
 

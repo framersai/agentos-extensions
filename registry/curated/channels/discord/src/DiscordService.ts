@@ -10,6 +10,7 @@ import {
   ChannelType,
   type Message,
   type TextBasedChannel,
+  type TextBasedChannelFields,
   type APIEmbed,
 } from 'discord.js';
 
@@ -151,12 +152,12 @@ export class DiscordService {
     return this.client;
   }
 
-  private async fetchTextChannel(channelId: string): Promise<TextBasedChannel> {
+  private async fetchTextChannel(channelId: string): Promise<TextBasedChannel & TextBasedChannelFields> {
     if (!this.client) throw new Error('DiscordService not initialized');
     const channel = await this.client.channels.fetch(channelId);
     if (!channel || !('send' in channel)) {
       throw new Error(`Channel ${channelId} is not a text-based channel or does not exist`);
     }
-    return channel as TextBasedChannel;
+    return channel as TextBasedChannel & TextBasedChannelFields;
   }
 }

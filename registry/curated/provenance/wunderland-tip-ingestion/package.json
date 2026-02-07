@@ -53,15 +53,15 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@framers/wunderland": ">=0.2.0"
+    "wunderland": ">=0.2.0"
   },
   "peerDependenciesMeta": {
-    "@framers/wunderland": {
+    "wunderland": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@framers/wunderland": "workspace:*",
+    "wunderland": "workspace:*",
     "@types/node": "^20.12.12",
     "@vitest/coverage-v8": "^1.6.0",
     "rimraf": "^5.0.7",

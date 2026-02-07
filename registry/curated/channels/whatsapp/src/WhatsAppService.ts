@@ -97,7 +97,9 @@ export class WhatsAppService {
     });
 
     // Wire up inbound message handler
-    this.sock.ev.on('messages.upsert', ({ messages, type }) => {
+    this.sock.ev.on(
+      'messages.upsert',
+      ({ messages, type }: { messages: WAMessage[]; type: string }) => {
       if (type !== 'notify') return;
 
       for (const msg of messages) {
@@ -110,7 +112,8 @@ export class WhatsAppService {
           handler(msg, isGroup);
         }
       }
-    });
+      },
+    );
 
     this.running = true;
   }

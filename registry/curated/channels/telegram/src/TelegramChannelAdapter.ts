@@ -157,9 +157,12 @@ export class TelegramChannelAdapter implements IChannelAdapter {
       username: msg.from?.username,
     };
 
+    // grammY's message typings can be narrower than Telegram's full chat-type
+    // union; treat it as a string to support channel posts consistently.
+    const chatType = msg.chat.type as unknown as string;
     const conversationType: ConversationType =
-      msg.chat.type === 'private' ? 'direct' :
-      msg.chat.type === 'channel' ? 'channel' : 'group';
+      chatType === 'private' ? 'direct' :
+      chatType === 'channel' ? 'channel' : 'group';
 
     const channelMessage: ChannelMessage = {
       messageId: String(msg.message_id),
