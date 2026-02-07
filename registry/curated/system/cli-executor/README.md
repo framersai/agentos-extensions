@@ -36,12 +36,12 @@ extensionManager.register(createExtensionPack({
 
 ## Tools
 
-### shellExecute
+### shell_execute
 
 Execute a shell command.
 
 ```typescript
-const result = await gmi.executeTool('shellExecute', {
+const result = await gmi.executeTool('shell_execute', {
   command: 'npm install lodash',
   cwd: '/path/to/project',
   timeout: 30000
@@ -49,31 +49,31 @@ const result = await gmi.executeTool('shellExecute', {
 // Returns: { command, exitCode, stdout, stderr, duration, success }
 ```
 
-### fileRead
+### file_read
 
 Read file contents.
 
 ```typescript
-const result = await gmi.executeTool('fileRead', {
+const result = await gmi.executeTool('file_read', {
   path: './package.json',
   encoding: 'utf-8'
 });
 // Returns: { path, content, size, truncated, encoding }
 
 // Read last 50 lines
-const logs = await gmi.executeTool('fileRead', {
+const logs = await gmi.executeTool('file_read', {
   path: './app.log',
   lines: 50,
   fromEnd: true
 });
 ```
 
-### fileWrite
+### file_write
 
 Write content to a file.
 
 ```typescript
-const result = await gmi.executeTool('fileWrite', {
+const result = await gmi.executeTool('file_write', {
   path: './config.json',
   content: JSON.stringify({ key: 'value' }),
   createDirs: true
@@ -81,12 +81,12 @@ const result = await gmi.executeTool('fileWrite', {
 // Returns: { path, bytesWritten, created, appended }
 ```
 
-### listDirectory
+### list_directory
 
 List directory contents.
 
 ```typescript
-const result = await gmi.executeTool('listDirectory', {
+const result = await gmi.executeTool('list_directory', {
   path: './src',
   recursive: true,
   pattern: '*.ts',
@@ -119,6 +119,18 @@ createExtensionPack({
 });
 ```
 
+### Disabling Safety Checks (Dangerous)
+
+If you need full control (for example, in a locked-down container or local dev), you can disable all command safety checks:
+
+```typescript
+createExtensionPack({
+  options: {
+    dangerouslySkipSecurityChecks: true
+  }
+});
+```
+
 ### Risk Assessment
 
 Each command is assessed for risk level:
@@ -139,7 +151,8 @@ Each command is assessed for risk level:
 | `timeout` | number | `60000` | Default timeout (ms) |
 | `workingDirectory` | string | `process.cwd()` | Default working directory |
 | `allowedCommands` | string[] | `[]` | Command whitelist (empty = all) |
-| `blockedCommands` | string[] | `[...]` | Command blacklist |
+| `blockedCommands` | string[] | `[]` | Command blacklist (additional to built-in dangerous patterns) |
+| `dangerouslySkipSecurityChecks` | boolean | `false` | Disable all command safety checks (use only in trusted environments) |
 | `env` | object | `{}` | Environment variables |
 
 ## Use Cases
@@ -148,14 +161,14 @@ Each command is assessed for risk level:
 
 ```typescript
 // Write generated code
-await gmi.executeTool('fileWrite', {
+await gmi.executeTool('file_write', {
   path: './generated/app.py',
   content: generatedPythonCode,
   createDirs: true
 });
 
 // Execute it
-await gmi.executeTool('shellExecute', {
+await gmi.executeTool('shell_execute', {
   command: 'python ./generated/app.py',
   timeout: 30000
 });
@@ -165,12 +178,12 @@ await gmi.executeTool('shellExecute', {
 
 ```typescript
 // Create project structure
-await gmi.executeTool('shellExecute', {
+await gmi.executeTool('shell_execute', {
   command: 'npx create-react-app my-app --template typescript'
 });
 
 // Install dependencies
-await gmi.executeTool('shellExecute', {
+await gmi.executeTool('shell_execute', {
   command: 'npm install axios lodash',
   cwd: './my-app'
 });
@@ -180,7 +193,7 @@ await gmi.executeTool('shellExecute', {
 
 ```typescript
 // Read recent logs
-const logs = await gmi.executeTool('fileRead', {
+const logs = await gmi.executeTool('file_read', {
   path: '/var/log/app.log',
   lines: 100,
   fromEnd: true
@@ -216,6 +229,3 @@ Together, an intelligent agent can:
 ## License
 
 MIT © Frame.dev
-
-
-

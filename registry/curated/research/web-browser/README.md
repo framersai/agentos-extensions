@@ -38,12 +38,12 @@ extensionManager.register(createExtensionPack({
 
 ## Tools
 
-### browserNavigate
+### browser_navigate
 
 Navigate to a URL and retrieve page content.
 
 ```typescript
-const result = await gmi.executeTool('browserNavigate', {
+const result = await gmi.executeTool('browser_navigate', {
   url: 'https://example.com',
   waitFor: 'networkidle2',
   returnText: true
@@ -51,36 +51,36 @@ const result = await gmi.executeTool('browserNavigate', {
 // Returns: { url, status, title, text, loadTime }
 ```
 
-### browserScrape
+### browser_scrape
 
 Extract content using CSS selectors.
 
 ```typescript
-const result = await gmi.executeTool('browserScrape', {
+const result = await gmi.executeTool('browser_scrape', {
   selector: 'article h2',
   limit: 10
 });
 // Returns: { selector, count, elements: [{ tag, text, html, attributes }] }
 ```
 
-### browserClick
+### browser_click
 
 Click on an element.
 
 ```typescript
-const result = await gmi.executeTool('browserClick', {
+const result = await gmi.executeTool('browser_click', {
   selector: 'button.submit',
   waitForNavigation: true
 });
 // Returns: { success, element, newUrl }
 ```
 
-### browserType
+### browser_type
 
 Type text into an input field.
 
 ```typescript
-const result = await gmi.executeTool('browserType', {
+const result = await gmi.executeTool('browser_type', {
   selector: 'input[name="search"]',
   text: 'AgentOS documentation',
   clear: true
@@ -88,24 +88,24 @@ const result = await gmi.executeTool('browserType', {
 // Returns: { success, element, text }
 ```
 
-### browserScreenshot
+### browser_screenshot
 
 Capture a screenshot.
 
 ```typescript
-const result = await gmi.executeTool('browserScreenshot', {
+const result = await gmi.executeTool('browser_screenshot', {
   fullPage: true,
   format: 'png'
 });
 // Returns: { data (base64), format, width, height, size }
 ```
 
-### browserSnapshot
+### browser_snapshot
 
 Get accessibility tree for intelligent interaction.
 
 ```typescript
-const result = await gmi.executeTool('browserSnapshot', {});
+const result = await gmi.executeTool('browser_snapshot', {});
 // Returns: { url, title, elements, links, forms, interactable }
 ```
 
@@ -126,26 +126,26 @@ const result = await gmi.executeTool('browserSnapshot', {});
 
 ```typescript
 // Search and scrape information
-await gmi.executeTool('browserNavigate', { url: 'https://google.com' });
-await gmi.executeTool('browserType', { selector: 'input[name="q"]', text: 'AI agents 2024' });
-await gmi.executeTool('browserClick', { selector: 'input[type="submit"]', waitForNavigation: true });
-const results = await gmi.executeTool('browserScrape', { selector: '.g h3' });
+await gmi.executeTool('browser_navigate', { url: 'https://google.com' });
+await gmi.executeTool('browser_type', { selector: 'input[name="q"]', text: 'AI agents 2024' });
+await gmi.executeTool('browser_click', { selector: 'input[type="submit"]', waitForNavigation: true });
+const results = await gmi.executeTool('browser_scrape', { selector: '.g h3' });
 ```
 
 ### Form Automation
 
 ```typescript
-await gmi.executeTool('browserNavigate', { url: 'https://signup.example.com' });
-await gmi.executeTool('browserType', { selector: '#email', text: 'user@example.com' });
-await gmi.executeTool('browserType', { selector: '#password', text: 'securepass123' });
-await gmi.executeTool('browserClick', { selector: 'button[type="submit"]' });
+await gmi.executeTool('browser_navigate', { url: 'https://signup.example.com' });
+await gmi.executeTool('browser_type', { selector: '#email', text: 'user@example.com' });
+await gmi.executeTool('browser_type', { selector: '#password', text: 'securepass123' });
+await gmi.executeTool('browser_click', { selector: 'button[type="submit"]' });
 ```
 
 ### Visual Verification
 
 ```typescript
-await gmi.executeTool('browserNavigate', { url: 'https://myapp.com' });
-const screenshot = await gmi.executeTool('browserScreenshot', { fullPage: true });
+await gmi.executeTool('browser_navigate', { url: 'https://myapp.com' });
+const screenshot = await gmi.executeTool('browser_screenshot', { fullPage: true });
 // Send screenshot to vision model for analysis
 ```
 
@@ -156,6 +156,5 @@ This extension requires Chrome/Chromium to be installed on the system. It uses `
 ## License
 
 MIT © Frame.dev
-
 
 

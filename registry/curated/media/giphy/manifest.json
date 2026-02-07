@@ -16,10 +16,10 @@
   "extensions": [
     {
       "kind": "tool",
-      "id": "giphySearch",
+      "id": "giphy_search",
       "displayName": "Giphy GIF Search",
       "description": "Search for GIFs and stickers via Giphy",
-      "entry": "./src/tools/giphySearch.ts"
+      "entry": "./dist/tools/giphySearch.js"
     }
   ],
   "configuration": {

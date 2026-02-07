@@ -10,7 +10,7 @@
   "agentosVersion": "^2.0.0",
   "categories": ["media", "communication"],
   "extensions": [
-    { "kind": "tool", "id": "textToSpeech", "displayName": "Text to Speech", "entry": "./src/tools/textToSpeech.ts" }
+    { "kind": "tool", "id": "text_to_speech", "displayName": "Text to Speech", "entry": "./dist/tools/textToSpeech.js" }
   ],
   "configuration": {
     "properties": {

@@ -56,6 +56,7 @@ export class ShellService {
       defaultShell: 'auto',
       timeout: 60000,
       blockedCommands: [],
+      dangerouslySkipSecurityChecks: false,
       ...config,
     };
   }
@@ -82,6 +83,15 @@ export class ShellService {
    * Check if a command is safe to execute
    */
   checkSecurity(command: string): SecurityCheckResult {
+    if (this.config.dangerouslySkipSecurityChecks) {
+      return {
+        allowed: true,
+        reason: 'Security checks disabled by configuration',
+        riskLevel: 'critical',
+        warnings: ['Security checks are disabled'],
+      };
+    }
+
     const warnings: string[] = [];
     let riskLevel: SecurityCheckResult['riskLevel'] = 'safe';
 
@@ -425,5 +435,4 @@ export class ShellService {
     };
   }
 }
-
 

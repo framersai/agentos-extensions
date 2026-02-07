@@ -2,7 +2,7 @@
   "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
   "id": "com.framers.research.web-browser",
   "name": "Web Browser Extension",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Browser automation capabilities for AgentOS - navigate pages, scrape content, click links, and capture screenshots",
   "author": {
     "name": "Frame.dev",
@@ -20,38 +20,45 @@
   "extensions": [
     {
       "kind": "tool",
-      "id": "browserNavigate",
+      "id": "browser_navigate",
       "displayName": "Navigate to URL",
       "description": "Navigate browser to a URL and get page content",
       "entry": "./dist/tools/navigate.js"
     },
     {
       "kind": "tool",
-      "id": "browserScrape",
+      "id": "browser_scrape",
       "displayName": "Scrape Content",
       "description": "Extract content from web page using CSS selectors",
       "entry": "./dist/tools/scrape.js"
     },
     {
       "kind": "tool",
-      "id": "browserClick",
+      "id": "browser_click",
       "displayName": "Click Element",
       "description": "Click on an element in the current page",
       "entry": "./dist/tools/click.js"
     },
     {
       "kind": "tool",
-      "id": "browserScreenshot",
+      "id": "browser_screenshot",
       "displayName": "Take Screenshot",
       "description": "Capture screenshot of current page or element",
       "entry": "./dist/tools/screenshot.js"
     },
     {
       "kind": "tool",
-      "id": "browserType",
+      "id": "browser_type",
       "displayName": "Type Text",
       "description": "Type text into an input field",
       "entry": "./dist/tools/type.js"
+    },
+    {
+      "kind": "tool",
+      "id": "browser_snapshot",
+      "displayName": "Page Snapshot",
+      "description": "Extract a structured snapshot of the current page DOM",
+      "entry": "./dist/tools/snapshot.js"
     }
   ],
   "configuration": {
@@ -88,6 +95,5 @@
     "puppeteer-core": "^22.0.0"
   }
 }
-
 
 

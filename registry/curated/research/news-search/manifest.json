@@ -10,7 +10,7 @@
   "agentosVersion": "^2.0.0",
   "categories": ["research"],
   "extensions": [
-    { "kind": "tool", "id": "newsSearch", "displayName": "News Search", "entry": "./src/tools/newsSearch.ts" }
+    { "kind": "tool", "id": "news_search", "displayName": "News Search", "entry": "./dist/tools/newsSearch.js" }
   ],
   "configuration": {
     "properties": { "newsapi.apiKey": { "type": "string", "secret": true } }

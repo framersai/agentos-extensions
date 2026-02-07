@@ -16,3 +16,8 @@ packages:
   - "registry/curated/channels/discord"
   - "registry/curated/channels/slack"
   - "registry/curated/channels/webchat"
+  - "registry/curated/voice/twilio"
+  - "registry/curated/voice/telnyx"
+  - "registry/curated/voice/plivo"
+  - "registry/curated/productivity/google-calendar"
+  - "registry/curated/productivity/gmail"

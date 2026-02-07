@@ -17,6 +17,11 @@ export interface ShellConfig {
   allowedCommands?: string[];
   /** Blacklist of blocked commands */
   blockedCommands?: string[];
+  /**
+   * Disable all command safety checks (dangerous patterns, allow/deny lists).
+   * Use only in trusted environments.
+   */
+  dangerouslySkipSecurityChecks?: boolean;
   /** Environment variables to inject */
   env?: Record<string, string>;
 }
@@ -192,6 +197,5 @@ export interface SecurityCheckResult {
   /** Warnings */
   warnings: string[];
 }
-
 
 

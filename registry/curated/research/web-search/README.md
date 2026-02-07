@@ -1,218 +1,61 @@
 # Web Search Extension for AgentOS
 
-Enable powerful web search capabilities for your AgentOS agents.
+Professional web search, research aggregation, and fact-checking for AgentOS agents.
 
-## Features
-
-- 🔍 **Web Search** - Search the web with multiple providers
-- 📚 **Research Aggregator** - Compile research from multiple searches
-- ✅ **Fact Checker** - Verify claims across sources
-- 🌍 **Multi-provider Support** - Serper, SerpAPI, Brave, DuckDuckGo
+Supports multiple providers (Serper.dev, SerpAPI, Brave) with a DuckDuckGo fallback when no API keys are configured.
 
 ## Installation
 
 ```bash
-npm install @framers/agentos-ext-search
+npm install @framers/agentos-ext-web-search
 ```
 
 ## Quick Start
 
-```typescript
-import { AgentOS } from '@framers/agentos';
-import searchExtension from '@framers/agentos-ext-search';
+```ts
+import { ExtensionManager } from '@framers/agentos';
+import { createExtensionPack } from '@framers/agentos-ext-web-search';
 
-const agentos = new AgentOS();
+const extensionManager = new ExtensionManager();
 
-await agentos.initialize({
-  // ... other config
-  extensionManifest: {
-    packs: [
-      {
-        factory: () => searchExtension({
-          manifestEntry: {} as any,
-          source: { sourceName: '@framers/agentos-ext-search' },
-          options: {
-            search: {
-              provider: 'serper',
-              apiKey: process.env.SERPER_API_KEY
-            }
-          }
-        })
-      }
-    ]
-  }
-});
+extensionManager.register(createExtensionPack({
+  options: {
+    // Any one of these is enough; Serper/SerpAPI/Brave are tried in order.
+    serperApiKey: process.env.SERPER_API_KEY,
+    serpApiKey: process.env.SERPAPI_API_KEY,
+    braveApiKey: process.env.BRAVE_API_KEY,
+  },
+  logger: console,
+}));
 ```
 
-## Configuration
+## Environment Variables
 
-### Environment Variables
+- `SERPER_API_KEY` (optional)
+- `SERPAPI_API_KEY` (optional)
+- `BRAVE_API_KEY` (optional)
 
-```bash
-# Option 1: Serper (2,500 free queries)
-SERPER_API_KEY=your_serper_api_key
+If none are set, the extension falls back to DuckDuckGo.
 
-# Option 2: SerpAPI (100 free/month)
-SERPAPI_API_KEY=your_serpapi_key
+## Tools
 
-# Option 3: Brave (2,000 free/month)
-BRAVE_SEARCH_API_KEY=your_brave_api_key
+### `web_search`
 
-# Optional: Override provider
-SEARCH_PROVIDER=serper  # or serpapi, brave, duckduckgo
-```
+Search the web.
 
-### Programmatic Configuration
+### `research_aggregate`
 
-```typescript
-{
-  search: {
-    provider: 'serper',  // 'serper' | 'serpapi' | 'brave' | 'duckduckgo'
-    apiKey: 'your-api-key',
-    rateLimit: 5  // requests per second
-  }
-}
-```
+Run multiple searches and aggregate results.
 
-## Available Tools
+### `fact_check`
 
-### 1. Web Search
+Cross-check a claim across sources.
 
-Search the web for information.
+## Notes
 
-**Input:**
-```typescript
-{
-  query: string;           // Search query
-  numResults?: number;     // Results to return (1-10, default: 5)
-  searchType?: string;     // 'web' | 'news' | 'images' | 'videos'
-  timeRange?: string;      // 'any' | 'day' | 'week' | 'month' | 'year'
-  region?: string;         // Country code: 'us', 'uk', 'fr', etc.
-}
-```
-
-**Example:**
-```typescript
-const result = await tool.execute({
-  query: "latest AI developments",
-  numResults: 5,
-  timeRange: "week"
-});
-```
-
-### 2. Research Aggregator
-
-Perform comprehensive research on a topic.
-
-**Input:**
-```typescript
-{
-  topic: string;                // Research topic
-  searchQueries?: string[];     // Specific queries to run
-  sources?: string[];           // 'web' | 'academic' | 'news'
-  maxResultsPerQuery?: number;  // Results per query (default: 3)
-}
-```
-
-### 3. Fact Checker
-
-Verify claims across multiple sources.
-
-**Input:**
-```typescript
-{
-  claim: string;         // Claim to verify
-  context?: string;      // Additional context
-  sources?: string[];    // Specific sources to check
-}
-```
-
-## Provider Setup
-
-### Serper.dev (Recommended)
-1. Sign up: https://serper.dev/signup
-2. Get API key from dashboard
-3. 2,500 free queries
-
-### SerpAPI
-1. Sign up: https://serpapi.com/users/sign_up
-2. Copy API key from account page
-3. 100 free searches/month
-
-### Brave Search
-1. Register: https://brave.com/search/api/
-2. Get API key
-3. 2,000 free queries/month
-
-### DuckDuckGo (Fallback)
-- No API key required
-- Limited functionality
-- Rate limited
-
-## Usage with Agents
-
-Once installed, agents can use search tools:
-
-```typescript
-// Agent conversation
-User: "Search for information about quantum computing"
-Agent: [Uses webSearch tool] Here's what I found about quantum computing...
-
-User: "Research the latest renewable energy developments"
-Agent: [Uses researchAggregator tool] I've compiled research from multiple sources...
-
-User: "Fact check: Is coffee the second most traded commodity?"
-Agent: [Uses factCheck tool] After checking multiple sources...
-```
-
-## Error Handling
-
-The extension handles various error scenarios:
-
-```typescript
-// Missing API key
-{
-  success: false,
-  error: "Search provider not configured",
-  details: {
-    message: "Please configure a search API key",
-    providers: [/* signup links */]
-  }
-}
-
-// Rate limiting
-// Automatically enforced based on provider limits
-
-// Network errors
-{
-  success: false,
-  error: "Search failed: Network error",
-  details: { provider: "serper", timestamp: "..." }
-}
-```
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build
-npm run build
-
-# Run tests
-npm test
-
-# Watch mode
-npm run dev
-```
+- Tools are read-only (no side effects).
+- Provider selection is automatic based on which keys are configured.
 
 ## License
 
 MIT © Frame.dev
-
-## Support
-
-- Issues: https://github.com/framersai/agentos-extensions/issues
-- Documentation: https://agentos.sh/docs/extensions
-- Discord: https://discord.gg/agentos

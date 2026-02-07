@@ -10,7 +10,7 @@
   "agentosVersion": "^2.0.0",
   "categories": ["media"],
   "extensions": [
-    { "kind": "tool", "id": "imageSearch", "displayName": "Image Search", "entry": "./src/tools/imageSearch.ts" }
+    { "kind": "tool", "id": "image_search", "displayName": "Image Search", "entry": "./dist/tools/imageSearch.js" }
   ],
   "configuration": {
     "properties": {

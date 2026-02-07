@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
+import type { ExtensionPackContext, ExtensionPack, ExtensionLifecycleContext } from '@framers/agentos';
 import { WebSearchTool } from './tools/webSearch.js';
 import { ResearchAggregatorTool } from './tools/researchAggregator.js';
 import { FactCheckTool } from './tools/factCheck.js';
@@ -38,31 +38,30 @@ export interface WebSearchExtensionOptions {
 /**
  * Creates the web search extension pack
  * 
- * @param {ExtensionContext} context - The extension context
+ * @param {ExtensionPackContext} context - The extension context
  * @returns {ExtensionPack} The configured extension pack
- * 
+ *
  * @example
  * ```typescript
  * import { createExtensionPack } from '@framers/agentos-ext-web-search';
- * 
+ *
  * const pack = createExtensionPack({
  *   options: {
  *     serperApiKey: process.env.SERPER_API_KEY,
  *     defaultMaxResults: 10
- *   },
- *   logger: console
+ *   }
  * });
  * ```
  */
-export function createExtensionPack(context: ExtensionContext): ExtensionPack {
-  const options = context.options as WebSearchExtensionOptions || {};
+export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
+  const options = (context.options ?? {}) as WebSearchExtensionOptions;
 
   const serperApiKey =
-    options.serperApiKey || context.getSecret?.('serper.apiKey') || process.env.SERPER_API_KEY;
+    options.serperApiKey || process.env.SERPER_API_KEY;
   const serpApiKey =
-    options.serpApiKey || context.getSecret?.('serpapi.apiKey') || process.env.SERPAPI_API_KEY;
+    options.serpApiKey || process.env.SERPAPI_API_KEY;
   const braveApiKey =
-    options.braveApiKey || context.getSecret?.('brave.apiKey') || process.env.BRAVE_API_KEY;
+    options.braveApiKey || process.env.BRAVE_API_KEY;
   
   // Initialize search service with configuration
   const searchService = new SearchProviderService({
@@ -115,23 +114,11 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
         ],
       }
     ],
-    /**
-     * Called when extension is activated
-     */
-    onActivate: async () => {
-      if (context.onActivate) {
-        await context.onActivate();
-      }
-      context.logger?.info('Web Search Extension activated');
+    onActivate: async (lc: ExtensionLifecycleContext) => {
+      lc.logger?.info('Web Search Extension activated');
     },
-    /**
-     * Called when extension is deactivated
-     */
-    onDeactivate: async () => {
-      if (context.onDeactivate) {
-        await context.onDeactivate();
-      }
-      context.logger?.info('Web Search Extension deactivated');
+    onDeactivate: async (lc: ExtensionLifecycleContext) => {
+      lc.logger?.info('Web Search Extension deactivated');
     }
   };
 }

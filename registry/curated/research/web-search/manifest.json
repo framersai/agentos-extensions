@@ -2,7 +2,7 @@
   "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
   "id": "com.framers.research.web-search",
   "name": "Web Search Extension",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Professional web search, research aggregation, and fact-checking capabilities for AgentOS",
   "author": {
     "name": "Frame.dev",
@@ -20,21 +20,21 @@
   "extensions": [
     {
       "kind": "tool",
-      "id": "webSearch",
+      "id": "web_search",
       "displayName": "Web Search",
       "description": "Search the web for information",
       "entry": "./dist/tools/webSearch.js"
     },
     {
       "kind": "tool",
-      "id": "researchAggregator",
+      "id": "research_aggregate",
       "displayName": "Research Aggregator",
       "description": "Aggregate research from multiple searches",
       "entry": "./dist/tools/researchAggregator.js"
     },
     {
       "kind": "tool",
-      "id": "factCheck",
+      "id": "fact_check",
       "displayName": "Fact Checker",
       "description": "Verify facts across multiple sources",
       "entry": "./dist/tools/factCheck.js"

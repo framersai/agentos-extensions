@@ -55,6 +55,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
     workingDirectory: options.workingDirectory,
     allowedCommands: options.allowedCommands,
     blockedCommands: options.blockedCommands,
+    dangerouslySkipSecurityChecks: options.dangerouslySkipSecurityChecks,
     env: options.env,
   });
 
