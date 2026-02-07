@@ -10,29 +10,49 @@
 
 Official extension registry for the AgentOS ecosystem.
 
-[![CI Status](https://github.com/framersai/agentos-extensions/workflows/CI%20-%20All%20Extensions/badge.svg)](https://github.com/framersai/agentos-extensions/actions)
+[![CI Status](https://github.com/framersai/agentos-extensions/workflows/CI/badge.svg)](https://github.com/framersai/agentos-extensions/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![API Docs](https://img.shields.io/badge/docs-TypeDoc-blue)](https://framersai.github.io/agentos-extensions/)
+[![npm: registry](https://img.shields.io/npm/v/@framers/agentos-extensions-registry?label=registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry)
+[![npm: catalog](https://img.shields.io/npm/v/@framers/agentos-extensions?label=catalog)](https://www.npmjs.com/package/@framers/agentos-extensions)
 
 ## Published Extensions
 
 All extensions are published to npm under the `@framers` scope.
 
+### Registry Packages
+
 | Package | Description | npm |
 |---------|-------------|-----|
-| [`@framers/agentos-ext-auth`](./registry/curated/auth) | JWT authentication & subscription management | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-auth) |
-| [`@framers/agentos-ext-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-anchor-providers) |
-| [`@framers/agentos-ext-tip-ingestion`](./registry/curated/provenance/wunderland-tip-ingestion) | Tip content processing pipeline | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-tip-ingestion) |
-| [`@framers/agentos-ext-web-search`](./registry/curated/research/web-search) | Multi-provider web search & fact-checking | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-web-search) |
-| [`@framers/agentos-ext-web-browser`](./registry/curated/research/web-browser) | Browser automation & content extraction | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-web-browser) |
-| [`@framers/agentos-ext-telegram`](./registry/curated/integrations/telegram) | Telegram Bot API integration | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram) |
-| [`@framers/agentos-ext-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram-bot) |
-| [`@framers/agentos-ext-cli-executor`](./registry/curated/system/cli-executor) | Shell command execution & file management | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-cli-executor) |
-| [`@framers/agentos-ext-channel-telegram`](./registry/curated/channels/telegram) | Telegram messaging channel (grammY) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-telegram) |
-| [`@framers/agentos-ext-channel-whatsapp`](./registry/curated/channels/whatsapp) | WhatsApp messaging channel (Baileys) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-whatsapp) |
-| [`@framers/agentos-ext-channel-discord`](./registry/curated/channels/discord) | Discord messaging channel (discord.js) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-discord) |
-| [`@framers/agentos-ext-channel-slack`](./registry/curated/channels/slack) | Slack messaging channel (Bolt) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-slack) |
-| [`@framers/agentos-ext-channel-webchat`](./registry/curated/channels/webchat) | Built-in WebChat channel (Socket.IO) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-webchat) |
+| [`@framers/agentos-extensions-registry`](https://www.npmjs.com/package/@framers/agentos-extensions-registry) | Curated registry bundle — single import with `createCuratedManifest()` | [![npm](https://img.shields.io/npm/v/@framers/agentos-extensions-registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry) |
+| [`@framers/agentos-extensions`](https://www.npmjs.com/package/@framers/agentos-extensions) | Static catalog (`registry.json`) of all extensions | [![npm](https://img.shields.io/npm/v/@framers/agentos-extensions)](https://www.npmjs.com/package/@framers/agentos-extensions) |
+
+### Extensions
+
+| Package | Description | npm |
+|---------|-------------|-----|
+| [`@framers/agentos-ext-web-search`](./registry/curated/research/web-search) | Multi-provider web search & fact-checking | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-web-search)](https://www.npmjs.com/package/@framers/agentos-ext-web-search) |
+| [`@framers/agentos-ext-web-browser`](./registry/curated/research/web-browser) | Browser automation & content extraction | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-web-browser)](https://www.npmjs.com/package/@framers/agentos-ext-web-browser) |
+| [`@framers/agentos-ext-news-search`](./registry/curated/research/news-search) | News article search via NewsAPI | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-news-search)](https://www.npmjs.com/package/@framers/agentos-ext-news-search) |
+| [`@framers/agentos-ext-giphy`](./registry/curated/media/giphy) | GIF & sticker search via Giphy API | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-giphy)](https://www.npmjs.com/package/@framers/agentos-ext-giphy) |
+| [`@framers/agentos-ext-image-search`](./registry/curated/media/image-search) | Stock photo search (Pexels, Unsplash, Pixabay) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-image-search)](https://www.npmjs.com/package/@framers/agentos-ext-image-search) |
+| [`@framers/agentos-ext-voice-synthesis`](./registry/curated/media/voice-synthesis) | Text-to-speech via ElevenLabs | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-voice-synthesis)](https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis) |
+| [`@framers/agentos-ext-cli-executor`](./registry/curated/system/cli-executor) | Shell command execution & file management | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-cli-executor)](https://www.npmjs.com/package/@framers/agentos-ext-cli-executor) |
+| [`@framers/agentos-ext-auth`](./registry/curated/auth) | JWT authentication & subscription management | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-auth)](https://www.npmjs.com/package/@framers/agentos-ext-auth) |
+| [`@framers/agentos-ext-telegram`](./registry/curated/integrations/telegram) | Telegram Bot API integration | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram)](https://www.npmjs.com/package/@framers/agentos-ext-telegram) |
+| [`@framers/agentos-ext-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram-bot)](https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot) |
+| [`@framers/agentos-ext-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-anchor-providers)](https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers) |
+| [`@framers/agentos-ext-tip-ingestion`](./registry/curated/provenance/wunderland-tip-ingestion) | Tip content processing pipeline | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-tip-ingestion)](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion) |
+
+### Channel Adapters
+
+| Package | Description | npm |
+|---------|-------------|-----|
+| [`@framers/agentos-ext-channel-telegram`](./registry/curated/channels/telegram) | Telegram messaging channel (grammY) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-telegram)](https://www.npmjs.com/package/@framers/agentos-ext-channel-telegram) |
+| [`@framers/agentos-ext-channel-whatsapp`](./registry/curated/channels/whatsapp) | WhatsApp messaging channel (Baileys) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-whatsapp)](https://www.npmjs.com/package/@framers/agentos-ext-channel-whatsapp) |
+| [`@framers/agentos-ext-channel-discord`](./registry/curated/channels/discord) | Discord messaging channel (discord.js) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-discord)](https://www.npmjs.com/package/@framers/agentos-ext-channel-discord) |
+| [`@framers/agentos-ext-channel-slack`](./registry/curated/channels/slack) | Slack messaging channel (Bolt) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-slack)](https://www.npmjs.com/package/@framers/agentos-ext-channel-slack) |
+| [`@framers/agentos-ext-channel-webchat`](./registry/curated/channels/webchat) | Built-in WebChat channel (Socket.IO) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-webchat)](https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat) |
 
 ## Repository Structure
 
