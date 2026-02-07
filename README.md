@@ -28,6 +28,11 @@ All extensions are published to npm under the `@framers` scope.
 | [`@framers/agentos-ext-telegram`](./registry/curated/integrations/telegram) | Telegram Bot API integration | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram) |
 | [`@framers/agentos-ext-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram-bot) |
 | [`@framers/agentos-ext-cli-executor`](./registry/curated/system/cli-executor) | Shell command execution & file management | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-cli-executor) |
+| [`@framers/agentos-ext-channel-telegram`](./registry/curated/channels/telegram) | Telegram messaging channel (grammY) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-telegram) |
+| [`@framers/agentos-ext-channel-whatsapp`](./registry/curated/channels/whatsapp) | WhatsApp messaging channel (Baileys) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-whatsapp) |
+| [`@framers/agentos-ext-channel-discord`](./registry/curated/channels/discord) | Discord messaging channel (discord.js) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-discord) |
+| [`@framers/agentos-ext-channel-slack`](./registry/curated/channels/slack) | Slack messaging channel (Bolt) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-slack) |
+| [`@framers/agentos-ext-channel-webchat`](./registry/curated/channels/webchat) | Built-in WebChat channel (Socket.IO) | ![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-webchat) |
 
 ## Repository Structure
 
@@ -48,6 +53,7 @@ agentos-extensions/
 │   │   ├── integrations/  # External services (Telegram API)
 │   │   ├── provenance/    # On-chain anchoring & tip ingestion
 │   │   ├── research/      # Web search & browser automation
+│   │   ├── channels/       # Messaging channels (Telegram, WhatsApp, Discord, Slack, WebChat)
 │   │   └── system/        # CLI executor
 │   └── community/         # Community-contributed extensions
 ├── scripts/               # Registry build & scaffolding tools

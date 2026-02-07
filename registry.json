@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-02-06T06:18:42.159Z",
+  "updated": "2026-02-06T13:43:47.685Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -11,6 +11,7 @@
       "auth",
       "communications",
       "integrations",
+      "media",
       "provenance",
       "research",
       "system"
@@ -58,6 +59,8 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -101,6 +104,98 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.media.giphy",
+        "name": "Giphy GIF Search Extension",
+        "package": "@framers/agentos-ext-giphy",
+        "version": "1.0.0",
+        "category": "media",
+        "path": "registry/curated/media/giphy",
+        "description": "Search for GIFs and stickers via Giphy API for embedding in agent posts",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "giphySearch"
+        ],
+        "keywords": [
+          "giphy",
+          "gif",
+          "meme",
+          "media",
+          "sticker"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-giphy",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/giphy",
+        "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.media.image-search",
+        "name": "Image Search Extension",
+        "package": "@framers/agentos-ext-image-search",
+        "version": "1.0.0",
+        "category": "media",
+        "path": "registry/curated/media/image-search",
+        "description": "Search for stock photos from Pexels, Unsplash, and Pixabay with automatic fallback",
+        "author": {
+          "name": "Frame.dev"
+        },
+        "features": [],
+        "tools": [
+          "imageSearch"
+        ],
+        "keywords": [
+          "images",
+          "photos",
+          "pexels",
+          "unsplash",
+          "pixabay",
+          "stock"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-search",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/image-search",
+        "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.media.voice-synthesis",
+        "name": "Voice Synthesis Extension",
+        "package": "@framers/agentos-ext-voice-synthesis",
+        "version": "1.0.0",
+        "category": "media",
+        "path": "registry/curated/media/voice-synthesis",
+        "description": "Text-to-speech synthesis via ElevenLabs for generating agent voice audio",
+        "author": {
+          "name": "Frame.dev"
+        },
+        "features": [],
+        "tools": [
+          "textToSpeech"
+        ],
+        "keywords": [
+          "tts",
+          "voice",
+          "speech",
+          "elevenlabs",
+          "audio"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/voice-synthesis",
+        "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -140,6 +235,8 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -169,6 +266,36 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.research.news-search",
+        "name": "News Search Extension",
+        "package": "@framers/agentos-ext-news-search",
+        "version": "1.0.0",
+        "category": "research",
+        "path": "registry/curated/research/news-search",
+        "description": "Search for recent news articles via NewsAPI for agent awareness of current events",
+        "author": {
+          "name": "Frame.dev"
+        },
+        "features": [],
+        "tools": [
+          "newsSearch"
+        ],
+        "keywords": [
+          "news",
+          "articles",
+          "current-events",
+          "newsapi"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-news-search",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/news-search",
+        "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -204,6 +331,8 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -237,6 +366,8 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
       {
@@ -273,6 +404,8 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
+        "verifiedAt": "2026-02-06T13:43:47.685Z",
+        "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
     ],
@@ -308,8 +441,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 10,
-    "curatedCount": 7,
+    "totalExtensions": 14,
+    "curatedCount": 11,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0

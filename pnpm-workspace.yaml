@@ -11,3 +11,8 @@ packages:
   - "registry/curated/media/image-search"
   - "registry/curated/media/voice-synthesis"
   - "registry/curated/research/news-search"
+  - "registry/curated/channels/telegram"
+  - "registry/curated/channels/whatsapp"
+  - "registry/curated/channels/discord"
+  - "registry/curated/channels/slack"
+  - "registry/curated/channels/webchat"
