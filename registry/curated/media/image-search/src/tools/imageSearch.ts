@@ -2,7 +2,7 @@
  * Image Search Tool — unified stock photo search across Pexels, Unsplash, Pixabay.
  */
 
-import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '../../../../../../agentos/src/core/tools/ITool.js';
+import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '@framers/agentos';
 
 export interface ImageSearchInput {
   query: string;
@@ -98,7 +98,7 @@ export class ImageSearchTool implements ITool<ImageSearchInput, ImageSearchOutpu
     if (orientation) params.set('orientation', orientation);
     const res = await fetch(`https://api.pexels.com/v1/search?${params}`, { headers: { Authorization: this.pexelsKey } });
     if (!res.ok) return { success: false, error: `Pexels: ${res.status}` };
-    const data = await res.json();
+    const data = (await res.json()) as any;
     return {
       success: true,
       output: {
@@ -119,7 +119,7 @@ export class ImageSearchTool implements ITool<ImageSearchInput, ImageSearchOutpu
     if (orientation) params.set('orientation', orientation);
     const res = await fetch(`https://api.unsplash.com/search/photos?${params}`, { headers: { Authorization: `Client-ID ${this.unsplashKey}` } });
     if (!res.ok) return { success: false, error: `Unsplash: ${res.status}` };
-    const data = await res.json();
+    const data = (await res.json()) as any;
     return {
       success: true,
       output: {
@@ -141,7 +141,7 @@ export class ImageSearchTool implements ITool<ImageSearchInput, ImageSearchOutpu
     if (orientation && orientation !== 'square') params.set('orientation', orientation);
     const res = await fetch(`https://pixabay.com/api/?${params}`);
     if (!res.ok) return { success: false, error: `Pixabay: ${res.status}` };
-    const data = await res.json();
+    const data = (await res.json()) as any;
     return {
       success: true,
       output: {

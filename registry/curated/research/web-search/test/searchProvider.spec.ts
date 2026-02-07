@@ -53,23 +53,15 @@ describe('SearchProviderService', () => {
     
     it('should use DuckDuckGo as final fallback', async () => {
       const mockFetch = global.fetch as any;
-      
-      // All API providers fail
-      mockFetch.mockRejectedValue(new Error('API error'));
-      
-      // Mock DuckDuckGo HTML response
-      const duckDuckGoHtml = `
-        <div class="result">
-          <h2 class="result__title">
-            <a href="https://example.com">Test Result</a>
-          </h2>
-          <a class="result__snippet">Test snippet from DuckDuckGo</a>
-        </div>
-      `;
-      
+
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        text: async () => duckDuckGoHtml
+        json: async () => ({
+          Heading: 'Test Result',
+          AbstractText: 'Test snippet from DuckDuckGo',
+          AbstractURL: 'https://example.com',
+          RelatedTopics: [],
+        }),
       });
       
       const serviceNoKeys = new SearchProviderService({});

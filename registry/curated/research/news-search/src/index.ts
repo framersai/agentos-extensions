@@ -18,7 +18,8 @@ export function createExtensionPack(context: any) {
     name: '@framers/agentos-ext-news-search',
     version: '1.0.0',
     descriptors: [
-      { id: 'newsSearch', kind: 'tool' as const, priority: options.priority || 50, payload: tool, requiredSecrets: [{ id: 'newsapi.apiKey' }] },
+      // Keep descriptor id aligned with `tool.name` so ToolExecutor can find it.
+      { id: tool.name, kind: 'tool' as const, priority: options.priority || 50, payload: tool, requiredSecrets: [{ id: 'newsapi.apiKey' }] },
     ],
     onActivate: async () => context.logger?.info('News Search Extension activated'),
     onDeactivate: async () => context.logger?.info('News Search Extension deactivated'),

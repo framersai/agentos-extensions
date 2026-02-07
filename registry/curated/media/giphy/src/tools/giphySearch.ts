@@ -2,7 +2,7 @@
  * Giphy GIF Search Tool — ITool implementation for Giphy API.
  */
 
-import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '../../../../../../agentos/src/core/tools/ITool.js';
+import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '@framers/agentos';
 
 export interface GiphySearchInput {
   query: string;
@@ -83,7 +83,7 @@ export class GiphySearchTool implements ITool<GiphySearchInput, GiphySearchOutpu
         return { success: false, error: `Giphy API error (${response.status})` };
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as any;
 
       const results: GiphyGif[] = (data.data || []).map((gif: any) => ({
         id: gif.id,

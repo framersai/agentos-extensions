@@ -23,7 +23,8 @@ export function createExtensionPack(context: any) {
     name: '@framers/agentos-ext-image-search',
     version: '1.0.0',
     descriptors: [
-      { id: 'imageSearch', kind: 'tool' as const, priority: options.priority || 50, payload: tool },
+      // Keep descriptor id aligned with `tool.name` so ToolExecutor can find it.
+      { id: tool.name, kind: 'tool' as const, priority: options.priority || 50, payload: tool },
     ],
     onActivate: async () => context.logger?.info('Image Search Extension activated'),
     onDeactivate: async () => context.logger?.info('Image Search Extension deactivated'),

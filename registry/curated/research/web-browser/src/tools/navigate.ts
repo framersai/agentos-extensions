@@ -5,29 +5,64 @@
  * @module @framers/agentos-ext-web-browser
  */
 
-import type { ITool } from '@framers/agentos';
-import type { BrowserService } from '../services/browserService';
-import type { NavigationResult } from '../types';
+import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { BrowserService } from '../services/browserService.js';
+import type { NavigationResult } from '../types.js';
 
 /**
  * Tool for navigating to URLs
  */
 export class NavigateTool implements ITool {
-  public readonly id = 'browserNavigate';
-  public readonly name = 'Navigate to URL';
-  public readonly description = 'Navigate browser to a URL and get page content';
+  public readonly id = 'web-browser-navigate-v1';
+  /** Tool call name used by the LLM / ToolExecutor. */
+  public readonly name = 'browser_navigate';
+  public readonly displayName = 'Browser Navigate';
+  public readonly description = 'Navigate the browser to a URL and return page text (and optionally HTML).';
+  public readonly category = 'research';
+  public readonly hasSideEffects = false;
+
+  public readonly inputSchema: JSONSchemaObject = {
+    type: 'object',
+    required: ['url'],
+    properties: {
+      url: {
+        type: 'string',
+        description: 'The URL to navigate to',
+      },
+      waitFor: {
+        type: 'string',
+        enum: ['load', 'domcontentloaded', 'networkidle0', 'networkidle2'],
+        default: 'networkidle2',
+        description: 'When to consider navigation complete',
+      },
+      returnHtml: {
+        type: 'boolean',
+        default: false,
+        description: 'Include full HTML in response',
+      },
+      returnText: {
+        type: 'boolean',
+        default: true,
+        description: 'Include extracted text in response',
+      },
+    },
+    additionalProperties: false,
+  };
 
   constructor(private browserService: BrowserService) {}
 
   /**
    * Execute navigation
    */
-  async execute(input: {
+  async execute(
+    input: {
     url: string;
     waitFor?: 'load' | 'domcontentloaded' | 'networkidle0' | 'networkidle2';
     returnHtml?: boolean;
     returnText?: boolean;
-  }): Promise<{ success: boolean; output?: NavigationResult; error?: string }> {
+    },
+    _context: ToolExecutionContext,
+  ): Promise<ToolExecutionResult<NavigationResult>> {
     try {
       const result = await this.browserService.navigate(input.url, {
         waitFor: input.waitFor,
@@ -59,7 +94,7 @@ export class NavigateTool implements ITool {
   /**
    * Validate input
    */
-  validate(input: any): { valid: boolean; errors: string[] } {
+  validateArgs(input: Record<string, any>): { isValid: boolean; errors?: any[] } {
     const errors: string[] = [];
 
     if (!input.url) {
@@ -74,41 +109,7 @@ export class NavigateTool implements ITool {
       }
     }
 
-    return { valid: errors.length === 0, errors };
-  }
-
-  /**
-   * Get JSON schema for tool
-   */
-  getSchema(): any {
-    return {
-      type: 'object',
-      required: ['url'],
-      properties: {
-        url: {
-          type: 'string',
-          description: 'The URL to navigate to',
-        },
-        waitFor: {
-          type: 'string',
-          enum: ['load', 'domcontentloaded', 'networkidle0', 'networkidle2'],
-          default: 'networkidle2',
-          description: 'When to consider navigation complete',
-        },
-        returnHtml: {
-          type: 'boolean',
-          default: false,
-          description: 'Include full HTML in response',
-        },
-        returnText: {
-          type: 'boolean',
-          default: true,
-          description: 'Include extracted text in response',
-        },
-      },
-    };
+    return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 }
-
-
 

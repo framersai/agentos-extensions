@@ -19,7 +19,9 @@ export function createExtensionPack(context: any) {
     version: '1.0.0',
     descriptors: [
       {
-        id: 'giphySearch',
+        // IMPORTANT: ToolExecutor uses descriptor id as the lookup key for tool calls.
+        // Keep it aligned with `tool.name`.
+        id: tool.name,
         kind: 'tool' as const,
         priority: options.priority || 50,
         payload: tool,

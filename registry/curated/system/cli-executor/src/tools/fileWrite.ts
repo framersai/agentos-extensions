@@ -5,30 +5,68 @@
  * @module @framers/agentos-ext-cli-executor
  */
 
-import type { ITool } from '@framers/agentos';
-import type { ShellService } from '../services/shellService';
-import type { FileWriteResult } from '../types';
+import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { ShellService } from '../services/shellService.js';
+import type { FileWriteResult } from '../types.js';
 
 /**
  * Tool for writing files
  */
 export class FileWriteTool implements ITool {
-  public readonly id = 'fileWrite';
-  public readonly name = 'Write File';
-  public readonly description = 'Write content to a file';
+  public readonly id = 'cli-file-write-v1';
+  /** Tool call name used by the LLM / ToolExecutor. */
+  public readonly name = 'file_write';
+  public readonly displayName = 'Write File';
+  public readonly description = 'Write or append content to a file on disk.';
+  public readonly category = 'system';
+  public readonly hasSideEffects = true;
+
+  public readonly inputSchema: JSONSchemaObject = {
+    type: 'object',
+    required: ['path', 'content'],
+    properties: {
+      path: {
+        type: 'string',
+        description: 'File path to write',
+      },
+      content: {
+        type: 'string',
+        description: 'Content to write',
+      },
+      encoding: {
+        type: 'string',
+        default: 'utf-8',
+        description: 'File encoding',
+      },
+      append: {
+        type: 'boolean',
+        default: false,
+        description: 'Append to file instead of overwriting',
+      },
+      createDirs: {
+        type: 'boolean',
+        default: true,
+        description: 'Create parent directories if needed',
+      },
+    },
+    additionalProperties: false,
+  };
 
   constructor(private shellService: ShellService) {}
 
   /**
    * Write file
    */
-  async execute(input: {
+  async execute(
+    input: {
     path: string;
     content: string;
     encoding?: BufferEncoding;
     append?: boolean;
     createDirs?: boolean;
-  }): Promise<{ success: boolean; output?: FileWriteResult; error?: string }> {
+    },
+    _context: ToolExecutionContext,
+  ): Promise<ToolExecutionResult<FileWriteResult>> {
     try {
       const result = await this.shellService.writeFile(input.path, input.content, {
         encoding: input.encoding,
@@ -45,7 +83,7 @@ export class FileWriteTool implements ITool {
   /**
    * Validate input
    */
-  validate(input: any): { valid: boolean; errors: string[] } {
+  validateArgs(input: Record<string, any>): { isValid: boolean; errors?: any[] } {
     const errors: string[] = [];
 
     if (!input.path) {
@@ -58,44 +96,7 @@ export class FileWriteTool implements ITool {
       errors.push('Content is required');
     }
 
-    return { valid: errors.length === 0, errors };
-  }
-
-  /**
-   * Get JSON schema for tool
-   */
-  getSchema(): any {
-    return {
-      type: 'object',
-      required: ['path', 'content'],
-      properties: {
-        path: {
-          type: 'string',
-          description: 'File path to write',
-        },
-        content: {
-          type: 'string',
-          description: 'Content to write',
-        },
-        encoding: {
-          type: 'string',
-          default: 'utf-8',
-          description: 'File encoding',
-        },
-        append: {
-          type: 'boolean',
-          default: false,
-          description: 'Append to file instead of overwriting',
-        },
-        createDirs: {
-          type: 'boolean',
-          default: true,
-          description: 'Create parent directories if needed',
-        },
-      },
-    };
+    return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 }
-
-
 

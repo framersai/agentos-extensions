@@ -3,13 +3,29 @@
  * Handles socket lifecycle, message sending, and rate limiting.
  */
 
-import makeWASocket, {
-  DisconnectReason,
-  type WASocket,
-  type WAMessage,
-  type ConnectionState,
-  type AuthenticationState,
-} from '@whiskeysockets/baileys';
+// Baileys depends on git-hosted packages. To keep `pnpm install` usable in offline
+// and minimal environments, this extension treats Baileys as a peer dependency
+// and loads it lazily at runtime.
+let cachedBaileys: any | null = null;
+
+function loadBaileys(): any {
+  if (cachedBaileys) return cachedBaileys;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    cachedBaileys = require('@whiskeysockets/baileys');
+    return cachedBaileys;
+  } catch (error) {
+    cachedBaileys = null;
+    const details = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Missing peer dependency "@whiskeysockets/baileys". Install it to enable WhatsApp support (e.g. \`pnpm add @whiskeysockets/baileys\`). Original error: ${details}`,
+    );
+  }
+}
+
+type WASocket = any;
+type WAMessage = any;
+type AuthenticationState = any;
 
 export interface WhatsAppChannelConfig {
   sessionData: string;
@@ -48,18 +64,23 @@ export class WhatsAppService {
     // Parse session data into auth state
     const authState = this.parseSessionData(this.config.sessionData);
 
+    const baileys = loadBaileys();
+    const makeWASocket = baileys?.default ?? baileys;
+    const DisconnectReason = baileys?.DisconnectReason;
+
     this.sock = makeWASocket({
       auth: authState,
       printQRInTerminal: false,
     });
 
     // Wire up connection updates
-    this.sock.ev.on('connection.update', (update: Partial<ConnectionState>) => {
+    this.sock.ev.on('connection.update', (update: any) => {
       const { connection, lastDisconnect } = update;
 
       if (connection === 'close') {
         const statusCode = (lastDisconnect?.error as any)?.output?.statusCode;
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+        const loggedOutCode = (DisconnectReason as any)?.loggedOut;
+        const shouldReconnect = loggedOutCode == null ? true : statusCode !== loggedOutCode;
 
         if (shouldReconnect && this.config.reconnect.maxRetries > 0) {
           setTimeout(() => {

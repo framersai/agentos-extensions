@@ -16,7 +16,7 @@ import type {
   ScreenshotOptions,
   PageSnapshot,
   SnapshotElement,
-} from '../types';
+} from '../types.js';
 
 // Dynamic import for puppeteer to support environments where it's not available
 let puppeteer: typeof import('puppeteer-core') | null = null;
@@ -452,6 +452,5 @@ export class BrowserService {
     }
   }
 }
-
 
 

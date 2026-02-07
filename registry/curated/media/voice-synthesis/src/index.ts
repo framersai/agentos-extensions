@@ -18,7 +18,8 @@ export function createExtensionPack(context: any) {
     name: '@framers/agentos-ext-voice-synthesis',
     version: '1.0.0',
     descriptors: [
-      { id: 'textToSpeech', kind: 'tool' as const, priority: options.priority || 50, payload: tool, requiredSecrets: [{ id: 'elevenlabs.apiKey' }] },
+      // Keep descriptor id aligned with `tool.name` so ToolExecutor can find it.
+      { id: tool.name, kind: 'tool' as const, priority: options.priority || 50, payload: tool, requiredSecrets: [{ id: 'elevenlabs.apiKey' }] },
     ],
     onActivate: async () => context.logger?.info('Voice Synthesis Extension activated'),
     onDeactivate: async () => context.logger?.info('Voice Synthesis Extension deactivated'),

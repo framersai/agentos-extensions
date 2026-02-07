@@ -5,33 +5,54 @@
  * @module @framers/agentos-ext-web-browser
  */
 
-import type { ITool } from '@framers/agentos';
-import type { BrowserService } from '../services/browserService';
-import type { ClickResult } from '../types';
+import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { BrowserService } from '../services/browserService.js';
+import type { ClickResult } from '../types.js';
 
 /**
  * Tool for clicking elements
  */
 export class ClickTool implements ITool {
-  public readonly id = 'browserClick';
-  public readonly name = 'Click Element';
-  public readonly description = 'Click on an element in the current page';
+  public readonly id = 'web-browser-click-v1';
+  /** Tool call name used by the LLM / ToolExecutor. */
+  public readonly name = 'browser_click';
+  public readonly displayName = 'Browser Click';
+  public readonly description = 'Click an element in the current page using a CSS selector.';
+  public readonly category = 'research';
+  public readonly hasSideEffects = true;
+
+  public readonly inputSchema: JSONSchemaObject = {
+    type: 'object',
+    required: ['selector'],
+    properties: {
+      selector: {
+        type: 'string',
+        description: 'CSS selector for the element to click',
+      },
+      waitForNavigation: {
+        type: 'boolean',
+        default: false,
+        description: 'Wait for page navigation after click',
+      },
+    },
+    additionalProperties: false,
+  };
 
   constructor(private browserService: BrowserService) {}
 
   /**
    * Execute click
    */
-  async execute(input: {
-    selector: string;
-    waitForNavigation?: boolean;
-  }): Promise<{ success: boolean; output?: ClickResult; error?: string }> {
+  async execute(
+    input: { selector: string; waitForNavigation?: boolean },
+    _context: ToolExecutionContext,
+  ): Promise<ToolExecutionResult<ClickResult>> {
     try {
       const result = await this.browserService.click(input.selector, {
         waitForNavigation: input.waitForNavigation,
       });
 
-      return { success: result.success, output: result };
+      return { success: result.success, output: result, error: result.success ? undefined : 'Click failed' };
     } catch (error: any) {
       return { success: false, error: error.message };
     }
@@ -40,7 +61,7 @@ export class ClickTool implements ITool {
   /**
    * Validate input
    */
-  validate(input: any): { valid: boolean; errors: string[] } {
+  validateArgs(input: Record<string, any>): { isValid: boolean; errors?: any[] } {
     const errors: string[] = [];
 
     if (!input.selector) {
@@ -49,30 +70,7 @@ export class ClickTool implements ITool {
       errors.push('Selector must be a string');
     }
 
-    return { valid: errors.length === 0, errors };
-  }
-
-  /**
-   * Get JSON schema for tool
-   */
-  getSchema(): any {
-    return {
-      type: 'object',
-      required: ['selector'],
-      properties: {
-        selector: {
-          type: 'string',
-          description: 'CSS selector for the element to click',
-        },
-        waitForNavigation: {
-          type: 'boolean',
-          default: false,
-          description: 'Wait for page navigation after click',
-        },
-      },
-    };
+    return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 }
-
-
 

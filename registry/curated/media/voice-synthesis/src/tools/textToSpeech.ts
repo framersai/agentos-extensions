@@ -2,7 +2,7 @@
  * ElevenLabs TTS Tool — text-to-speech synthesis.
  */
 
-import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '../../../../../../agentos/src/core/tools/ITool.js';
+import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '@framers/agentos';
 
 export interface TTSInput {
   text: string;

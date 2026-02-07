@@ -16,10 +16,8 @@
   "license": "MIT",
   "files": ["dist", "manifest.json"],
   "peerDependencies": {
-    "@framers/agentos": "^0.1.0"
-  },
-  "dependencies": {
-    "@whiskeysockets/baileys": "^6.0.0"
+    "@framers/agentos": "^0.1.0",
+    "@whiskeysockets/baileys": ">=6.0.0"
   },
   "devDependencies": {
     "@framers/agentos": "workspace:*",

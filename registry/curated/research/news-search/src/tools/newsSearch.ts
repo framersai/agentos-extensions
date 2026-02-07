@@ -2,7 +2,7 @@
  * News Search Tool — search news articles via NewsAPI.
  */
 
-import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '../../../../../../agentos/src/core/tools/ITool.js';
+import type { ITool, ToolExecutionContext, ToolExecutionResult, JSONSchemaObject } from '@framers/agentos';
 
 export interface NewsSearchInput {
   query: string;
@@ -74,7 +74,7 @@ export class NewsSearchTool implements ITool<NewsSearchInput, NewsSearchOutput> 
         return { success: false, error: `NewsAPI error (${response.status}): ${(err as any).message || response.statusText}` };
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as any;
       const articles: NewsArticle[] = (data.articles || []).map((a: any) => ({
         title: a.title || '',
         description: a.description || '',

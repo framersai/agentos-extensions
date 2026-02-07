@@ -62,12 +62,14 @@ export class SearchProviderService {
    */
   constructor(config: SearchProviderConfig) {
     this.config = {
-      maxRetries: 3,
-      rateLimit: {
+      serperApiKey: config.serperApiKey,
+      serpApiKey: config.serpApiKey,
+      braveApiKey: config.braveApiKey,
+      maxRetries: config.maxRetries ?? 3,
+      rateLimit: config.rateLimit ?? {
         maxRequests: 10,
-        windowMs: 60000
+        windowMs: 60000,
       },
-      ...config
     };
     this.rateLimitState = new Map();
   }
@@ -224,7 +226,7 @@ export class SearchProviderService {
     
     if (!response.ok) throw new Error(`Serper API error: ${response.statusText}`);
     
-    const data = await response.json();
+    const data = (await response.json()) as any;
     return (data.organic || []).map((item: any) => ({
       title: item.title,
       url: item.link,
@@ -251,7 +253,7 @@ export class SearchProviderService {
     const response = await fetch(`https://serpapi.com/search?${params}`);
     if (!response.ok) throw new Error(`SerpAPI error: ${response.statusText}`);
     
-    const data = await response.json();
+    const data = (await response.json()) as any;
     return (data.organic_results || []).map((item: any) => ({
       title: item.title,
       url: item.link,
@@ -282,7 +284,7 @@ export class SearchProviderService {
     
     if (!response.ok) throw new Error(`Brave API error: ${response.statusText}`);
     
-    const data = await response.json();
+    const data = (await response.json()) as any;
     return (data.web?.results || []).map((item: any, index: number) => ({
       title: item.title,
       url: item.url,
@@ -350,7 +352,7 @@ export class SearchProviderService {
     });
     
     const response = await fetch(`https://api.duckduckgo.com/?${params}`);
-    const data = await response.json();
+    const data = (await response.json()) as any;
     
     const results: SearchResult[] = [];
     

@@ -5,29 +5,62 @@
  * @module @framers/agentos-ext-cli-executor
  */
 
-import type { ITool } from '@framers/agentos';
-import type { ShellService } from '../services/shellService';
-import type { ExecutionResult } from '../types';
+import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { ShellService } from '../services/shellService.js';
+import type { ExecutionResult } from '../types.js';
 
 /**
  * Tool for executing shell commands
  */
 export class ExecuteTool implements ITool {
-  public readonly id = 'shellExecute';
-  public readonly name = 'Execute Shell Command';
-  public readonly description = 'Execute a shell command and return output';
+  public readonly id = 'cli-shell-execute-v1';
+  /** Tool call name used by the LLM / ToolExecutor. */
+  public readonly name = 'shell_execute';
+  public readonly displayName = 'Execute Shell Command';
+  public readonly description = 'Execute a shell command and return stdout/stderr/exit code.';
+  public readonly category = 'system';
+  public readonly hasSideEffects = true;
+
+  public readonly inputSchema: JSONSchemaObject = {
+    type: 'object',
+    required: ['command'],
+    properties: {
+      command: {
+        type: 'string',
+        description: 'Shell command to execute',
+      },
+      cwd: {
+        type: 'string',
+        description: 'Working directory for command',
+      },
+      env: {
+        type: 'object',
+        additionalProperties: { type: 'string' },
+        description: 'Environment variables',
+      },
+      timeout: {
+        type: 'number',
+        description: 'Timeout in milliseconds',
+        default: 60000,
+      },
+    },
+    additionalProperties: false,
+  };
 
   constructor(private shellService: ShellService) {}
 
   /**
    * Execute command
    */
-  async execute(input: {
+  async execute(
+    input: {
     command: string;
     cwd?: string;
     env?: Record<string, string>;
     timeout?: number;
-  }): Promise<{ success: boolean; output?: ExecutionResult; error?: string }> {
+    },
+    _context: ToolExecutionContext,
+  ): Promise<ToolExecutionResult<ExecutionResult>> {
     try {
       // Security check first
       const securityCheck = this.shellService.checkSecurity(input.command);
@@ -47,7 +80,7 @@ export class ExecuteTool implements ITool {
       return {
         success: result.success,
         output: result,
-        error: result.success ? undefined : result.stderr,
+        error: result.success ? undefined : result.stderr || 'Command failed',
       };
     } catch (error: any) {
       return { success: false, error: error.message };
@@ -57,7 +90,7 @@ export class ExecuteTool implements ITool {
   /**
    * Validate input
    */
-  validate(input: any): { valid: boolean; errors: string[] } {
+  validateArgs(input: Record<string, any>): { isValid: boolean; errors?: any[] } {
     const errors: string[] = [];
 
     if (!input.command) {
@@ -72,39 +105,7 @@ export class ExecuteTool implements ITool {
       }
     }
 
-    return { valid: errors.length === 0, errors };
-  }
-
-  /**
-   * Get JSON schema for tool
-   */
-  getSchema(): any {
-    return {
-      type: 'object',
-      required: ['command'],
-      properties: {
-        command: {
-          type: 'string',
-          description: 'Shell command to execute',
-        },
-        cwd: {
-          type: 'string',
-          description: 'Working directory for command',
-        },
-        env: {
-          type: 'object',
-          additionalProperties: { type: 'string' },
-          description: 'Environment variables',
-        },
-        timeout: {
-          type: 'number',
-          description: 'Timeout in milliseconds',
-          default: 60000,
-        },
-      },
-    };
+    return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 }
-
-
 

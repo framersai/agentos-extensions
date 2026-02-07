@@ -22,7 +22,7 @@ import type {
   ListDirectoryResult,
   DirectoryEntry,
   SecurityCheckResult,
-} from '../types';
+} from '../types.js';
 
 const execPromise = promisify(exec);
 
@@ -425,6 +425,5 @@ export class ShellService {
     };
   }
 }
-
 
 

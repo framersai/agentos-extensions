@@ -5,17 +5,17 @@
  * capabilities for AgentOS agents.
  *
  * @module @framers/agentos-ext-cli-executor
- * @version 1.0.0
+ * @version 1.1.0
  * @license MIT
  */
 
 import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
-import { ShellService } from './services/shellService';
-import { ExecuteTool } from './tools/execute';
-import { FileReadTool } from './tools/fileRead';
-import { FileWriteTool } from './tools/fileWrite';
-import { ListDirectoryTool } from './tools/listDir';
-import type { ShellConfig } from './types';
+import { ShellService } from './services/shellService.js';
+import { ExecuteTool } from './tools/execute.js';
+import { FileReadTool } from './tools/fileRead.js';
+import { FileWriteTool } from './tools/fileWrite.js';
+import { ListDirectoryTool } from './tools/listDir.js';
+import type { ShellConfig } from './types.js';
 
 /**
  * Extension configuration options
@@ -66,28 +66,28 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 
   return {
     name: '@framers/agentos-ext-cli-executor',
-    version: '1.0.0',
+    version: '1.1.0',
     descriptors: [
       {
-        id: 'shellExecute',
+        id: executeTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: executeTool,
       },
       {
-        id: 'fileRead',
+        id: fileReadTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: fileReadTool,
       },
       {
-        id: 'fileWrite',
+        id: fileWriteTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: fileWriteTool,
       },
       {
-        id: 'listDirectory',
+        id: listDirectoryTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: listDirectoryTool,
@@ -117,15 +117,12 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 }
 
 // Export types and classes for consumers
-export { ShellService } from './services/shellService';
-export { ExecuteTool } from './tools/execute';
-export { FileReadTool } from './tools/fileRead';
-export { FileWriteTool } from './tools/fileWrite';
-export { ListDirectoryTool } from './tools/listDir';
-export * from './types';
+export { ShellService } from './services/shellService.js';
+export { ExecuteTool } from './tools/execute.js';
+export { FileReadTool } from './tools/fileRead.js';
+export { FileWriteTool } from './tools/fileWrite.js';
+export { ListDirectoryTool } from './tools/listDir.js';
+export * from './types.js';
 
 // Default export for convenience
 export default createExtensionPack;
-
-
-

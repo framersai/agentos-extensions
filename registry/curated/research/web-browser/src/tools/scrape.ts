@@ -5,28 +5,53 @@
  * @module @framers/agentos-ext-web-browser
  */
 
-import type { ITool } from '@framers/agentos';
-import type { BrowserService } from '../services/browserService';
-import type { ScrapeResult } from '../types';
+import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { BrowserService } from '../services/browserService.js';
+import type { ScrapeResult } from '../types.js';
 
 /**
  * Tool for scraping page content
  */
 export class ScrapeTool implements ITool {
-  public readonly id = 'browserScrape';
-  public readonly name = 'Scrape Content';
-  public readonly description = 'Extract content from web page using CSS selectors';
+  public readonly id = 'web-browser-scrape-v1';
+  /** Tool call name used by the LLM / ToolExecutor. */
+  public readonly name = 'browser_scrape';
+  public readonly displayName = 'Browser Scrape';
+  public readonly description = 'Extract content from the current page using a CSS selector.';
+  public readonly category = 'research';
+  public readonly hasSideEffects = false;
+
+  public readonly inputSchema: JSONSchemaObject = {
+    type: 'object',
+    required: ['selector'],
+    properties: {
+      selector: {
+        type: 'string',
+        description: 'CSS selector to match elements',
+      },
+      limit: {
+        type: 'number',
+        description: 'Maximum number of elements to return',
+        minimum: 1,
+      },
+      attributes: {
+        type: 'array',
+        items: { type: 'string' },
+        description: 'Specific attributes to extract',
+      },
+    },
+    additionalProperties: false,
+  };
 
   constructor(private browserService: BrowserService) {}
 
   /**
    * Execute scraping
    */
-  async execute(input: {
-    selector: string;
-    limit?: number;
-    attributes?: string[];
-  }): Promise<{ success: boolean; output?: ScrapeResult; error?: string }> {
+  async execute(
+    input: { selector: string; limit?: number; attributes?: string[] },
+    _context: ToolExecutionContext,
+  ): Promise<ToolExecutionResult<ScrapeResult>> {
     try {
       const result = await this.browserService.scrape(input.selector);
 
@@ -57,7 +82,7 @@ export class ScrapeTool implements ITool {
   /**
    * Validate input
    */
-  validate(input: any): { valid: boolean; errors: string[] } {
+  validateArgs(input: Record<string, any>): { isValid: boolean; errors?: any[] } {
     const errors: string[] = [];
 
     if (!input.selector) {
@@ -72,35 +97,7 @@ export class ScrapeTool implements ITool {
       }
     }
 
-    return { valid: errors.length === 0, errors };
-  }
-
-  /**
-   * Get JSON schema for tool
-   */
-  getSchema(): any {
-    return {
-      type: 'object',
-      required: ['selector'],
-      properties: {
-        selector: {
-          type: 'string',
-          description: 'CSS selector to match elements',
-        },
-        limit: {
-          type: 'number',
-          description: 'Maximum number of elements to return',
-          minimum: 1,
-        },
-        attributes: {
-          type: 'array',
-          items: { type: 'string' },
-          description: 'Specific attributes to extract',
-        },
-      },
-    };
+    return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 }
-
-
 

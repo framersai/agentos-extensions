@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["ES2022"],
+    "baseUrl": ".",
+    "paths": {
+      "@framers/agentos": ["../../../../../agentos/dist/index.d.ts"],
+      "@framers/agentos/*": ["../../../../../agentos/dist/*"]
+    },
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -13,7 +19,6 @@
     "declarationMap": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
     "types": ["node"]
   },
   "include": ["src/**/*"],

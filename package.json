@@ -1,6 +1,11 @@
 {
   "name": "@framers/agentos-extensions",
   "version": "1.0.0",
+  "files": [
+    "registry.json",
+    "types.d.ts",
+    "README.md"
+  ],
   "description": "Community registry of tools, workflows, and integrations for AgentOS",
   "type": "module",
   "sideEffects": false,
@@ -43,6 +48,9 @@
     }
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@10.15.1",
   "pnpm": {
     "overrides": {

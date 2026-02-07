@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { createExtensionPack } from '../src';
 import { ExtensionContext } from '@framers/agentos';
 
@@ -7,6 +7,16 @@ describe('Web Search Extension Integration', () => {
   let context: ExtensionContext;
   
   beforeEach(() => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        Heading: 'Test',
+        AbstractText: 'Test abstract',
+        AbstractURL: 'https://example.com',
+        RelatedTopics: [],
+      }),
+    }) as any;
+
     context = {
       options: {
         serperApiKey: process.env.SERPER_API_KEY,
@@ -27,15 +37,15 @@ describe('Web Search Extension Integration', () => {
   describe('Extension Pack Creation', () => {
     it('should create extension pack with correct metadata', () => {
       expect(extensionPack.name).toBe('@framers/agentos-ext-web-search');
-      expect(extensionPack.version).toBe('1.0.0');
+      expect(extensionPack.version).toBe('1.1.0');
       expect(extensionPack.descriptors).toHaveLength(3);
     });
     
     it('should register all three tools', () => {
       const toolIds = extensionPack.descriptors.map((d: any) => d.id);
-      expect(toolIds).toContain('webSearch');
-      expect(toolIds).toContain('researchAggregator');
-      expect(toolIds).toContain('factCheck');
+      expect(toolIds).toContain('web_search');
+      expect(toolIds).toContain('research_aggregate');
+      expect(toolIds).toContain('fact_check');
     });
     
     it('should set correct tool kinds', () => {
@@ -48,13 +58,17 @@ describe('Web Search Extension Integration', () => {
   describe('Tool Execution', () => {
     it('should execute web search tool', async () => {
       const webSearchDescriptor = extensionPack.descriptors.find(
-        (d: any) => d.id === 'webSearch'
+        (d: any) => d.id === 'web_search'
       );
       const webSearchTool = webSearchDescriptor.payload;
       
       // Test with DuckDuckGo (no API key required)
       const result = await webSearchTool.execute({
         query: 'AgentOS extensions'
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
       });
       
       expect(result.success).toBe(true);
@@ -65,13 +79,17 @@ describe('Web Search Extension Integration', () => {
     
     it('should execute research aggregator tool', async () => {
       const aggregatorDescriptor = extensionPack.descriptors.find(
-        (d: any) => d.id === 'researchAggregator'
+        (d: any) => d.id === 'research_aggregate'
       );
       const aggregatorTool = aggregatorDescriptor.payload;
       
       const result = await aggregatorTool.execute({
         topic: 'TypeScript testing',
         sources: 2
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
       });
       
       expect(result.success).toBe(true);
@@ -82,13 +100,17 @@ describe('Web Search Extension Integration', () => {
     
     it('should execute fact check tool', async () => {
       const factCheckDescriptor = extensionPack.descriptors.find(
-        (d: any) => d.id === 'factCheck'
+        (d: any) => d.id === 'fact_check'
       );
       const factCheckTool = factCheckDescriptor.payload;
       
       const result = await factCheckTool.execute({
         statement: 'TypeScript was created by Microsoft',
         checkSources: true
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
       });
       
       expect(result.success).toBe(true);
@@ -111,6 +133,10 @@ describe('Web Search Extension Integration', () => {
       
       const result = await webSearch.execute({
         query: 'test query'
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
       });
       
       // Should fallback to DuckDuckGo
@@ -120,16 +146,16 @@ describe('Web Search Extension Integration', () => {
     
     it('should validate inputs before execution', async () => {
       const webSearchDescriptor = extensionPack.descriptors.find(
-        (d: any) => d.id === 'webSearch'
+        (d: any) => d.id === 'web_search'
       );
       const webSearchTool = webSearchDescriptor.payload;
       
-      const validation = webSearchTool.validate({
+      const validation = webSearchTool.validateArgs({
         // Missing required 'query' field
         maxResults: 5
       });
       
-      expect(validation.valid).toBe(false);
+      expect(validation.isValid).toBe(false);
       expect(validation.errors).toContain('Query is required');
     });
   });
@@ -170,4 +196,3 @@ describe('Web Search Extension Integration', () => {
     });
   });
 });
-

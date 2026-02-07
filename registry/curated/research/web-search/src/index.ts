@@ -4,15 +4,15 @@
  * Provides web search capabilities through multiple providers with automatic fallback.
  * 
  * @module @framers/agentos-ext-web-search
- * @version 1.0.0
+ * @version 1.1.0
  * @license MIT
  */
 
-import { ExtensionContext, ExtensionPack } from '@framers/agentos';
-import { WebSearchTool } from './tools/webSearch';
-import { ResearchAggregatorTool } from './tools/researchAggregator';
-import { FactCheckTool } from './tools/factCheck';
-import { SearchProviderService } from './services/searchProvider';
+import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
+import { WebSearchTool } from './tools/webSearch.js';
+import { ResearchAggregatorTool } from './tools/researchAggregator.js';
+import { FactCheckTool } from './tools/factCheck.js';
+import { SearchProviderService } from './services/searchProvider.js';
 
 /**
  * Extension configuration options
@@ -56,12 +56,19 @@ export interface WebSearchExtensionOptions {
  */
 export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const options = context.options as WebSearchExtensionOptions || {};
+
+  const serperApiKey =
+    options.serperApiKey || context.getSecret?.('serper.apiKey') || process.env.SERPER_API_KEY;
+  const serpApiKey =
+    options.serpApiKey || context.getSecret?.('serpapi.apiKey') || process.env.SERPAPI_API_KEY;
+  const braveApiKey =
+    options.braveApiKey || context.getSecret?.('brave.apiKey') || process.env.BRAVE_API_KEY;
   
   // Initialize search service with configuration
   const searchService = new SearchProviderService({
-    serperApiKey: options.serperApiKey,
-    serpApiKey: options.serpApiKey,
-    braveApiKey: options.braveApiKey,
+    serperApiKey,
+    serpApiKey,
+    braveApiKey,
     rateLimit: options.rateLimit
   });
   
@@ -72,25 +79,40 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   
   return {
     name: '@framers/agentos-ext-web-search',
-    version: '1.0.0',
+    version: '1.1.0',
     descriptors: [
       {
-        id: 'webSearch',
+        id: webSearchTool.name,
         kind: 'tool',
         priority: options.priority || 50,
-        payload: webSearchTool
+        payload: webSearchTool,
+        requiredSecrets: [
+          { id: 'serper.apiKey', optional: true },
+          { id: 'serpapi.apiKey', optional: true },
+          { id: 'brave.apiKey', optional: true },
+        ],
       },
       {
-        id: 'researchAggregator',
+        id: researchAggregator.name,
         kind: 'tool',
         priority: options.priority || 50,
-        payload: researchAggregator
+        payload: researchAggregator,
+        requiredSecrets: [
+          { id: 'serper.apiKey', optional: true },
+          { id: 'serpapi.apiKey', optional: true },
+          { id: 'brave.apiKey', optional: true },
+        ],
       },
       {
-        id: 'factCheck',
+        id: factCheckTool.name,
         kind: 'tool',
         priority: options.priority || 50,
-        payload: factCheckTool
+        payload: factCheckTool,
+        requiredSecrets: [
+          { id: 'serper.apiKey', optional: true },
+          { id: 'serpapi.apiKey', optional: true },
+          { id: 'brave.apiKey', optional: true },
+        ],
       }
     ],
     /**
@@ -116,8 +138,8 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 
 // Export types for consumers
 export { WebSearchTool, ResearchAggregatorTool, FactCheckTool };
-export { SearchProviderService, SearchResult, ProviderResponse } from './services/searchProvider';
-export type { SearchProviderConfig } from './services/searchProvider';
+export { SearchProviderService, SearchResult, ProviderResponse } from './services/searchProvider.js';
+export type { SearchProviderConfig } from './services/searchProvider.js';
 
 // Default export for convenience
 export default createExtensionPack;

@@ -5,19 +5,19 @@
  * clicking elements, and capturing screenshots.
  *
  * @module @framers/agentos-ext-web-browser
- * @version 1.0.0
+ * @version 1.1.0
  * @license MIT
  */
 
 import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
-import { BrowserService } from './services/browserService';
-import { NavigateTool } from './tools/navigate';
-import { ScrapeTool } from './tools/scrape';
-import { ClickTool } from './tools/click';
-import { TypeTool } from './tools/type';
-import { ScreenshotTool } from './tools/screenshot';
-import { SnapshotTool } from './tools/snapshot';
-import type { BrowserConfig } from './types';
+import { BrowserService } from './services/browserService.js';
+import { NavigateTool } from './tools/navigate.js';
+import { ScrapeTool } from './tools/scrape.js';
+import { ClickTool } from './tools/click.js';
+import { TypeTool } from './tools/type.js';
+import { ScreenshotTool } from './tools/screenshot.js';
+import { SnapshotTool } from './tools/snapshot.js';
+import type { BrowserConfig } from './types.js';
 
 /**
  * Extension configuration options
@@ -69,40 +69,40 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 
   return {
     name: '@framers/agentos-ext-web-browser',
-    version: '1.0.0',
+    version: '1.1.0',
     descriptors: [
       {
-        id: 'browserNavigate',
+        id: navigateTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: navigateTool,
       },
       {
-        id: 'browserScrape',
+        id: scrapeTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: scrapeTool,
       },
       {
-        id: 'browserClick',
+        id: clickTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: clickTool,
       },
       {
-        id: 'browserType',
+        id: typeTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: typeTool,
       },
       {
-        id: 'browserScreenshot',
+        id: screenshotTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: screenshotTool,
       },
       {
-        id: 'browserSnapshot',
+        id: snapshotTool.name,
         kind: 'tool',
         priority: options.priority || 50,
         payload: snapshotTool,
@@ -133,17 +133,14 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 }
 
 // Export types and classes for consumers
-export { BrowserService } from './services/browserService';
-export { NavigateTool } from './tools/navigate';
-export { ScrapeTool } from './tools/scrape';
-export { ClickTool } from './tools/click';
-export { TypeTool } from './tools/type';
-export { ScreenshotTool } from './tools/screenshot';
-export { SnapshotTool } from './tools/snapshot';
-export * from './types';
+export { BrowserService } from './services/browserService.js';
+export { NavigateTool } from './tools/navigate.js';
+export { ScrapeTool } from './tools/scrape.js';
+export { ClickTool } from './tools/click.js';
+export { TypeTool } from './tools/type.js';
+export { ScreenshotTool } from './tools/screenshot.js';
+export { SnapshotTool } from './tools/snapshot.js';
+export * from './types.js';
 
 // Default export for convenience
 export default createExtensionPack;
-
-
-

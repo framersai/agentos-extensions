@@ -5,36 +5,64 @@
  * @module @framers/agentos-ext-web-browser
  */
 
-import type { ITool } from '@framers/agentos';
-import type { BrowserService } from '../services/browserService';
-import type { TypeResult } from '../types';
+import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { BrowserService } from '../services/browserService.js';
+import type { TypeResult } from '../types.js';
 
 /**
  * Tool for typing into inputs
  */
 export class TypeTool implements ITool {
-  public readonly id = 'browserType';
-  public readonly name = 'Type Text';
-  public readonly description = 'Type text into an input field';
+  public readonly id = 'web-browser-type-v1';
+  /** Tool call name used by the LLM / ToolExecutor. */
+  public readonly name = 'browser_type';
+  public readonly displayName = 'Browser Type';
+  public readonly description = 'Type text into an input field using a CSS selector.';
+  public readonly category = 'research';
+  public readonly hasSideEffects = true;
+
+  public readonly inputSchema: JSONSchemaObject = {
+    type: 'object',
+    required: ['selector', 'text'],
+    properties: {
+      selector: {
+        type: 'string',
+        description: 'CSS selector for the input element',
+      },
+      text: {
+        type: 'string',
+        description: 'Text to type',
+      },
+      delay: {
+        type: 'number',
+        description: 'Delay between keystrokes (ms)',
+        default: 0,
+      },
+      clear: {
+        type: 'boolean',
+        description: 'Clear existing text before typing',
+        default: false,
+      },
+    },
+    additionalProperties: false,
+  };
 
   constructor(private browserService: BrowserService) {}
 
   /**
    * Execute typing
    */
-  async execute(input: {
-    selector: string;
-    text: string;
-    delay?: number;
-    clear?: boolean;
-  }): Promise<{ success: boolean; output?: TypeResult; error?: string }> {
+  async execute(
+    input: { selector: string; text: string; delay?: number; clear?: boolean },
+    _context: ToolExecutionContext,
+  ): Promise<ToolExecutionResult<TypeResult>> {
     try {
       const result = await this.browserService.type(input.selector, input.text, {
         delay: input.delay,
         clear: input.clear,
       });
 
-      return { success: result.success, output: result };
+      return { success: result.success, output: result, error: result.success ? undefined : 'Type failed' };
     } catch (error: any) {
       return { success: false, error: error.message };
     }
@@ -43,7 +71,7 @@ export class TypeTool implements ITool {
   /**
    * Validate input
    */
-  validate(input: any): { valid: boolean; errors: string[] } {
+  validateArgs(input: Record<string, any>): { isValid: boolean; errors?: any[] } {
     const errors: string[] = [];
 
     if (!input.selector) {
@@ -58,39 +86,7 @@ export class TypeTool implements ITool {
       errors.push('Text must be a string');
     }
 
-    return { valid: errors.length === 0, errors };
-  }
-
-  /**
-   * Get JSON schema for tool
-   */
-  getSchema(): any {
-    return {
-      type: 'object',
-      required: ['selector', 'text'],
-      properties: {
-        selector: {
-          type: 'string',
-          description: 'CSS selector for the input element',
-        },
-        text: {
-          type: 'string',
-          description: 'Text to type',
-        },
-        delay: {
-          type: 'number',
-          description: 'Delay between keystrokes (ms)',
-          default: 0,
-        },
-        clear: {
-          type: 'boolean',
-          description: 'Clear existing text before typing',
-          default: false,
-        },
-      },
-    };
+    return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 }
-
-
 
