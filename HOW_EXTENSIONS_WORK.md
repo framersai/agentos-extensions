@@ -76,7 +76,41 @@ const config: AgentOSConfig = {
 };
 ```
 
-### Method 2: NPM Package (Coming Soon)
+### Method 2: Curated Registry (Recommended)
+
+Load all official extensions at once via `createCuratedManifest()`:
+
+```typescript
+import { createCuratedManifest } from '@framers/agentos-extensions-registry';
+
+const manifest = await createCuratedManifest({
+  tools: 'all',       // or ['web-search', 'giphy'] for selective
+  channels: 'none',   // or ['telegram', 'discord'] or 'all'
+  secrets: {
+    'serper.apiKey': process.env.SERPER_API_KEY!,
+    'giphy.apiKey': process.env.GIPHY_API_KEY!,
+  },
+});
+
+const config: AgentOSConfig = {
+  extensionManifest: manifest,
+};
+```
+
+Only extensions whose npm packages are installed will load — missing packages are skipped silently via `tryImport()`.
+
+**Options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `tools` | `string[] \| 'all' \| 'none'` | `'all'` | Tool extensions to enable |
+| `channels` | `ChannelPlatform[] \| 'all' \| 'none'` | `'all'` | Messaging channels to enable |
+| `secrets` | `Record<string, string>` | `{}` | API keys (falls back to env vars) |
+| `logger` | `RegistryLogger` | `console` | Custom logger |
+| `basePriority` | `number` | `0` | Base priority offset |
+| `overrides` | `Record<string, ExtensionOverrideConfig>` | — | Per-extension overrides |
+
+### Method 3: NPM Package
 ```typescript
 const config: AgentOSConfig = {
   extensionManifest: {
@@ -91,7 +125,7 @@ const config: AgentOSConfig = {
 };
 ```
 
-### Method 3: Local Module
+### Method 4: Local Module
 ```typescript
 const config: AgentOSConfig = {
   extensionManifest: {
@@ -247,46 +281,59 @@ const result = await tool.execute(input, context);
 
 ## Example: Complete Setup
 
+### Using the Registry (Recommended)
+
 ```typescript
 import { AgentOS } from '@framers/agentos';
-import searchExtension from '@framers/agentos-ext-search';
-import weatherExtension from '@framers/agentos-ext-weather';
+import { createCuratedManifest } from '@framers/agentos-extensions-registry';
 
-// Initialize AgentOS with multiple extensions
+const agentos = new AgentOS();
+
+// Load all available extensions in one call
+const manifest = await createCuratedManifest({
+  tools: 'all',
+  channels: ['telegram'],
+  secrets: {
+    'serper.apiKey': process.env.SERPER_API_KEY!,
+    'telegram.botToken': process.env.TELEGRAM_BOT_TOKEN!,
+  },
+  overrides: {
+    'cli-executor': { enabled: false },  // Disable specific extensions
+  },
+});
+
+await agentos.initialize({
+  defaultPersonaId: 'v_researcher',
+  extensionManifest: manifest,
+  modelProviderManagerConfig: {
+    providers: [/* ... */]
+  }
+});
+
+const gmi = await agentos.createGMI('v_researcher');
+// Agent can now use webSearch, researchAggregator, giphy, news, etc.
+```
+
+### Using Individual Extensions
+
+```typescript
+import { AgentOS } from '@framers/agentos';
+import searchExtension from '@framers/agentos-ext-web-search';
+
 const agentos = new AgentOS();
 
 await agentos.initialize({
-  // Core configuration
   defaultPersonaId: 'v_researcher',
-  
-  // Extension configuration
   extensionManifest: {
     packs: [
-      // Search extension with Serper
       {
         factory: () => searchExtension({
           manifestEntry: {} as any,
-          source: { sourceName: '@framers/agentos-ext-search' },
+          source: { sourceName: '@framers/agentos-ext-web-search' },
           options: {
             search: {
               provider: 'serper',
               apiKey: process.env.SERPER_API_KEY,
-              rateLimit: 10
-            }
-          }
-        }),
-        priority: 10,
-        enabled: true
-      },
-      
-      // Weather extension
-      {
-        factory: () => weatherExtension({
-          manifestEntry: {} as any,
-          source: { sourceName: '@framers/agentos-ext-weather' },
-          options: {
-            weather: {
-              apiKey: process.env.WEATHER_API_KEY
             }
           }
         }),
@@ -294,30 +341,19 @@ await agentos.initialize({
         enabled: true
       }
     ],
-    
-    // Override specific tools
     overrides: {
       tools: {
-        'researchAggregator': {
-          enabled: true,  // Enable by default
-          priority: 15
-        },
-        'factCheck': {
-          enabled: false  // Disable fact checker
-        }
+        'researchAggregator': { enabled: true, priority: 15 },
+        'factCheck': { enabled: false }
       }
     }
   },
-  
-  // Other AgentOS config...
   modelProviderManagerConfig: {
     providers: [/* ... */]
   }
 });
 
-// Tools now available to agents
 const gmi = await agentos.createGMI('v_researcher');
-// Agent can now use webSearch, researchAggregator, weather tools
 ```
 
 ## Extension Discovery

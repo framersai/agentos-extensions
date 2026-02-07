@@ -100,8 +100,27 @@ export interface ITool<TInput = any, TOutput = any> {
 4. **Activation**: `onActivate` lifecycle hooks are called
 5. **Availability**: Tools become available to GMIs
 
+### Using the Curated Registry (Recommended)
+
 ```typescript
-// 1. Define manifest
+import { createCuratedManifest } from '@framers/agentos-extensions-registry';
+
+// Build manifest from all installed extensions
+const manifest = await createCuratedManifest({
+  tools: 'all',
+  channels: ['telegram', 'discord'],
+  secrets: {
+    'serper.apiKey': process.env.SERPER_API_KEY!,
+    'telegram.botToken': process.env.TELEGRAM_BOT_TOKEN!,
+  },
+});
+
+await extensionManager.loadFromManifest(manifest);
+```
+
+### Using Individual Factories
+
+```typescript
 const manifest = {
   packs: [
     {
@@ -115,10 +134,8 @@ const manifest = {
   ]
 };
 
-// 2. Load extensions
 await extensionManager.loadFromManifest(manifest);
 
-// 3. Tools are now available
 const tools = registry.getDescriptorStack('tool');
 ```
 

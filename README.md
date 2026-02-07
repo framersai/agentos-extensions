@@ -84,13 +84,38 @@ agentos-extensions/
 
 ## Quick Start
 
-### Install an extension
+### Install the registry (recommended)
+
+Load all extensions at once via the curated registry:
+
+```bash
+npm install @framers/agentos-extensions-registry
+```
+
+```typescript
+import { AgentOS } from '@framers/agentos';
+import { createCuratedManifest } from '@framers/agentos-extensions-registry';
+
+const manifest = await createCuratedManifest({
+  tools: 'all',
+  channels: 'none',
+  secrets: {
+    'serper.apiKey': process.env.SERPER_API_KEY!,
+    'giphy.apiKey': process.env.GIPHY_API_KEY!,
+  },
+});
+
+const agentos = new AgentOS();
+await agentos.initialize({ extensionManifest: manifest });
+```
+
+Only extensions whose npm packages are installed will load — missing packages are skipped silently.
+
+### Install individual extensions
 
 ```bash
 npm install @framers/agentos-ext-web-search
 ```
-
-### Use in your agent
 
 ```typescript
 import { AgentOS } from '@framers/agentos';
@@ -103,6 +128,67 @@ await agentos.initialize({
       factory: () => webSearch({ /* config */ })
     }]
   }
+});
+```
+
+### Registry options
+
+`createCuratedManifest()` accepts:
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `tools` | `string[] \| 'all' \| 'none'` | `'all'` | Which tool extensions to enable. Pass an array of names (e.g. `['web-search', 'giphy']`) to selectively load. |
+| `channels` | `ChannelPlatform[] \| 'all' \| 'none'` | `'all'` | Which messaging channels to enable. |
+| `secrets` | `Record<string, string>` | `{}` | API keys and tokens. Falls back to environment variables. |
+| `logger` | `RegistryLogger` | `console` | Custom logger (`info`, `warn`, `error`, `debug` methods). |
+| `basePriority` | `number` | `0` | Base priority for all extensions. |
+| `overrides` | `Record<string, ExtensionOverrideConfig>` | — | Per-extension overrides for `enabled`, `priority`, and `options`. |
+
+#### Secret keys
+
+| Secret ID | Environment Variable | Extension |
+|-----------|---------------------|-----------|
+| `serper.apiKey` | `SERPER_API_KEY` | web-search |
+| `serpapi.apiKey` | `SERPAPI_API_KEY` | web-search |
+| `brave.apiKey` | `BRAVE_API_KEY` | web-search |
+| `giphy.apiKey` | `GIPHY_API_KEY` | giphy |
+| `elevenlabs.apiKey` | `ELEVENLABS_API_KEY` | voice-synthesis |
+| `pexels.apiKey` | `PEXELS_API_KEY` | image-search |
+| `unsplash.apiKey` | `UNSPLASH_ACCESS_KEY` | image-search |
+| `pixabay.apiKey` | `PIXABAY_API_KEY` | image-search |
+| `newsapi.apiKey` | `NEWSAPI_API_KEY` | news-search |
+| `telegram.botToken` | `TELEGRAM_BOT_TOKEN` | channel-telegram |
+| `discord.botToken` | `DISCORD_BOT_TOKEN` | channel-discord |
+| `slack.botToken` | `SLACK_BOT_TOKEN` | channel-slack |
+| `slack.appToken` | `SLACK_APP_TOKEN` | channel-slack |
+
+#### Selective loading examples
+
+```typescript
+// Only web search and giphy, no channels
+const manifest = await createCuratedManifest({
+  tools: ['web-search', 'giphy'],
+  channels: 'none',
+});
+
+// Only Telegram and Discord channels, all tools
+const manifest = await createCuratedManifest({
+  channels: ['telegram', 'discord'],
+  tools: 'all',
+  secrets: {
+    'telegram.botToken': process.env.TELEGRAM_BOT_TOKEN!,
+    'discord.botToken': process.env.DISCORD_BOT_TOKEN!,
+  },
+});
+
+// Override specific extension options
+const manifest = await createCuratedManifest({
+  tools: 'all',
+  channels: 'none',
+  overrides: {
+    'web-search': { priority: 10 },
+    'cli-executor': { enabled: false },
+  },
 });
 ```
 

@@ -25,6 +25,32 @@ const DEFAULT_EXTENSION_CONFIG = {
 
 ### 2. Initialization Flow
 
+#### Using the Registry (Recommended)
+
+The simplest way to load extensions is via `createCuratedManifest()`:
+
+```typescript
+import { AgentOS } from '@framers/agentos';
+import { createCuratedManifest } from '@framers/agentos-extensions-registry';
+
+const manifest = await createCuratedManifest({
+  tools: 'all',       // Load all tool extensions
+  channels: 'none',   // Or 'all', or ['telegram', 'discord']
+  secrets: {
+    'serper.apiKey': process.env.SERPER_API_KEY!,
+    'giphy.apiKey': process.env.GIPHY_API_KEY!,
+  },
+});
+
+const agentos = new AgentOS();
+await agentos.initialize({ extensionManifest: manifest });
+// All installed extensions are now loaded and available!
+```
+
+Only extensions whose npm packages are installed will load — missing packages are skipped silently via `tryImport()`.
+
+#### Using AgentOS Config
+
 ```typescript
 // When AgentOS initializes
 const agentos = new AgentOS({
