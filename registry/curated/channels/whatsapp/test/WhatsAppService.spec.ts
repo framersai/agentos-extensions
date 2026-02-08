@@ -23,8 +23,8 @@ vi.mock('@whiskeysockets/baileys', () => {
   };
 });
 
-import { WhatsAppService, type WhatsAppChannelConfig } from '../src/WhatsAppService';
-import makeWASocket from '@whiskeysockets/baileys';
+import { WhatsAppService, type WhatsAppChannelConfig, _setBaileysForTesting } from '../src/WhatsAppService';
+import makeWASocket, * as baileysMock from '@whiskeysockets/baileys';
 
 function createConfig(overrides?: Partial<WhatsAppChannelConfig>): WhatsAppChannelConfig {
   return {
@@ -40,6 +40,7 @@ function getMockSocket() {
 describe('WhatsAppService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    _setBaileysForTesting(baileysMock);
   });
 
   // ── Constructor ──

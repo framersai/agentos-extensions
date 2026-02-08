@@ -23,6 +23,11 @@ function loadBaileys(): any {
   }
 }
 
+/** @internal Set or reset the cached Baileys module — used by tests to ensure mock isolation across vitest threads. */
+export function _setBaileysForTesting(mod: any): void {
+  cachedBaileys = mod;
+}
+
 type WASocket = any;
 type WAMessage = any;
 type AuthenticationState = any;
@@ -122,7 +127,11 @@ export class WhatsAppService {
     if (!this.running || !this.sock) return;
     this.sock.ev.removeAllListeners('messages.upsert');
     this.sock.ev.removeAllListeners('connection.update');
-    this.sock.end(undefined);
+    try {
+      this.sock.end(undefined);
+    } catch {
+      // Socket may already be closed or not fully connected
+    }
     this.running = false;
     this.sock = null;
   }

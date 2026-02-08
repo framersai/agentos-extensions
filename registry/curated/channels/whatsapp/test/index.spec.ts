@@ -24,6 +24,8 @@ vi.mock('@whiskeysockets/baileys', () => {
 });
 
 import { createExtensionPack } from '../src/index';
+import { _setBaileysForTesting } from '../src/WhatsAppService';
+import * as baileysMock from '@whiskeysockets/baileys';
 import type { ExtensionContext } from '@framers/agentos';
 
 function createContext(options: Record<string, any> = {}): ExtensionContext {
@@ -42,6 +44,8 @@ describe('createExtensionPack', () => {
   const savedEnv: Record<string, string | undefined> = {};
 
   beforeEach(() => {
+    vi.clearAllMocks();
+    _setBaileysForTesting(baileysMock);
     // Save and clean env vars that resolveSessionData checks
     for (const key of ['WHATSAPP_SESSION_DATA', 'WHATSAPP_AUTH_STATE']) {
       savedEnv[key] = process.env[key];
