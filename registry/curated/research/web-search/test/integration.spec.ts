@@ -162,37 +162,25 @@ describe('Web Search Extension Integration', () => {
   
   describe('Lifecycle Hooks', () => {
     it('should call onActivate when extension is activated', async () => {
-      let activated = false;
-      
-      const customPack = createExtensionPack({
-        ...context,
-        onActivate: async () => {
-          activated = true;
-        }
-      });
-      
-      if (customPack.onActivate) {
-        await customPack.onActivate();
+      const logSpy = vi.fn();
+      const lc = { logger: { info: logSpy, warn: vi.fn(), error: vi.fn(), debug: vi.fn() } };
+
+      if (extensionPack.onActivate) {
+        await extensionPack.onActivate(lc);
       }
-      
-      expect(activated).toBe(true);
+
+      expect(logSpy).toHaveBeenCalledWith('Web Search Extension activated');
     });
-    
+
     it('should call onDeactivate when extension is deactivated', async () => {
-      let deactivated = false;
-      
-      const customPack = createExtensionPack({
-        ...context,
-        onDeactivate: async () => {
-          deactivated = true;
-        }
-      });
-      
-      if (customPack.onDeactivate) {
-        await customPack.onDeactivate();
+      const logSpy = vi.fn();
+      const lc = { logger: { info: logSpy, warn: vi.fn(), error: vi.fn(), debug: vi.fn() } };
+
+      if (extensionPack.onDeactivate) {
+        await extensionPack.onDeactivate(lc);
       }
-      
-      expect(deactivated).toBe(true);
+
+      expect(logSpy).toHaveBeenCalledWith('Web Search Extension deactivated');
     });
   });
 });
