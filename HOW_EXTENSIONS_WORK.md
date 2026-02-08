@@ -1,511 +1,212 @@
 # How Extensions Work in AgentOS
 
-## Overview
+AgentOS extensions are **runtime code** packaged as “extension packs”. Packs can add:
 
-AgentOS uses a sophisticated extension system that allows developers to add new capabilities without modifying core code. Extensions can provide tools, guardrails, workflows, and more.
+- Tools (`ITool`) for LLM tool calling
+- Guardrails (`IGuardrailService`) for safety/policy
+- Workflows (definitions + executors)
+- Other runtime services (channels, memory providers, provenance, etc.)
 
-## Extension Architecture
+This document focuses on how extensions become **callable tools**.
 
-```mermaid
-graph TD
-    A[AgentOS Core] --> B[ExtensionManager]
-    B --> C[ExtensionRegistry]
-    C --> D[Tool Registry]
-    C --> E[Guardrail Registry]
-    C --> F[Workflow Registry]
-    
-    G[Extension Pack] --> H[Descriptors]
-    H --> I[Tool Descriptors]
-    H --> J[Guardrail Descriptors]
-    H --> K[Workflow Descriptors]
-    
-    B --> G
-    I --> D
-    J --> E
-    K --> F
-```
+## Core Building Blocks
 
-## Core Components
+### Extension Pack
 
-### 1. Extension Pack
-A collection of related extensions distributed together:
-```typescript
+An extension pack is a bundle of descriptors.
+
+```ts
 export interface ExtensionPack {
   name: string;
   version?: string;
   descriptors: ExtensionDescriptor[];
+  onActivate?: (ctx) => Promise<void> | void;
+  onDeactivate?: (ctx) => Promise<void> | void;
 }
 ```
 
-### 2. Extension Descriptor
-Metadata and payload for a single extension:
-```typescript
-export interface ExtensionDescriptor<TPayload = unknown> {
-  id: string;                    // Unique identifier
-  kind: ExtensionKind;           // 'tool', 'guardrail', etc.
-  payload: TPayload;             // The actual implementation
-  priority?: number;             // Loading priority (higher = later)
-  enableByDefault?: boolean;     // Auto-enable when loaded
-  metadata?: Record<string, unknown>;
-  onActivate?: (context) => void;    // Lifecycle hook
-  onDeactivate?: (context) => void;  // Lifecycle hook
-}
-```
+### Extension Descriptor
 
-### 3. Extension Manager
-Coordinates loading and lifecycle:
-```typescript
-const extensionManager = new ExtensionManager();
-await extensionManager.loadManifest(context);
-```
-
-## Loading Extensions
-
-### Method 1: Factory Function (In-Process)
-```typescript
-const config: AgentOSConfig = {
-  extensionManifest: {
-    packs: [
-      {
-        factory: () => createSearchExtension({
-          // ... options
-        })
-      }
-    ]
-  }
-};
-```
-
-### Method 2: Curated Registry (Recommended)
-
-Load all official extensions at once via `createCuratedManifest()`:
-
-```typescript
-import { createCuratedManifest } from '@framers/agentos-extensions-registry';
-
-const manifest = await createCuratedManifest({
-  tools: 'all',       // or ['web-search', 'giphy'] for selective
-  channels: 'none',   // or ['telegram', 'discord'] or 'all'
-  secrets: {
-    'serper.apiKey': process.env.SERPER_API_KEY!,
-    'giphy.apiKey': process.env.GIPHY_API_KEY!,
-  },
-});
-
-const config: AgentOSConfig = {
-  extensionManifest: manifest,
-};
-```
-
-Only extensions whose npm packages are installed will load — missing packages are skipped silently via `tryImport()`.
-
-**Options:**
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `tools` | `string[] \| 'all' \| 'none'` | `'all'` | Tool extensions to enable |
-| `channels` | `ChannelPlatform[] \| 'all' \| 'none'` | `'all'` | Messaging channels to enable |
-| `secrets` | `Record<string, string>` | `{}` | API keys (falls back to env vars) |
-| `logger` | `RegistryLogger` | `console` | Custom logger |
-| `basePriority` | `number` | `0` | Base priority offset |
-| `overrides` | `Record<string, ExtensionOverrideConfig>` | — | Per-extension overrides |
-
-### Method 3: NPM Package
-```typescript
-const config: AgentOSConfig = {
-  extensionManifest: {
-    packs: [
-      {
-        package: '@framers/agentos-ext-search',
-        version: '^1.0.0',
-        options: { /* config */ }
-      }
-    ]
-  }
-};
-```
-
-### Method 4: Local Module
-```typescript
-const config: AgentOSConfig = {
-  extensionManifest: {
-    packs: [
-      {
-        module: './extensions/my-extension',
-        options: { /* config */ }
-      }
-    ]
-  }
-};
-```
-
-### Secrets & API Keys
-
-When a descriptor needs a credential, declare it and read the value from the lifecycle context:
+Descriptors are registered into kind-specific registries (tools, guardrails, workflows, etc.).
 
 ```ts
-const descriptor = {
-  id: 'example.search',
-  kind: EXTENSION_KIND_TOOL,
-  payload: searchTool,
-  requiredSecrets: [{ id: 'openai.apiKey' }],
-  onActivate: (ctx) => {
-    searchTool.setApiKey(ctx.getSecret?.('openai.apiKey'));
-  },
-};
-```
-
-- Secret IDs correspond to entries in `packages/agentos/src/config/extension-secrets.json`.
-- Hosts can supply the values via environment variables or the AgentOS client UI.
-- Optional secrets can be marked with `optional: true` to allow degraded operation.
-
-## Priority & Overriding
-
-### Extension Priority
-Extensions with higher priority load later and can override earlier ones:
-```typescript
-{
-  id: 'webSearch',
-  kind: 'tool',
-  priority: 10,  // Default priority
-  payload: new WebSearchTool()
-}
-
-// Later extension can override:
-{
-  id: 'webSearch',  // Same ID
-  kind: 'tool',
-  priority: 20,     // Higher priority wins
-  payload: new EnhancedWebSearchTool()
+export interface ExtensionDescriptor<TPayload = unknown> {
+  id: string;
+  kind: string; // 'tool', 'guardrail', ...
+  payload: TPayload;
+  priority?: number;
+  requiredSecrets?: Array<{ id: string; optional?: boolean }>;
+  onActivate?: (ctx) => Promise<void> | void;
+  onDeactivate?: (ctx) => Promise<void> | void;
 }
 ```
 
-### Stacking
-Multiple descriptors with the same ID form a stack. The highest priority becomes active:
-```typescript
-// Registry maintains stack:
-webSearch: [
-  { priority: 10, payload: BasicSearch },    // Inactive
-  { priority: 20, payload: EnhancedSearch }  // Active
-]
+### Extension Registry (Stacking)
+
+Each `(kind, id)` is a **stack**. The active entry is:
+
+- highest `priority`
+- tie-breaker: latest registration
+
+## How Tool Calling Uses Extensions
+
+Tools are stored in an extension registry of kind `tool`. The important invariant:
+
+- `ToolExecutor` looks up tools by **tool call name**, which is `ITool.name`
+- therefore, tool descriptors must use `descriptor.id === tool.name`
+
+```mermaid
+sequenceDiagram
+  participant G as GMI
+  participant O as ToolOrchestrator
+  participant E as ToolExecutor
+  participant R as ExtensionRegistry(tool)
+  participant T as ITool
+
+  G->>O: listAvailableTools()
+  O->>E: listAvailableTools()
+  E->>R: listActive()
+  R-->>E: active tool descriptors
+  E-->>O: tool schemas
+  O-->>G: tool schemas
+
+  G->>O: processToolCall(name,args)
+  O->>E: executeTool(request)
+  E->>R: getActive(toolName)
+  R-->>E: descriptor.payload (ITool)
+  E->>T: tool.execute(args, ctx)
+  T-->>E: ToolExecutionResult
+  E-->>O: ToolCallResult
+  O-->>G: ToolCallResult
 ```
 
-### Manual Overrides
-Configure overrides in the manifest:
-```typescript
-{
-  extensionManifest: {
-    packs: [/* ... */],
-    overrides: {
-      tools: {
-        'webSearch': {
-          enabled: false,      // Disable specific tool
-          priority: 100,       // Override priority
-          options: { /* */ }   // Custom options
-        }
-      }
-    }
-  }
-}
+## Loading Packs (Extension Manifest)
+
+AgentOS loads extensions from `extensionManifest.packs` via `ExtensionManager.loadManifest()`.
+
+Packs load **sequentially** in manifest order.
+
+### Pack Entry Types
+
+Each pack entry can be:
+
+1. `factory`: a function returning an `ExtensionPack`
+2. `package`: dynamic `import()` of an npm package exporting `createExtensionPack()`
+3. `module`: dynamic `import()` of a local file/module exporting `createExtensionPack()`
+
+```mermaid
+graph TD
+  M[extensionManifest] --> EM[ExtensionManager.loadManifest]
+  EM --> RP[resolve pack entry]
+  RP --> P[ExtensionPack]
+  P --> D[descriptors]
+  D --> R[ExtensionRegistry (per kind)]
+  R --> TE[ToolExecutor]
+  TE --> TO[ToolOrchestrator]
 ```
 
-## Loading Multiple Extensions
+### Example: Curated Registry (Recommended)
 
-### Parallel Loading
-Multiple extension packs load in parallel:
-```typescript
-{
-  extensionManifest: {
-    packs: [
-      { factory: () => createSearchExtension(opts1) },
-      { factory: () => createDatabaseExtension(opts2) },
-      { factory: () => createWeatherExtension(opts3) }
-    ]
-  }
-}
-```
+Use `@framers/agentos-extensions-registry` to build a manifest from installed curated extensions.
 
-### Load Order
-1. Extensions load based on manifest order
-2. Within each pack, descriptors apply by priority
-3. Lifecycle hooks (`onActivate`) run after registration
-4. Higher priority extensions can override lower ones
-
-## Extension Lifecycle
-
-### 1. Discovery
-ExtensionManager reads manifest and identifies packs to load.
-
-### 2. Loading
-```typescript
-for (const entry of manifest.packs) {
-  const pack = await resolvePack(entry);
-  await registerPack(pack, entry, context);
-}
-```
-
-### 3. Registration
-Each descriptor registers with its kind-specific registry:
-```typescript
-const toolRegistry = extensionManager.getRegistry('tool');
-await toolRegistry.register(descriptor, context);
-```
-
-### 4. Activation
-`onActivate` hook runs when descriptor becomes active:
-```typescript
-{
-  onActivate: async (ctx) => {
-    ctx.logger?.info('Tool activated');
-    await initializeResources();
-  }
-}
-```
-
-### 5. Runtime
-Tools available to agents via ToolExecutor:
-```typescript
-const tool = toolExecutor.getTool('webSearch');
-const result = await tool.execute(input, context);
-```
-
-### 6. Deactivation
-`onDeactivate` runs when overridden or removed:
-```typescript
-{
-  onDeactivate: async (ctx) => {
-    await cleanupResources();
-  }
-}
-```
-
-## Example: Complete Setup
-
-### Using the Registry (Recommended)
-
-```typescript
+```ts
 import { AgentOS } from '@framers/agentos';
 import { createCuratedManifest } from '@framers/agentos-extensions-registry';
 
-const agentos = new AgentOS();
+const extensionSecrets = {
+  'serper.apiKey': process.env.SERPER_API_KEY!,
+  'giphy.apiKey': process.env.GIPHY_API_KEY!,
+};
 
-// Load all available extensions in one call
 const manifest = await createCuratedManifest({
   tools: 'all',
-  channels: ['telegram'],
-  secrets: {
-    'serper.apiKey': process.env.SERPER_API_KEY!,
-    'telegram.botToken': process.env.TELEGRAM_BOT_TOKEN!,
-  },
-  overrides: {
-    'cli-executor': { enabled: false },  // Disable specific extensions
-  },
+  channels: 'none',
+  secrets: extensionSecrets,
 });
-
-await agentos.initialize({
-  defaultPersonaId: 'v_researcher',
-  extensionManifest: manifest,
-  modelProviderManagerConfig: {
-    providers: [/* ... */]
-  }
-});
-
-const gmi = await agentos.createGMI('v_researcher');
-// Agent can now use webSearch, researchAggregator, giphy, news, etc.
-```
-
-### Using Individual Extensions
-
-```typescript
-import { AgentOS } from '@framers/agentos';
-import searchExtension from '@framers/agentos-ext-web-search';
 
 const agentos = new AgentOS();
-
 await agentos.initialize({
-  defaultPersonaId: 'v_researcher',
-  extensionManifest: {
-    packs: [
-      {
-        factory: () => searchExtension({
-          manifestEntry: {} as any,
-          source: { sourceName: '@framers/agentos-ext-web-search' },
-          options: {
-            search: {
-              provider: 'serper',
-              apiKey: process.env.SERPER_API_KEY,
-            }
-          }
-        }),
-        priority: 10,
-        enabled: true
-      }
-    ],
-    overrides: {
-      tools: {
-        'researchAggregator': { enabled: true, priority: 15 },
-        'factCheck': { enabled: false }
-      }
-    }
-  },
-  modelProviderManagerConfig: {
-    providers: [/* ... */]
-  }
-});
-
-const gmi = await agentos.createGMI('v_researcher');
-```
-
-## Extension Discovery
-
-### Runtime Discovery
-```typescript
-// Get all registered tools
-const toolRegistry = extensionManager.getRegistry('tool');
-const activeToos = toolRegistry.listActive();
-
-// Check if specific tool exists
-const hasSearch = toolRegistry.has('webSearch');
-
-// Get tool metadata
-const descriptor = toolRegistry.get('webSearch');
-```
-
-### Agent Discovery
-Agents discover available tools through GMI configuration:
-```typescript
-const gmi = await gmiManager.createGMI({
-  personaId: 'researcher',
-  toolIds: ['webSearch', 'researchAggregator']  // Explicit tools
+  extensionManifest: manifest,
+  // Provide secrets here so `requiredSecrets` gating can be evaluated without relying on env vars.
+  extensionSecrets,
+  // ...other required AgentOS config
 });
 ```
 
-## Best Practices
+### Example: Load a Local Module Pack
 
-### 1. Namespace Your IDs
-Use reverse domain notation:
-```typescript
-id: 'com.yourcompany.ext.toolname'
-```
-
-### 2. Version Compatibility
-Specify AgentOS version requirements:
-```json
-{
-  "agentosVersion": "^2.0.0"
+```ts
+extensionManifest: {
+  packs: [
+    {
+      module: './extensions/my-pack.mjs',
+      options: { /* your config */ },
+      priority: 10,
+    },
+  ],
 }
 ```
 
-### 3. Configuration Validation
-Validate options in factory:
-```typescript
-export function createExtensionPack(context: ExtensionPackContext) {
-  const { options = {} } = context;
-  
-  if (!options.apiKey && !process.env.API_KEY) {
-    throw new Error('API key required');
-  }
-  
-  // ... create pack
+### Example: Load an npm Package Pack
+
+```ts
+extensionManifest: {
+  packs: [
+    {
+      package: '@framers/agentos-ext-web-search',
+      options: { /* your config */ },
+      priority: 10,
+    },
+  ],
 }
 ```
 
-### 4. Graceful Degradation
-Handle missing dependencies:
-```typescript
-async execute(input, context) {
-  if (!this.service.isConfigured()) {
-    return {
-      success: false,
-      error: 'Service not configured',
-      details: { helpUrl: 'https://...' }
-    };
-  }
-  // ... normal execution
-}
-```
+## Secrets & `requiredSecrets`
 
-### 5. Resource Cleanup
-Always cleanup in deactivate:
-```typescript
-onDeactivate: async (ctx) => {
-  await this.closeConnections();
-  await this.saveState();
-  this.clearCache();
-}
-```
+Descriptors can declare `requiredSecrets` to declare runtime dependencies (API keys, tokens, credentials).
 
-## Debugging Extensions
+AgentOS resolves secrets from:
 
-### Enable Logging
-```typescript
-{
-  extensionManifest: {
-    packs: [/* ... */]
+1. `extensionSecrets` passed to AgentOS (host-provided)
+2. `packs[].options.secrets` if present
+3. environment variables mapped by the shared secret catalog (`extension-secrets.json`)
+
+If a descriptor requires a non-optional secret and it can’t be resolved, AgentOS skips activating that descriptor.
+
+## Overrides
+
+You can disable or reprioritize individual descriptors using overrides:
+
+- `extensionManifest.overrides` (inline)
+- `extensionOverrides` on AgentOS config (host-provided)
+
+Overrides currently apply to:
+
+- tools
+- guardrails
+- response processors
+
+Example: disable `giphy_search`:
+
+```ts
+extensionOverrides: {
+  tools: {
+    giphy_search: { enabled: false },
   },
-  debugging: {
-    logExtensionEvents: true,
-    logToolCalls: true
-  }
-}
+},
 ```
 
-### Extension Events
-Listen to extension events:
-```typescript
+## Lifecycle Hooks
+
+- `pack.onActivate(ctx)` runs once per loaded pack before descriptors register
+- `descriptor.onActivate(ctx)` runs when the descriptor becomes active for its `(kind,id)`
+- `descriptor.onDeactivate(ctx)` runs when the descriptor is superseded or removed
+- `pack.onDeactivate(ctx)` runs on AgentOS shutdown
+
+You can listen to extension events:
+
+```ts
 extensionManager.on((event) => {
-  console.log('Extension event:', event.type, event.source);
+  console.log(event.type, event.timestamp, event.source);
 });
 ```
-
-### Tool Execution Tracking
-```typescript
-const toolOrchestrator = new ToolOrchestrator({
-  logToolCalls: true,
-  onToolCall: (tool, input, result) => {
-    console.log(`Tool ${tool.name}:`, { input, result });
-  }
-});
-```
-
-## Security Considerations
-
-### 1. Permission Scoping
-Tools declare required permissions:
-```typescript
-readonly permissions = {
-  requiredScopes: ['internet.access', 'file.read'],
-  requiredCapabilities: ['web-search']
-};
-```
-
-### 2. API Key Security
-Never hardcode keys:
-```typescript
-// ❌ Bad
-apiKey: 'sk-1234567890'
-
-// ✅ Good
-apiKey: process.env.API_KEY
-```
-
-### 3. Input Validation
-Always validate tool inputs:
-```typescript
-async execute(input: any, context: ToolExecutionContext) {
-  // Validate against schema
-  const valid = ajv.validate(this.inputSchema, input);
-  if (!valid) {
-    return { success: false, error: 'Invalid input' };
-  }
-  // ... proceed
-}
-```
-
-## Future Roadmap
-
-- **Extension Marketplace**: Browse and install from UI
-- **Hot Reloading**: Update extensions without restart
-- **Sandboxing**: Isolate extension execution
-- **Dependency Resolution**: Automatic dependency management
-- **Visual Editor**: Create extensions without code

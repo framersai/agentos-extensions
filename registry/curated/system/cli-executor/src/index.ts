@@ -10,6 +10,9 @@
  */
 
 import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { ShellService } from './services/shellService.js';
 import { ExecuteTool } from './tools/execute.js';
 import { FileReadTool } from './tools/fileRead.js';
@@ -48,11 +51,48 @@ export interface CLIExecutorExtensionOptions extends ShellConfig {
 export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const options = (context.options as CLIExecutorExtensionOptions) || {};
 
+  let workspaceDir: string | undefined;
+  let workspaceSubdirs: string[] = [];
+  const workspaceConfig = options.agentWorkspace;
+  if (workspaceConfig && workspaceConfig.enabled !== false) {
+    const baseDir =
+      (workspaceConfig.baseDir && String(workspaceConfig.baseDir).trim()) ||
+      path.join(os.homedir(), 'Documents', 'AgentOS');
+    const agentId = String(workspaceConfig.agentId || '').trim();
+    if (agentId) {
+      workspaceDir = path.resolve(baseDir, agentId);
+      workspaceSubdirs = Array.isArray(workspaceConfig.subdirs) && workspaceConfig.subdirs.length > 0
+        ? workspaceConfig.subdirs.map((d) => String(d)).filter(Boolean)
+        : ['assets', 'exports', 'tmp'];
+    }
+  }
+
+  const workingDirectory = options.workingDirectory || workspaceDir;
+  const filesystem = options.filesystem
+    ? {
+        ...options.filesystem,
+        readRoots:
+          options.filesystem.allowRead === true &&
+          (!options.filesystem.readRoots || options.filesystem.readRoots.length === 0) &&
+          workspaceDir
+            ? [workspaceDir]
+            : options.filesystem.readRoots,
+        writeRoots:
+          options.filesystem.allowWrite === true &&
+          (!options.filesystem.writeRoots || options.filesystem.writeRoots.length === 0) &&
+          workspaceDir
+            ? [workspaceDir]
+            : options.filesystem.writeRoots,
+      }
+    : undefined;
+
   // Initialize shell service with configuration
   const shellService = new ShellService({
     defaultShell: options.defaultShell,
     timeout: options.timeout,
-    workingDirectory: options.workingDirectory,
+    workingDirectory,
+    filesystem,
+    agentWorkspace: options.agentWorkspace,
     allowedCommands: options.allowedCommands,
     blockedCommands: options.blockedCommands,
     dangerouslySkipSecurityChecks: options.dangerouslySkipSecurityChecks,
@@ -101,6 +141,12 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
     onActivate: async () => {
       if (context.onActivate) {
         await context.onActivate();
+      }
+      if (workspaceDir && workspaceConfig?.createIfMissing !== false) {
+        await fs.mkdir(workspaceDir, { recursive: true });
+        for (const sub of workspaceSubdirs) {
+          await fs.mkdir(path.join(workspaceDir, sub), { recursive: true });
+        }
       }
       context.logger?.info('CLI Executor Extension activated');
     },

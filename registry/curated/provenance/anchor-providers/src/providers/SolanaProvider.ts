@@ -37,15 +37,20 @@ export interface SolanaProviderConfig extends BaseProviderConfig {
   registrarPrivateKeyBase58?: string;
 
   /**
-   * Signer secret key (Solana Keypair secretKey bytes) as a JSON number array.
+   * Agent signer wallet secret key (Solana Keypair secretKey bytes) as a JSON number array.
+   *
+   * This keypair is used to:
+   * - pay transaction fees/rent (fee payer)
+   * - ed25519-sign Wunderland payload messages (agent signer)
+   *
    * Example: the contents of a Solana CLI keypair file.
    */
   signerSecretKeyJson?: number[];
 
-  /** Path to Solana keypair JSON file (array of numbers). */
+  /** Path to agent signer wallet keypair JSON file (array of numbers). */
   signerKeypairPath?: string;
 
-  /** Base58-encoded signer secret key bytes (64 bytes). */
+  /** Base58-encoded agent signer wallet secret key bytes (64 bytes). */
   signerPrivateKeyBase58?: string;
 
   /** Solana cluster label used only for `externalRef` formatting. */
@@ -55,12 +60,33 @@ export interface SolanaProviderConfig extends BaseProviderConfig {
   commitment?: string;
 
   /**
+   * Enclave name to publish into.
+   *
+   * Default: 'wunderland'
+   */
+  enclaveName?: string;
+
+  /**
+   * If true, automatically creates the enclave (create_enclave) when missing.
+   *
+   * Default: false
+   */
+  autoCreateEnclave?: boolean;
+
+  /**
+   * Optional explicit agent_id (32-byte hex string).
+   *
+   * If omitted, a deterministic id is derived from the signer public key.
+   */
+  agentIdHex?: string;
+
+  /**
    * If true, automatically initializes the agent (initialize_agent) when missing.
    *
    * Note: With immutable-agent enforcement, `initialize_agent` is registrar-gated, so auto-init
    * requires registrar signer configuration.
    *
-   * Default: true
+   * Default: false
    */
   autoInitializeAgent?: boolean;
 
@@ -76,6 +102,11 @@ export interface SolanaProviderConfig extends BaseProviderConfig {
 
 const DEFAULT_HEXACO: [number, number, number, number, number, number] = [800, 450, 650, 750, 850, 700];
 
+const SIGN_DOMAIN = Buffer.from('WUNDERLAND_SOL_V2', 'utf8');
+const ACTION_CREATE_ENCLAVE = 1;
+const ACTION_ANCHOR_POST = 2;
+const ENTRY_KIND_POST = 0;
+
 function instructionDiscriminator(methodName: string): Buffer {
   return createHash('sha256')
     .update(`global:${methodName}`)
@@ -83,8 +114,8 @@ function instructionDiscriminator(methodName: string): Buffer {
     .subarray(0, 8);
 }
 
-function decodeProgramConfigRegistrar(data: Buffer): Buffer {
-  // Anchor discriminator (8) + registrar pubkey (32) + bump (1)
+function decodeProgramConfigAuthority(data: Buffer): Buffer {
+  // Anchor discriminator (8) + authority pubkey (32) + ...
   const offset = 8;
   return data.subarray(offset, offset + 32);
 }
@@ -93,6 +124,29 @@ function encodeName32(displayName: string): Buffer {
   const bytes = Buffer.alloc(32, 0);
   Buffer.from(displayName, 'utf-8').copy(bytes, 0, 0, Math.min(displayName.length, 32));
   return bytes;
+}
+
+function normalizeEnclaveName(name: string): string {
+  return name.trim().toLowerCase();
+}
+
+function enclaveNameHash(name: string): Buffer {
+  return createHash('sha256').update(normalizeEnclaveName(name), 'utf8').digest();
+}
+
+function buildAgentMessage(opts: {
+  action: number;
+  programId: Buffer;
+  agentIdentityPda: Buffer;
+  payload: Buffer;
+}): Buffer {
+  return Buffer.concat([
+    SIGN_DOMAIN,
+    Buffer.from([opts.action & 0xff]),
+    opts.programId,
+    opts.agentIdentityPda,
+    opts.payload,
+  ]);
 }
 
 function parseSolExternalRef(externalRef: string): { cluster?: string; postPda?: string; txSignature?: string } | null {
@@ -122,6 +176,18 @@ function canonicalizeSolanaManifest(anchor: AnchorRecord): string {
   });
 }
 
+// Account decoding offsets (must match on-chain Anchor structs).
+const AGENT_TOTAL_ENTRIES_OFFSET = 8 + 32 + 32 + 32 + 32 + 12 + 1 + 8; // 157
+const POST_CONTENT_HASH_OFFSET = 8 + 32 + 32 + 1 + 32 + 4; // 109
+
+function decodeAgentTotalEntries(agentData: Buffer): number {
+  const minLen = AGENT_TOTAL_ENTRIES_OFFSET + 4;
+  if (agentData.length < minLen) {
+    throw new Error(`AgentIdentity account data too small (${agentData.length} bytes).`);
+  }
+  return agentData.readUInt32LE(AGENT_TOTAL_ENTRIES_OFFSET);
+}
+
 export class SolanaProvider implements AnchorProvider {
   readonly id = 'solana';
   readonly name = 'Solana On-Chain Anchor (Wunderland)';
@@ -134,7 +200,9 @@ export class SolanaProvider implements AnchorProvider {
     this.config = {
       cluster: 'devnet',
       commitment: 'confirmed',
-      autoInitializeAgent: true,
+      enclaveName: 'wunderland',
+      autoCreateEnclave: false,
+      autoInitializeAgent: false,
       agentDisplayName: 'AgentOS',
       ...config,
     };
@@ -171,108 +239,187 @@ export class SolanaProvider implements AnchorProvider {
 
       const programId = new web3.PublicKey(this.config.programId);
 
-      // ── Derive agent PDA ────────────────────────────────────────────────
+      const [configPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('config')], programId);
+      const [treasuryPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('treasury')], programId);
+
+      const cfgInfo = await connection.getAccountInfo(configPda, this.config.commitment);
+      if (!cfgInfo) {
+        throw new Error(
+          'ProgramConfig not found. Run initialize_config as the program upgrade authority before anchoring.',
+        );
+      }
+
+      const cfgData = Buffer.from(cfgInfo.data);
+      if (cfgData.length < 8 + 32) {
+        throw new Error(`ProgramConfig account data too small (${cfgData.length} bytes).`);
+      }
+      const registrarPubkey = new web3.PublicKey(decodeProgramConfigAuthority(cfgData));
+
+      const agentId = (() => {
+        if (this.config.agentIdHex) {
+          const cleaned = this.config.agentIdHex.trim().toLowerCase();
+          if (!/^[0-9a-f]{64}$/.test(cleaned)) {
+            throw new Error(`agentIdHex must be 64 hex chars (got ${this.config.agentIdHex.length}).`);
+          }
+          return Buffer.from(cleaned, 'hex');
+        }
+        return createHash('sha256')
+          .update(`agentos:${signer.publicKey.toBase58()}`, 'utf8')
+          .digest();
+      })();
+
+      if (agentId.length !== 32) {
+        throw new Error(`agentId must be 32 bytes (got ${agentId.length}).`);
+      }
+
+      // ── Derive AgentIdentity PDA ───────────────────────────────────────
       const [agentPda] = web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('agent'), signer.publicKey.toBuffer()],
+        [Buffer.from('agent'), registrarPubkey.toBuffer(), agentId],
         programId,
       );
 
-      // ── Ensure agent exists (optional auto-init) ────────────────────────
+      // ── Ensure agent exists (optional auto-init) ───────────────────────
       let agentInfo = await connection.getAccountInfo(agentPda, this.config.commitment);
       if (!agentInfo && this.config.autoInitializeAgent) {
         const registrar = await this.loadRegistrarSigner(web3);
-        const [configPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('config')], programId);
 
-        // Ensure config exists (initialize_config)
-        let cfgInfo = await connection.getAccountInfo(configPda, this.config.commitment);
-        if (!cfgInfo) {
-          const loaderId = new web3.PublicKey('BPFLoaderUpgradeab1e11111111111111111111111');
-          const [programDataPda] = web3.PublicKey.findProgramAddressSync([programId.toBuffer()], loaderId);
-          const initConfigIx = new web3.TransactionInstruction({
-            programId,
-            keys: [
-              { pubkey: configPda, isSigner: false, isWritable: true },
-              { pubkey: programDataPda, isSigner: false, isWritable: false },
-              { pubkey: registrar.publicKey, isSigner: true, isWritable: true },
-              { pubkey: web3.SystemProgram.programId, isSigner: false, isWritable: false },
-            ],
-            data: instructionDiscriminator('initialize_config'),
-          });
-          const initConfigTx = new web3.Transaction().add(initConfigIx);
-          try {
-            await web3.sendAndConfirmTransaction(connection, initConfigTx, [registrar]);
-          } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e);
-            // If another process initialized the config concurrently, proceed to verify it.
-            if (!msg.toLowerCase().includes('already in use')) {
-              throw e;
-            }
-          }
-          cfgInfo = await connection.getAccountInfo(configPda, this.config.commitment);
-        }
-
-        if (!cfgInfo) {
-          throw new Error('ProgramConfig not found and could not be initialized.');
-        }
-
-        const cfgData = Buffer.from(cfgInfo.data);
-        if (cfgData.length < 8 + 32 + 1) {
-          throw new Error(`ProgramConfig account data too small (${cfgData.length} bytes).`);
-        }
-        const onChainRegistrar = new web3.PublicKey(decodeProgramConfigRegistrar(cfgData)).toBase58();
-        if (onChainRegistrar !== registrar.publicKey.toBase58()) {
+        if (!registrar.publicKey.equals(registrarPubkey)) {
           throw new Error(
-            `Program registrar mismatch. On-chain registrar=${onChainRegistrar}, configured registrar=${registrar.publicKey.toBase58()}`,
+            `Registrar mismatch. On-chain registrar=${registrarPubkey.toBase58()}, configured registrar=${registrar.publicKey.toBase58()}`,
           );
         }
+
+        const [vaultPda] = web3.PublicKey.findProgramAddressSync(
+          [Buffer.from('vault'), agentPda.toBuffer()],
+          programId,
+        );
 
         const displayName = this.config.agentDisplayName || 'AgentOS';
         const traits = this.config.agentHexacoTraits || DEFAULT_HEXACO;
 
-        const initData = Buffer.alloc(8 + 32 + 12);
-        instructionDiscriminator('initialize_agent').copy(initData, 0);
-        encodeName32(displayName).copy(initData, 8);
+        const traitBytes = Buffer.alloc(12);
         for (let i = 0; i < 6; i++) {
           const val = traits[i];
           if (val < 0 || val > 1000) {
             throw new Error(`Invalid agentHexacoTraits[${i}] value: ${val} (expected 0..1000)`);
           }
-          initData.writeUInt16LE(val, 8 + 32 + i * 2);
+          traitBytes.writeUInt16LE(val >>> 0, i * 2);
         }
 
-        const ix = new web3.TransactionInstruction({
+        const metadataHash = createHash('sha256')
+          .update(
+            JSON.stringify({
+              schema: 'wunderland.agent-metadata.v1',
+              displayName,
+              hexacoU16: traits,
+              createdBy: 'agentos.solana-provider',
+              agentIdHex: agentId.toString('hex'),
+            }),
+            'utf8',
+          )
+          .digest();
+
+        const initData = Buffer.concat([
+          instructionDiscriminator('initialize_agent'),
+          agentId,
+          encodeName32(displayName),
+          traitBytes,
+          metadataHash,
+          signer.publicKey.toBuffer(), // agent_signer
+        ]);
+
+        const initIx = new web3.TransactionInstruction({
           programId,
           keys: [
-            { pubkey: configPda, isSigner: false, isWritable: false },
-            { pubkey: agentPda, isSigner: false, isWritable: true },
-            // agent_authority (unchecked, does not sign)
-            { pubkey: signer.publicKey, isSigner: false, isWritable: false },
+            { pubkey: configPda, isSigner: false, isWritable: true },
+            { pubkey: treasuryPda, isSigner: false, isWritable: true },
             { pubkey: registrar.publicKey, isSigner: true, isWritable: true },
+            { pubkey: agentPda, isSigner: false, isWritable: true },
+            { pubkey: vaultPda, isSigner: false, isWritable: true },
             { pubkey: web3.SystemProgram.programId, isSigner: false, isWritable: false },
           ],
           data: initData,
         });
 
-        const tx = new web3.Transaction().add(ix);
-        await web3.sendAndConfirmTransaction(connection, tx, [registrar]);
+        const initTx = new web3.Transaction().add(initIx);
+        initTx.feePayer = registrar.publicKey;
+        await web3.sendAndConfirmTransaction(connection, initTx, [registrar]);
         agentInfo = await connection.getAccountInfo(agentPda, this.config.commitment);
       }
 
       if (!agentInfo) {
         throw new Error(
-          'AgentIdentity not found. Register this agent authority with the registrar (initialize_agent) or enable autoInitializeAgent with registrar signer configuration.',
+          `AgentIdentity not found (${agentPda.toBase58()}). Register this agent with the registrar or enable autoInitializeAgent.`,
         );
       }
 
-      // total_posts is at offset 8 + 32 + 32 + 12 + 1 + 8 = 93
-      const agentData = Buffer.from(agentInfo.data);
-      if (agentData.length < 97) {
-        throw new Error(`AgentIdentity account data too small (${agentData.length} bytes).`);
+      // ── Ensure enclave exists (optional auto-create) ───────────────────
+      const enclaveName = this.config.enclaveName || 'wunderland';
+      const nameHash = enclaveNameHash(enclaveName);
+      const [enclavePda] = web3.PublicKey.findProgramAddressSync([Buffer.from('enclave'), nameHash], programId);
+
+      let enclaveInfo = await connection.getAccountInfo(enclavePda, this.config.commitment);
+      if (!enclaveInfo && this.config.autoCreateEnclave) {
+        const metadataHash = createHash('sha256')
+          .update(
+            JSON.stringify({
+              schema: 'wunderland.enclave-metadata.v1',
+              name: normalizeEnclaveName(enclaveName),
+              createdBy: 'agentos.solana-provider',
+            }),
+            'utf8',
+          )
+          .digest();
+
+        const payload = Buffer.concat([nameHash, metadataHash]);
+        const message = buildAgentMessage({
+          action: ACTION_CREATE_ENCLAVE,
+          programId: programId.toBuffer(),
+          agentIdentityPda: agentPda.toBuffer(),
+          payload,
+        });
+
+        const ed25519Ix = web3.Ed25519Program.createInstructionWithPrivateKey({
+          privateKey: signer.secretKey,
+          message,
+        });
+
+        const createData = Buffer.concat([
+          instructionDiscriminator('create_enclave'),
+          nameHash,
+          metadataHash,
+        ]);
+
+        const createIx = new web3.TransactionInstruction({
+          programId,
+          keys: [
+            { pubkey: configPda, isSigner: false, isWritable: true },
+            { pubkey: agentPda, isSigner: false, isWritable: false },
+            { pubkey: enclavePda, isSigner: false, isWritable: true },
+            { pubkey: signer.publicKey, isSigner: true, isWritable: true },
+            { pubkey: web3.SYSVAR_INSTRUCTIONS_PUBKEY, isSigner: false, isWritable: false },
+            { pubkey: web3.SystemProgram.programId, isSigner: false, isWritable: false },
+          ],
+          data: createData,
+        });
+
+        const createTx = new web3.Transaction().add(ed25519Ix, createIx);
+        createTx.feePayer = signer.publicKey;
+        await web3.sendAndConfirmTransaction(connection, createTx, [signer]);
+        enclaveInfo = await connection.getAccountInfo(enclavePda, this.config.commitment);
       }
-      const postIndex = agentData.readUInt32LE(93);
+
+      if (!enclaveInfo) {
+        throw new Error(
+          `Enclave not found (${enclavePda.toBase58()}). Create it on-chain or enable autoCreateEnclave.`,
+        );
+      }
+
+      const agentData = Buffer.from(agentInfo.data);
+      const entryIndex = decodeAgentTotalEntries(agentData);
 
       const indexBuf = Buffer.alloc(4);
-      indexBuf.writeUInt32LE(postIndex);
+      indexBuf.writeUInt32LE(entryIndex >>> 0, 0);
       const [postPda] = web3.PublicKey.findProgramAddressSync(
         [Buffer.from('post'), agentPda.toBuffer(), indexBuf],
         programId,
@@ -289,6 +436,27 @@ export class SolanaProvider implements AnchorProvider {
         throw new Error('Computed hashes are not 32 bytes.');
       }
 
+      const payload = Buffer.concat([
+        enclavePda.toBuffer(),
+        Buffer.from([ENTRY_KIND_POST]),
+        Buffer.alloc(32, 0), // reply_to = none
+        indexBuf,
+        contentHash,
+        manifestHash,
+      ]);
+
+      const message = buildAgentMessage({
+        action: ACTION_ANCHOR_POST,
+        programId: programId.toBuffer(),
+        agentIdentityPda: agentPda.toBuffer(),
+        payload,
+      });
+
+      const ed25519Ix = web3.Ed25519Program.createInstructionWithPrivateKey({
+        privateKey: signer.secretKey,
+        message,
+      });
+
       const data = Buffer.concat([
         instructionDiscriminator('anchor_post'),
         contentHash,
@@ -300,13 +468,16 @@ export class SolanaProvider implements AnchorProvider {
         keys: [
           { pubkey: postPda, isSigner: false, isWritable: true },
           { pubkey: agentPda, isSigner: false, isWritable: true },
+          { pubkey: enclavePda, isSigner: false, isWritable: false },
           { pubkey: signer.publicKey, isSigner: true, isWritable: true },
+          { pubkey: web3.SYSVAR_INSTRUCTIONS_PUBKEY, isSigner: false, isWritable: false },
           { pubkey: web3.SystemProgram.programId, isSigner: false, isWritable: false },
         ],
         data,
       });
 
-      const postTx = new web3.Transaction().add(postIx);
+      const postTx = new web3.Transaction().add(ed25519Ix, postIx);
+      postTx.feePayer = signer.publicKey;
       const txSignature = await web3.sendAndConfirmTransaction(connection, postTx, [signer]);
 
       return {
@@ -319,7 +490,8 @@ export class SolanaProvider implements AnchorProvider {
           commitment: this.config.commitment,
           postPda: postPda.toBase58(),
           agentPda: agentPda.toBase58(),
-          postIndex,
+          enclavePda: enclavePda.toBase58(),
+          postIndex: entryIndex,
           txSignature,
         },
       };
@@ -347,8 +519,7 @@ export class SolanaProvider implements AnchorProvider {
       if (!postInfo) return false;
 
       const data = Buffer.from(postInfo.data);
-      // discriminator (8) + agent (32) + post_index (4)
-      const offset = 8 + 32 + 4;
+      const offset = POST_CONTENT_HASH_OFFSET;
       if (data.length < offset + 64) return false;
 
       const onChainContentHash = data.subarray(offset, offset + 32);

@@ -13,6 +13,39 @@ export interface ShellConfig {
   timeout?: number;
   /** Default working directory */
   workingDirectory?: string;
+  /**
+   * Optional filesystem access policy for the file_* tools.
+   *
+   * When omitted, file tools can access any path (legacy behavior).
+   * When set, read/write/list operations are restricted to the configured roots.
+   */
+  filesystem?: {
+    /** Allow file reads and directory listings. Default: false. */
+    allowRead?: boolean;
+    /** Allow file writes. Default: false. */
+    allowWrite?: boolean;
+    /** Allowed root directories for reads/listing. */
+    readRoots?: string[];
+    /** Allowed root directories for writes. */
+    writeRoots?: string[];
+  };
+  /**
+   * Optional per-agent workspace helper. When provided, the extension can
+   * auto-create an agent-specific directory and (optionally) default the
+   * workingDirectory/readRoots/writeRoots to that directory.
+   */
+  agentWorkspace?: {
+    /** Enable workspace behavior when provided. Default: true. */
+    enabled?: boolean;
+    /** Base directory under which per-agent folders are created. */
+    baseDir?: string;
+    /** Folder name for this agent. */
+    agentId: string;
+    /** Create the workspace directory if missing. Default: true. */
+    createIfMissing?: boolean;
+    /** Subdirectories to create inside the workspace. Default: ['assets','exports','tmp'] */
+    subdirs?: string[];
+  };
   /** Whitelist of allowed commands (empty = all allowed) */
   allowedCommands?: string[];
   /** Blacklist of blocked commands */
@@ -197,5 +230,4 @@ export interface SecurityCheckResult {
   /** Warnings */
   warnings: string[];
 }
-
 

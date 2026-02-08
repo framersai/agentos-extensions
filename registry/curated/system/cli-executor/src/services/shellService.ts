@@ -61,6 +61,81 @@ export class ShellService {
     };
   }
 
+  private resolveAbsolutePath(filePath: string): string {
+    const baseDir = this.config.workingDirectory || process.cwd();
+    const abs = path.isAbsolute(filePath) ? filePath : path.resolve(baseDir, filePath);
+    return path.normalize(abs);
+  }
+
+  private isFilesystemPolicyEnabled(): boolean {
+    return !!this.config.filesystem;
+  }
+
+  private isWithinRoot(targetPath: string, rootPath: string): boolean {
+    const rel = path.relative(rootPath, targetPath);
+    return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
+  }
+
+  private async resolvePathForAuthorization(absolutePath: string, op: 'read' | 'write' | 'list'): Promise<string> {
+    try {
+      return await fs.realpath(absolutePath);
+    } catch {
+      // For writes, resolve the closest existing ancestor so symlink escapes are still detected.
+      if (op !== 'write') return absolutePath;
+
+      let cursor = path.dirname(absolutePath);
+      while (true) {
+        try {
+          const realCursor = await fs.realpath(cursor);
+          const remainder = path.relative(cursor, absolutePath);
+          return path.join(realCursor, remainder);
+        } catch {
+          const parent = path.dirname(cursor);
+          if (parent === cursor) break;
+          cursor = parent;
+        }
+      }
+
+      return absolutePath;
+    }
+  }
+
+  private async assertFilesystemAllowed(op: 'read' | 'write' | 'list', absolutePath: string): Promise<void> {
+    if (!this.isFilesystemPolicyEnabled()) return;
+
+    const policy = this.config.filesystem!;
+    const allow =
+      op === 'write' ? policy.allowWrite === true : policy.allowRead === true;
+
+    if (!allow) {
+      throw new Error(`Filesystem ${op} is disabled by policy`);
+    }
+
+    const rootsRaw = op === 'write' ? policy.writeRoots : policy.readRoots;
+    if (!Array.isArray(rootsRaw) || rootsRaw.length === 0) {
+      throw new Error(`Filesystem ${op} roots are not configured`);
+    }
+
+    const baseDir = this.config.workingDirectory || process.cwd();
+    const roots = await Promise.all(
+      rootsRaw.map(async (root) => {
+        const absRoot = path.isAbsolute(root) ? root : path.resolve(baseDir, root);
+        const normalized = path.normalize(absRoot);
+        try {
+          return await fs.realpath(normalized);
+        } catch {
+          return normalized;
+        }
+      }),
+    );
+
+    const authPath = await this.resolvePathForAuthorization(absolutePath, op);
+    const allowed = roots.some((root) => this.isWithinRoot(authPath, root));
+    if (!allowed) {
+      throw new Error(`Path is outside allowed filesystem ${op} roots: ${absolutePath}`);
+    }
+  }
+
   /**
    * Detect the appropriate shell for the current platform
    */
@@ -268,9 +343,9 @@ export class ShellService {
    */
   async readFile(filePath: string, options?: FileReadOptions): Promise<FileReadResult> {
     const encoding = options?.encoding || 'utf-8';
-    const absolutePath = path.isAbsolute(filePath)
-      ? filePath
-      : path.resolve(this.config.workingDirectory || process.cwd(), filePath);
+    const absolutePath = this.resolveAbsolutePath(filePath);
+
+    await this.assertFilesystemAllowed('read', absolutePath);
 
     const stats = await fs.stat(absolutePath);
 
@@ -319,9 +394,9 @@ export class ShellService {
     options?: FileWriteOptions
   ): Promise<FileWriteResult> {
     const encoding = options?.encoding || 'utf-8';
-    const absolutePath = path.isAbsolute(filePath)
-      ? filePath
-      : path.resolve(this.config.workingDirectory || process.cwd(), filePath);
+    const absolutePath = this.resolveAbsolutePath(filePath);
+
+    await this.assertFilesystemAllowed('write', absolutePath);
 
     // Check if file exists
     let fileExists = true;
@@ -358,9 +433,9 @@ export class ShellService {
     dirPath: string,
     options?: ListDirectoryOptions
   ): Promise<ListDirectoryResult> {
-    const absolutePath = path.isAbsolute(dirPath)
-      ? dirPath
-      : path.resolve(this.config.workingDirectory || process.cwd(), dirPath);
+    const absolutePath = this.resolveAbsolutePath(dirPath);
+
+    await this.assertFilesystemAllowed('list', absolutePath);
 
     const entries: DirectoryEntry[] = [];
 
@@ -403,7 +478,7 @@ export class ShellService {
         // Include stats if requested
         if (options?.includeStats) {
           try {
-            const stats = await fs.stat(itemPath);
+            const stats = await fs.lstat(itemPath);
             entry.size = stats.size;
             entry.modifiedAt = stats.mtime.toISOString();
             entry.createdAt = stats.birthtime.toISOString();
@@ -435,4 +510,3 @@ export class ShellService {
     };
   }
 }
-

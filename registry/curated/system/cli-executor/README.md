@@ -18,20 +18,26 @@ npm install @framers/agentos-ext-cli-executor
 ## Quick Start
 
 ```typescript
-import { createExtensionPack } from '@framers/agentos-ext-cli-executor';
 import { ExtensionManager } from '@framers/agentos';
+import { createExtensionPack } from '@framers/agentos-ext-cli-executor';
 
 const extensionManager = new ExtensionManager();
 
-// Register the CLI extension
-extensionManager.register(createExtensionPack({
-  options: {
-    defaultShell: 'bash',
-    timeout: 60000,
-    blockedCommands: ['rm -rf /', 'format']
-  },
-  logger: console
-}));
+// Load the pack into the runtime
+await extensionManager.loadPackFromFactory(
+  createExtensionPack({
+    options: {
+      defaultShell: 'bash',
+      timeout: 60000,
+      blockedCommands: ['rm -rf /', 'format'],
+      // Restrict file_* tools to a per-agent workspace
+      filesystem: { allowRead: true, allowWrite: true },
+      agentWorkspace: { agentId: 'my-agent' },
+    },
+    logger: console,
+  }),
+  '@framers/agentos-ext-cli-executor',
+);
 ```
 
 ## Tools
@@ -150,10 +156,46 @@ Each command is assessed for risk level:
 | `defaultShell` | string | `auto` | Shell to use (bash, powershell, cmd, zsh) |
 | `timeout` | number | `60000` | Default timeout (ms) |
 | `workingDirectory` | string | `process.cwd()` | Default working directory |
+| `filesystem` | object | `undefined` | Optional policy for file_* tools (allowRead/allowWrite + roots) |
+| `agentWorkspace` | object | `undefined` | Optional per-agent workspace directory helper |
 | `allowedCommands` | string[] | `[]` | Command whitelist (empty = all) |
 | `blockedCommands` | string[] | `[]` | Command blacklist (additional to built-in dangerous patterns) |
 | `dangerouslySkipSecurityChecks` | boolean | `false` | Disable all command safety checks (use only in trusted environments) |
 | `env` | object | `{}` | Environment variables |
+
+### Filesystem Policy (Recommended)
+
+By default, the `file_*` tools can access any path (legacy behavior). To enforce a safe filesystem sandbox, configure `filesystem` + roots:
+
+```ts
+createExtensionPack({
+  options: {
+    filesystem: {
+      allowRead: true,
+      allowWrite: true,
+      readRoots: ['/Users/me/Documents/AgentOS/agents/my-agent'],
+      writeRoots: ['/Users/me/Documents/AgentOS/agents/my-agent'],
+    },
+  },
+});
+```
+
+### Per-Agent Workspace Helper
+
+To simplify safe defaults, you can configure `agentWorkspace`. When paired with `filesystem.allowRead/allowWrite`, the extension defaults roots to the workspace directory.
+
+```ts
+createExtensionPack({
+  options: {
+    filesystem: { allowRead: true, allowWrite: true },
+    agentWorkspace: {
+      agentId: 'my-agent',
+      // baseDir defaults to ~/Documents/AgentOS
+      subdirs: ['assets', 'exports', 'tmp'],
+    },
+  },
+});
+```
 
 ## Use Cases
 
