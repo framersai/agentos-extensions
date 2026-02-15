@@ -27,10 +27,26 @@ export interface SolanaProviderConfig extends BaseProviderConfig {
   programId: string;
 
   /**
-   * Registrar signer used for immutable agent registration (initialize_config / initialize_agent).
+   * Owner wallet signer used for agent registration (`initialize_agent`).
    *
-   * If `autoInitializeAgent` is enabled and the agent identity is missing, the provider will
-   * require a registrar signer and will register the agent programmatically.
+   * This wallet:
+   * - signs `initialize_agent`
+   * - pays the mint fee + rent
+   *
+   * Notes:
+   * - Registration is permissionless (not registrar-gated).
+   * - The owner wallet must be different from the agent signer (on-chain invariant).
+   */
+  ownerSecretKeyJson?: number[];
+  ownerKeypairPath?: string;
+  ownerPrivateKeyBase58?: string;
+
+  /**
+   * @deprecated Use `owner*` fields instead.
+   *
+   * Legacy alias for the owner wallet used for agent registration.
+   *
+   * Kept for backward compatibility with older configs that used the term "registrar".
    */
   registrarSecretKeyJson?: number[];
   registrarKeypairPath?: string;
@@ -83,8 +99,7 @@ export interface SolanaProviderConfig extends BaseProviderConfig {
   /**
    * If true, automatically initializes the agent (initialize_agent) when missing.
    *
-   * Note: With immutable-agent enforcement, `initialize_agent` is registrar-gated, so auto-init
-   * requires registrar signer configuration.
+   * Requires owner wallet signer configuration (see `owner*` fields).
    *
    * Default: false
    */
@@ -106,6 +121,7 @@ const SIGN_DOMAIN = Buffer.from('WUNDERLAND_SOL_V2', 'utf8');
 const ACTION_CREATE_ENCLAVE = 1;
 const ACTION_ANCHOR_POST = 2;
 const ENTRY_KIND_POST = 0;
+const AGENT_IDENTITY_DATA_SIZE = 219;
 
 function instructionDiscriminator(methodName: string): Buffer {
   return createHash('sha256')
@@ -114,10 +130,40 @@ function instructionDiscriminator(methodName: string): Buffer {
     .subarray(0, 8);
 }
 
-function decodeProgramConfigAuthority(data: Buffer): Buffer {
-  // Anchor discriminator (8) + authority pubkey (32) + ...
-  const offset = 8;
-  return data.subarray(offset, offset + 32);
+// ── base58 (needed for getProgramAccounts memcmp discriminator filter) ─────
+
+const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+function base58Encode(bytes: Uint8Array): string {
+  if (bytes.length === 0) return '';
+  const digits = [0];
+
+  for (const byte of bytes) {
+    let carry = byte;
+    for (let i = 0; i < digits.length; i += 1) {
+      carry += (digits[i] ?? 0) << 8;
+      digits[i] = carry % 58;
+      carry = (carry / 58) | 0;
+    }
+    while (carry > 0) {
+      digits.push(carry % 58);
+      carry = (carry / 58) | 0;
+    }
+  }
+
+  // Preserve leading zeros (bs58 behavior).
+  for (let k = 0; k < bytes.length && bytes[k] === 0 && k < bytes.length - 1; k += 1) {
+    digits.push(0);
+  }
+
+  return digits
+    .reverse()
+    .map((d) => BASE58_ALPHABET[d] ?? '')
+    .join('');
+}
+
+function accountDiscriminator(accountName: string): Buffer {
+  return createHash('sha256').update(`account:${accountName}`).digest().subarray(0, 8);
 }
 
 function encodeName32(displayName: string): Buffer {
@@ -241,6 +287,7 @@ export class SolanaProvider implements AnchorProvider {
 
       const [configPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('config')], programId);
       const [treasuryPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('treasury')], programId);
+      const [economicsPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('econ')], programId);
 
       const cfgInfo = await connection.getAccountInfo(configPda, this.config.commitment);
       if (!cfgInfo) {
@@ -249,11 +296,12 @@ export class SolanaProvider implements AnchorProvider {
         );
       }
 
-      const cfgData = Buffer.from(cfgInfo.data);
-      if (cfgData.length < 8 + 32) {
-        throw new Error(`ProgramConfig account data too small (${cfgData.length} bytes).`);
+      const econInfo = await connection.getAccountInfo(economicsPda, this.config.commitment);
+      if (!econInfo && this.config.autoInitializeAgent) {
+        throw new Error(
+          'EconomicsConfig not found. Run initialize_economics as the program authority before using autoInitializeAgent.',
+        );
       }
-      const registrarPubkey = new web3.PublicKey(decodeProgramConfigAuthority(cfgData));
 
       const agentId = (() => {
         if (this.config.agentIdHex) {
@@ -272,25 +320,55 @@ export class SolanaProvider implements AnchorProvider {
         throw new Error(`agentId must be 32 bytes (got ${agentId.length}).`);
       }
 
-      // ── Derive AgentIdentity PDA ───────────────────────────────────────
-      const [agentPda] = web3.PublicKey.findProgramAddressSync(
-        [Buffer.from('agent'), registrarPubkey.toBuffer(), agentId],
-        programId,
-      );
-
       // ── Ensure agent exists (optional auto-init) ───────────────────────
-      let agentInfo = await connection.getAccountInfo(agentPda, this.config.commitment);
-      if (!agentInfo && this.config.autoInitializeAgent) {
-        const registrar = await this.loadRegistrarSigner(web3);
+      const owner = await this.tryLoadOwnerSigner(web3);
 
-        if (!registrar.publicKey.equals(registrarPubkey)) {
+      // Preferred: derive via owner (fast, avoids full scan).
+      const derivedAgentPda = owner
+        ? web3.PublicKey.findProgramAddressSync(
+            [Buffer.from('agent'), owner.publicKey.toBuffer(), agentId],
+            programId,
+          )[0]
+        : null;
+
+      const derivedAgentInfo = derivedAgentPda
+        ? await connection.getAccountInfo(derivedAgentPda, this.config.commitment)
+        : null;
+
+      const found = derivedAgentInfo
+        ? { pda: derivedAgentPda!, info: derivedAgentInfo }
+        : await this.findAgentIdentityBySearch({
+            connection,
+            web3,
+            programId,
+            agentId,
+            agentSigner: signer.publicKey,
+          });
+
+      let agentPda = found?.pda ?? derivedAgentPda;
+      let agentInfo = found?.info ?? derivedAgentInfo;
+
+      if (!agentInfo && this.config.autoInitializeAgent) {
+        if (!owner) {
           throw new Error(
-            `Registrar mismatch. On-chain registrar=${registrarPubkey.toBase58()}, configured registrar=${registrar.publicKey.toBase58()}`,
+            'autoInitializeAgent requires owner signer configuration. Provide one of: ownerSecretKeyJson, ownerKeypairPath, ownerPrivateKeyBase58 (or legacy registrar* aliases).',
           );
         }
 
-        const [vaultPda] = web3.PublicKey.findProgramAddressSync(
-          [Buffer.from('vault'), agentPda.toBuffer()],
+        if (owner.publicKey.equals(signer.publicKey)) {
+          throw new Error('Invalid config: owner wallet must not equal agent signer (agent_signer != owner).');
+        }
+
+        // Ensure we use the owner-derived PDA for initialization.
+        const [initAgentPda] = web3.PublicKey.findProgramAddressSync(
+          [Buffer.from('agent'), owner.publicKey.toBuffer(), agentId],
+          programId,
+        );
+        agentPda = initAgentPda;
+
+        const [vaultPda] = web3.PublicKey.findProgramAddressSync([Buffer.from('vault'), agentPda.toBuffer()], programId);
+        const [ownerCounterPda] = web3.PublicKey.findProgramAddressSync(
+          [Buffer.from('owner_counter'), owner.publicKey.toBuffer()],
           programId,
         );
 
@@ -333,7 +411,9 @@ export class SolanaProvider implements AnchorProvider {
           keys: [
             { pubkey: configPda, isSigner: false, isWritable: true },
             { pubkey: treasuryPda, isSigner: false, isWritable: true },
-            { pubkey: registrar.publicKey, isSigner: true, isWritable: true },
+            { pubkey: economicsPda, isSigner: false, isWritable: false },
+            { pubkey: ownerCounterPda, isSigner: false, isWritable: true },
+            { pubkey: owner.publicKey, isSigner: true, isWritable: true },
             { pubkey: agentPda, isSigner: false, isWritable: true },
             { pubkey: vaultPda, isSigner: false, isWritable: true },
             { pubkey: web3.SystemProgram.programId, isSigner: false, isWritable: false },
@@ -342,14 +422,14 @@ export class SolanaProvider implements AnchorProvider {
         });
 
         const initTx = new web3.Transaction().add(initIx);
-        initTx.feePayer = registrar.publicKey;
-        await web3.sendAndConfirmTransaction(connection, initTx, [registrar]);
+        initTx.feePayer = owner.publicKey;
+        await web3.sendAndConfirmTransaction(connection, initTx, [owner]);
         agentInfo = await connection.getAccountInfo(agentPda, this.config.commitment);
       }
 
-      if (!agentInfo) {
+      if (!agentPda || !agentInfo) {
         throw new Error(
-          `AgentIdentity not found (${agentPda.toBase58()}). Register this agent with the registrar or enable autoInitializeAgent.`,
+          `AgentIdentity not found. Register this agent on-chain (initialize_agent) or enable autoInitializeAgent with an owner signer. agentId=${agentId.toString('hex')}, agentSigner=${signer.publicKey.toBase58()}`,
         );
       }
 
@@ -357,6 +437,10 @@ export class SolanaProvider implements AnchorProvider {
       const enclaveName = this.config.enclaveName || 'wunderland';
       const nameHash = enclaveNameHash(enclaveName);
       const [enclavePda] = web3.PublicKey.findProgramAddressSync([Buffer.from('enclave'), nameHash], programId);
+      const [enclaveTreasuryPda] = web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('enclave_treasury'), enclavePda.toBuffer()],
+        programId,
+      );
 
       let enclaveInfo = await connection.getAccountInfo(enclavePda, this.config.commitment);
       if (!enclaveInfo && this.config.autoCreateEnclave) {
@@ -396,6 +480,7 @@ export class SolanaProvider implements AnchorProvider {
             { pubkey: configPda, isSigner: false, isWritable: true },
             { pubkey: agentPda, isSigner: false, isWritable: false },
             { pubkey: enclavePda, isSigner: false, isWritable: true },
+            { pubkey: enclaveTreasuryPda, isSigner: false, isWritable: true },
             { pubkey: signer.publicKey, isSigner: true, isWritable: true },
             { pubkey: web3.SYSVAR_INSTRUCTIONS_PUBKEY, isSigner: false, isWritable: false },
             { pubkey: web3.SystemProgram.programId, isSigner: false, isWritable: false },
@@ -575,6 +660,48 @@ export class SolanaProvider implements AnchorProvider {
   }
 
   private async loadRegistrarSigner(web3: any): Promise<any> {
+    // Deprecated: retain method for backward compatibility, but treat "registrar" as "owner".
+    return this.loadOwnerSigner(web3);
+  }
+
+  private async loadBs58(): Promise<any> {
+    const moduleName: string = 'bs58';
+    try {
+      const mod = await import(moduleName);
+      return (mod as any).default ?? mod;
+    } catch {
+      throw new Error('signerPrivateKeyBase58 requires the optional dependency "bs58" at runtime.');
+    }
+  }
+
+  private async tryLoadOwnerSigner(web3: any): Promise<any | null> {
+    try {
+      return await this.loadOwnerSigner(web3);
+    } catch {
+      return null;
+    }
+  }
+
+  private async loadOwnerSigner(web3: any): Promise<any> {
+    if (this.config.ownerSecretKeyJson && this.config.ownerSecretKeyJson.length > 0) {
+      return web3.Keypair.fromSecretKey(Uint8Array.from(this.config.ownerSecretKeyJson));
+    }
+
+    if (this.config.ownerKeypairPath) {
+      if (!existsSync(this.config.ownerKeypairPath)) {
+        throw new Error(`ownerKeypairPath does not exist: ${this.config.ownerKeypairPath}`);
+      }
+      const raw = JSON.parse(readFileSync(this.config.ownerKeypairPath, 'utf-8')) as number[];
+      return web3.Keypair.fromSecretKey(Uint8Array.from(raw));
+    }
+
+    if (this.config.ownerPrivateKeyBase58) {
+      const bs58 = await this.loadBs58();
+      const secretKey = (bs58.decode as (input: string) => Uint8Array)(this.config.ownerPrivateKeyBase58);
+      return web3.Keypair.fromSecretKey(secretKey);
+    }
+
+    // Legacy aliases
     if (this.config.registrarSecretKeyJson && this.config.registrarSecretKeyJson.length > 0) {
       return web3.Keypair.fromSecretKey(Uint8Array.from(this.config.registrarSecretKeyJson));
     }
@@ -594,17 +721,50 @@ export class SolanaProvider implements AnchorProvider {
     }
 
     throw new Error(
-      'Missing registrar signer configuration. Provide one of: registrarSecretKeyJson, registrarKeypairPath, registrarPrivateKeyBase58.',
+      'Missing owner signer configuration. Provide one of: ownerSecretKeyJson, ownerKeypairPath, ownerPrivateKeyBase58 (or legacy registrar* aliases).',
     );
   }
 
-  private async loadBs58(): Promise<any> {
-    const moduleName: string = 'bs58';
+  private async findAgentIdentityBySearch(opts: {
+    connection: any;
+    web3: any;
+    programId: any;
+    agentId: Buffer;
+    agentSigner: any;
+  }): Promise<{ pda: any; info: any } | null> {
     try {
-      const mod = await import(moduleName);
-      return (mod as any).default ?? mod;
+      const disc = accountDiscriminator('AgentIdentity');
+      const discBase58 = base58Encode(disc);
+      const agentIdBase58 = base58Encode(opts.agentId);
+
+      // Account layout (current): disc(8) + owner(32) + agent_id(32) + agent_signer(32) + ...
+      const AGENT_ID_OFFSET = 8 + 32;
+      const AGENT_SIGNER_OFFSET = 8 + 32 + 32;
+
+      const accounts = await opts.connection.getProgramAccounts(opts.programId, {
+        filters: [
+          { dataSize: AGENT_IDENTITY_DATA_SIZE },
+          { memcmp: { offset: 0, bytes: discBase58 } },
+          { memcmp: { offset: AGENT_ID_OFFSET, bytes: agentIdBase58 } },
+          { memcmp: { offset: AGENT_SIGNER_OFFSET, bytes: opts.agentSigner.toBase58() } },
+        ],
+      });
+
+      if (!Array.isArray(accounts) || accounts.length === 0) return null;
+      if (accounts.length > 1) {
+        // Should not happen when filtering by both agent_id + agent_signer, but guard anyway.
+        throw new Error(`Multiple AgentIdentity accounts matched (count=${accounts.length}).`);
+      }
+
+      const acc = accounts[0];
+      if (!acc?.pubkey || !acc?.account?.data) return null;
+
+      return {
+        pda: acc.pubkey,
+        info: { data: acc.account.data },
+      };
     } catch {
-      throw new Error('signerPrivateKeyBase58 requires the optional dependency "bs58" at runtime.');
+      return null;
     }
   }
 }
