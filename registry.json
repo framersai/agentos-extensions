@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-02-16T09:40:06.736Z",
+  "updated": "2026-02-18T11:20:19.849Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -62,7 +62,512 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-discord",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/discord",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.email",
+        "name": "Email Channel Extension",
+        "package": "@framers/agentos-ext-channel-email",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/email",
+        "description": "Bidirectional email integration — send, read, search, extract verification codes, and reply to email threads via SMTP and IMAP.",
+        "features": [
+          "Send emails with text, HTML, and attachments via SMTP",
+          "Read inbox and other IMAP folders",
+          "Search emails by query, folder, and date range",
+          "Extract verification codes and OTPs from email bodies",
+          "Reply to email threads maintaining conversation context"
+        ],
+        "tools": [
+          "emailSend",
+          "emailRead",
+          "emailSearch",
+          "emailExtractCodes",
+          "emailReply",
+          "emailChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-email",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/email",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.feishu",
+        "name": "Feishu / Lark Channel Extension",
+        "package": "@framers/agentos-ext-channel-feishu",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/feishu",
+        "description": "Feishu (Lark) bot via official SDK — supports outbound messages + inbound webhooks.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound messaging",
+          "Inbound event subscriptions via webhook"
+        ],
+        "tools": [
+          "feishuChannelSendMessage",
+          "feishuChannel",
+          "feishuWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "feishu",
+          "lark",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-feishu",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/feishu",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.google-chat",
+        "name": "Google Chat Channel Extension",
+        "package": "@framers/agentos-ext-channel-google-chat",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/google-chat",
+        "description": "Google Workspace Chat via Cloud API — supports outbound messages + inbound webhooks.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound text messaging",
+          "Inbound messaging via webhooks"
+        ],
+        "tools": [
+          "googleChatChannelSendMessage",
+          "googleChatChannel",
+          "googleChatWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "google-chat",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-chat",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-chat",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.imessage",
+        "name": "iMessage Channel Extension",
+        "package": "@framers/agentos-ext-channel-imessage",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/imessage",
+        "description": "iMessage bridge via BlueBubbles — macOS server required. Supports outbound sends + inbound webhooks.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound text messaging",
+          "Inbound webhooks (BlueBubbles)"
+        ],
+        "tools": [
+          "imessageChannelSendMessage",
+          "imessageChannel",
+          "imessageWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "imessage",
+          "bluebubbles",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-imessage",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/imessage",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.instagram",
+        "name": "Instagram Channel Extension",
+        "package": "@framers/agentos-ext-channel-instagram",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/instagram",
+        "description": "Full Instagram integration — post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API with browser automation fallback.",
+        "features": [
+          "Post single photos and multi-image carousels",
+          "Upload Reels with captions and hashtags",
+          "Post Stories with stickers and overlays",
+          "Send and read direct messages",
+          "Like and comment on posts",
+          "Follow and unfollow users",
+          "Research hashtag performance and reach",
+          "Browse explore/discover content",
+          "Track engagement analytics (likes, comments, reach, impressions)"
+        ],
+        "tools": [
+          "instagramPost",
+          "instagramReel",
+          "instagramStory",
+          "instagramDm",
+          "instagramLike",
+          "instagramComment",
+          "instagramFollow",
+          "instagramHashtags",
+          "instagramExplore",
+          "instagramAnalytics",
+          "instagramChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/instagram",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.irc",
+        "name": "IRC Channel Extension",
+        "package": "@framers/agentos-ext-channel-irc",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/irc",
+        "description": "IRC channel adapter — supports inbound/outbound messages and channel joins.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound messaging (PRIVMSG)",
+          "Inbound messaging (PRIVMSG)",
+          "Channel join on connect (JOIN)",
+          "Automatic PING/PONG keepalive"
+        ],
+        "tools": [
+          "ircChannelSendMessage",
+          "ircChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "irc",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-irc",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/irc",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.line",
+        "name": "LINE Channel Extension",
+        "package": "@framers/agentos-ext-channel-line",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/line",
+        "description": "LINE Messaging API — inbound webhook (signature-verified) + outbound messaging.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound text messaging",
+          "Inbound webhook events",
+          "Signature verification"
+        ],
+        "tools": [
+          "lineChannelSendMessage",
+          "lineChannel",
+          "lineWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "line",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-line",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/line",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.matrix",
+        "name": "Matrix Channel Extension",
+        "package": "@framers/agentos-ext-channel-matrix",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/matrix",
+        "description": "Matrix/Element via matrix-bot-sdk — decentralized, federated messaging.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound text messaging",
+          "Inbound messages via sync"
+        ],
+        "tools": [
+          "matrixChannelSendMessage",
+          "matrixChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "matrix",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-matrix",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/matrix",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.mattermost",
+        "name": "Mattermost Channel Extension",
+        "package": "@framers/agentos-ext-channel-mattermost",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/mattermost",
+        "description": "Mattermost self-hosted chat — supports outbound posts and inbound WebSocket events.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound messaging",
+          "Inbound WebSocket events"
+        ],
+        "tools": [
+          "mattermostChannelSendMessage",
+          "mattermostChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "mattermost",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mattermost",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mattermost",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.nextcloud",
+        "name": "NextCloud Talk Channel Extension",
+        "package": "@framers/agentos-ext-channel-nextcloud",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/nextcloud",
+        "description": "Nextcloud Talk bot API — self-hosted, privacy-focused team messaging via webhook bots.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound messaging",
+          "Inbound webhooks (Nextcloud Talk bot)"
+        ],
+        "tools": [
+          "nextcloudChannelSendMessage",
+          "nextcloudChannel",
+          "nextcloudTalkWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "nextcloud",
+          "talk",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nextcloud",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nextcloud",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.nostr",
+        "name": "Nostr Channel Extension",
+        "package": "@framers/agentos-ext-channel-nostr",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/nostr",
+        "description": "Nostr relay messaging via nostr-tools — decentralized, censorship-resistant encrypted DMs (NIP-04).",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound encrypted DMs",
+          "Inbound encrypted DMs (relay subscriptions)"
+        ],
+        "tools": [
+          "nostrChannelSendMessage",
+          "nostrChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "nostr",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nostr",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nostr",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.pinterest",
+        "name": "Pinterest Channel Extension",
+        "package": "@framers/agentos-ext-channel-pinterest",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/pinterest",
+        "description": "Pinterest integration — create pins, manage boards, search content, discover trends, track analytics, and schedule posts via Pinterest API v5.",
+        "features": [
+          "Create image, video, and idea pins",
+          "Create and manage boards and sections",
+          "Search pins and boards by keyword",
+          "Discover trending pins and topics",
+          "Track pin and board performance metrics",
+          "Schedule pins for future publishing",
+          "Carousel pin support",
+          "Hashtag management"
+        ],
+        "tools": [
+          "pinterestPin",
+          "pinterestBoard",
+          "pinterestSearch",
+          "pinterestTrending",
+          "pinterestAnalytics",
+          "pinterestSchedule",
+          "pinterestChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/pinterest",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.reddit",
+        "name": "Reddit Channel Extension",
+        "package": "@framers/agentos-ext-channel-reddit",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/reddit",
+        "description": "Bidirectional Reddit interaction via snoowrap — supports posting, commenting, voting, searching, trending, subscriptions, messaging, and analytics.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Submit text, link, image, and poll posts to subreddits",
+          "Comment on posts and reply to comments",
+          "Upvote and downvote content",
+          "Search posts and subreddits with filters",
+          "Get trending posts and subreddits",
+          "Subscribe to and unsubscribe from subreddits",
+          "Read and send private messages",
+          "Post and comment karma analytics"
+        ],
+        "tools": [
+          "redditSubmitPost",
+          "redditComment",
+          "redditVote",
+          "redditSearch",
+          "redditTrending",
+          "redditSubscribe",
+          "redditInbox",
+          "redditAnalytics",
+          "redditChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "reddit",
+          "snoowrap",
+          "social"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.signal",
+        "name": "Signal Channel Extension",
+        "package": "@framers/agentos-ext-channel-signal",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/signal",
+        "description": "Signal messenger integration via signal-cli — end-to-end encrypted messaging.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound text messaging",
+          "Inbound messaging (signal-cli receive --json)"
+        ],
+        "tools": [
+          "signalChannelSendMessage",
+          "signalChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "signal",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-signal",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/signal",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -105,7 +610,79 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-slack",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/slack",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.sms",
+        "name": "SMS Channel Extension",
+        "package": "@framers/agentos-ext-channel-sms",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/sms",
+        "description": "SMS messaging via Twilio — inbound webhook + outbound sends.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound SMS sending",
+          "Inbound webhook events",
+          "Signature verification"
+        ],
+        "tools": [
+          "smsChannelSendMessage",
+          "smsChannel",
+          "smsWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "sms",
+          "twilio",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-sms",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/sms",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.teams",
+        "name": "Microsoft Teams Channel Extension",
+        "package": "@framers/agentos-ext-channel-teams",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/teams",
+        "description": "Microsoft Teams bot via Bot Framework — supports inbound webhooks + proactive outbound sends.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound proactive messaging",
+          "Inbound messaging via bot framework webhooks"
+        ],
+        "tools": [
+          "teamsChannelSendMessage",
+          "teamsChannel",
+          "teamsWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "teams",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-teams",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/teams",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -147,7 +724,155 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/telegram",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.tiktok",
+        "name": "TikTok Channel Extension",
+        "package": "@framers/agentos-ext-channel-tiktok",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/tiktok",
+        "description": "TikTok integration — upload videos, discover trending sounds and hashtags, search content, track analytics, and engage with the community via TikTok API for Business.",
+        "features": [
+          "Upload videos with captions and hashtags",
+          "Discover trending sounds and hashtags",
+          "Search videos and creators",
+          "Track video performance metrics",
+          "Like, comment, and share videos",
+          "Browse For You page content",
+          "Engagement metrics and audience insights"
+        ],
+        "tools": [
+          "tiktokUpload",
+          "tiktokTrending",
+          "tiktokSearch",
+          "tiktokAnalytics",
+          "tiktokEngage",
+          "tiktokDiscover",
+          "tiktokChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.tlon",
+        "name": "Tlon (Urbit) Channel Extension",
+        "package": "@framers/agentos-ext-channel-tlon",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/tlon",
+        "description": "Tlon / Urbit messaging — peer-to-peer, identity-sovereign communication.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound DM messaging (chat-dm-action)",
+          "Outbound group messaging (channels/channel-action-1)",
+          "Inbound subscriptions via /~/channel SSE",
+          "DM auto-discovery via /~/scry/chat/dm.json"
+        ],
+        "tools": [
+          "tlonChannelSendMessage",
+          "tlonChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "tlon",
+          "urbit",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tlon",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tlon",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.twitch",
+        "name": "Twitch Channel Extension",
+        "package": "@framers/agentos-ext-channel-twitch",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/twitch",
+        "description": "Twitch IRC chat via tmi.js — supports inbound/outbound chat messaging.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Inbound chat subscriptions",
+          "Outbound chat messages"
+        ],
+        "tools": [
+          "twitchChannelSendMessage",
+          "twitchChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "twitch",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitch",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitch",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.twitter",
+        "name": "Twitter/X Channel Extension",
+        "package": "@framers/agentos-ext-channel-twitter",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/twitter",
+        "description": "Bidirectional Twitter/X integration — post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
+        "features": [
+          "Post tweets with text, images, video, and polls",
+          "Reply to tweets and quote tweets",
+          "Post multi-tweet threads",
+          "Like, retweet, and undo engagement",
+          "Search tweets by query with filters",
+          "Get trending topics by location",
+          "Read home timeline",
+          "Send and read direct messages",
+          "Track engagement analytics (likes, retweets, impressions)",
+          "Schedule tweets for future posting"
+        ],
+        "tools": [
+          "twitterPost",
+          "twitterReply",
+          "twitterQuote",
+          "twitterLike",
+          "twitterRetweet",
+          "twitterSearch",
+          "twitterTrending",
+          "twitterTimeline",
+          "twitterDm",
+          "twitterAnalytics",
+          "twitterSchedule",
+          "twitterThread",
+          "twitterChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -186,7 +911,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/webchat",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -227,7 +952,144 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-whatsapp",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/whatsapp",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.youtube",
+        "name": "YouTube Channel Extension",
+        "package": "@framers/agentos-ext-channel-youtube",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/youtube",
+        "description": "YouTube integration — upload videos, publish Shorts, comment on videos, search content, discover trending, track analytics, manage playlists, and schedule publishing via YouTube Data API v3.",
+        "features": [
+          "Upload videos with metadata (title, description, tags, category)",
+          "Publish YouTube Shorts",
+          "Comment on videos and reply to comments",
+          "Search videos, channels, and playlists",
+          "Discover trending videos by region and category",
+          "Track channel and video analytics (views, likes, subscribers)",
+          "Create and manage playlists",
+          "Schedule video publishing with privacy status transitions",
+          "Thread-based comment replies"
+        ],
+        "tools": [
+          "youtubeUpload",
+          "youtubeShort",
+          "youtubeComment",
+          "youtubeSearch",
+          "youtubeTrending",
+          "youtubeAnalytics",
+          "youtubePlaylist",
+          "youtubeSchedule",
+          "youtubeChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/youtube",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.zalo",
+        "name": "Zalo Channel Extension",
+        "package": "@framers/agentos-ext-channel-zalo",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/zalo",
+        "description": "Zalo Bot API — text messaging with optional webhook or long-polling.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound messaging",
+          "Inbound messaging (polling or webhook)"
+        ],
+        "tools": [
+          "zaloChannelSendMessage",
+          "zaloChannel",
+          "zaloWebhook"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "zalo",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalo",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalo",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.zalouser",
+        "name": "Zalo Personal Channel Extension",
+        "package": "@framers/agentos-ext-channel-zalouser",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/zalouser",
+        "description": "Zalo personal account messaging via zca-cli (unofficial).",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Outbound text messaging (zca msg send)",
+          "Inbound message listening (zca listen)",
+          "Multi-profile support via ZCA_PROFILE"
+        ],
+        "tools": [
+          "zalouserChannelSendMessage",
+          "zalouserChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "zalo",
+          "zalouser",
+          "messaging"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalouser",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalouser",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.communications.notifications",
+        "name": "Notifications Extension",
+        "package": "@framers/agentos-ext-notifications",
+        "version": "0.1.0",
+        "category": "communications",
+        "path": "registry/curated/communications/notifications",
+        "description": "Unified multi-channel notification router — send, broadcast, and schedule notifications across all configured channels.",
+        "features": [
+          "Send notifications via a specific channel or the highest-priority available channel",
+          "Broadcast notifications to all registered channels simultaneously",
+          "Schedule notifications for future delivery with in-memory timer queue",
+          "Cancel and list pending scheduled notifications",
+          "Register and unregister notification channels at runtime"
+        ],
+        "tools": [
+          "notifySend",
+          "notifyBroadcast",
+          "notifySchedule"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-notifications",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -270,7 +1132,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -315,7 +1177,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -346,7 +1208,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-giphy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/giphy",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -376,7 +1238,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/image-search",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -405,7 +1267,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/voice-synthesis",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -448,7 +1310,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-email-gmail",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/gmail",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -492,7 +1354,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-calendar-google",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/google-calendar",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -533,7 +1395,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -564,7 +1426,67 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.research.content-extraction",
+        "name": "Content Extraction Extension",
+        "package": "@framers/agentos-ext-content-extraction",
+        "version": "0.1.0",
+        "category": "research",
+        "path": "registry/curated/research/content-extraction",
+        "description": "Extract clean text, markdown, and structured data from URLs, YouTube videos, Wikipedia articles, and PDF documents.",
+        "features": [
+          "Extract clean text or markdown from any URL using readability algorithm",
+          "Get YouTube video transcripts and metadata",
+          "Extract Wikipedia article content in multiple languages",
+          "Extract text from remote PDF documents",
+          "Extract structured data (tables, lists, metadata) with CSS selectors"
+        ],
+        "tools": [
+          "extractUrl",
+          "extractYoutube",
+          "extractWikipedia",
+          "extractPdf",
+          "extractStructured"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-content-extraction",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/content-extraction",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.research.deep-research",
+        "name": "Deep Research Extension",
+        "package": "@framers/agentos-ext-deep-research",
+        "version": "0.1.0",
+        "category": "research",
+        "path": "registry/curated/research/deep-research",
+        "description": "Multi-source investigation engine with academic search, content scraping, aggregate search across engines, and trend discovery across platforms.",
+        "features": [
+          "Multi-source investigation with claim verification and cross-referencing",
+          "Academic paper search across arXiv, Google Scholar, and Semantic Scholar",
+          "Platform-specific content extraction (YouTube transcripts, Wikipedia, blogs)",
+          "Unified search across multiple engines (Serper, Brave, SerpAPI)",
+          "Trend discovery across Twitter, Reddit, YouTube, and HackerNews"
+        ],
+        "tools": [
+          "researchInvestigate",
+          "researchAcademic",
+          "researchScrape",
+          "researchAggregate",
+          "researchTrending"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-deep-research",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -592,7 +1514,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-news-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/news-search",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -630,7 +1552,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -665,7 +1587,49 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.system.browser-automation",
+        "name": "Browser Automation Extension",
+        "package": "@framers/agentos-ext-browser-automation",
+        "version": "0.1.0",
+        "category": "system",
+        "path": "registry/curated/system/browser-automation",
+        "description": "Full browser automation for autonomous agents — navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies. Powered by Playwright with persistent session support.",
+        "features": [
+          "Navigate to any URL with full page rendering",
+          "Click elements by CSS selector, text content, or ARIA role",
+          "Fill forms and interact with inputs",
+          "Capture full-page or element screenshots",
+          "Extract text, HTML, or structured data from DOM",
+          "Wait for selectors, navigation, or custom conditions",
+          "Smart page snapshot — inventory of all interactive elements",
+          "Execute arbitrary JavaScript in page context",
+          "Persistent login sessions via cookie/localStorage storage",
+          "CAPTCHA solving via 2captcha (reCAPTCHA, hCaptcha, Turnstile)",
+          "Proxy rotation with sticky sessions and geo-targeting",
+          "Auto-screenshot on errors for debugging"
+        ],
+        "tools": [
+          "browserNavigate",
+          "browserClick",
+          "browserFill",
+          "browserScreenshot",
+          "browserExtract",
+          "browserWait",
+          "browserScroll",
+          "browserSnapshot",
+          "browserEvaluate",
+          "browserSession"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-browser-automation",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/browser-automation",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -702,7 +1666,37 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.system.credential-vault",
+        "name": "Credential Vault Extension",
+        "package": "@framers/agentos-ext-credential-vault",
+        "version": "0.1.0",
+        "category": "system",
+        "path": "registry/curated/system/credential-vault",
+        "description": "Encrypted in-memory credential storage with AES-256-GCM encryption, OAuth token rotation, and credential import/export.",
+        "features": [
+          "AES-256-GCM encrypted in-memory credential storage",
+          "Store and retrieve credentials by platform and key",
+          "List stored credentials with masked values",
+          "Rotate OAuth tokens and API keys",
+          "Import credentials from JSON or CSV format"
+        ],
+        "tools": [
+          "credentialsSet",
+          "credentialsGet",
+          "credentialsList",
+          "credentialsRotate",
+          "credentialsImport"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-credential-vault",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault",
+        "verified": true,
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -741,7 +1735,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-plivo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/plivo",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -781,7 +1775,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-telnyx",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/telnyx",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -821,235 +1815,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-twilio",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/twilio",
         "verified": true,
-        "verifiedAt": "2026-02-16T09:40:06.736Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.system.browser-automation",
-        "name": "Browser Automation Extension",
-        "package": "@framers/agentos-ext-browser-automation",
-        "version": "0.1.0",
-        "category": "system",
-        "path": "registry/curated/system/browser-automation",
-        "description": "Full browser automation for autonomous agents — navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies via Playwright.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["URL navigation", "DOM interaction", "Screenshots", "Content extraction", "Page snapshots", "JavaScript evaluation", "Session management", "CAPTCHA solving", "Proxy rotation"],
-        "tools": ["browserNavigate", "browserClick", "browserFill", "browserScreenshot", "browserExtract", "browserWait", "browserScroll", "browserSnapshot", "browserEvaluate", "browserSession"],
-        "keywords": ["agentos", "extension", "browser", "automation", "playwright", "scraping", "captcha", "proxy"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-browser-automation",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/browser-automation",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.twitter",
-        "name": "Twitter/X Channel Extension",
-        "package": "@framers/agentos-ext-channel-twitter",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/twitter",
-        "description": "Bidirectional Twitter/X integration — post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Post tweets with media and polls", "Reply and quote tweets", "Multi-tweet threads", "Like and retweet", "Search tweets", "Trending topics", "DMs", "Engagement analytics", "Scheduled tweets"],
-        "tools": ["twitterPost", "twitterReply", "twitterQuote", "twitterLike", "twitterRetweet", "twitterSearch", "twitterTrending", "twitterTimeline", "twitterDm", "twitterAnalytics", "twitterSchedule", "twitterThread", "twitterChannel"],
-        "keywords": ["agentos", "extension", "channel", "twitter", "x", "social-media", "tweets"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.instagram",
-        "name": "Instagram Channel Extension",
-        "package": "@framers/agentos-ext-channel-instagram",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/instagram",
-        "description": "Full Instagram integration — post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Photo and carousel posts", "Reels upload", "Stories", "Comments", "Hashtag research", "Explore/discover", "Engagement analytics"],
-        "tools": ["instagramPost", "instagramReel", "instagramStory", "instagramDm", "instagramLike", "instagramComment", "instagramFollow", "instagramHashtags", "instagramExplore", "instagramAnalytics", "instagramChannel"],
-        "keywords": ["agentos", "extension", "channel", "instagram", "social-media", "reels", "stories"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/instagram",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.reddit",
-        "name": "Reddit Channel Extension",
-        "package": "@framers/agentos-ext-channel-reddit",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/reddit",
-        "description": "Reddit integration — submit posts, comment, vote, search, discover trending, and track karma via Reddit OAuth2 API.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Submit posts (text, link, image, poll)", "Comment and reply", "Upvote/downvote", "Search posts and subreddits", "Trending discovery", "Subscribe/unsubscribe", "Inbox messages", "Karma analytics"],
-        "tools": ["redditSubmitPost", "redditComment", "redditVote", "redditSearch", "redditTrending", "redditSubscribe", "redditInbox", "redditAnalytics", "redditChannel"],
-        "keywords": ["agentos", "extension", "channel", "reddit", "social-media", "subreddits"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.pinterest",
-        "name": "Pinterest Channel Extension",
-        "package": "@framers/agentos-ext-channel-pinterest",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/pinterest",
-        "description": "Pinterest integration — create pins, manage boards, search and discover trending content, schedule pins, and track analytics via Pinterest API v5.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Create pins (image, video, idea)", "Board management", "Pin/board search", "Trending discovery", "Pin scheduling", "Performance analytics"],
-        "tools": ["pinterestPin", "pinterestBoard", "pinterestSearch", "pinterestTrending", "pinterestAnalytics", "pinterestSchedule", "pinterestChannel"],
-        "keywords": ["agentos", "extension", "channel", "pinterest", "social-media", "pins", "boards"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/pinterest",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.tiktok",
-        "name": "TikTok Channel Extension",
-        "package": "@framers/agentos-ext-channel-tiktok",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/tiktok",
-        "description": "TikTok integration — upload videos, discover trending sounds/hashtags, search content, engage, and track analytics via TikTok API for Business.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Video upload", "Trending sounds and hashtags", "Content search", "Video analytics", "Engagement (like, comment, share)", "For You page discovery"],
-        "tools": ["tiktokUpload", "tiktokTrending", "tiktokSearch", "tiktokAnalytics", "tiktokEngage", "tiktokDiscover", "tiktokChannel"],
-        "keywords": ["agentos", "extension", "channel", "tiktok", "social-media", "short-video"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.youtube",
-        "name": "YouTube Channel Extension",
-        "package": "@framers/agentos-ext-channel-youtube",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/youtube",
-        "description": "YouTube integration — upload videos and Shorts, comment, search, discover trending, manage playlists, schedule publishing, and track analytics via YouTube Data API v3.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Video upload", "YouTube Shorts", "Comments", "Video/channel search", "Trending videos", "Analytics", "Playlist management", "Scheduled publishing"],
-        "tools": ["youtubeUpload", "youtubeShort", "youtubeComment", "youtubeSearch", "youtubeTrending", "youtubeAnalytics", "youtubePlaylist", "youtubeSchedule", "youtubeChannel"],
-        "keywords": ["agentos", "extension", "channel", "youtube", "social-media", "video"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/youtube",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.research.deep-research",
-        "name": "Deep Research Extension",
-        "package": "@framers/agentos-ext-deep-research",
-        "version": "0.1.0",
-        "category": "research",
-        "path": "registry/curated/research/deep-research",
-        "description": "Multi-source investigation — academic papers, web research, cross-referencing, claim verification, and trend discovery.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Multi-source investigation", "Academic paper search", "Content scraping", "Search aggregation", "Trend discovery"],
-        "tools": ["researchInvestigate", "researchAcademic", "researchScrape", "researchAggregate", "researchTrending"],
-        "keywords": ["agentos", "extension", "research", "investigation", "academic", "fact-checking"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-deep-research",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.research.content-extraction",
-        "name": "Content Extraction Extension",
-        "package": "@framers/agentos-ext-content-extraction",
-        "version": "0.1.0",
-        "category": "research",
-        "path": "registry/curated/research/content-extraction",
-        "description": "Extract clean text and structured data from URLs, YouTube transcripts, Wikipedia articles, PDFs, and web pages.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["URL text extraction", "YouTube transcripts", "Wikipedia content", "PDF text extraction", "Structured data extraction"],
-        "tools": ["extractUrl", "extractYoutube", "extractWikipedia", "extractPdf", "extractStructured"],
-        "keywords": ["agentos", "extension", "extraction", "scraping", "youtube", "wikipedia", "pdf"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-content-extraction",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/content-extraction",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.channels.email",
-        "name": "Email Channel Extension",
-        "package": "@framers/agentos-ext-channel-email",
-        "version": "0.1.0",
-        "category": "channels",
-        "path": "registry/curated/channels/email",
-        "description": "Email channel adapter — send, read, search, and reply to emails via SMTP/IMAP. Includes verification code extraction.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Send emails (text/HTML, attachments)", "Read inbox and folders", "Search emails", "Extract verification codes", "Reply to threads"],
-        "tools": ["emailSend", "emailRead", "emailSearch", "emailExtractCodes", "emailReply", "emailChannel"],
-        "keywords": ["agentos", "extension", "channel", "email", "smtp", "imap", "messaging"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-email",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/email",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.system.credential-vault",
-        "name": "Credential Vault Extension",
-        "package": "@framers/agentos-ext-credential-vault",
-        "version": "0.1.0",
-        "category": "system",
-        "path": "registry/curated/system/credential-vault",
-        "description": "Centralized encrypted credential management — store, retrieve, rotate, and import API keys and tokens for all platform integrations.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["AES-256-GCM encrypted storage", "Per-platform credential management", "Token rotation", "Bulk import (JSON/CSV)", "Credential listing and audit"],
-        "tools": ["credentialsSet", "credentialsGet", "credentialsList", "credentialsRotate", "credentialsImport"],
-        "keywords": ["agentos", "extension", "credentials", "vault", "security", "encryption", "api-keys"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-credential-vault",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.communications.notifications",
-        "name": "Notifications Extension",
-        "package": "@framers/agentos-ext-notifications",
-        "version": "0.1.0",
-        "category": "communications",
-        "path": "registry/curated/communications/notifications",
-        "description": "Unified multi-channel notification router — send, broadcast, and schedule notifications across all configured channels.",
-        "author": { "name": "Framers AI", "url": "https://frame.dev" },
-        "features": ["Send via best available channel", "Broadcast to all channels", "Scheduled notifications with cancellation", "Channel priority routing"],
-        "tools": ["notifySend", "notifyBroadcast", "notifySchedule"],
-        "keywords": ["agentos", "extension", "notifications", "broadcast", "schedule", "multi-channel"],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-notifications",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications",
-        "verified": true,
-        "verifiedAt": "2026-02-17T00:00:00.000Z",
+        "verifiedAt": "2026-02-18T11:20:19.849Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
@@ -1086,8 +1852,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 37,
-    "curatedCount": 34,
+    "totalExtensions": 52,
+    "curatedCount": 49,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0

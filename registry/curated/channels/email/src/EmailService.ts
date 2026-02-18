@@ -149,7 +149,7 @@ export class EmailService {
 
       try {
         // Fetch the most recent messages
-        const totalMessages = client.mailbox?.exists ?? 0;
+        const totalMessages = client.mailbox ? client.mailbox.exists : 0;
         if (totalMessages === 0) return [];
 
         const startSeq = Math.max(1, totalMessages - limit + 1);
@@ -212,7 +212,8 @@ export class EmailService {
         }
 
         const uids = await client.search(searchCriteria, { uid: true });
-        const limitedUids = uids.slice(-(options.limit ?? 20));
+        const uidList = Array.isArray(uids) ? uids : [];
+        const limitedUids = uidList.slice(-(options.limit ?? 20));
 
         if (limitedUids.length > 0) {
           for await (const msg of client.fetch(limitedUids, {
@@ -259,12 +260,13 @@ export class EmailService {
       try {
         // Search for the specific message
         const uids = await client.search({ header: { 'message-id': messageId } }, { uid: true });
+        const uidList = Array.isArray(uids) ? uids : [];
 
-        if (uids.length === 0) {
+        if (uidList.length === 0) {
           return { codes: [], messageId };
         }
 
-        for await (const msg of client.fetch(uids, { source: true })) {
+        for await (const msg of client.fetch(uidList, { source: true })) {
           const source = msg.source?.toString() ?? '';
           const bodyText = this.extractPlainText(source);
           const htmlBody = this.extractHtmlBody(source);
@@ -329,8 +331,9 @@ export class EmailService {
       const lock = await client.getMailboxLock('INBOX');
       try {
         const uids = await client.search({ header: { 'message-id': messageId } }, { uid: true });
-        if (uids.length > 0) {
-          for await (const msg of client.fetch(uids, { envelope: true, headers: true })) {
+        const uidList = Array.isArray(uids) ? uids : [];
+        if (uidList.length > 0) {
+          for await (const msg of client.fetch(uidList, { envelope: true, headers: true })) {
             originalFrom = msg.envelope?.from?.[0]?.address ?? '';
             originalSubject = msg.envelope?.subject ?? '';
             const headersStr = msg.headers?.toString() ?? '';

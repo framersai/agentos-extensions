@@ -3,7 +3,7 @@
   "id": "com.framers.channels.signal",
   "name": "Signal Channel Extension",
   "version": "0.1.0",
-  "description": "Signal messenger integration via signal-cli — end-to-end encrypted messaging (scaffold).",
+  "description": "Signal messenger integration via signal-cli — end-to-end encrypted messaging.",
   "categories": ["channel", "communication"],
   "platforms": ["signal"],
   "sdk": "signal-cli",
@@ -20,6 +20,5 @@
     }
   ],
   "requiredSecrets": ["signal.phoneNumber"],
-  "features": ["Outbound text messaging (scaffold)", "Inbound messaging (planned)"]
+  "features": ["Outbound text messaging", "Inbound messaging (signal-cli receive --json)"]
 }
-

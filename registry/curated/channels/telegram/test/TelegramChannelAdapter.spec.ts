@@ -58,6 +58,27 @@ describe('TelegramChannelAdapter', () => {
       expect(mockService.sendMessage).toHaveBeenCalledWith('123', 'Hello world', expect.any(Object));
     });
 
+    it('should pass messageThreadId when conversationId targets a forum topic', async () => {
+      const content: MessageContent = {
+        blocks: [{ type: 'text', text: 'Hello topic' }],
+      };
+      await adapter.sendMessage('123#42', content);
+      expect(mockService.sendMessage).toHaveBeenCalledWith(
+        '123',
+        'Hello topic',
+        expect.objectContaining({ messageThreadId: 42 }),
+      );
+    });
+
+    it('should omit messageThreadId for General topic id=1', async () => {
+      const content: MessageContent = {
+        blocks: [{ type: 'text', text: 'Hello general' }],
+      };
+      await adapter.sendMessage('123#1', content);
+      const [, , opts] = (mockService.sendMessage as any).mock.calls.at(-1);
+      expect(opts).not.toHaveProperty('messageThreadId');
+    });
+
     it('should send images when image block present', async () => {
       const content: MessageContent = {
         blocks: [
@@ -85,6 +106,11 @@ describe('TelegramChannelAdapter', () => {
     it('should send typing action when isTyping=true', async () => {
       await adapter.sendTypingIndicator('123', true);
       expect(mockService.sendChatAction).toHaveBeenCalledWith('123', 'typing');
+    });
+
+    it('should include thread id for typing indicator when provided', async () => {
+      await adapter.sendTypingIndicator('123#42', true);
+      expect(mockService.sendChatAction).toHaveBeenCalledWith('123', 'typing', 42);
     });
 
     it('should no-op when isTyping=false', async () => {

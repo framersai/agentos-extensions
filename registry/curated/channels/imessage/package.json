@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-imessage",
   "version": "0.1.0",
-  "description": "iMessage messaging channel adapter for AgentOS — scaffold (BlueBubbles bridge)",
+  "description": "iMessage messaging channel adapter for AgentOS (BlueBubbles bridge + webhooks)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -26,4 +26,3 @@
   },
   "engines": { "node": ">=18.0.0" }
 }
-

@@ -80,6 +80,20 @@ describe('TelegramService', () => {
       expect(result.text).toBe('hello');
     });
 
+    it('should include message_thread_id when provided (>1)', async () => {
+      await service.initialize();
+      await service.sendMessage('123', 'hello', { messageThreadId: 42 });
+      const [, , params] = (service.api.sendMessage as any).mock.calls.at(-1);
+      expect(params).toMatchObject({ message_thread_id: 42 });
+    });
+
+    it('should omit message_thread_id when provided as 1 (General topic)', async () => {
+      await service.initialize();
+      await service.sendMessage('123', 'hello', { messageThreadId: 1 });
+      const [, , params] = (service.api.sendMessage as any).mock.calls.at(-1);
+      expect(params).not.toHaveProperty('message_thread_id');
+    });
+
     it('should throw when not initialized', async () => {
       await expect(service.sendMessage('123', 'hello')).rejects.toThrow('not initialized');
     });
@@ -106,6 +120,12 @@ describe('TelegramService', () => {
       await service.initialize();
       await service.sendChatAction('123', 'typing');
       expect(service.api.sendChatAction).toHaveBeenCalledWith('123', 'typing');
+    });
+
+    it('should include message_thread_id when provided (typing)', async () => {
+      await service.initialize();
+      await service.sendChatAction('123', 'typing', 42);
+      expect(service.api.sendChatAction).toHaveBeenCalledWith('123', 'typing', { message_thread_id: 42 });
     });
   });
 

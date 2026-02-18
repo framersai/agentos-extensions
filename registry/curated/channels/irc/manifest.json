@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.irc",
+  "name": "IRC Channel Extension",
+  "version": "0.1.0",
+  "description": "IRC channel adapter — supports inbound/outbound messages and channel joins.",
+  "categories": ["channel", "communication"],
+  "platforms": ["irc"],
+  "sdk": "node:net",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "ircChannelSendMessage",
+      "displayName": "Send IRC Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "ircChannel",
+      "displayName": "IRC Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["irc.host", "irc.port", "irc.nick", "irc.channels"],
+  "features": [
+    "Outbound messaging (PRIVMSG)",
+    "Inbound messaging (PRIVMSG)",
+    "Channel join on connect (JOIN)",
+    "Automatic PING/PONG keepalive"
+  ]
+}
+

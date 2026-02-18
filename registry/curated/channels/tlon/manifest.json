@@ -3,7 +3,7 @@
   "id": "com.framers.channels.tlon",
   "name": "Tlon (Urbit) Channel Extension",
   "version": "0.1.0",
-  "description": "Tlon / Urbit messaging — peer-to-peer, identity-sovereign communication (scaffold).",
+  "description": "Tlon / Urbit messaging — peer-to-peer, identity-sovereign communication.",
   "categories": ["channel", "communication"],
   "platforms": ["tlon"],
   "sdk": "tlon-api",
@@ -20,6 +20,10 @@
     }
   ],
   "requiredSecrets": ["tlon.shipUrl", "tlon.code"],
-  "features": ["Outbound messaging (scaffold)", "Inbound subscriptions (planned)"]
+  "features": [
+    "Outbound DM messaging (chat-dm-action)",
+    "Outbound group messaging (channels/channel-action-1)",
+    "Inbound subscriptions via /~/channel SSE",
+    "DM auto-discovery via /~/scry/chat/dm.json"
+  ]
 }
-

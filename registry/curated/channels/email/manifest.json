@@ -15,7 +15,7 @@
     { "kind": "tool", "id": "emailReply", "displayName": "Reply to Email" },
     { "kind": "messaging-channel", "id": "emailChannel", "displayName": "Email Channel Adapter" }
   ],
-  "requiredSecrets": ["email.smtp.host", "email.smtp.user", "email.smtp.password"],
+  "requiredSecrets": ["email.smtpHost", "email.smtpUser", "email.smtpPassword"],
   "optionalSecrets": ["email.imap.host", "email.imap.user", "email.imap.password"],
   "features": [
     "Send emails with text, HTML, and attachments via SMTP",

@@ -3,7 +3,7 @@
   "id": "com.framers.channels.google-chat",
   "name": "Google Chat Channel Extension",
   "version": "0.1.0",
-  "description": "Google Workspace Chat via Cloud API — supports cards and threads (scaffold).",
+  "description": "Google Workspace Chat via Cloud API — supports outbound messages + inbound webhooks.",
   "categories": ["channel", "communication"],
   "platforms": ["google-chat"],
   "sdk": "google-chat",
@@ -17,9 +17,13 @@
       "kind": "messaging-channel",
       "id": "googleChatChannel",
       "displayName": "Google Chat Channel Adapter"
+    },
+    {
+      "kind": "http-handler",
+      "id": "googleChatWebhook",
+      "displayName": "Google Chat Webhook Handler"
     }
   ],
   "requiredSecrets": ["googlechat.serviceAccount"],
-  "features": ["Outbound text messaging (scaffold)", "Inbound messaging via events (planned)"]
+  "features": ["Outbound text messaging", "Inbound messaging via webhooks"]
 }
-

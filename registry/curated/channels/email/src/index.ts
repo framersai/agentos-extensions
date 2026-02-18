@@ -39,13 +39,46 @@ export interface EmailChannelOptions {
 // ---------------------------------------------------------------------------
 
 function resolveConfig(opts: EmailChannelOptions, secrets: Record<string, string>): EmailConfig {
-  const smtpHost = opts.smtpHost ?? secrets['email.smtp.host'] ?? process.env.EMAIL_SMTP_HOST ?? process.env.SMTP_HOST ?? '';
-  const smtpUser = opts.smtpUser ?? secrets['email.smtp.user'] ?? process.env.EMAIL_SMTP_USER ?? process.env.SMTP_USER ?? '';
-  const smtpPassword = opts.smtpPassword ?? secrets['email.smtp.password'] ?? process.env.EMAIL_SMTP_PASSWORD ?? process.env.SMTP_PASSWORD ?? '';
+  const smtpHost =
+    opts.smtpHost ??
+    secrets['email.smtpHost'] ??
+    secrets['email.smtp.host'] ??
+    process.env.SMTP_HOST ??
+    process.env.EMAIL_SMTP_HOST ??
+    '';
+  const smtpUser =
+    opts.smtpUser ??
+    secrets['email.smtpUser'] ??
+    secrets['email.smtp.user'] ??
+    process.env.SMTP_USER ??
+    process.env.EMAIL_SMTP_USER ??
+    '';
+  const smtpPassword =
+    opts.smtpPassword ??
+    secrets['email.smtpPassword'] ??
+    secrets['email.smtp.password'] ??
+    process.env.SMTP_PASSWORD ??
+    process.env.EMAIL_SMTP_PASSWORD ??
+    '';
 
-  const imapHost = opts.imapHost ?? secrets['email.imap.host'] ?? process.env.EMAIL_IMAP_HOST ?? process.env.IMAP_HOST;
-  const imapUser = opts.imapUser ?? secrets['email.imap.user'] ?? process.env.EMAIL_IMAP_USER ?? process.env.IMAP_USER;
-  const imapPassword = opts.imapPassword ?? secrets['email.imap.password'] ?? process.env.EMAIL_IMAP_PASSWORD ?? process.env.IMAP_PASSWORD;
+  const imapHost =
+    opts.imapHost ??
+    secrets['email.imapHost'] ??
+    secrets['email.imap.host'] ??
+    process.env.IMAP_HOST ??
+    process.env.EMAIL_IMAP_HOST;
+  const imapUser =
+    opts.imapUser ??
+    secrets['email.imapUser'] ??
+    secrets['email.imap.user'] ??
+    process.env.IMAP_USER ??
+    process.env.EMAIL_IMAP_USER;
+  const imapPassword =
+    opts.imapPassword ??
+    secrets['email.imapPassword'] ??
+    secrets['email.imap.password'] ??
+    process.env.IMAP_PASSWORD ??
+    process.env.EMAIL_IMAP_PASSWORD;
 
   const config: EmailConfig = {
     smtp: {

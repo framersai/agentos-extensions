@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-signal",
   "version": "0.1.0",
-  "description": "Signal messaging channel adapter for AgentOS — scaffold (signal-cli bridge)",
+  "description": "Signal messaging channel adapter for AgentOS (signal-cli bridge)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -26,4 +26,3 @@
   },
   "engines": { "node": ">=18.0.0" }
 }
-

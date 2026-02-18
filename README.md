@@ -81,7 +81,7 @@ agentos-extensions/
 ├── registry/
 │   ├── curated/           # Official & verified extensions
 │   │   ├── auth/          # Authentication & subscriptions
-│   │   ├── channels/      # Messaging & social channels (26 platforms)
+│   │   ├── channels/      # Messaging & social channels (28 platforms)
 │   │   ├── communications/# Telegram bot, notifications
 │   │   ├── integrations/  # External services (Telegram API)
 │   │   ├── media/         # Giphy, image search, voice synthesis
@@ -189,9 +189,9 @@ await agentos.initialize({
 | `youtube.apiKey` | `YOUTUBE_API_KEY` | channel-youtube |
 | `pinterest.accessToken` | `PINTEREST_ACCESS_TOKEN` | channel-pinterest |
 | `tiktok.accessToken` | `TIKTOK_ACCESS_TOKEN` | channel-tiktok |
-| `email.smtp.host` | `EMAIL_SMTP_HOST` | channel-email |
-| `email.smtp.user` | `EMAIL_SMTP_USER` | channel-email |
-| `email.smtp.password` | `EMAIL_SMTP_PASSWORD` | channel-email |
+| `email.smtpHost` | `SMTP_HOST` | channel-email |
+| `email.smtpUser` | `SMTP_USER` | channel-email |
+| `email.smtpPassword` | `SMTP_PASSWORD` | channel-email |
 
 #### Selective loading examples
 

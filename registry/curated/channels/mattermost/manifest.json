@@ -3,7 +3,7 @@
   "id": "com.framers.channels.mattermost",
   "name": "Mattermost Channel Extension",
   "version": "0.1.0",
-  "description": "Mattermost self-hosted chat via official client — supports text, threads, reactions (scaffold).",
+  "description": "Mattermost self-hosted chat — supports outbound posts and inbound WebSocket events.",
   "categories": ["channel", "communication"],
   "platforms": ["mattermost"],
   "sdk": "@mattermost/client",
@@ -20,6 +20,5 @@
     }
   ],
   "requiredSecrets": ["mattermost.url", "mattermost.token"],
-  "features": ["Outbound messaging (scaffold)", "Inbound WebSocket events (planned)"]
+  "features": ["Outbound messaging", "Inbound WebSocket events"]
 }
-

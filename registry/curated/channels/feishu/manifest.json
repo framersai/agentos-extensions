@@ -3,7 +3,7 @@
   "id": "com.framers.channels.feishu",
   "name": "Feishu / Lark Channel Extension",
   "version": "0.1.0",
-  "description": "Feishu (Lark) bot via official SDK — supports text, cards, interactive messages (scaffold).",
+  "description": "Feishu (Lark) bot via official SDK — supports outbound messages + inbound webhooks.",
   "categories": ["channel", "communication"],
   "platforms": ["feishu"],
   "sdk": "@larksuiteoapi/node-sdk",
@@ -17,9 +17,13 @@
       "kind": "messaging-channel",
       "id": "feishuChannel",
       "displayName": "Feishu Channel Adapter"
+    },
+    {
+      "kind": "http-handler",
+      "id": "feishuWebhook",
+      "displayName": "Feishu Webhook Handler"
     }
   ],
-  "requiredSecrets": ["feishu.appId", "feishu.appSecret"],
-  "features": ["Outbound messaging (scaffold)", "Inbound webhook subscriptions (planned)"]
+  "requiredSecrets": ["feishu.appId", "feishu.appSecret", "feishu.verificationToken", "feishu.encryptKey"],
+  "features": ["Outbound messaging", "Inbound event subscriptions via webhook"]
 }
-

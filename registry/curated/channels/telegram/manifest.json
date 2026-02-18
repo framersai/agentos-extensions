@@ -31,6 +31,7 @@
     "Rate limiting with queue management",
     "Webhook and polling support",
     "Group chat and channel support",
+    "Forum topic routing via chatId#topicId",
     "Message editing and deletion",
     "Inline keyboard interactions",
     "Typing indicators"

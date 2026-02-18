@@ -13,6 +13,16 @@ export interface TelegramChannelConfig {
   rateLimit?: { maxRequests: number; windowMs: number };
 }
 
+function normalizeTelegramThreadId(
+  threadId: unknown,
+  opts?: { allowGeneralTopic?: boolean },
+): number | undefined {
+  const n = typeof threadId === 'number' ? Math.trunc(threadId) : Number(String(threadId ?? ''));
+  if (!Number.isFinite(n) || n <= 0) return undefined;
+  if (opts?.allowGeneralTopic !== true && n === 1) return undefined;
+  return n;
+}
+
 interface RateState {
   count: number;
   resetAt: number;
@@ -93,41 +103,53 @@ export class TelegramService {
       replyToMessageId?: number;
       replyMarkup?: unknown;
       disableNotification?: boolean;
+      messageThreadId?: number;
     },
   ): Promise<{ message_id: number; chat: { id: number }; date: number; text?: string }> {
     await this.checkRateLimit(String(chatId));
+    const messageThreadId = normalizeTelegramThreadId(options?.messageThreadId);
     return this.api.sendMessage(chatId, text, {
       parse_mode: (options?.parseMode ?? this.config.defaultParseMode) as any,
       reply_to_message_id: options?.replyToMessageId,
       reply_markup: options?.replyMarkup as any,
       disable_notification: options?.disableNotification,
+      ...(messageThreadId ? { message_thread_id: messageThreadId } : {}),
     }) as any;
   }
 
   async sendPhoto(
     chatId: string | number,
     photo: string,
-    options?: { caption?: string; parseMode?: string },
+    options?: { caption?: string; parseMode?: string; messageThreadId?: number },
   ): Promise<{ message_id: number }> {
     await this.checkRateLimit(String(chatId));
+    const messageThreadId = normalizeTelegramThreadId(options?.messageThreadId);
     return this.api.sendPhoto(chatId, photo, {
       caption: options?.caption,
       parse_mode: (options?.parseMode ?? this.config.defaultParseMode) as any,
+      ...(messageThreadId ? { message_thread_id: messageThreadId } : {}),
     }) as any;
   }
 
   async sendDocument(
     chatId: string | number,
     document: string,
-    options?: { caption?: string; filename?: string },
+    options?: { caption?: string; filename?: string; messageThreadId?: number },
   ): Promise<{ message_id: number }> {
     await this.checkRateLimit(String(chatId));
+    const messageThreadId = normalizeTelegramThreadId(options?.messageThreadId);
     return this.api.sendDocument(chatId, document, {
       caption: options?.caption,
+      ...(messageThreadId ? { message_thread_id: messageThreadId } : {}),
     }) as any;
   }
 
-  async sendChatAction(chatId: string | number, action: string): Promise<void> {
+  async sendChatAction(chatId: string | number, action: string, messageThreadId?: number): Promise<void> {
+    const threadId = normalizeTelegramThreadId(messageThreadId, { allowGeneralTopic: true });
+    if (threadId) {
+      await this.api.sendChatAction(chatId, action as any, { message_thread_id: threadId } as any);
+      return;
+    }
     await this.api.sendChatAction(chatId, action as any);
   }
 

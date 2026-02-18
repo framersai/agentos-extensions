@@ -87,9 +87,9 @@ describe('createExtensionPack', () => {
     const pack = createExtensionPack({
       options: {
         secrets: {
-          'email.smtp.host': 'smtp.secret.com',
-          'email.smtp.user': 'secret-user',
-          'email.smtp.password': 'secret-pass',
+          'email.smtpHost': 'smtp.secret.com',
+          'email.smtpUser': 'secret-user',
+          'email.smtpPassword': 'secret-pass',
         },
       },
     });
@@ -100,9 +100,22 @@ describe('createExtensionPack', () => {
   it('should resolve config from context-level secrets', () => {
     const pack = createExtensionPack({
       secrets: {
-        'email.smtp.host': 'smtp.ctx.com',
-        'email.smtp.user': 'ctx-user',
-        'email.smtp.password': 'ctx-pass',
+        'email.smtpHost': 'smtp.ctx.com',
+        'email.smtpUser': 'ctx-user',
+        'email.smtpPassword': 'ctx-pass',
+      },
+    });
+    expect(pack.descriptors).toHaveLength(6);
+  });
+
+  it('should resolve config from legacy dot-notation secrets', () => {
+    const pack = createExtensionPack({
+      options: {
+        secrets: {
+          'email.smtp.host': 'smtp.legacy.com',
+          'email.smtp.user': 'legacy-user',
+          'email.smtp.password': 'legacy-pass',
+        },
       },
     });
     expect(pack.descriptors).toHaveLength(6);

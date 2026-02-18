@@ -3,7 +3,7 @@
   "id": "com.framers.channels.nostr",
   "name": "Nostr Channel Extension",
   "version": "0.1.0",
-  "description": "Nostr relay messaging via nostr-tools — decentralized, censorship-resistant protocol (scaffold).",
+  "description": "Nostr relay messaging via nostr-tools — decentralized, censorship-resistant encrypted DMs (NIP-04).",
   "categories": ["channel", "communication"],
   "platforms": ["nostr"],
   "sdk": "nostr-tools",
@@ -19,7 +19,6 @@
       "displayName": "Nostr Channel Adapter"
     }
   ],
-  "requiredSecrets": ["nostr.privateKey"],
-  "features": ["Outbound text messaging (scaffold)", "Inbound DM subscriptions (planned)"]
+  "requiredSecrets": ["nostr.privateKey", "nostr.relayUrls"],
+  "features": ["Outbound encrypted DMs", "Inbound encrypted DMs (relay subscriptions)"]
 }
-

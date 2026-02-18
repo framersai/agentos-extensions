@@ -1,7 +1,7 @@
 {
-  "name": "@framers/agentos-ext-channel-teams",
+  "name": "@framers/agentos-ext-channel-irc",
   "version": "0.1.0",
-  "description": "Microsoft Teams messaging channel adapter for AgentOS (Bot Framework)",
+  "description": "IRC messaging channel adapter for AgentOS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -11,15 +11,12 @@
     "test:watch": "vitest watch",
     "clean": "rm -rf dist"
   },
-  "keywords": ["agentos", "extension", "channel", "teams", "messaging"],
+  "keywords": ["agentos", "extension", "channel", "irc", "messaging"],
   "author": { "name": "Framers AI", "url": "https://frame.dev" },
   "license": "MIT",
   "files": ["dist", "manifest.json"],
   "peerDependencies": {
     "@framers/agentos": "^0.1.0"
-  },
-  "dependencies": {
-    "botbuilder": "^4.23.3"
   },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
@@ -29,3 +26,4 @@
   },
   "engines": { "node": ">=18.0.0" }
 }
+

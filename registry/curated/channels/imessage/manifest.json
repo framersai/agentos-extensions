@@ -3,7 +3,7 @@
   "id": "com.framers.channels.imessage",
   "name": "iMessage Channel Extension",
   "version": "0.1.0",
-  "description": "iMessage bridge via BlueBubbles — macOS server required (scaffold).",
+  "description": "iMessage bridge via BlueBubbles — macOS server required. Supports outbound sends + inbound webhooks.",
   "categories": ["channel", "communication"],
   "platforms": ["imessage"],
   "sdk": "bluebubbles",
@@ -17,9 +17,13 @@
       "kind": "messaging-channel",
       "id": "imessageChannel",
       "displayName": "iMessage Channel Adapter"
+    },
+    {
+      "kind": "http-handler",
+      "id": "imessageWebhook",
+      "displayName": "BlueBubbles Webhook Handler"
     }
   ],
   "requiredSecrets": ["imessage.serverUrl", "imessage.password"],
-  "features": ["Outbound text messaging (scaffold)", "Inbound messaging (planned)"]
+  "features": ["Outbound text messaging", "Inbound webhooks (BlueBubbles)"]
 }
-

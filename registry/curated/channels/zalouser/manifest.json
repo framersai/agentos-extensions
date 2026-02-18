@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.zalouser",
+  "name": "Zalo Personal Channel Extension",
+  "version": "0.1.0",
+  "description": "Zalo personal account messaging via zca-cli (unofficial).",
+  "categories": ["channel", "communication"],
+  "platforms": ["zalouser"],
+  "sdk": "zca-cli",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "zalouserChannelSendMessage",
+      "displayName": "Send Zalo Personal Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "zalouserChannel",
+      "displayName": "Zalo Personal Channel Adapter"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Outbound text messaging (zca msg send)",
+    "Inbound message listening (zca listen)",
+    "Multi-profile support via ZCA_PROFILE"
+  ]
+}
+

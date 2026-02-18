@@ -3,10 +3,10 @@
   "id": "com.framers.channels.matrix",
   "name": "Matrix Channel Extension",
   "version": "0.1.0",
-  "description": "Matrix/Element via matrix-js-sdk — decentralized, federated messaging (scaffold).",
+  "description": "Matrix/Element via matrix-bot-sdk — decentralized, federated messaging.",
   "categories": ["channel", "communication"],
   "platforms": ["matrix"],
-  "sdk": "matrix-js-sdk",
+  "sdk": "@vector-im/matrix-bot-sdk",
   "extensions": [
     {
       "kind": "tool",
@@ -20,6 +20,5 @@
     }
   ],
   "requiredSecrets": ["matrix.homeserverUrl", "matrix.accessToken"],
-  "features": ["Outbound text messaging (scaffold)", "Inbound messaging (planned)"]
+  "features": ["Outbound text messaging", "Inbound messages via sync"]
 }
-

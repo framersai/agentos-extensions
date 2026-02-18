@@ -20,6 +20,21 @@ import type {
 import { TelegramService } from './TelegramService';
 import type { Context } from 'grammy';
 
+function parseTelegramConversationId(conversationId: string): { chatId: string; messageThreadId?: number } {
+  const raw = String(conversationId ?? '').trim();
+  if (!raw) return { chatId: '' };
+  const idx = raw.lastIndexOf('#');
+  if (idx <= 0) return { chatId: raw };
+  const chatId = raw.slice(0, idx).trim();
+  const threadRaw = raw.slice(idx + 1).trim();
+  const threadId = Number(threadRaw);
+  if (!chatId || !Number.isFinite(threadId)) return { chatId: raw };
+  const normalized = Math.trunc(threadId);
+  // Telegram forum "General" topic (id=1) is best addressed by omitting message_thread_id.
+  if (normalized <= 1) return { chatId };
+  return { chatId, messageThreadId: normalized };
+}
+
 export class TelegramChannelAdapter implements IChannelAdapter {
   readonly platform: ChannelPlatform = 'telegram';
   readonly displayName = 'Telegram';
@@ -68,6 +83,7 @@ export class TelegramChannelAdapter implements IChannelAdapter {
   }
 
   async sendMessage(conversationId: string, content: MessageContent): Promise<ChannelSendResult> {
+    const { chatId, messageThreadId } = parseTelegramConversationId(conversationId);
     const textBlock = content.blocks.find((b) => b.type === 'text');
     const imageBlock = content.blocks.find((b) => b.type === 'image');
     const documentBlock = content.blocks.find((b) => b.type === 'document');
@@ -75,22 +91,27 @@ export class TelegramChannelAdapter implements IChannelAdapter {
     let messageId: number;
 
     if (imageBlock && imageBlock.type === 'image') {
-      const result = await this.service.sendPhoto(conversationId, imageBlock.url, {
+      const opts: Parameters<TelegramService['sendPhoto']>[2] = {
         caption: imageBlock.caption ?? textBlock?.text,
-      });
+        ...(messageThreadId ? { messageThreadId } : {}),
+      };
+      const result = await this.service.sendPhoto(chatId, imageBlock.url, opts);
       messageId = result.message_id;
     } else if (documentBlock && documentBlock.type === 'document') {
-      const result = await this.service.sendDocument(conversationId, documentBlock.url, {
+      const opts: Parameters<TelegramService['sendDocument']>[2] = {
         caption: textBlock?.text,
         filename: documentBlock.filename,
-      });
+        ...(messageThreadId ? { messageThreadId } : {}),
+      };
+      const result = await this.service.sendDocument(chatId, documentBlock.url, opts);
       messageId = result.message_id;
     } else {
       const text = textBlock?.text ?? '';
-      const result = await this.service.sendMessage(conversationId, text, {
+      const result = await this.service.sendMessage(chatId, text, {
         replyToMessageId: content.replyToMessageId
           ? Number(content.replyToMessageId)
           : undefined,
+        ...(messageThreadId ? { messageThreadId } : {}),
       });
       messageId = result.message_id;
     }
@@ -100,7 +121,12 @@ export class TelegramChannelAdapter implements IChannelAdapter {
 
   async sendTypingIndicator(conversationId: string, _isTyping: boolean): Promise<void> {
     if (_isTyping) {
-      await this.service.sendChatAction(conversationId, 'typing');
+      const { chatId, messageThreadId } = parseTelegramConversationId(conversationId);
+      if (messageThreadId) {
+        await this.service.sendChatAction(chatId, 'typing', messageThreadId);
+      } else {
+        await this.service.sendChatAction(chatId, 'typing');
+      }
     }
     // Telegram doesn't have a "stop typing" API — it auto-clears.
   }
@@ -115,16 +141,19 @@ export class TelegramChannelAdapter implements IChannelAdapter {
   async editMessage(conversationId: string, messageId: string, content: MessageContent): Promise<void> {
     const textBlock = content.blocks.find((b) => b.type === 'text');
     if (textBlock && textBlock.type === 'text') {
-      await this.service.api.editMessageText(conversationId, Number(messageId), textBlock.text);
+      const { chatId } = parseTelegramConversationId(conversationId);
+      await this.service.api.editMessageText(chatId, Number(messageId), textBlock.text);
     }
   }
 
   async deleteMessage(conversationId: string, messageId: string): Promise<void> {
-    await this.service.api.deleteMessage(conversationId, Number(messageId));
+    const { chatId } = parseTelegramConversationId(conversationId);
+    await this.service.api.deleteMessage(chatId, Number(messageId));
   }
 
   async addReaction(conversationId: string, messageId: string, emoji: string): Promise<void> {
-    await this.service.api.setMessageReaction(conversationId, Number(messageId), [
+    const { chatId } = parseTelegramConversationId(conversationId);
+    await this.service.api.setMessageReaction(chatId, Number(messageId), [
       { type: 'emoji', emoji } as any,
     ]);
   }
@@ -135,11 +164,12 @@ export class TelegramChannelAdapter implements IChannelAdapter {
     isGroup: boolean;
     metadata?: Record<string, unknown>;
   }> {
-    const chat = await this.service.api.getChat(conversationId) as any;
+    const { chatId } = parseTelegramConversationId(conversationId);
+    const chat = await this.service.api.getChat(chatId) as any;
     const isGroup = ['group', 'supergroup'].includes(chat.type);
     return {
       name: chat.title ?? chat.first_name,
-      memberCount: isGroup ? await this.service.api.getChatMemberCount(conversationId) : undefined,
+      memberCount: isGroup ? await this.service.api.getChatMemberCount(chatId) : undefined,
       isGroup,
       metadata: { type: chat.type, username: chat.username },
     };
@@ -167,7 +197,13 @@ export class TelegramChannelAdapter implements IChannelAdapter {
     const channelMessage: ChannelMessage = {
       messageId: String(msg.message_id),
       platform: 'telegram',
-      conversationId: String(msg.chat.id),
+      conversationId: (() => {
+        const threadId = (msg as any).message_thread_id;
+        // Omit General topic id=1 — treat it as the base chat conversation.
+        return typeof threadId === 'number' && threadId > 1
+          ? `${String(msg.chat.id)}#${Math.trunc(threadId)}`
+          : String(msg.chat.id);
+      })(),
       conversationType,
       sender,
       content: [{ type: 'text', text: msg.text ?? '' }],
@@ -182,7 +218,7 @@ export class TelegramChannelAdapter implements IChannelAdapter {
     const event: ChannelEvent<ChannelMessage> = {
       type: 'message',
       platform: 'telegram',
-      conversationId: String(msg.chat.id),
+      conversationId: channelMessage.conversationId,
       timestamp: channelMessage.timestamp,
       data: channelMessage,
     };
