@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.research.deep-research",
+  "name": "Deep Research Extension",
+  "version": "0.1.0",
+  "description": "Multi-source investigation engine with academic search, content scraping, aggregate search across engines, and trend discovery across platforms.",
+  "categories": ["research", "investigation"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "researchInvestigate", "displayName": "Multi-Source Investigation" },
+    { "kind": "tool", "id": "researchAcademic", "displayName": "Academic Paper Search" },
+    { "kind": "tool", "id": "researchScrape", "displayName": "Content Scraper" },
+    { "kind": "tool", "id": "researchAggregate", "displayName": "Aggregate Search" },
+    { "kind": "tool", "id": "researchTrending", "displayName": "Trend Discovery" }
+  ],
+  "requiredSecrets": ["serper.apiKey"],
+  "optionalSecrets": ["brave.apiKey", "serpapi.apiKey"],
+  "features": [
+    "Multi-source investigation with claim verification and cross-referencing",
+    "Academic paper search across arXiv, Google Scholar, and Semantic Scholar",
+    "Platform-specific content extraction (YouTube transcripts, Wikipedia, blogs)",
+    "Unified search across multiple engines (Serper, Brave, SerpAPI)",
+    "Trend discovery across Twitter, Reddit, YouTube, and HackerNews"
+  ]
+}

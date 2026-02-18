@@ -1,0 +1,46 @@
+{
+  "name": "@framers/agentos-ext-channel-twitch",
+  "version": "0.1.0",
+  "description": "Twitch IRC chat channel adapter for AgentOS (tmi.js)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "agentos",
+    "extension",
+    "channel",
+    "twitch",
+    "messaging"
+  ],
+  "author": {
+    "name": "Framers AI",
+    "url": "https://frame.dev"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@types/tmi.js": "1.8.6",
+    "tmi.js": "1.8.5"
+  }
+}

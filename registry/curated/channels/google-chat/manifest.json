@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.google-chat",
+  "name": "Google Chat Channel Extension",
+  "version": "0.1.0",
+  "description": "Google Workspace Chat via Cloud API — supports cards and threads (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["google-chat"],
+  "sdk": "google-chat",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "googleChatChannelSendMessage",
+      "displayName": "Send Google Chat Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "googleChatChannel",
+      "displayName": "Google Chat Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["googlechat.serviceAccount"],
+  "features": ["Outbound text messaging (scaffold)", "Inbound messaging via events (planned)"]
+}
+

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.mattermost",
+  "name": "Mattermost Channel Extension",
+  "version": "0.1.0",
+  "description": "Mattermost self-hosted chat via official client — supports text, threads, reactions (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["mattermost"],
+  "sdk": "@mattermost/client",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "mattermostChannelSendMessage",
+      "displayName": "Send Mattermost Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "mattermostChannel",
+      "displayName": "Mattermost Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["mattermost.url", "mattermost.token"],
+  "features": ["Outbound messaging (scaffold)", "Inbound WebSocket events (planned)"]
+}
+

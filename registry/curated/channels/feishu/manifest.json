@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.feishu",
+  "name": "Feishu / Lark Channel Extension",
+  "version": "0.1.0",
+  "description": "Feishu (Lark) bot via official SDK — supports text, cards, interactive messages (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["feishu"],
+  "sdk": "@larksuiteoapi/node-sdk",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "feishuChannelSendMessage",
+      "displayName": "Send Feishu Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "feishuChannel",
+      "displayName": "Feishu Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["feishu.appId", "feishu.appSecret"],
+  "features": ["Outbound messaging (scaffold)", "Inbound webhook subscriptions (planned)"]
+}
+

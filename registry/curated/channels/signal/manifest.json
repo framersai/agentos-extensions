@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.signal",
+  "name": "Signal Channel Extension",
+  "version": "0.1.0",
+  "description": "Signal messenger integration via signal-cli — end-to-end encrypted messaging (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["signal"],
+  "sdk": "signal-cli",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "signalChannelSendMessage",
+      "displayName": "Send Signal Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "signalChannel",
+      "displayName": "Signal Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["signal.phoneNumber"],
+  "features": ["Outbound text messaging (scaffold)", "Inbound messaging (planned)"]
+}
+

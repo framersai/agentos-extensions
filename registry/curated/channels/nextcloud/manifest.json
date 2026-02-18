@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.nextcloud",
+  "name": "NextCloud Talk Channel Extension",
+  "version": "0.1.0",
+  "description": "NextCloud Talk bot API — self-hosted, privacy-focused team messaging (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["nextcloud-talk"],
+  "sdk": "nextcloud-talk-bot",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "nextcloudChannelSendMessage",
+      "displayName": "Send NextCloud Talk Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "nextcloudChannel",
+      "displayName": "NextCloud Talk Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["nextcloud.url", "nextcloud.token"],
+  "features": ["Outbound messaging (scaffold)", "Inbound webhook subscriptions (planned)"]
+}
+

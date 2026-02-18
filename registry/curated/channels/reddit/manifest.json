@@ -1,0 +1,73 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.reddit",
+  "name": "Reddit Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Reddit interaction via snoowrap — supports posting, commenting, voting, searching, trending, subscriptions, messaging, and analytics.",
+  "categories": ["channel", "social"],
+  "platforms": ["reddit"],
+  "sdk": "snoowrap",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "redditSubmitPost",
+      "displayName": "Submit Reddit Post"
+    },
+    {
+      "kind": "tool",
+      "id": "redditComment",
+      "displayName": "Reddit Comment"
+    },
+    {
+      "kind": "tool",
+      "id": "redditVote",
+      "displayName": "Reddit Vote"
+    },
+    {
+      "kind": "tool",
+      "id": "redditSearch",
+      "displayName": "Reddit Search"
+    },
+    {
+      "kind": "tool",
+      "id": "redditTrending",
+      "displayName": "Reddit Trending"
+    },
+    {
+      "kind": "tool",
+      "id": "redditSubscribe",
+      "displayName": "Reddit Subscribe"
+    },
+    {
+      "kind": "tool",
+      "id": "redditInbox",
+      "displayName": "Reddit Inbox"
+    },
+    {
+      "kind": "tool",
+      "id": "redditAnalytics",
+      "displayName": "Reddit Analytics"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "redditChannel",
+      "displayName": "Reddit Channel Adapter"
+    }
+  ],
+  "requiredSecrets": [
+    "reddit.clientId",
+    "reddit.clientSecret",
+    "reddit.username",
+    "reddit.password"
+  ],
+  "features": [
+    "Submit text, link, image, and poll posts to subreddits",
+    "Comment on posts and reply to comments",
+    "Upvote and downvote content",
+    "Search posts and subreddits with filters",
+    "Get trending posts and subreddits",
+    "Subscribe to and unsubscribe from subreddits",
+    "Read and send private messages",
+    "Post and comment karma analytics"
+  ]
+}

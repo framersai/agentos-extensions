@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.research.content-extraction",
+  "name": "Content Extraction Extension",
+  "version": "0.1.0",
+  "description": "Extract clean text, markdown, and structured data from URLs, YouTube videos, Wikipedia articles, and PDF documents.",
+  "categories": ["research", "data"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "extractUrl", "displayName": "Extract URL Content" },
+    { "kind": "tool", "id": "extractYoutube", "displayName": "Extract YouTube Transcript" },
+    { "kind": "tool", "id": "extractWikipedia", "displayName": "Extract Wikipedia Article" },
+    { "kind": "tool", "id": "extractPdf", "displayName": "Extract PDF Content" },
+    { "kind": "tool", "id": "extractStructured", "displayName": "Extract Structured Data" }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Extract clean text or markdown from any URL using readability algorithm",
+    "Get YouTube video transcripts and metadata",
+    "Extract Wikipedia article content in multiple languages",
+    "Extract text from remote PDF documents",
+    "Extract structured data (tables, lists, metadata) with CSS selectors"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.pinterest",
+  "name": "Pinterest Channel Extension",
+  "version": "0.1.0",
+  "description": "Pinterest integration — create pins, manage boards, search content, discover trends, track analytics, and schedule posts via Pinterest API v5.",
+  "categories": ["channel", "social"],
+  "platforms": ["pinterest"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "pinterestPin", "displayName": "Create Pin" },
+    { "kind": "tool", "id": "pinterestBoard", "displayName": "Manage Board" },
+    { "kind": "tool", "id": "pinterestSearch", "displayName": "Search Pinterest" },
+    { "kind": "tool", "id": "pinterestTrending", "displayName": "Get Trending" },
+    { "kind": "tool", "id": "pinterestAnalytics", "displayName": "Pin Analytics" },
+    { "kind": "tool", "id": "pinterestSchedule", "displayName": "Schedule Pin" },
+    { "kind": "messaging-channel", "id": "pinterestChannel", "displayName": "Pinterest Channel Adapter" }
+  ],
+  "requiredSecrets": ["pinterest.accessToken"],
+  "features": [
+    "Create image, video, and idea pins",
+    "Create and manage boards and sections",
+    "Search pins and boards by keyword",
+    "Discover trending pins and topics",
+    "Track pin and board performance metrics",
+    "Schedule pins for future publishing",
+    "Carousel pin support",
+    "Hashtag management"
+  ]
+}

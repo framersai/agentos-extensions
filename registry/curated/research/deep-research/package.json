@@ -1,0 +1,27 @@
+{
+  "name": "@framers/agentos-ext-deep-research",
+  "version": "0.1.0",
+  "description": "Deep research extension for AgentOS — multi-source investigation, academic search, content scraping, aggregate search, and trend discovery.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "manifest.json"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}

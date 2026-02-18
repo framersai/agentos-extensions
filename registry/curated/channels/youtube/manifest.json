@@ -1,0 +1,34 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.youtube",
+  "name": "YouTube Channel Extension",
+  "version": "0.1.0",
+  "description": "YouTube integration — upload videos, publish Shorts, comment on videos, search content, discover trending, track analytics, manage playlists, and schedule publishing via YouTube Data API v3.",
+  "categories": ["channel", "social"],
+  "platforms": ["youtube"],
+  "sdk": "googleapis",
+  "extensions": [
+    { "kind": "tool", "id": "youtubeUpload", "displayName": "Upload Video" },
+    { "kind": "tool", "id": "youtubeShort", "displayName": "Upload Short" },
+    { "kind": "tool", "id": "youtubeComment", "displayName": "Comment on Video" },
+    { "kind": "tool", "id": "youtubeSearch", "displayName": "Search YouTube" },
+    { "kind": "tool", "id": "youtubeTrending", "displayName": "Get Trending" },
+    { "kind": "tool", "id": "youtubeAnalytics", "displayName": "Video Analytics" },
+    { "kind": "tool", "id": "youtubePlaylist", "displayName": "Manage Playlist" },
+    { "kind": "tool", "id": "youtubeSchedule", "displayName": "Schedule Video" },
+    { "kind": "messaging-channel", "id": "youtubeChannel", "displayName": "YouTube Channel Adapter" }
+  ],
+  "requiredSecrets": ["youtube.apiKey"],
+  "optionalSecrets": ["youtube.oauth.clientId", "youtube.oauth.clientSecret", "youtube.oauth.refreshToken"],
+  "features": [
+    "Upload videos with metadata (title, description, tags, category)",
+    "Publish YouTube Shorts",
+    "Comment on videos and reply to comments",
+    "Search videos, channels, and playlists",
+    "Discover trending videos by region and category",
+    "Track channel and video analytics (views, likes, subscribers)",
+    "Create and manage playlists",
+    "Schedule video publishing with privacy status transitions",
+    "Thread-based comment replies"
+  ]
+}

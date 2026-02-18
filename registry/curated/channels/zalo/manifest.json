@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.zalo",
+  "name": "Zalo Channel Extension",
+  "version": "0.1.0",
+  "description": "Zalo Official Account API — scaffold.",
+  "categories": ["channel", "communication"],
+  "platforms": ["zalo"],
+  "sdk": "zalo-api",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "zaloChannelSendMessage",
+      "displayName": "Send Zalo Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "zaloChannel",
+      "displayName": "Zalo Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["zalo.appId", "zalo.secretKey"],
+  "features": ["Outbound text messaging (scaffold)", "Inbound messaging (planned)"]
+}
+

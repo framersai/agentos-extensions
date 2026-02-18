@@ -1,0 +1,33 @@
+import type { EmailService } from '../EmailService.js';
+
+export class EmailReadTool {
+  readonly id = 'emailRead';
+  readonly name = 'emailRead';
+  readonly displayName = 'Read Inbox';
+  readonly description = 'Read emails from inbox or other IMAP folder. Returns most recent messages first.';
+  readonly category = 'communication';
+  readonly version = '0.1.0';
+  readonly hasSideEffects = false;
+
+  readonly inputSchema = {
+    type: 'object' as const,
+    properties: {
+      folder: { type: 'string', description: 'IMAP folder to read (default: INBOX)' },
+      limit: { type: 'number', description: 'Maximum number of messages to return (default: 20)' },
+    },
+  };
+
+  constructor(private service: EmailService) {}
+
+  async execute(args: {
+    folder?: string;
+    limit?: number;
+  }): Promise<{ success: boolean; data?: any; error?: string }> {
+    try {
+      const messages = await this.service.readInbox(args.folder ?? 'INBOX', args.limit ?? 20);
+      return { success: true, data: { messages, count: messages.length } };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  }
+}

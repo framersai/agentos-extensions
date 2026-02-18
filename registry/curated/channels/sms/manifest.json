@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.sms",
+  "name": "SMS Channel Extension",
+  "version": "0.1.0",
+  "description": "SMS messaging via Twilio — inbound webhook + outbound sends.",
+  "categories": ["channel", "communication"],
+  "platforms": ["sms"],
+  "sdk": "twilio",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "smsChannelSendMessage",
+      "displayName": "Send SMS"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "smsChannel",
+      "displayName": "SMS Channel Adapter"
+    },
+    {
+      "kind": "http-handler",
+      "id": "smsWebhook",
+      "displayName": "Twilio SMS Webhook"
+    }
+  ],
+  "requiredSecrets": ["twilio.accountSid", "twilio.authToken", "twilio.phoneNumber"],
+  "features": ["Outbound SMS sending", "Inbound webhook events", "Signature verification"]
+}

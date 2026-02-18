@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.instagram",
+  "name": "Instagram Channel Extension",
+  "version": "0.1.0",
+  "description": "Full Instagram integration — post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API with browser automation fallback.",
+  "categories": ["channel", "social"],
+  "platforms": ["instagram"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "instagramPost", "displayName": "Post Photo/Carousel" },
+    { "kind": "tool", "id": "instagramReel", "displayName": "Upload Reel" },
+    { "kind": "tool", "id": "instagramStory", "displayName": "Post Story" },
+    { "kind": "tool", "id": "instagramDm", "displayName": "Direct Messages" },
+    { "kind": "tool", "id": "instagramLike", "displayName": "Like Post" },
+    { "kind": "tool", "id": "instagramComment", "displayName": "Comment on Post" },
+    { "kind": "tool", "id": "instagramFollow", "displayName": "Follow/Unfollow" },
+    { "kind": "tool", "id": "instagramHashtags", "displayName": "Hashtag Research" },
+    { "kind": "tool", "id": "instagramExplore", "displayName": "Explore/Discover" },
+    { "kind": "tool", "id": "instagramAnalytics", "displayName": "Engagement Analytics" },
+    { "kind": "messaging-channel", "id": "instagramChannel", "displayName": "Instagram Channel Adapter" }
+  ],
+  "requiredSecrets": ["instagram.accessToken"],
+  "optionalSecrets": ["instagram.username", "instagram.password"],
+  "features": [
+    "Post single photos and multi-image carousels",
+    "Upload Reels with captions and hashtags",
+    "Post Stories with stickers and overlays",
+    "Send and read direct messages",
+    "Like and comment on posts",
+    "Follow and unfollow users",
+    "Research hashtag performance and reach",
+    "Browse explore/discover content",
+    "Track engagement analytics (likes, comments, reach, impressions)"
+  ]
+}

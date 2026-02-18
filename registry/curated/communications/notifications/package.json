@@ -1,0 +1,23 @@
+{
+  "name": "@framers/agentos-ext-notifications",
+  "version": "0.1.0",
+  "description": "Unified multi-channel notification router for AgentOS — send, broadcast, and schedule notifications across all configured channels.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "manifest.json"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}

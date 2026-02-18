@@ -1,0 +1,55 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.system.browser-automation",
+  "name": "Browser Automation Extension",
+  "version": "0.1.0",
+  "description": "Full browser automation for autonomous agents — navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies. Powered by Playwright with persistent session support.",
+  "categories": ["system", "automation", "browser"],
+  "sdk": "playwright",
+  "extensions": [
+    { "kind": "tool", "id": "browserNavigate", "displayName": "Navigate to URL" },
+    { "kind": "tool", "id": "browserClick", "displayName": "Click Element" },
+    { "kind": "tool", "id": "browserFill", "displayName": "Fill Input" },
+    { "kind": "tool", "id": "browserScreenshot", "displayName": "Take Screenshot" },
+    { "kind": "tool", "id": "browserExtract", "displayName": "Extract Content" },
+    { "kind": "tool", "id": "browserWait", "displayName": "Wait for Condition" },
+    { "kind": "tool", "id": "browserScroll", "displayName": "Scroll Page" },
+    { "kind": "tool", "id": "browserSnapshot", "displayName": "Page Snapshot" },
+    { "kind": "tool", "id": "browserEvaluate", "displayName": "Evaluate JavaScript" },
+    { "kind": "tool", "id": "browserSession", "displayName": "Manage Session" }
+  ],
+  "requiredSecrets": [],
+  "optionalSecrets": ["twocaptcha.apiKey", "proxy.config"],
+  "features": [
+    "Navigate to any URL with full page rendering",
+    "Click elements by CSS selector, text content, or ARIA role",
+    "Fill forms and interact with inputs",
+    "Capture full-page or element screenshots",
+    "Extract text, HTML, or structured data from DOM",
+    "Wait for selectors, navigation, or custom conditions",
+    "Smart page snapshot — inventory of all interactive elements",
+    "Execute arbitrary JavaScript in page context",
+    "Persistent login sessions via cookie/localStorage storage",
+    "CAPTCHA solving via 2captcha (reCAPTCHA, hCaptcha, Turnstile)",
+    "Proxy rotation with sticky sessions and geo-targeting",
+    "Auto-screenshot on errors for debugging"
+  ],
+  "configuration": {
+    "properties": {
+      "browser.headless": {
+        "type": "boolean",
+        "default": true,
+        "description": "Run browser in headless mode"
+      },
+      "browser.timeout": {
+        "type": "number",
+        "default": 30000,
+        "description": "Default navigation timeout in milliseconds"
+      },
+      "browser.userDataDir": {
+        "type": "string",
+        "description": "Path to persistent browser profile directory"
+      }
+    }
+  }
+}

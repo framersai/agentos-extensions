@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.tiktok",
+  "name": "TikTok Channel Extension",
+  "version": "0.1.0",
+  "description": "TikTok integration — upload videos, discover trending sounds and hashtags, search content, track analytics, and engage with the community via TikTok API for Business.",
+  "categories": ["channel", "social"],
+  "platforms": ["tiktok"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "tiktokUpload", "displayName": "Upload Video" },
+    { "kind": "tool", "id": "tiktokTrending", "displayName": "Get Trending" },
+    { "kind": "tool", "id": "tiktokSearch", "displayName": "Search TikTok" },
+    { "kind": "tool", "id": "tiktokAnalytics", "displayName": "Video Analytics" },
+    { "kind": "tool", "id": "tiktokEngage", "displayName": "Engage" },
+    { "kind": "tool", "id": "tiktokDiscover", "displayName": "Discover Content" },
+    { "kind": "messaging-channel", "id": "tiktokChannel", "displayName": "TikTok Channel Adapter" }
+  ],
+  "requiredSecrets": ["tiktok.accessToken"],
+  "optionalSecrets": ["tiktok.username", "tiktok.password"],
+  "features": [
+    "Upload videos with captions and hashtags",
+    "Discover trending sounds and hashtags",
+    "Search videos and creators",
+    "Track video performance metrics",
+    "Like, comment, and share videos",
+    "Browse For You page content",
+    "Engagement metrics and audience insights"
+  ]
+}

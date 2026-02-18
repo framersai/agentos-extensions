@@ -92,8 +92,16 @@ export class TelnyxVoiceService {
     try {
       // Dynamic import — the telnyx package exports a factory function
       const telnyxModule = await import('telnyx');
-      const TelnyxFactory = telnyxModule.default ?? telnyxModule;
-      this.client = TelnyxFactory(this.config.apiKey) as unknown as TelnyxClient;
+      const TelnyxFactory = (telnyxModule as any).default ?? telnyxModule;
+      // The telnyx SDK is callable in CommonJS usage (factory), but typings may
+      // model it as a constructable class. Support both shapes.
+      let client: any;
+      try {
+        client = (TelnyxFactory as any)(this.config.apiKey);
+      } catch {
+        client = new (TelnyxFactory as any)(this.config.apiKey);
+      }
+      this.client = client as TelnyxClient;
       this.running = true;
     } catch (err) {
       throw new Error(

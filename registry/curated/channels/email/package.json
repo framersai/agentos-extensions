@@ -1,0 +1,29 @@
+{
+  "name": "@framers/agentos-ext-channel-email",
+  "version": "0.1.0",
+  "description": "Email channel adapter for AgentOS — send, read, search, extract codes, and reply to emails via SMTP/IMAP.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "manifest.json"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.0",
+    "imapflow": "^1.0.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/node": "^20.0.0",
+    "@types/nodemailer": "^6.4.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.email",
+  "name": "Email Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional email integration — send, read, search, extract verification codes, and reply to email threads via SMTP and IMAP.",
+  "categories": ["channel", "communication"],
+  "platforms": ["email"],
+  "sdk": "nodemailer",
+  "extensions": [
+    { "kind": "tool", "id": "emailSend", "displayName": "Send Email" },
+    { "kind": "tool", "id": "emailRead", "displayName": "Read Inbox" },
+    { "kind": "tool", "id": "emailSearch", "displayName": "Search Emails" },
+    { "kind": "tool", "id": "emailExtractCodes", "displayName": "Extract Verification Codes" },
+    { "kind": "tool", "id": "emailReply", "displayName": "Reply to Email" },
+    { "kind": "messaging-channel", "id": "emailChannel", "displayName": "Email Channel Adapter" }
+  ],
+  "requiredSecrets": ["email.smtp.host", "email.smtp.user", "email.smtp.password"],
+  "optionalSecrets": ["email.imap.host", "email.imap.user", "email.imap.password"],
+  "features": [
+    "Send emails with text, HTML, and attachments via SMTP",
+    "Read inbox and other IMAP folders",
+    "Search emails by query, folder, and date range",
+    "Extract verification codes and OTPs from email bodies",
+    "Reply to email threads maintaining conversation context"
+  ]
+}

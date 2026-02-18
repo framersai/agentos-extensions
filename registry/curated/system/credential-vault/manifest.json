@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.system.credential-vault",
+  "name": "Credential Vault Extension",
+  "version": "0.1.0",
+  "description": "Encrypted in-memory credential storage with AES-256-GCM encryption, OAuth token rotation, and credential import/export.",
+  "categories": ["system", "security"],
+  "extensions": [
+    { "kind": "tool", "id": "credentialsSet", "displayName": "Store Credential" },
+    { "kind": "tool", "id": "credentialsGet", "displayName": "Retrieve Credential" },
+    { "kind": "tool", "id": "credentialsList", "displayName": "List Credentials" },
+    { "kind": "tool", "id": "credentialsRotate", "displayName": "Rotate Credential" },
+    { "kind": "tool", "id": "credentialsImport", "displayName": "Import Credentials" }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "AES-256-GCM encrypted in-memory credential storage",
+    "Store and retrieve credentials by platform and key",
+    "List stored credentials with masked values",
+    "Rotate OAuth tokens and API keys",
+    "Import credentials from JSON or CSV format"
+  ]
+}

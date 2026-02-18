@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.nostr",
+  "name": "Nostr Channel Extension",
+  "version": "0.1.0",
+  "description": "Nostr relay messaging via nostr-tools — decentralized, censorship-resistant protocol (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["nostr"],
+  "sdk": "nostr-tools",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "nostrChannelSendMessage",
+      "displayName": "Send Nostr Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "nostrChannel",
+      "displayName": "Nostr Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["nostr.privateKey"],
+  "features": ["Outbound text messaging (scaffold)", "Inbound DM subscriptions (planned)"]
+}
+

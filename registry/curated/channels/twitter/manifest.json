@@ -1,0 +1,39 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.twitter",
+  "name": "Twitter/X Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Twitter/X integration — post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
+  "categories": ["channel", "social"],
+  "platforms": ["twitter"],
+  "sdk": "twitter-api-v2",
+  "extensions": [
+    { "kind": "tool", "id": "twitterPost", "displayName": "Post Tweet" },
+    { "kind": "tool", "id": "twitterReply", "displayName": "Reply to Tweet" },
+    { "kind": "tool", "id": "twitterQuote", "displayName": "Quote Tweet" },
+    { "kind": "tool", "id": "twitterLike", "displayName": "Like Tweet" },
+    { "kind": "tool", "id": "twitterRetweet", "displayName": "Retweet" },
+    { "kind": "tool", "id": "twitterSearch", "displayName": "Search Tweets" },
+    { "kind": "tool", "id": "twitterTrending", "displayName": "Get Trending Topics" },
+    { "kind": "tool", "id": "twitterTimeline", "displayName": "Get Timeline" },
+    { "kind": "tool", "id": "twitterDm", "displayName": "Direct Messages" },
+    { "kind": "tool", "id": "twitterAnalytics", "displayName": "Engagement Analytics" },
+    { "kind": "tool", "id": "twitterSchedule", "displayName": "Schedule Tweet" },
+    { "kind": "tool", "id": "twitterThread", "displayName": "Post Thread" },
+    { "kind": "messaging-channel", "id": "twitterChannel", "displayName": "Twitter Channel Adapter" }
+  ],
+  "requiredSecrets": ["twitter.bearerToken"],
+  "optionalSecrets": ["twitter.apiKey", "twitter.apiSecret", "twitter.accessToken", "twitter.accessSecret"],
+  "features": [
+    "Post tweets with text, images, video, and polls",
+    "Reply to tweets and quote tweets",
+    "Post multi-tweet threads",
+    "Like, retweet, and undo engagement",
+    "Search tweets by query with filters",
+    "Get trending topics by location",
+    "Read home timeline",
+    "Send and read direct messages",
+    "Track engagement analytics (likes, retweets, impressions)",
+    "Schedule tweets for future posting"
+  ]
+}

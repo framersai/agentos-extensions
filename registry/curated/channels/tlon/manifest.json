@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.tlon",
+  "name": "Tlon (Urbit) Channel Extension",
+  "version": "0.1.0",
+  "description": "Tlon / Urbit messaging — peer-to-peer, identity-sovereign communication (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["tlon"],
+  "sdk": "tlon-api",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "tlonChannelSendMessage",
+      "displayName": "Send Tlon (Urbit) Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "tlonChannel",
+      "displayName": "Tlon Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["tlon.shipUrl", "tlon.code"],
+  "features": ["Outbound messaging (scaffold)", "Inbound subscriptions (planned)"]
+}
+

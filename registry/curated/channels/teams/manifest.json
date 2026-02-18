@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.teams",
+  "name": "Microsoft Teams Channel Extension",
+  "version": "0.1.0",
+  "description": "Microsoft Teams bot via Teams AI library — supports adaptive cards (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["teams"],
+  "sdk": "teams-ai",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "teamsChannelSendMessage",
+      "displayName": "Send Teams Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "teamsChannel",
+      "displayName": "Teams Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["teams.appId", "teams.appPassword"],
+  "features": ["Outbound text messaging (scaffold)", "Inbound messaging via bot framework (planned)"]
+}
+

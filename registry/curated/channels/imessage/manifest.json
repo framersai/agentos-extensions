@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.imessage",
+  "name": "iMessage Channel Extension",
+  "version": "0.1.0",
+  "description": "iMessage bridge via BlueBubbles — macOS server required (scaffold).",
+  "categories": ["channel", "communication"],
+  "platforms": ["imessage"],
+  "sdk": "bluebubbles",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "imessageChannelSendMessage",
+      "displayName": "Send iMessage"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "imessageChannel",
+      "displayName": "iMessage Channel Adapter"
+    }
+  ],
+  "requiredSecrets": ["imessage.serverUrl", "imessage.password"],
+  "features": ["Outbound text messaging (scaffold)", "Inbound messaging (planned)"]
+}
+

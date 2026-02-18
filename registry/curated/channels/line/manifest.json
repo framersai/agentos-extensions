@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.line",
+  "name": "LINE Channel Extension",
+  "version": "0.1.0",
+  "description": "LINE Messaging API — inbound webhook (signature-verified) + outbound messaging.",
+  "categories": ["channel", "communication"],
+  "platforms": ["line"],
+  "sdk": "@line/bot-sdk",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "lineChannelSendMessage",
+      "displayName": "Send LINE Message"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "lineChannel",
+      "displayName": "LINE Channel Adapter"
+    },
+    {
+      "kind": "http-handler",
+      "id": "lineWebhook",
+      "displayName": "LINE Webhook Handler"
+    }
+  ],
+  "requiredSecrets": ["line.channelAccessToken", "line.channelSecret"],
+  "features": ["Outbound text messaging", "Inbound webhook events", "Signature verification"]
+}

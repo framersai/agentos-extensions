@@ -43,6 +43,11 @@ All extensions are published to npm under the `@framers` scope.
 | [`@framers/agentos-ext-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram-bot)](https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot) |
 | [`@framers/agentos-ext-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-anchor-providers)](https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers) |
 | [`@framers/agentos-ext-tip-ingestion`](./registry/curated/provenance/wunderland-tip-ingestion) | Tip content processing pipeline | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-tip-ingestion)](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion) |
+| [`@framers/agentos-ext-browser-automation`](./registry/curated/system/browser-automation) | Full browser automation (Playwright) — 10 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-browser-automation)](https://www.npmjs.com/package/@framers/agentos-ext-browser-automation) |
+| [`@framers/agentos-ext-deep-research`](./registry/curated/research/deep-research) | Multi-source research & investigation — 5 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-deep-research)](https://www.npmjs.com/package/@framers/agentos-ext-deep-research) |
+| [`@framers/agentos-ext-content-extraction`](./registry/curated/research/content-extraction) | Content extraction (URLs, YouTube, PDF) — 5 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-content-extraction)](https://www.npmjs.com/package/@framers/agentos-ext-content-extraction) |
+| [`@framers/agentos-ext-credential-vault`](./registry/curated/system/credential-vault) | Encrypted credential management — 5 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-credential-vault)](https://www.npmjs.com/package/@framers/agentos-ext-credential-vault) |
+| [`@framers/agentos-ext-notifications`](./registry/curated/communications/notifications) | Multi-channel notification router — 3 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-notifications)](https://www.npmjs.com/package/@framers/agentos-ext-notifications) |
 
 ### Channel Adapters
 
@@ -53,6 +58,13 @@ All extensions are published to npm under the `@framers` scope.
 | [`@framers/agentos-ext-channel-discord`](./registry/curated/channels/discord) | Discord messaging channel (discord.js) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-discord)](https://www.npmjs.com/package/@framers/agentos-ext-channel-discord) |
 | [`@framers/agentos-ext-channel-slack`](./registry/curated/channels/slack) | Slack messaging channel (Bolt) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-slack)](https://www.npmjs.com/package/@framers/agentos-ext-channel-slack) |
 | [`@framers/agentos-ext-channel-webchat`](./registry/curated/channels/webchat) | Built-in WebChat channel (Socket.IO) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-webchat)](https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat) |
+| [`@framers/agentos-ext-channel-twitter`](./registry/curated/channels/twitter) | Twitter/X social channel (twitter-api-v2) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-twitter)](https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter) |
+| [`@framers/agentos-ext-channel-instagram`](./registry/curated/channels/instagram) | Instagram social channel (Graph API) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-instagram)](https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram) |
+| [`@framers/agentos-ext-channel-reddit`](./registry/curated/channels/reddit) | Reddit social channel (snoowrap) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-reddit)](https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit) |
+| [`@framers/agentos-ext-channel-youtube`](./registry/curated/channels/youtube) | YouTube social channel (googleapis) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-youtube)](https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube) |
+| [`@framers/agentos-ext-channel-pinterest`](./registry/curated/channels/pinterest) | Pinterest social channel (API v5) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-pinterest)](https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest) |
+| [`@framers/agentos-ext-channel-tiktok`](./registry/curated/channels/tiktok) | TikTok social channel (API for Business) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-tiktok)](https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok) |
+| [`@framers/agentos-ext-channel-email`](./registry/curated/channels/email) | Email messaging channel (nodemailer/imapflow) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-email)](https://www.npmjs.com/package/@framers/agentos-ext-channel-email) |
 
 ## Repository Structure
 
@@ -69,12 +81,15 @@ agentos-extensions/
 ├── registry/
 │   ├── curated/           # Official & verified extensions
 │   │   ├── auth/          # Authentication & subscriptions
-│   │   ├── communications/# Messaging (Telegram bot)
+│   │   ├── channels/      # Messaging & social channels (26 platforms)
+│   │   ├── communications/# Telegram bot, notifications
 │   │   ├── integrations/  # External services (Telegram API)
+│   │   ├── media/         # Giphy, image search, voice synthesis
 │   │   ├── provenance/    # On-chain anchoring & tip ingestion
-│   │   ├── research/      # Web search & browser automation
-│   │   ├── channels/       # Messaging channels (Telegram, WhatsApp, Discord, Slack, WebChat)
-│   │   └── system/        # CLI executor
+│   │   ├── research/      # Web search, deep research, content extraction
+│   │   ├── system/        # CLI executor, browser automation, credential vault
+│   │   ├── voice/         # Twilio, Telnyx, Plivo voice providers
+│   │   └── productivity/  # Google Calendar, Gmail
 │   └── community/         # Community-contributed extensions
 ├── scripts/               # Registry build & scaffolding tools
 ├── registry.json          # Auto-generated extension manifest
@@ -161,6 +176,22 @@ await agentos.initialize({
 | `discord.botToken` | `DISCORD_BOT_TOKEN` | channel-discord |
 | `slack.botToken` | `SLACK_BOT_TOKEN` | channel-slack |
 | `slack.appToken` | `SLACK_APP_TOKEN` | channel-slack |
+| `twitter.bearerToken` | `TWITTER_BEARER_TOKEN` | channel-twitter |
+| `twitter.apiKey` | `TWITTER_API_KEY` | channel-twitter |
+| `twitter.apiSecret` | `TWITTER_API_SECRET` | channel-twitter |
+| `twitter.accessToken` | `TWITTER_ACCESS_TOKEN` | channel-twitter |
+| `twitter.accessSecret` | `TWITTER_ACCESS_SECRET` | channel-twitter |
+| `instagram.accessToken` | `INSTAGRAM_ACCESS_TOKEN` | channel-instagram |
+| `reddit.clientId` | `REDDIT_CLIENT_ID` | channel-reddit |
+| `reddit.clientSecret` | `REDDIT_CLIENT_SECRET` | channel-reddit |
+| `reddit.username` | `REDDIT_USERNAME` | channel-reddit |
+| `reddit.password` | `REDDIT_PASSWORD` | channel-reddit |
+| `youtube.apiKey` | `YOUTUBE_API_KEY` | channel-youtube |
+| `pinterest.accessToken` | `PINTEREST_ACCESS_TOKEN` | channel-pinterest |
+| `tiktok.accessToken` | `TIKTOK_ACCESS_TOKEN` | channel-tiktok |
+| `email.smtp.host` | `EMAIL_SMTP_HOST` | channel-email |
+| `email.smtp.user` | `EMAIL_SMTP_USER` | channel-email |
+| `email.smtp.password` | `EMAIL_SMTP_PASSWORD` | channel-email |
 
 #### Selective loading examples
 
