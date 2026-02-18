@@ -3,7 +3,7 @@
   "id": "com.framers.channels.nextcloud",
   "name": "NextCloud Talk Channel Extension",
   "version": "0.1.0",
-  "description": "NextCloud Talk bot API — self-hosted, privacy-focused team messaging (scaffold).",
+  "description": "Nextcloud Talk bot API — self-hosted, privacy-focused team messaging via webhook bots.",
   "categories": ["channel", "communication"],
   "platforms": ["nextcloud-talk"],
   "sdk": "nextcloud-talk-bot",
@@ -17,9 +17,13 @@
       "kind": "messaging-channel",
       "id": "nextcloudChannel",
       "displayName": "NextCloud Talk Channel Adapter"
+    },
+    {
+      "kind": "http-handler",
+      "id": "nextcloudTalkWebhook",
+      "displayName": "Nextcloud Talk Webhook Handler"
     }
   ],
   "requiredSecrets": ["nextcloud.url", "nextcloud.token"],
-  "features": ["Outbound messaging (scaffold)", "Inbound webhook subscriptions (planned)"]
+  "features": ["Outbound messaging", "Inbound webhooks (Nextcloud Talk bot)"]
 }
-
