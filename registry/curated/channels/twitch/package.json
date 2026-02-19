@@ -42,5 +42,10 @@
   "dependencies": {
     "@types/tmi.js": "1.8.6",
     "tmi.js": "1.8.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/channels/twitch"
   }
 }

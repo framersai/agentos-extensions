@@ -4,7 +4,10 @@
   "description": "Deep research extension for AgentOS — multi-source investigation, academic search, content scraping, aggregate search, and trend discovery.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "manifest.json"],
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -23,5 +26,10 @@
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/research/deep-research"
   }
 }

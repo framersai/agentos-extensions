@@ -4,7 +4,10 @@
   "description": "Email channel adapter for AgentOS — send, read, search, extract codes, and reply to emails via SMTP/IMAP.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "manifest.json"],
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -25,5 +28,10 @@
     "@types/nodemailer": "^6.4.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/channels/email"
   }
 }

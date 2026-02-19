@@ -4,7 +4,10 @@
   "description": "YouTube channel adapter for AgentOS — upload videos, publish Shorts, comment, search, track analytics, manage playlists, and schedule via YouTube Data API v3.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "manifest.json"],
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -24,5 +27,12 @@
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "engines": { "node": ">=18.0.0" }
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/channels/youtube"
+  }
 }

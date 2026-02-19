@@ -11,10 +11,22 @@
     "test:watch": "vitest watch",
     "clean": "rm -rf dist"
   },
-  "keywords": ["agentos", "extension", "channel", "nostr", "messaging"],
-  "author": { "name": "Framers AI", "url": "https://frame.dev" },
+  "keywords": [
+    "agentos",
+    "extension",
+    "channel",
+    "nostr",
+    "messaging"
+  ],
+  "author": {
+    "name": "Framers AI",
+    "url": "https://frame.dev"
+  },
   "license": "MIT",
-  "files": ["dist", "manifest.json"],
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
   "peerDependencies": {
     "@framers/agentos": "^0.1.0"
   },
@@ -24,9 +36,16 @@
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "engines": { "node": ">=18.0.0" },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "nostr-tools": "2.23.1",
     "ws": "^8.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/channels/nostr"
   }
 }

@@ -42,5 +42,10 @@
   },
   "dependencies": {
     "twilio": "^5.12.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/channels/sms"
   }
 }

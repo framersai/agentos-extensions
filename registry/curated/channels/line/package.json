@@ -41,5 +41,10 @@
   },
   "dependencies": {
     "@line/bot-sdk": "10.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/channels/line"
   }
 }
