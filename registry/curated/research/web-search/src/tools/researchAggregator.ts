@@ -7,13 +7,14 @@
  */
 
 import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
-import type { ProviderResponse } from '../services/searchProvider.js';
+import type { ProviderResponse, MultiSearchResponse } from '../services/searchProvider.js';
 import { SearchProviderService } from '../services/searchProvider.js';
 
 export interface ResearchAggregatorInput {
   topic: string;
   sources?: number;
   depth?: 'quick' | 'moderate' | 'comprehensive';
+  multiSearch?: boolean;
 }
 
 export interface ResearchAggregatorOutput {
@@ -55,13 +56,22 @@ export class ResearchAggregatorTool implements ITool<ResearchAggregatorInput, Re
         enum: ['quick', 'moderate', 'comprehensive'],
         default: 'moderate',
       },
+      multiSearch: {
+        type: 'boolean',
+        description:
+          'When true, each search query fans out to ALL available providers in parallel, returning merged and deduplicated results ranked by cross-provider agreement.',
+        default: false,
+      },
     },
     additionalProperties: false,
   };
 
   public readonly requiredCapabilities = ['capability:web_search'];
 
-  constructor(private readonly searchService: SearchProviderService) {}
+  constructor(
+    private readonly searchService: SearchProviderService,
+    private readonly defaultMultiSearch: boolean = false,
+  ) {}
 
   async execute(
     input: ResearchAggregatorInput,
@@ -70,22 +80,43 @@ export class ResearchAggregatorTool implements ITool<ResearchAggregatorInput, Re
     try {
       const sources = input.sources || 3;
       const depth = input.depth || 'moderate';
+      const useMultiSearch = input.multiSearch ?? this.defaultMultiSearch;
 
       const queries = this.generateSearchQueries(input.topic, sources, depth);
 
       const perQueryMaxResults = depth === 'quick' ? 5 : depth === 'moderate' ? 10 : 15;
 
-      const searchPromises = queries.map((query) =>
-        this.searchService
-          .search(query, { maxResults: perQueryMaxResults })
-          .catch((err) => ({
-            provider: 'error',
-            results: [],
-            metadata: { query, error: err?.message || String(err), timestamp: new Date().toISOString() },
-          }))
-      );
+      let searchResults: ProviderResponse[];
 
-      const searchResults: ProviderResponse[] = (await Promise.all(searchPromises)) as any;
+      if (useMultiSearch) {
+        // Fan out each query to ALL providers in parallel, then normalize into ProviderResponse shape
+        const multiPromises = queries.map((query) =>
+          this.searchService
+            .multiSearch(query, { maxResults: perQueryMaxResults })
+            .then((multi): ProviderResponse => ({
+              provider: 'multi',
+              results: multi.results,
+              metadata: { query, timestamp: multi.metadata.timestamp },
+            }))
+            .catch((err) => ({
+              provider: 'error',
+              results: [],
+              metadata: { query, error: err?.message || String(err), timestamp: new Date().toISOString() },
+            }))
+        );
+        searchResults = (await Promise.all(multiPromises)) as ProviderResponse[];
+      } else {
+        const searchPromises = queries.map((query) =>
+          this.searchService
+            .search(query, { maxResults: perQueryMaxResults })
+            .catch((err) => ({
+              provider: 'error',
+              results: [],
+              metadata: { query, error: err?.message || String(err), timestamp: new Date().toISOString() },
+            }))
+        );
+        searchResults = (await Promise.all(searchPromises)) as ProviderResponse[];
+      }
 
       const aggregatedResults = this.aggregateResults(searchResults, input.topic);
 
@@ -124,6 +155,10 @@ export class ResearchAggregatorTool implements ITool<ResearchAggregatorInput, Re
       if (!['quick', 'moderate', 'comprehensive'].includes(input.depth)) {
         errors.push('Depth must be quick, moderate, or comprehensive');
       }
+    }
+
+    if (input.multiSearch !== undefined && typeof input.multiSearch !== 'boolean') {
+      errors.push('multiSearch must be a boolean');
     }
 
     return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
@@ -233,6 +268,11 @@ export class ResearchAggregatorTool implements ITool<ResearchAggregatorInput, Re
     if (titleWords.includes('official')) score += 10;
     if (titleWords.includes('guide')) score += 5;
     if (titleWords.includes('tutorial')) score += 5;
+
+    // Bonus for multi-search results with cross-provider agreement
+    if (typeof result.confidenceScore === 'number') {
+      score += (result.confidenceScore / 100) * 20;
+    }
 
     return Math.min(100, score);
   }

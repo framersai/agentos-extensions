@@ -31,6 +31,8 @@ export interface WebSearchExtensionOptions {
     maxRequests: number;
     windowMs: number;
   };
+  /** Default multi-provider parallel search for all search tools */
+  defaultMultiSearch?: boolean;
   /** Extension priority in the stack */
   priority?: number;
 }
@@ -71,10 +73,12 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     rateLimit: options.rateLimit
   });
   
+  const defaultMultiSearch = options.defaultMultiSearch ?? false;
+
   // Create tool instances
-  const webSearchTool = new WebSearchTool(searchService);
-  const researchAggregator = new ResearchAggregatorTool(searchService);
-  const factCheckTool = new FactCheckTool(searchService);
+  const webSearchTool = new WebSearchTool(searchService, defaultMultiSearch);
+  const researchAggregator = new ResearchAggregatorTool(searchService, defaultMultiSearch);
+  const factCheckTool = new FactCheckTool(searchService, defaultMultiSearch);
   
   return {
     name: '@framers/agentos-ext-web-search',
@@ -126,7 +130,7 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
 // Export types for consumers
 export { WebSearchTool, ResearchAggregatorTool, FactCheckTool };
 export { SearchProviderService, SearchResult, ProviderResponse } from './services/searchProvider.js';
-export type { SearchProviderConfig } from './services/searchProvider.js';
+export type { SearchProviderConfig, MultiSearchResult, MultiSearchResponse } from './services/searchProvider.js';
 
 // Default export for convenience
 export default createExtensionPack;

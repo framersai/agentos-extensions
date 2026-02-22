@@ -7,13 +7,14 @@
  */
 
 import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
-import type { ProviderResponse } from '../services/searchProvider.js';
+import type { ProviderResponse, MultiSearchResponse } from '../services/searchProvider.js';
 import { SearchProviderService } from '../services/searchProvider.js';
 
 export interface FactCheckInput {
   statement: string;
   checkSources?: boolean;
   confidence?: 'low' | 'medium' | 'high';
+  multiSearch?: boolean;
 }
 
 export interface FactCheckOutput {
@@ -58,32 +59,61 @@ export class FactCheckTool implements ITool<FactCheckInput, FactCheckOutput> {
         enum: ['low', 'medium', 'high'],
         default: 'medium',
       },
+      multiSearch: {
+        type: 'boolean',
+        description:
+          'When true, each verification query fans out to ALL available providers in parallel for higher-confidence cross-provider consensus.',
+        default: false,
+      },
     },
     additionalProperties: false,
   };
 
   public readonly requiredCapabilities = ['capability:web_search'];
 
-  constructor(private readonly searchService: SearchProviderService) {}
+  constructor(
+    private readonly searchService: SearchProviderService,
+    private readonly defaultMultiSearch: boolean = false,
+  ) {}
 
   async execute(input: FactCheckInput, _context: ToolExecutionContext): Promise<ToolExecutionResult<FactCheckOutput>> {
     try {
       const checkSources = input.checkSources !== false;
       const requiredConfidence = input.confidence || 'medium';
+      const useMultiSearch = input.multiSearch ?? this.defaultMultiSearch;
 
       const queries = this.generateFactCheckQueries(input.statement);
 
-      const searchPromises = queries.map((query) =>
-        this.searchService
-          .search(query, { maxResults: 5 })
-          .catch((err) => ({
-            provider: 'error',
-            results: [],
-            metadata: { query, error: err?.message || String(err), timestamp: new Date().toISOString() },
-          }))
-      );
+      let searchResults: ProviderResponse[];
 
-      const searchResults: ProviderResponse[] = (await Promise.all(searchPromises)) as any;
+      if (useMultiSearch) {
+        const multiPromises = queries.map((query) =>
+          this.searchService
+            .multiSearch(query, { maxResults: 5 })
+            .then((multi): ProviderResponse => ({
+              provider: 'multi',
+              results: multi.results,
+              metadata: { query, timestamp: multi.metadata.timestamp },
+            }))
+            .catch((err) => ({
+              provider: 'error',
+              results: [],
+              metadata: { query, error: err?.message || String(err), timestamp: new Date().toISOString() },
+            }))
+        );
+        searchResults = (await Promise.all(multiPromises)) as ProviderResponse[];
+      } else {
+        const searchPromises = queries.map((query) =>
+          this.searchService
+            .search(query, { maxResults: 5 })
+            .catch((err) => ({
+              provider: 'error',
+              results: [],
+              metadata: { query, error: err?.message || String(err), timestamp: new Date().toISOString() },
+            }))
+        );
+        searchResults = (await Promise.all(searchPromises)) as ProviderResponse[];
+      }
 
       const analysis = this.analyzeFactCheckResults(input.statement, searchResults, requiredConfidence);
       const sources = checkSources ? this.compileSources(searchResults) : [];
@@ -129,6 +159,10 @@ export class FactCheckTool implements ITool<FactCheckInput, FactCheckOutput> {
       errors.push('checkSources must be a boolean');
     }
 
+    if (input.multiSearch !== undefined && typeof input.multiSearch !== 'boolean') {
+      errors.push('multiSearch must be a boolean');
+    }
+
     return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
   }
 
@@ -170,7 +204,9 @@ export class FactCheckTool implements ITool<FactCheckInput, FactCheckOutput> {
           String(result.url || '').includes('factcheck') ||
           String(result.url || '').includes('politifact');
 
-        const weight = isFactCheckSite ? 2 : 1;
+        // Multi-search results with cross-provider agreement get extra weight
+        const agreementBonus = typeof result.agreementCount === 'number' ? Math.max(0, result.agreementCount - 1) : 0;
+        const weight = (isFactCheckSite ? 2 : 1) + agreementBonus;
 
         const hasNegative = negativeIndicators.some((ind) => contentLower.includes(ind));
         const hasPositive = positiveIndicators.some((ind) => contentLower.includes(ind));

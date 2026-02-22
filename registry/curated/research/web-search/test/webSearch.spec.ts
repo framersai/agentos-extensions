@@ -121,6 +121,63 @@ describe('WebSearchTool', () => {
     });
   });
   
+  describe('multiSearch', () => {
+    it('should call multiSearch when multiSearch input is true', async () => {
+      const mockMultiResults = {
+        results: [{ title: 'Multi', url: 'https://example.com', snippet: 'Multi result', providers: ['serper', 'brave'], agreementCount: 2, confidenceScore: 80, providerPositions: { serper: 1, brave: 1 } }],
+        metadata: { query: 'test', timestamp: new Date().toISOString(), totalResponseTime: 100, providersQueried: ['serper', 'brave'], providersSucceeded: ['serper', 'brave'], providersFailed: [], totalRawResults: 2, deduplicatedCount: 1 },
+      };
+      mockSearchService.multiSearch = vi.fn().mockResolvedValue(mockMultiResults);
+
+      const result = await tool.execute({ query: 'test', multiSearch: true }, ctx);
+
+      expect(mockSearchService.multiSearch).toHaveBeenCalledWith('test', { maxResults: 10 });
+      expect(result.success).toBe(true);
+      expect(result.output).toEqual(mockMultiResults);
+    });
+
+    it('should use defaultMultiSearch from constructor when input omits multiSearch', async () => {
+      const toolWithDefault = new WebSearchTool(mockSearchService, true);
+      const mockMultiResults = {
+        results: [],
+        metadata: { query: 'test', timestamp: new Date().toISOString(), totalResponseTime: 50, providersQueried: [], providersSucceeded: [], providersFailed: [], totalRawResults: 0, deduplicatedCount: 0 },
+      };
+      mockSearchService.multiSearch = vi.fn().mockResolvedValue(mockMultiResults);
+
+      await toolWithDefault.execute({ query: 'test' }, ctx);
+
+      expect(mockSearchService.multiSearch).toHaveBeenCalled();
+    });
+
+    it('should fall back to single search when provider is specified even with multiSearch', async () => {
+      mockSearchService.search = vi.fn().mockResolvedValue({ provider: 'serper', results: [], metadata: {} });
+
+      await tool.execute({ query: 'test', multiSearch: true, provider: 'serper' }, ctx);
+
+      // When provider is specified, multiSearch is ignored — single provider search is used
+      expect(mockSearchService.search).toHaveBeenCalled();
+    });
+  });
+
+  describe('validateArgs - multiSearch', () => {
+    it('should reject multiSearch + provider combination', () => {
+      const result = tool.validateArgs({ query: 'test', multiSearch: true, provider: 'serper' });
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain('Cannot specify both multiSearch and a specific provider');
+    });
+
+    it('should reject non-boolean multiSearch', () => {
+      const result = tool.validateArgs({ query: 'test', multiSearch: 'yes' });
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain('multiSearch must be a boolean');
+    });
+
+    it('should accept multiSearch: true without provider', () => {
+      const result = tool.validateArgs({ query: 'test', multiSearch: true });
+      expect(result.isValid).toBe(true);
+    });
+  });
+
   describe('inputSchema', () => {
     it('should return proper JSON schema', () => {
       const schema = tool.inputSchema;
@@ -129,6 +186,13 @@ describe('WebSearchTool', () => {
       expect(schema.properties.query.type).toBe('string');
       expect(schema.properties.maxResults.type).toBe('integer');
       expect(schema.properties.provider.enum).toContain('serper');
+    });
+
+    it('should include multiSearch in schema', () => {
+      const schema = tool.inputSchema;
+      expect(schema.properties.multiSearch).toBeDefined();
+      expect(schema.properties.multiSearch.type).toBe('boolean');
+      expect(schema.properties.multiSearch.default).toBe(false);
     });
   });
 });

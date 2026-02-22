@@ -160,6 +160,97 @@ describe('Web Search Extension Integration', () => {
     });
   });
   
+  describe('Multi-Search Integration', () => {
+    it('should create tools with defaultMultiSearch option', () => {
+      const multiContext = {
+        options: {
+          ...context.options,
+          defaultMultiSearch: true,
+        },
+        logger: context.logger,
+      } as any;
+
+      const multiPack = createExtensionPack(multiContext);
+      expect(multiPack.descriptors).toHaveLength(3);
+
+      // Verify tools were created (defaultMultiSearch is internal, just check they still work)
+      const webSearch = multiPack.descriptors.find((d: any) => d.id === 'web_search');
+      expect(webSearch).toBeDefined();
+    });
+
+    it('should execute web_search with multiSearch: true', async () => {
+      const webSearchTool = extensionPack.descriptors.find(
+        (d: any) => d.id === 'web_search'
+      ).payload;
+
+      const result = await webSearchTool.execute({
+        query: 'multi search test',
+        multiSearch: true,
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
+      });
+
+      expect(result.success).toBe(true);
+      // Multi-search returns metadata with provider info
+      expect(result.output).toHaveProperty('metadata');
+    });
+
+    it('should execute research_aggregate with multiSearch: true', async () => {
+      const aggregatorTool = extensionPack.descriptors.find(
+        (d: any) => d.id === 'research_aggregate'
+      ).payload;
+
+      const result = await aggregatorTool.execute({
+        topic: 'test topic',
+        sources: 1,
+        depth: 'quick',
+        multiSearch: true,
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.output).toHaveProperty('aggregatedResults');
+    });
+
+    it('should execute fact_check with multiSearch: true', async () => {
+      const factCheckTool = extensionPack.descriptors.find(
+        (d: any) => d.id === 'fact_check'
+      ).payload;
+
+      const result = await factCheckTool.execute({
+        statement: 'The sky is blue because of Rayleigh scattering',
+        multiSearch: true,
+      }, {
+        gmiId: 'test-gmi',
+        personaId: 'test-persona',
+        userContext: { userId: 'test-user' },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.output).toHaveProperty('verdict');
+    });
+
+    it('should reject multiSearch + provider on web_search validation', () => {
+      const webSearchTool = extensionPack.descriptors.find(
+        (d: any) => d.id === 'web_search'
+      ).payload;
+
+      const validation = webSearchTool.validateArgs({
+        query: 'test',
+        multiSearch: true,
+        provider: 'serper',
+      });
+
+      expect(validation.isValid).toBe(false);
+      expect(validation.errors).toContain('Cannot specify both multiSearch and a specific provider');
+    });
+  });
+
   describe('Lifecycle Hooks', () => {
     it('should call onActivate when extension is activated', async () => {
       const logSpy = vi.fn();

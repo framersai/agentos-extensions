@@ -37,6 +37,37 @@ export interface ProviderResponse {
 }
 
 /**
+ * A search result enriched with cross-provider agreement data.
+ */
+export interface MultiSearchResult extends SearchResult {
+  /** Which providers returned this URL */
+  providers: string[];
+  /** Number of providers that returned this URL */
+  agreementCount: number;
+  /** Confidence score (0-100) based on cross-provider agreement + position */
+  confidenceScore: number;
+  /** The position this result appeared at in each provider's results */
+  providerPositions: Record<string, number>;
+}
+
+/**
+ * Response from a multi-provider parallel search aggregation.
+ */
+export interface MultiSearchResponse {
+  results: MultiSearchResult[];
+  metadata: {
+    query: string;
+    timestamp: string;
+    totalResponseTime: number;
+    providersQueried: string[];
+    providersSucceeded: string[];
+    providersFailed: string[];
+    totalRawResults: number;
+    deduplicatedCount: number;
+  };
+}
+
+/**
  * Service for managing multiple search providers with fallback support
  * 
  * @class SearchProviderService
@@ -165,11 +196,10 @@ export class SearchProviderService {
   
   /**
    * Gets list of available providers based on configured API keys
-   * 
-   * @private
+   *
    * @returns {string[]} Array of available provider names
    */
-  private getAvailableProviders(): string[] {
+  public getAvailableProviders(): string[] {
     const providers: string[] = [];
     
     if (this.config.serperApiKey) providers.push('serper');
@@ -382,8 +412,133 @@ export class SearchProviderService {
   }
   
   /**
+   * Normalizes a URL for deduplication — strips www, tracking params, trailing slash.
+   */
+  static normalizeUrl(rawUrl: string): string {
+    try {
+      const url = new URL(rawUrl);
+      url.hostname = url.hostname.replace(/^www\./, '');
+      const trackingParams = [
+        'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+        'fbclid', 'gclid', 'ref', 'source', 'sxsrf', 'ei', 'ved',
+      ];
+      for (const param of trackingParams) url.searchParams.delete(param);
+      url.searchParams.sort();
+      url.pathname = url.pathname.replace(/\/+$/, '') || '/';
+      return url.toString();
+    } catch {
+      return rawUrl.toLowerCase().trim();
+    }
+  }
+
+  /**
+   * Searches ALL available providers in parallel, then merges, deduplicates,
+   * and reranks results by cross-provider agreement.
+   */
+  async multiSearch(
+    query: string,
+    options: { maxResults?: number } = {},
+  ): Promise<MultiSearchResponse> {
+    const startTime = Date.now();
+    const maxResults = options.maxResults || 10;
+
+    const providers = [...new Set([...this.getAvailableProviders(), 'duckduckgo'])];
+
+    const providerResults = await Promise.allSettled(
+      providers.map(async (provider) => {
+        try {
+          if (provider !== 'duckduckgo' && !(await this.checkRateLimit(provider))) {
+            throw new Error(`Rate limit exceeded for ${provider}`);
+          }
+          const response = await this.searchWithProvider(query, provider, maxResults, startTime);
+          return { provider, results: response.results, success: true as const };
+        } catch {
+          return { provider, results: [] as SearchResult[], success: false as const };
+        }
+      }),
+    );
+
+    const succeeded: string[] = [];
+    const failed: string[] = [];
+    const allResults: Array<{ provider: string; result: SearchResult; position: number }> = [];
+
+    for (const outcome of providerResults) {
+      if (outcome.status === 'fulfilled') {
+        const { provider, results, success } = outcome.value;
+        if (success && results.length > 0) {
+          succeeded.push(provider);
+          results.forEach((result, index) => {
+            allResults.push({ provider, result, position: index + 1 });
+          });
+        } else {
+          failed.push(provider);
+        }
+      } else {
+        failed.push('unknown');
+      }
+    }
+
+    // Deduplicate and merge by normalized URL
+    const merged = new Map<string, MultiSearchResult>();
+
+    for (const { provider, result, position } of allResults) {
+      const key = SearchProviderService.normalizeUrl(result.url);
+
+      if (merged.has(key)) {
+        const existing = merged.get(key)!;
+        if (!existing.providers.includes(provider)) {
+          existing.providers.push(provider);
+          existing.agreementCount = existing.providers.length;
+        }
+        existing.providerPositions[provider] = position;
+        if ((result.snippet?.length || 0) > (existing.snippet?.length || 0)) {
+          existing.snippet = result.snippet;
+        }
+      } else {
+        merged.set(key, {
+          title: result.title,
+          url: result.url,
+          snippet: result.snippet,
+          position,
+          providers: [provider],
+          agreementCount: 1,
+          confidenceScore: 0,
+          providerPositions: { [provider]: position },
+        });
+      }
+    }
+
+    // Score and rank
+    const totalProviders = succeeded.length || 1;
+    const scoredResults = Array.from(merged.values()).map((r) => {
+      const agreementBonus = (r.agreementCount / totalProviders) * 50;
+      const positions = Object.values(r.providerPositions);
+      const avgNorm = positions.reduce((s, p) => s + (1 - (p - 1) / maxResults), 0) / positions.length;
+      const positionScore = avgNorm * 30;
+      r.confidenceScore = Math.round(Math.min(100, agreementBonus + positionScore + 20));
+      return r;
+    });
+
+    scoredResults.sort((a, b) => b.confidenceScore - a.confidenceScore);
+
+    return {
+      results: scoredResults.slice(0, maxResults),
+      metadata: {
+        query,
+        timestamp: new Date().toISOString(),
+        totalResponseTime: Date.now() - startTime,
+        providersQueried: providers,
+        providersSucceeded: succeeded,
+        providersFailed: failed,
+        totalRawResults: allResults.length,
+        deduplicatedCount: merged.size,
+      },
+    };
+  }
+
+  /**
    * Gets recommended search providers with signup information
-   * 
+   *
    * @static
    * @returns {Array} Array of provider recommendations
    */

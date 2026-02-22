@@ -7,16 +7,17 @@
  */
 
 import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
-import type { ProviderResponse } from '../services/searchProvider.js';
+import type { ProviderResponse, MultiSearchResponse } from '../services/searchProvider.js';
 import { SearchProviderService } from '../services/searchProvider.js';
 
 export interface WebSearchInput {
   query: string;
   maxResults?: number;
   provider?: 'serper' | 'serpapi' | 'brave' | 'duckduckgo';
+  multiSearch?: boolean;
 }
 
-export type WebSearchOutput = ProviderResponse;
+export type WebSearchOutput = ProviderResponse | MultiSearchResponse;
 
 export class WebSearchTool implements ITool<WebSearchInput, WebSearchOutput> {
   public readonly id = 'web-search-v1';
@@ -24,7 +25,7 @@ export class WebSearchTool implements ITool<WebSearchInput, WebSearchOutput> {
   public readonly name = 'web_search';
   public readonly displayName = 'Web Search';
   public readonly description =
-    'Search the web using multiple providers (Serper, SerpAPI, Brave, DuckDuckGo fallback). Returns titles, URLs, snippets, and metadata.';
+    'Search the web using multiple providers (Serper, SerpAPI, Brave, DuckDuckGo fallback). Set multiSearch=true to query ALL providers in parallel for higher-confidence, deduplicated results.';
   public readonly category = 'research';
   public readonly hasSideEffects = false;
 
@@ -45,8 +46,14 @@ export class WebSearchTool implements ITool<WebSearchInput, WebSearchOutput> {
       },
       provider: {
         type: 'string',
-        description: 'Specific search provider to use',
+        description: 'Specific search provider to use (ignored when multiSearch is true)',
         enum: ['serper', 'serpapi', 'brave', 'duckduckgo'],
+      },
+      multiSearch: {
+        type: 'boolean',
+        description:
+          'When true, searches ALL available providers in parallel and returns merged, deduplicated results ranked by cross-provider agreement. Useful for deep research or fact verification.',
+        default: false,
       },
     },
     additionalProperties: false,
@@ -54,15 +61,26 @@ export class WebSearchTool implements ITool<WebSearchInput, WebSearchOutput> {
 
   public readonly requiredCapabilities = ['capability:web_search'];
 
-  constructor(private readonly searchService: SearchProviderService) {}
+  constructor(
+    private readonly searchService: SearchProviderService,
+    private readonly defaultMultiSearch: boolean = false,
+  ) {}
 
   async execute(input: WebSearchInput, _context: ToolExecutionContext): Promise<ToolExecutionResult<WebSearchOutput>> {
     try {
+      const useMultiSearch = input.multiSearch ?? this.defaultMultiSearch;
+
+      if (useMultiSearch && !input.provider) {
+        const results = await this.searchService.multiSearch(input.query, {
+          maxResults: input.maxResults || 10,
+        });
+        return { success: true, output: results };
+      }
+
       const results = await this.searchService.search(input.query, {
         maxResults: input.maxResults || 10,
         provider: input.provider,
       });
-
       return { success: true, output: results };
     } catch (error: any) {
       return { success: false, error: error?.message || String(error) };
@@ -89,6 +107,14 @@ export class WebSearchTool implements ITool<WebSearchInput, WebSearchOutput> {
       if (!validProviders.includes(input.provider)) {
         errors.push('Invalid provider');
       }
+    }
+
+    if (input.multiSearch !== undefined && typeof input.multiSearch !== 'boolean') {
+      errors.push('multiSearch must be a boolean');
+    }
+
+    if (input.multiSearch && input.provider) {
+      errors.push('Cannot specify both multiSearch and a specific provider');
     }
 
     return errors.length === 0 ? { isValid: true } : { isValid: false, errors };
