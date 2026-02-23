@@ -11,7 +11,8 @@ describe('SearchProviderService', () => {
     service = new SearchProviderService({
       serperApiKey: 'test-serper-key',
       serpApiKey: 'test-serpapi-key',
-      braveApiKey: 'test-brave-key'
+      braveApiKey: 'test-brave-key',
+      searxngUrl: 'http://localhost:8888',
     });
     vi.clearAllMocks();
   });
@@ -137,12 +138,104 @@ describe('SearchProviderService', () => {
   describe('getAvailableProviders', () => {
     it('should return providers with configured API keys', () => {
       const providers = service.getAvailableProviders();
-      expect(providers).toEqual(['serper', 'serpapi', 'brave']);
+      expect(providers).toEqual(['serper', 'serpapi', 'brave', 'searxng']);
+    });
+
+    it('should include searxng when URL is configured', () => {
+      const searxngService = new SearchProviderService({ searxngUrl: 'http://searxng:8080' });
+      expect(searxngService.getAvailableProviders()).toEqual(['searxng']);
     });
 
     it('should return empty array with no API keys', () => {
       const emptyService = new SearchProviderService({});
       expect(emptyService.getAvailableProviders()).toEqual([]);
+    });
+  });
+
+  describe('searchSearXNG', () => {
+    it('should format request with correct URL params', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          results: [
+            { title: 'SearXNG Result', url: 'https://example.com/searxng', content: 'SearXNG snippet' },
+          ],
+        }),
+      });
+
+      const searxngService = new SearchProviderService({ searxngUrl: 'http://searxng:8080' });
+      const result = await searxngService.search('test query', { provider: 'searxng' });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('http://searxng:8080/search?'),
+      );
+      const calledUrl = mockFetch.mock.calls[0][0] as string;
+      expect(calledUrl).toContain('format=json');
+      expect(calledUrl).toContain('categories=general');
+      expect(result.provider).toBe('searxng');
+      expect(result.results).toHaveLength(1);
+    });
+
+    it('should map SearXNG "content" field to "snippet"', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          results: [
+            { title: 'Title', url: 'https://example.com', content: 'SearXNG content field' },
+          ],
+        }),
+      });
+
+      const searxngService = new SearchProviderService({ searxngUrl: 'http://searxng:8080' });
+      const result = await searxngService.search('test', { provider: 'searxng' });
+
+      expect(result.results[0].snippet).toBe('SearXNG content field');
+    });
+
+    it('should pass category parameter to SearXNG', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ results: [] }),
+      });
+
+      const searxngService = new SearchProviderService({ searxngUrl: 'http://searxng:8080' });
+      await searxngService.search('AI news', { provider: 'searxng', category: 'news' });
+
+      const calledUrl = mockFetch.mock.calls[0][0] as string;
+      expect(calledUrl).toContain('categories=news');
+    });
+
+    it('should handle SearXNG API errors', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValueOnce({ ok: false, statusText: 'Service Unavailable' });
+      // DuckDuckGo fallback
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ Heading: 'DDG', AbstractText: 'Fallback', AbstractURL: 'https://example.com', RelatedTopics: [] }),
+      });
+
+      const searxngService = new SearchProviderService({ searxngUrl: 'http://searxng:8080' });
+      const result = await searxngService.search('test');
+
+      // Should fall through to DuckDuckGo
+      expect(result.provider).toBe('duckduckgo');
+    });
+
+    it('should strip trailing slashes from SearXNG URL', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ results: [] }),
+      });
+
+      const searxngService = new SearchProviderService({ searxngUrl: 'http://searxng:8080///' });
+      await searxngService.search('test', { provider: 'searxng' });
+
+      const calledUrl = mockFetch.mock.calls[0][0] as string;
+      expect(calledUrl).toMatch(/^http:\/\/searxng:8080\/search\?/);
     });
   });
 
@@ -179,51 +272,39 @@ describe('SearchProviderService', () => {
   describe('multiSearch', () => {
     it('should fan out to all available providers + duckduckgo', async () => {
       const mockFetch = global.fetch as any;
-      // serper
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          organic: [
+      mockFetch.mockImplementation(async (url: string) => {
+        const urlStr = typeof url === 'string' ? url : url.toString();
+        if (urlStr.includes('serper.dev')) {
+          return { ok: true, json: async () => ({ organic: [
             { title: 'Result A', link: 'https://example.com/a', snippet: 'Snippet A', position: 1 },
             { title: 'Result B', link: 'https://example.com/b', snippet: 'Snippet B', position: 2 },
-          ],
-        }),
-      });
-      // serpapi
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          organic_results: [
+          ] }) };
+        }
+        if (urlStr.includes('serpapi.com')) {
+          return { ok: true, json: async () => ({ organic_results: [
             { title: 'Result A', link: 'https://example.com/a', snippet: 'Snippet A longer', position: 1 },
             { title: 'Result C', link: 'https://example.com/c', snippet: 'Snippet C', position: 2 },
-          ],
-        }),
-      });
-      // brave
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          web: {
-            results: [
-              { title: 'Result A', url: 'https://example.com/a', description: 'Snippet A brave' },
-            ],
-          },
-        }),
-      });
-      // duckduckgo
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          Heading: 'Result D',
-          AbstractText: 'DDG snippet',
-          AbstractURL: 'https://example.com/d',
-          RelatedTopics: [],
-        }),
+          ] }) };
+        }
+        if (urlStr.includes('brave.com')) {
+          return { ok: true, json: async () => ({ web: { results: [
+            { title: 'Result A', url: 'https://example.com/a', description: 'Snippet A brave' },
+          ] } }) };
+        }
+        if (urlStr.includes('localhost:8888')) {
+          return { ok: true, json: async () => ({ results: [
+            { title: 'Result A', url: 'https://example.com/a', content: 'Snippet A searxng' },
+            { title: 'Result E', url: 'https://example.com/e', content: 'Snippet E' },
+          ] }) };
+        }
+        // duckduckgo
+        return { ok: true, json: async () => ({ Heading: 'Result D', AbstractText: 'DDG snippet', AbstractURL: 'https://example.com/d', RelatedTopics: [] }) };
       });
 
       const result = await service.multiSearch('test query');
 
       expect(result.metadata.providersQueried).toContain('serper');
+      expect(result.metadata.providersQueried).toContain('searxng');
       expect(result.metadata.providersQueried).toContain('duckduckgo');
       expect(result.metadata.deduplicatedCount).toBeLessThanOrEqual(result.metadata.totalRawResults);
     });
@@ -242,6 +323,9 @@ describe('SearchProviderService', () => {
         if (urlStr.includes('brave.com')) {
           return { ok: true, json: async () => ({ web: { results: [{ title: 'Same', url: 'https://example.com/same', description: 'Same snippet' }] } }) };
         }
+        if (urlStr.includes('localhost:8888')) {
+          return { ok: true, json: async () => ({ results: [{ title: 'Same', url: 'https://example.com/same', content: 'Same snippet from SearXNG' }] }) };
+        }
         // duckduckgo
         return { ok: true, json: async () => ({ Heading: 'Same', AbstractText: 'Same', AbstractURL: 'https://example.com/same', RelatedTopics: [] }) };
       });
@@ -250,7 +334,7 @@ describe('SearchProviderService', () => {
 
       // Should be deduplicated to 1 result
       expect(result.results).toHaveLength(1);
-      expect(result.results[0].agreementCount).toBeGreaterThanOrEqual(3);
+      expect(result.results[0].agreementCount).toBeGreaterThanOrEqual(4);
     });
 
     it('should rank results with more provider agreement higher', async () => {
@@ -273,13 +357,18 @@ describe('SearchProviderService', () => {
             { title: 'A', url: 'https://example.com/a', description: 'A' },
           ] } }) };
         }
+        if (urlStr.includes('localhost:8888')) {
+          return { ok: true, json: async () => ({ results: [
+            { title: 'A', url: 'https://example.com/a', content: 'A' },
+          ] }) };
+        }
         // duckduckgo returns B only
         return { ok: true, json: async () => ({ Heading: 'B', AbstractText: 'B', AbstractURL: 'https://example.com/b', RelatedTopics: [] }) };
       });
 
       const result = await service.multiSearch('test');
 
-      // A appears in 3 providers, B in 2 — A should rank first
+      // A appears in 4 providers, B in 2 — A should rank first
       expect(result.results[0].url).toBe('https://example.com/a');
       expect(result.results[0].confidenceScore).toBeGreaterThan(result.results[1].confidenceScore);
     });
@@ -296,11 +385,14 @@ describe('SearchProviderService', () => {
   });
 
   describe('getRecommendedProviders', () => {
-    it('should return provider recommendations', () => {
+    it('should return provider recommendations including SearXNG', () => {
       const providers = SearchProviderService.getRecommendedProviders();
-      expect(providers).toHaveLength(4);
+      expect(providers).toHaveLength(5);
       expect(providers[0].name).toBe('Serper');
       expect(providers[0].signupUrl).toContain('serper.dev');
+      const searxng = providers.find((p) => p.name === 'SearXNG');
+      expect(searxng).toBeDefined();
+      expect(searxng!.freeQuota).toContain('Unlimited');
     });
   });
 });

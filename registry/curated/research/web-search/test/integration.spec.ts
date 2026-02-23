@@ -251,6 +251,103 @@ describe('Web Search Extension Integration', () => {
     });
   });
 
+  describe('SearXNG Integration', () => {
+    it('should create extension pack with searxngUrl option', () => {
+      const searxngContext = {
+        options: {
+          searxngUrl: 'http://searxng:8080',
+        },
+        logger: context.logger,
+      } as any;
+
+      const pack = createExtensionPack(searxngContext);
+      expect(pack.descriptors).toHaveLength(3);
+      expect(pack.name).toBe('@framers/agentos-ext-web-search');
+    });
+
+    it('should execute web search with searxng provider', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          results: [
+            { title: 'SearXNG Result', url: 'https://example.com/searxng', content: 'A result from SearXNG' },
+          ],
+        }),
+      });
+
+      const searxngContext = {
+        options: { searxngUrl: 'http://searxng:8080' },
+        logger: context.logger,
+      } as any;
+
+      const pack = createExtensionPack(searxngContext);
+      const webSearch = pack.descriptors.find((d: any) => d.id === 'web_search')!.payload;
+
+      const result = await webSearch.execute(
+        { query: 'test', provider: 'searxng' },
+        { gmiId: 'test-gmi', personaId: 'test-persona', userContext: { userId: 'test-user' } },
+      );
+
+      expect(result.success).toBe(true);
+      expect(result.output.provider).toBe('searxng');
+      expect(result.output.results[0].snippet).toBe('A result from SearXNG');
+    });
+
+    it('should pass category through to SearXNG', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ results: [] }),
+      });
+
+      const searxngContext = {
+        options: { searxngUrl: 'http://searxng:8080' },
+        logger: context.logger,
+      } as any;
+
+      const pack = createExtensionPack(searxngContext);
+      const webSearch = pack.descriptors.find((d: any) => d.id === 'web_search')!.payload;
+
+      await webSearch.execute(
+        { query: 'AI news', provider: 'searxng', category: 'news' },
+        { gmiId: 'test-gmi', personaId: 'test-persona', userContext: { userId: 'test-user' } },
+      );
+
+      const calledUrl = mockFetch.mock.calls[0][0] as string;
+      expect(calledUrl).toContain('categories=news');
+    });
+
+    it('should use SearXNG as primary when it is the only configured provider', async () => {
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          results: [
+            { title: 'SearXNG Primary', url: 'https://example.com/primary', content: 'Primary result' },
+          ],
+        }),
+      });
+
+      const searxngOnlyContext = {
+        options: { searxngUrl: 'http://searxng:8080' },
+        logger: context.logger,
+      } as any;
+
+      const pack = createExtensionPack(searxngOnlyContext);
+      const webSearch = pack.descriptors.find((d: any) => d.id === 'web_search')!.payload;
+
+      const result = await webSearch.execute(
+        { query: 'test' },
+        { gmiId: 'test-gmi', personaId: 'test-persona', userContext: { userId: 'test-user' } },
+      );
+
+      expect(result.success).toBe(true);
+      // SearXNG should be used as primary (not falling back to DDG)
+      expect(result.output.provider).toBe('searxng');
+    });
+  });
+
   describe('Lifecycle Hooks', () => {
     it('should call onActivate when extension is activated', async () => {
       const logSpy = vi.fn();

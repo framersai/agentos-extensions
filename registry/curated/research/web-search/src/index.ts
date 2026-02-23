@@ -24,6 +24,8 @@ export interface WebSearchExtensionOptions {
   serpApiKey?: string;
   /** Brave Search API key */
   braveApiKey?: string;
+  /** SearXNG instance URL (e.g. http://searxng:8080 or http://localhost:8888) */
+  searxngUrl?: string;
   /** Default maximum results for searches */
   defaultMaxResults?: number;
   /** Rate limiting configuration */
@@ -64,12 +66,15 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     options.serpApiKey || process.env.SERPAPI_API_KEY;
   const braveApiKey =
     options.braveApiKey || process.env.BRAVE_API_KEY;
-  
+  const searxngUrl =
+    options.searxngUrl || process.env.SEARXNG_URL;
+
   // Initialize search service with configuration
   const searchService = new SearchProviderService({
     serperApiKey,
     serpApiKey,
     braveApiKey,
+    searxngUrl,
     rateLimit: options.rateLimit
   });
   

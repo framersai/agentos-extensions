@@ -5,6 +5,7 @@ export interface SearchProviderConfig {
   serperApiKey?: string;
   serpApiKey?: string;
   braveApiKey?: string;
+  searxngUrl?: string;
   maxRetries?: number;
   rateLimit?: {
     maxRequests: number;
@@ -96,6 +97,7 @@ export class SearchProviderService {
       serperApiKey: config.serperApiKey,
       serpApiKey: config.serpApiKey,
       braveApiKey: config.braveApiKey,
+      searxngUrl: config.searxngUrl,
       maxRetries: config.maxRetries ?? 3,
       rateLimit: config.rateLimit ?? {
         maxRequests: 10,
@@ -117,10 +119,11 @@ export class SearchProviderService {
    * @throws {Error} If all providers fail and no fallback is available
    */
   async search(
-    query: string, 
-    options: { 
-      maxResults?: number; 
-      provider?: string 
+    query: string,
+    options: {
+      maxResults?: number;
+      provider?: string;
+      category?: string;
     } = {}
   ): Promise<ProviderResponse> {
     const startTime = Date.now();
@@ -128,23 +131,23 @@ export class SearchProviderService {
     
     // If specific provider requested, try only that one
     if (options.provider) {
-      return this.searchWithProvider(query, options.provider, maxResults, startTime);
+      return this.searchWithProvider(query, options.provider, maxResults, startTime, options.category);
     }
-    
+
     // Try providers in order of preference
     const providers = this.getAvailableProviders();
-    
+
     for (const provider of providers) {
       try {
         if (await this.checkRateLimit(provider)) {
-          return await this.searchWithProvider(query, provider, maxResults, startTime);
+          return await this.searchWithProvider(query, provider, maxResults, startTime, options.category);
         }
       } catch (error) {
         console.warn(`Provider ${provider} failed:`, error);
         continue;
       }
     }
-    
+
     // Final fallback to DuckDuckGo (no API key required)
     return this.searchDuckDuckGo(query, maxResults, startTime);
   }
@@ -163,10 +166,11 @@ export class SearchProviderService {
     query: string,
     provider: string,
     maxResults: number,
-    startTime: number
+    startTime: number,
+    category?: string
   ): Promise<ProviderResponse> {
     let results: SearchResult[];
-    
+
     switch (provider) {
       case 'serper':
         results = await this.searchSerper(query, maxResults);
@@ -176,6 +180,9 @@ export class SearchProviderService {
         break;
       case 'brave':
         results = await this.searchBrave(query, maxResults);
+        break;
+      case 'searxng':
+        results = await this.searchSearXNG(query, maxResults, { categories: category });
         break;
       case 'duckduckgo':
       default:
@@ -205,7 +212,8 @@ export class SearchProviderService {
     if (this.config.serperApiKey) providers.push('serper');
     if (this.config.serpApiKey) providers.push('serpapi');
     if (this.config.braveApiKey) providers.push('brave');
-    
+    if (this.config.searxngUrl) providers.push('searxng');
+
     return providers;
   }
   
@@ -412,6 +420,41 @@ export class SearchProviderService {
   }
   
   /**
+   * Search using a self-hosted SearXNG metasearch instance.
+   *
+   * @private
+   * @param {string} query - Search query
+   * @param {number} maxResults - Maximum results
+   * @param {Object} [options] - SearXNG-specific options
+   * @param {string} [options.categories] - SearXNG categories (e.g. 'general', 'news', 'images')
+   * @returns {Promise<SearchResult[]>} Search results
+   */
+  private async searchSearXNG(
+    query: string,
+    maxResults: number,
+    options?: { categories?: string }
+  ): Promise<SearchResult[]> {
+    const params = new URLSearchParams({
+      q: query,
+      format: 'json',
+      categories: options?.categories || 'general',
+    });
+
+    const baseUrl = this.config.searxngUrl!.replace(/\/+$/, '');
+    const response = await fetch(`${baseUrl}/search?${params}`);
+
+    if (!response.ok) throw new Error(`SearXNG API error: ${response.statusText}`);
+
+    const data = (await response.json()) as any;
+    return (data.results || []).slice(0, maxResults).map((item: any, index: number) => ({
+      title: item.title || '',
+      url: item.url || '',
+      snippet: item.content || '',
+      position: index + 1,
+    }));
+  }
+
+  /**
    * Normalizes a URL for deduplication — strips www, tracking params, trailing slash.
    */
   static normalizeUrl(rawUrl: string): string {
@@ -561,6 +604,12 @@ export class SearchProviderService {
         signupUrl: 'https://brave.com/search-api',
         freeQuota: '2,000 queries/month',
         description: 'Privacy-focused search API'
+      },
+      {
+        name: 'SearXNG',
+        signupUrl: 'https://docs.searxng.org (self-hosted)',
+        freeQuota: 'Unlimited (self-hosted)',
+        description: 'Self-hosted metasearch engine aggregating 244+ search services'
       },
       {
         name: 'DuckDuckGo',

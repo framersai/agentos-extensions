@@ -10,7 +10,7 @@
     "url": "https://github.com/framersai"
   },
   "license": "MIT",
-  "keywords": ["search", "web", "research", "fact-check", "serper", "serpapi", "brave"],
+  "keywords": ["search", "web", "research", "fact-check", "serper", "serpapi", "brave", "searxng"],
   "agentosVersion": "^2.0.0",
   "categories": ["productivity", "research"],
   "repository": {
@@ -44,7 +44,7 @@
     "properties": {
       "search.provider": {
         "type": "string",
-        "enum": ["serper", "serpapi", "brave", "duckduckgo"],
+        "enum": ["serper", "serpapi", "brave", "searxng", "duckduckgo"],
         "default": "duckduckgo",
         "description": "Search API provider to use"
       },

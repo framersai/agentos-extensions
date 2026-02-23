@@ -52,7 +52,8 @@ describe('WebSearchTool', () => {
       
       expect(mockSearchService.search).toHaveBeenCalledWith('test query', {
         maxResults: 5,
-        provider: 'serper'
+        provider: 'serper',
+        category: undefined,
       });
       expect(result.success).toBe(true);
       expect(result.output).toEqual(mockResults);
@@ -75,13 +76,30 @@ describe('WebSearchTool', () => {
         results: [],
         metadata: {}
       });
-      
+
       const input = { query: 'test query' };
       await tool.execute(input as any, ctx);
-      
+
       expect(mockSearchService.search).toHaveBeenCalledWith('test query', {
         maxResults: 10,
-        provider: undefined
+        provider: undefined,
+        category: undefined,
+      });
+    });
+
+    it('should pass category to search service', async () => {
+      mockSearchService.search = vi.fn().mockResolvedValue({
+        provider: 'searxng',
+        results: [],
+        metadata: {}
+      });
+
+      await tool.execute({ query: 'AI news', provider: 'searxng', category: 'news' }, ctx);
+
+      expect(mockSearchService.search).toHaveBeenCalledWith('AI news', {
+        maxResults: 10,
+        provider: 'searxng',
+        category: 'news',
       });
     });
   });
@@ -110,13 +128,18 @@ describe('WebSearchTool', () => {
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Invalid provider');
     });
-    
+
     it('should pass validation with correct inputs', () => {
-      const result = tool.validateArgs({ 
+      const result = tool.validateArgs({
         query: 'test query',
         maxResults: 5,
         provider: 'serper'
       });
+      expect(result.isValid).toBe(true);
+    });
+
+    it('should accept searxng as a valid provider', () => {
+      const result = tool.validateArgs({ query: 'test', provider: 'searxng' });
       expect(result.isValid).toBe(true);
     });
   });
@@ -186,6 +209,7 @@ describe('WebSearchTool', () => {
       expect(schema.properties.query.type).toBe('string');
       expect(schema.properties.maxResults.type).toBe('integer');
       expect(schema.properties.provider.enum).toContain('serper');
+      expect(schema.properties.provider.enum).toContain('searxng');
     });
 
     it('should include multiSearch in schema', () => {
@@ -193,6 +217,14 @@ describe('WebSearchTool', () => {
       expect(schema.properties.multiSearch).toBeDefined();
       expect(schema.properties.multiSearch.type).toBe('boolean');
       expect(schema.properties.multiSearch.default).toBe(false);
+    });
+
+    it('should include category field for SearXNG', () => {
+      const schema = tool.inputSchema;
+      expect(schema.properties.category).toBeDefined();
+      expect(schema.properties.category.type).toBe('string');
+      expect(schema.properties.category.enum).toContain('news');
+      expect(schema.properties.category.enum).toContain('science');
     });
   });
 });
