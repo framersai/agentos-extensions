@@ -27,6 +27,8 @@
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
+  "repository": { "type": "git", "url": "https://github.com/framersai/agentos-extensions.git", "directory": "registry/curated/research/weather" },
+  "publishConfig": { "access": "public" },
   "keywords": [
     "agentos",
     "extension",
