@@ -50,6 +50,7 @@ export class DiscordService {
   private pendingInteractions = new Map<string, PendingInteraction>();
   private readonly config: DiscordChannelConfig;
   private readonly state: LocalStateStore;
+  private additionalSlashCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
   constructor(config: DiscordChannelConfig) {
     this.config = config;
@@ -131,6 +132,11 @@ export class DiscordService {
   offInteraction(handler: (interaction: Interaction) => void): void {
     const idx = this.interactionHandlers.indexOf(handler);
     if (idx >= 0) this.interactionHandlers.splice(idx, 1);
+  }
+
+  /** Register additional slash commands to be included in the guild command set. */
+  registerSlashCommands(commands: RESTPostAPIChatInputApplicationCommandsJSONBody[]): void {
+    this.additionalSlashCommands.push(...commands);
   }
 
   registerPendingInteraction(interaction: ChatInputCommandInteraction, ttlMs = 15 * 60_000): void {
@@ -462,18 +468,21 @@ export class DiscordService {
       },
     ];
 
+    // Merge any additional slash commands from extensions (e.g., Founders).
+    const allCommands = [...commands, ...this.additionalSlashCommands];
+
     const guildId = String(process.env.DISCORD_GUILD_ID || '').trim();
     try {
       if (guildId) {
         const guild = await this.client.guilds.fetch(guildId);
-        await guild.commands.set(commands);
+        await guild.commands.set(allCommands);
         return;
       }
     } catch {
       // Fall back to global registration if guild fetch/registration fails.
     }
 
-    await this.client.application.commands.set(commands);
+    await this.client.application.commands.set(allCommands);
   }
 
   // ---------------------------------------------------------------------------

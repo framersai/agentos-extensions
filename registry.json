@@ -1852,7 +1852,46 @@
         "downloads": 0
       }
     ],
-    "community": [],
+    "community": [
+      {
+        "id": "com.framers.community.founders",
+        "name": "The Founders",
+        "package": "@framers/agentos-ext-founders",
+        "version": "1.0.0",
+        "path": "registry/curated/community/founders",
+        "description": "Gamified build-in-public program for Discord — daily standups, weekly updates, XP levels, streaks, milestones, cofounder matching, and project showcase.",
+        "author": "Rabbit Hole Inc",
+        "license": "MIT",
+        "category": "community",
+        "status": "curated",
+        "features": [
+          "17 Discord slash commands with modals and buttons",
+          "XP system with 5 levels (White Rabbit to Wonderland Founder)",
+          "Daily/weekly check-in streaks",
+          "Milestone tracking with unique-per-project enforcement",
+          "Cofounder matching with opt-in search",
+          "Monthly project showcase",
+          "Paginated leaderboard and directory",
+          "LLM-callable founders_query tool"
+        ],
+        "tools": [
+          "founders_query"
+        ],
+        "keywords": [
+          "founders",
+          "gamification",
+          "xp",
+          "levels",
+          "leaderboard",
+          "build-in-public",
+          "discord",
+          "community"
+        ],
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/founders",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      }
+    ],
     "templates": [
       {
         "id": "com.framers.template.basic-tool",

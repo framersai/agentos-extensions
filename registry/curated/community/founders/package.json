@@ -1,0 +1,43 @@
+{
+  "name": "@framers/agentos-ext-founders",
+  "version": "1.0.0",
+  "description": "The Founders — gamified build-in-public program with XP, levels, streaks, and cofounder matching for AgentOS",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
+    "./manifest.json": "./manifest.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0",
+    "discord.js": "^14.0.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "^0.1.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^20.12.12",
+    "discord.js": "^14.16.3",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/community/founders"
+  },
+  "publishConfig": { "access": "public" },
+  "keywords": ["agentos", "extension", "founders", "gamification", "xp", "leaderboard", "discord"]
+}

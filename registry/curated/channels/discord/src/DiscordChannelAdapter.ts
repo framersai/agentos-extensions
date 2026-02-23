@@ -62,7 +62,20 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
   >();
 
+  /** Optional external interaction handlers (e.g., Founders extension). */
+  private externalInteractionHandlers: Array<(interaction: Interaction) => Promise<boolean>> = [];
+
   constructor(private readonly service: DiscordService) {}
+
+  /**
+   * Register an external interaction handler that runs before built-in handling.
+   * The handler should return `true` if it consumed the interaction, `false` otherwise.
+   */
+  registerExternalInteractionHandler(
+    handler: (interaction: Interaction) => Promise<boolean>,
+  ): void {
+    this.externalInteractionHandlers.push(handler);
+  }
 
   async initialize(_auth: ChannelAuthConfig): Promise<void> {
     this.messageHandler = (message: Message) => this.handleInboundMessage(message);
@@ -256,6 +269,16 @@ export class DiscordChannelAdapter implements IChannelAdapter {
   }
 
   private async handleInboundInteraction(interaction: Interaction): Promise<void> {
+    // Delegate to external handlers first (e.g., Founders extension).
+    for (const handler of this.externalInteractionHandlers) {
+      try {
+        const consumed = await handler(interaction);
+        if (consumed) return;
+      } catch (err) {
+        console.error('[Discord] External interaction handler error:', err);
+      }
+    }
+
     if (interaction.isButton()) {
       await this.handleButtonInteraction(interaction);
       return;

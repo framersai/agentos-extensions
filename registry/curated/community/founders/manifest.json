@@ -1,0 +1,31 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.community.founders",
+  "name": "The Founders",
+  "version": "1.0.0",
+  "description": "Gamified build-in-public program — daily standups, weekly updates, XP levels, streaks, milestones, cofounder matching, and project showcase",
+  "author": { "name": "Rabbit Hole Inc" },
+  "license": "MIT",
+  "agentosVersion": "^2.0.0",
+  "categories": ["community"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "founders_query",
+      "displayName": "Founders Query",
+      "entry": "./dist/tools/foundersQuery.js"
+    }
+  ],
+  "configuration": {
+    "properties": {
+      "founders.dbPath": {
+        "type": "string",
+        "description": "Path to the Founders SQLite database (defaults to ./data/founders.db)"
+      },
+      "founders.guildId": {
+        "type": "string",
+        "description": "Discord guild ID for Founders commands"
+      }
+    }
+  }
+}

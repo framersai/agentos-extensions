@@ -673,7 +673,7 @@ importers:
         version: 1.6.1(@types/node@20.19.32)
       wunderland:
         specifier: '>=0.2.0'
-        version: 0.19.0(@aws-sdk/client-s3@3.984.0)(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(bufferutil@4.1.0)(encoding@0.1.13)(pg@8.18.0)(request@2.88.2)(typescript@5.9.3)(utf-8-validate@5.0.10)
+        version: 0.19.0(@aws-sdk/client-s3@3.984.0)(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(pg@8.18.0)(typescript@5.9.3)
 
   registry/curated/research/news-search:
     devDependencies:
@@ -689,6 +689,21 @@ importers:
       rimraf:
         specifier: ^5.0.7
         version: 5.0.10
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.32)
+
+  registry/curated/research/weather:
+    devDependencies:
+      '@framers/agentos':
+        specifier: ^0.1.0
+        version: 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.19.32
       typescript:
         specifier: ^5.4.5
         version: 5.9.3
@@ -7810,7 +7825,7 @@ snapshots:
     dependencies:
       '@framers/agentos': 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
 
-  '@framers/agentos-ext-telegram@1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(encoding@0.1.13)(request@2.88.2)':
+  '@framers/agentos-ext-telegram@1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(encoding@0.1.13)':
     dependencies:
       '@framers/agentos': 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
       dotenv: 16.6.1
@@ -7826,7 +7841,7 @@ snapshots:
     dependencies:
       '@framers/agentos': 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
 
-  '@framers/agentos-ext-web-browser@1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
+  '@framers/agentos-ext-web-browser@1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))':
     dependencies:
       '@framers/agentos': 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
       cheerio: 1.2.0
@@ -7846,7 +7861,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@framers/agentos-extensions-registry@0.1.1(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(bufferutil@4.1.0)(encoding@0.1.13)(request@2.88.2)(utf-8-validate@5.0.10)':
+  '@framers/agentos-extensions-registry@0.1.1(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(encoding@0.1.13)':
     dependencies:
       '@framers/agentos': 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
     optionalDependencies:
@@ -7855,9 +7870,9 @@ snapshots:
       '@framers/agentos-ext-giphy': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
       '@framers/agentos-ext-image-search': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
       '@framers/agentos-ext-news-search': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
-      '@framers/agentos-ext-telegram': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(encoding@0.1.13)(request@2.88.2)
+      '@framers/agentos-ext-telegram': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(encoding@0.1.13)
       '@framers/agentos-ext-voice-synthesis': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
-      '@framers/agentos-ext-web-browser': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      '@framers/agentos-ext-web-browser': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
       '@framers/agentos-ext-web-search': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
     transitivePeerDependencies:
       - bare-abort-controller
@@ -14370,7 +14385,7 @@ snapshots:
     dependencies:
       is-wsl: 3.1.1
 
-  wunderland@0.19.0(@aws-sdk/client-s3@3.984.0)(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(bufferutil@4.1.0)(encoding@0.1.13)(pg@8.18.0)(request@2.88.2)(typescript@5.9.3)(utf-8-validate@5.0.10):
+  wunderland@0.19.0(@aws-sdk/client-s3@3.984.0)(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(pg@8.18.0)(typescript@5.9.3):
     dependencies:
       '@clack/prompts': 0.9.1
       '@framers/agentos': 0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(socks@2.8.7)(typescript@5.9.3)
@@ -14379,9 +14394,9 @@ snapshots:
       '@framers/agentos-ext-image-search': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
       '@framers/agentos-ext-news-search': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
       '@framers/agentos-ext-voice-synthesis': 1.0.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
-      '@framers/agentos-ext-web-browser': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      '@framers/agentos-ext-web-browser': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
       '@framers/agentos-ext-web-search': 1.1.0(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))
-      '@framers/agentos-extensions-registry': 0.1.1(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(bufferutil@4.1.0)(encoding@0.1.13)(request@2.88.2)(utf-8-validate@5.0.10)
+      '@framers/agentos-extensions-registry': 0.1.1(@framers/agentos@0.1.6(@framers/sql-storage-adapter@0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0))(typescript@5.9.3))(encoding@0.1.13)
       '@framers/sql-storage-adapter': 0.5.2(@aws-sdk/client-s3@3.984.0)(pg@8.18.0)
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.201.1
