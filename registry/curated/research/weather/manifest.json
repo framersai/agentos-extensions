@@ -1,0 +1,28 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.research.weather",
+  "name": "Weather Extension",
+  "version": "1.0.0",
+  "description": "Weather lookup via WeatherAPI.com (preferred) with Open-Meteo fallback (no key required)",
+  "author": { "name": "Rabbit Hole Inc" },
+  "license": "MIT",
+  "agentosVersion": "^2.0.0",
+  "categories": ["research"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "weather_lookup",
+      "displayName": "Weather Lookup",
+      "entry": "./dist/tools/weatherLookup.js"
+    }
+  ],
+  "configuration": {
+    "properties": {
+      "weather.weatherApiKey": {
+        "type": "string",
+        "secret": true,
+        "description": "WeatherAPI.com API key (preferred provider)"
+      }
+    }
+  }
+}

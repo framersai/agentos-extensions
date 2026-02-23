@@ -1819,6 +1819,41 @@
         "verifiedAt": "2026-02-19T10:44:18.133Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
+      },
+      {
+        "id": "com.framers.research.weather",
+        "name": "Weather Extension",
+        "package": "@framers/agentos-ext-weather",
+        "version": "1.0.0",
+        "category": "research",
+        "path": "registry/curated/research/weather",
+        "description": "Weather lookup via WeatherAPI.com (preferred) with Open-Meteo fallback (no key required)",
+        "author": {
+          "name": "Rabbit Hole Inc"
+        },
+        "features": [
+          "Current weather conditions (temperature, humidity, wind, UV)",
+          "Multi-day forecasts up to 14 days",
+          "Severe weather alerts (WeatherAPI.com)",
+          "Automatic geocoding from city names",
+          "Dual-provider with automatic fallback"
+        ],
+        "tools": [
+          "weather_lookup"
+        ],
+        "keywords": [
+          "weather",
+          "forecast",
+          "temperature",
+          "open-meteo",
+          "weatherapi"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-weather",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/weather",
+        "verified": true,
+        "verifiedAt": "2026-02-23T00:00:00.000Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
       }
     ],
     "community": [],
@@ -1853,8 +1888,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 52,
-    "curatedCount": 49,
+    "totalExtensions": 53,
+    "curatedCount": 50,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0
