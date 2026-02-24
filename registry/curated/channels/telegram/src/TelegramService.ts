@@ -68,6 +68,19 @@ export class TelegramService {
     }
 
     this.running = true;
+
+    // Register bot command menu so Telegram shows autocomplete when users type /
+    try {
+      await this.bot.api.setMyCommands([
+        { command: 'ask', description: 'Ask the AI a question' },
+        { command: 'deepdive', description: 'Get a deeper answer' },
+        { command: 'summarize', description: 'Summarize a URL' },
+        { command: 'paper', description: 'Summarize an arXiv paper' },
+        { command: 'help', description: 'Show available commands' },
+      ]);
+    } catch {
+      // Non-fatal — command menu just won't appear
+    }
   }
 
   async shutdown(): Promise<void> {
