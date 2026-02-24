@@ -303,38 +303,51 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     const command = interaction.commandName;
 
     if (command === 'help') {
-      const text =
-        [
-          '**Rabbit Hole AI — Help**',
+      const tier = this.service.getTierFromInteraction(interaction);
+
+      const lines = [
+        '**Rabbit Hole AI — Help**',
+        '',
+        '__AI Commands__',
+        '`/ask question:<text>` — ask the AI (daily quota)',
+        '`/deepdive question:<text>` — deeper answer (separate quota)',
+        '`/summarize url:<link>` — summarize a link (counts as /ask)',
+        '`/paper arxiv:<id-or-url>` — summarize an arXiv paper (counts as /ask)',
+        '`/ask explain:true` — include a tool/API trace after the answer',
+        '',
+        '__Community__',
+        '`/trivia` — start a trivia question',
+        '`/trivia_leaderboard` — trivia leaderboard',
+        '',
+        '__Utilities__',
+        '`/quota` — view your remaining daily quotas',
+        '`/status` — bot health and connectivity',
+        '`/faq [key]` — view FAQ entries',
+        '`/note_add`, `/note_list`, `/note_delete` — personal notes',
+        '`/pair` — request pairing/allowlist access',
+      ];
+
+      if (tier === 'team') {
+        lines.push(
           '',
-          '- `/ask question:<text>` — ask in this channel (daily quota)',
-          '- `/deepdive question:<text>` — deeper answer (separate quota)',
-          '- `/summarize url:<link>` — summarize a link (counts as `/ask`)',
-          '- `/paper arxiv:<id-or-url>` — summarize an arXiv paper (counts as `/ask`)',
-          '- `/ask explain:true` — include a tool/API trace after the answer',
-          '- `/quota` — view your remaining quotas (ephemeral)',
-          '- `/status` — bot health (ephemeral)',
-          '- `/faq [key]` — view FAQ (ephemeral)',
-          '- `/note_add`, `/note_list`, `/note_delete` — your notes (ephemeral)',
-          '- `/trivia` — start a trivia question',
-          '- `/trivia_leaderboard` — trivia leaderboard (ephemeral)',
-          '- `/pair` — request allowlist/pairing access (posts a pairing code)',
-          '',
-          'DMs: this bot ignores DMs by default.',
-        ].join('\n');
-      try {
-        await interaction.reply({ content: text, ephemeral: true });
-      } catch {
-        // ignore
+          '__Team Commands__',
+          '`/clear [count]` — clear bot messages from this channel',
+          '`/faq_set key:<k> question:<q> answer:<a>` — create/update FAQ entry',
+        );
       }
+
+      lines.push('', '_DMs: this bot ignores DMs by default._');
+
+      await this.safeEphemeralReply(interaction, lines.join('\n'));
       return;
     }
 
     if (command === 'pair') {
       try {
-        await interaction.deferReply({ ephemeral: false });
-      } catch {
-        // ignore
+        await interaction.deferReply();
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /pair:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+        return;
       }
       this.service.registerPendingInteraction(interaction);
       this.emitSyntheticInteractionMessage(interaction, '!pair', { explicitInvocation: true });
@@ -342,24 +355,31 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'ask') {
+      // Defer IMMEDIATELY — Discord only gives 3 seconds before the interaction token expires.
+      const interactionAge = Date.now() - interaction.createdTimestamp;
+      try {
+        await interaction.deferReply();
+      } catch (deferErr) {
+        console.warn(`[DiscordChannel] deferReply failed for /ask (age=${interactionAge}ms):`, deferErr instanceof Error ? deferErr.message : String(deferErr));
+        // Continue anyway — fallback to channel.send() will handle delivery.
+      }
+
       const question = interaction.options.getString('question', true);
       const explain = interaction.options.getBoolean('explain') ?? false;
 
       const tier = this.service.getTierFromInteraction(interaction);
       const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
       if (!quota.allowed) {
-        await this.safeEphemeralReply(
-          interaction,
-          `Daily quota reached for **/ask**.\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
-        );
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/ask**.\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch {
+          // Interaction dead — not critical, user will notice via /quota
+        }
         return;
       }
 
-      try {
-        await interaction.deferReply({ ephemeral: false });
-      } catch {
-        // ignore
-      }
       this.service.registerPendingInteractionWithQuota(interaction, {
         dayKey: quota.dayKey,
         userId: interaction.user.id,
@@ -374,24 +394,26 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'summarize') {
+      try {
+        await interaction.deferReply();
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /summarize:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
       const url = interaction.options.getString('url', true);
       const explain = interaction.options.getBoolean('explain') ?? false;
 
       const tier = this.service.getTierFromInteraction(interaction);
       const quota = this.service.checkQuota(interaction.user.id, tier, 'summarize');
       if (!quota.allowed) {
-        await this.safeEphemeralReply(
-          interaction,
-          `Daily quota reached for **/summarize** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
-        );
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/summarize** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
         return;
       }
 
-      try {
-        await interaction.deferReply({ ephemeral: false });
-      } catch {
-        // ignore
-      }
       this.service.registerPendingInteractionWithQuota(interaction, {
         dayKey: quota.dayKey,
         userId: interaction.user.id,
@@ -406,24 +428,26 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'deepdive') {
+      try {
+        await interaction.deferReply();
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /deepdive:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
       const question = interaction.options.getString('question', true);
       const explain = interaction.options.getBoolean('explain') ?? false;
 
       const tier = this.service.getTierFromInteraction(interaction);
       const quota = this.service.checkQuota(interaction.user.id, tier, 'deepdive');
       if (!quota.allowed) {
-        await this.safeEphemeralReply(
-          interaction,
-          `Daily quota reached for **/deepdive**.\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
-        );
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/deepdive**.\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
         return;
       }
 
-      try {
-        await interaction.deferReply({ ephemeral: false });
-      } catch {
-        // ignore
-      }
       this.service.registerPendingInteractionWithQuota(interaction, {
         dayKey: quota.dayKey,
         userId: interaction.user.id,
@@ -438,24 +462,26 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'paper') {
+      try {
+        await interaction.deferReply();
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /paper:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
       const arxiv = interaction.options.getString('arxiv', true);
       const explain = interaction.options.getBoolean('explain') ?? false;
 
       const tier = this.service.getTierFromInteraction(interaction);
       const quota = this.service.checkQuota(interaction.user.id, tier, 'paper');
       if (!quota.allowed) {
-        await this.safeEphemeralReply(
-          interaction,
-          `Daily quota reached for **/paper** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
-        );
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/paper** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
         return;
       }
 
-      try {
-        await interaction.deferReply({ ephemeral: false });
-      } catch {
-        // ignore
-      }
       this.service.registerPendingInteractionWithQuota(interaction, {
         dayKey: quota.dayKey,
         userId: interaction.user.id,
@@ -562,6 +588,48 @@ export class DiscordChannelAdapter implements IChannelAdapter {
 
       const entry = this.service.setFaq(key, question, answer, interaction.user.id);
       await this.safeEphemeralReply(interaction, `Saved FAQ \`${entry.key}\` (updated ${entry.updatedAt}).`);
+      return;
+    }
+
+    if (command === 'clear') {
+      const tier = this.service.getTierFromInteraction(interaction);
+      if (tier !== 'team') {
+        await this.safeEphemeralReply(interaction, 'Only **Team** can clear bot messages.');
+        return;
+      }
+
+      try {
+        await interaction.deferReply({ ephemeral: true });
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /clear:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const count = Math.min(interaction.options.getInteger('count') ?? 50, 100);
+      const channel = interaction.channel;
+      if (!channel || !('messages' in channel)) {
+        try { await interaction.editReply('Cannot access this channel.'); } catch { /* ignore */ }
+        return;
+      }
+
+      try {
+        const botId = interaction.client.user?.id;
+        const fetched = await (channel as any).messages.fetch({ limit: count });
+        const botMessages = fetched.filter((m: Message) => m.author.id === botId);
+
+        if (botMessages.size === 0) {
+          try { await interaction.editReply(`No bot messages found in the last ${count} messages.`); } catch { /* ignore */ }
+          return;
+        }
+
+        // bulkDelete with filterOld=true skips messages older than 14 days instead of throwing
+        const deleted = await (channel as any).bulkDelete(botMessages, true);
+        try {
+          await interaction.editReply(`Cleared **${deleted.size}** bot message(s) from the last ${count} messages.`);
+        } catch { /* ignore */ }
+      } catch (err) {
+        console.error('[DiscordChannel] /clear error:', err instanceof Error ? err.message : String(err));
+        try { await interaction.editReply('Failed to clear messages. Check bot permissions (Manage Messages).'); } catch { /* ignore */ }
+      }
       return;
     }
 

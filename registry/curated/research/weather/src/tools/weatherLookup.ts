@@ -18,7 +18,7 @@ export class WeatherLookupTool implements ITool<WeatherLookupInput, WeatherResul
   readonly name = 'weather_lookup';
   readonly displayName = 'Weather Lookup';
   readonly description =
-    'Get current weather conditions and forecasts for any location. Returns temperature (F/C), humidity, wind, precipitation, UV index, and severe weather alerts.';
+    'Check the weather for any city or location. Use this when the user asks "what\'s the weather", "will it rain", "is it cold", "forecast for", "temperature in", or any weather-related question. Returns current conditions and forecasts including temperature (F/C), humidity, wind, precipitation, UV index, and severe weather alerts.';
   readonly category = 'research';
   readonly version = '1.0.0';
   readonly hasSideEffects = false;

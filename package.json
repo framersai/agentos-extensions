@@ -20,7 +20,7 @@
   "scripts": {
     "test": "node -e \"console.log('agentos-extensions: test skipped in this monorepo build')\"",
     "test:coverage": "npm run test",
-    "build": "node scripts/update-registry.js",
+    "build": "node scripts/build-extensions.js && node scripts/update-registry.js",
     "lint": "node -e \"console.log('agentos-extensions: lint skipped in this monorepo build')\"",
     "clean": "node -e \"console.log('agentos-extensions: clean noop in this monorepo build')\"",
     "create-extension": "node scripts/create-extension.js",

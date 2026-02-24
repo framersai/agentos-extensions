@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-02-23T13:40:59.946Z",
+  "updated": "2026-02-24T18:05:11.552Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -11,6 +11,7 @@
       "auth",
       "channels",
       "communications",
+      "community",
       "integrations",
       "media",
       "productivity",
@@ -62,7 +63,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-discord",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/discord",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -93,7 +94,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-email",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/email",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -129,7 +130,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-feishu",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/feishu",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -164,7 +165,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-chat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-chat",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -200,7 +201,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-imessage",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/imessage",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -240,7 +241,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/instagram",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -276,7 +277,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-irc",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/irc",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -312,7 +313,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-line",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/line",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -346,7 +347,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-matrix",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/matrix",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -380,7 +381,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mattermost",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mattermost",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -416,7 +417,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nextcloud",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nextcloud",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -450,7 +451,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nostr",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nostr",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -485,7 +486,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/pinterest",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -533,7 +534,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -567,7 +568,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-signal",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/signal",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -610,7 +611,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-slack",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/slack",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -647,7 +648,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-sms",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/sms",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -682,7 +683,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-teams",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/teams",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -725,7 +726,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/telegram",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -759,7 +760,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -796,7 +797,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tlon",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tlon",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -830,7 +831,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitch",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitch",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -873,7 +874,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -912,7 +913,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/webchat",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -953,7 +954,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-whatsapp",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/whatsapp",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -991,7 +992,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/youtube",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1026,7 +1027,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalo",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1062,7 +1063,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalouser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalouser",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1090,7 +1091,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-notifications",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1133,7 +1134,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1178,7 +1179,51 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.rabbithole.integrations.wunderbot-feeds",
+        "name": "Wunderbot Feeds",
+        "package": "@framers/agentos-ext-wunderbot-feeds",
+        "version": "1.0.0",
+        "category": "integrations",
+        "path": "registry/curated/integrations/wunderbot-feeds",
+        "description": "Scheduled feed posting — fetches scraped content from Python API and posts formatted Discord embeds on a timer.",
+        "author": {
+          "name": "Rabbit Hole Inc",
+          "url": "https://rabbithole.inc"
+        },
+        "features": [
+          "Scheduled news posting (6 categories)",
+          "Udemy deals posting",
+          "Short squeeze stocks",
+          "Trending crypto",
+          "Threat intelligence RSS",
+          "Job listings",
+          "AI papers from arXiv",
+          "Uniswap sniper SSE"
+        ],
+        "tools": [
+          "fetchNews",
+          "fetchDeals",
+          "fetchTrades"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "integration",
+          "feeds",
+          "scraper",
+          "discord",
+          "news",
+          "crypto"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-wunderbot-feeds",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/wunderbot-feeds",
+        "verified": true,
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1209,7 +1254,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-giphy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/giphy",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1239,7 +1284,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/image-search",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1268,7 +1313,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/voice-synthesis",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1311,7 +1356,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-email-gmail",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/gmail",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1355,7 +1400,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-calendar-google",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/google-calendar",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1396,7 +1441,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1427,7 +1472,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1457,7 +1502,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-content-extraction",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/content-extraction",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1487,7 +1532,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-deep-research",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1515,7 +1560,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-news-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/news-search",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1545,7 +1590,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-weather",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/weather",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1583,7 +1628,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1619,7 +1664,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1661,7 +1706,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-browser-automation",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/browser-automation",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1698,7 +1743,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1728,7 +1773,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-credential-vault",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1767,7 +1812,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-plivo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/plivo",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1807,7 +1852,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-telnyx",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/telnyx",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1847,7 +1892,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-twilio",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/twilio",
         "verified": true,
-        "verifiedAt": "2026-02-23T13:40:59.946Z",
+        "verifiedAt": "2026-02-24T18:05:11.552Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
@@ -1923,8 +1968,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 53,
-    "curatedCount": 50,
+    "totalExtensions": 54,
+    "curatedCount": 51,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0

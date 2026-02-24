@@ -191,47 +191,71 @@ export class DiscordService {
           const embeds = options?.embeds ?? undefined;
           const canEmbed = embedReply && !embeds && typeof text === 'string' && text.length > 0 && text.length <= 4096;
 
-          await pending.interaction.editReply(
-            canEmbed
-              ? {
-                  content: undefined,
-                  embeds: [
-                    {
-                      description: text,
-                      color: brandColor,
-                      footer: footer ? { text: footer } : undefined,
-                    } as APIEmbed,
-                  ],
-                  files: options?.files,
-                }
-              : {
-                  content: text || undefined,
-                  embeds,
-                  files: options?.files,
-                },
-          );
+          try {
+            await pending.interaction.editReply(
+              canEmbed
+                ? {
+                    content: undefined,
+                    embeds: [
+                      {
+                        description: text,
+                        color: brandColor,
+                        footer: footer ? { text: footer } : undefined,
+                      } as APIEmbed,
+                    ],
+                    files: options?.files,
+                  }
+                : {
+                    content: text || undefined,
+                    embeds,
+                    files: options?.files,
+                  },
+            );
 
-          // Only count quota usage after we successfully produced the first response.
-          if (pending.quota) {
-            try {
-              this.state.incrementUsage(pending.quota.dayKey, pending.quota.userId, pending.quota.command, pending.quota.amount);
-              this.state.pruneUsage();
-            } catch {
-              // ignore
-            } finally {
-              pending.quota = undefined;
+            // Only count quota usage after we successfully produced the first response.
+            if (pending.quota) {
+              try {
+                this.state.incrementUsage(pending.quota.dayKey, pending.quota.userId, pending.quota.command, pending.quota.amount);
+                this.state.pruneUsage();
+              } catch {
+                // ignore
+              } finally {
+                pending.quota = undefined;
+              }
             }
+            const msg = await pending.interaction.fetchReply();
+            return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+          } catch (editErr) {
+            // editReply failed (interaction expired or deferReply didn't register).
+            // Fall back to sending as a regular channel message.
+            console.warn('[DiscordService] editReply failed, falling back to channel.send:', editErr instanceof Error ? editErr.message : String(editErr));
+            const channel = await this.fetchTextChannel(channelId);
+            const msg = await channel.send({
+              content: text || undefined,
+              embeds: options?.embeds,
+              files: options?.files,
+            });
+            return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
           }
-          const msg = await pending.interaction.fetchReply();
-          return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
         }
 
-        const msg = await pending.interaction.followUp({
-          content: text || undefined,
-          embeds: options?.embeds,
-          files: options?.files,
-        });
-        return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+        try {
+          const msg = await pending.interaction.followUp({
+            content: text || undefined,
+            embeds: options?.embeds,
+            files: options?.files,
+          });
+          return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+        } catch (followUpErr) {
+          console.warn('[DiscordService] followUp failed, falling back to channel.send:', followUpErr instanceof Error ? followUpErr.message : String(followUpErr));
+          const channel = await this.fetchTextChannel(channelId);
+          const msg = await channel.send({
+            content: text || undefined,
+            embeds: options?.embeds,
+            files: options?.files,
+          });
+          return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+        }
       }
     }
 
@@ -466,6 +490,18 @@ export class DiscordService {
         name: 'trivia_leaderboard',
         description: 'Show trivia leaderboard',
       },
+      {
+        name: 'clear',
+        description: 'Clear bot messages from this channel (Team only)',
+        options: [
+          {
+            name: 'count',
+            description: 'Number of recent messages to scan (default 50, max 100)',
+            type: ApplicationCommandOptionType.Integer,
+            required: false,
+          },
+        ],
+      },
     ];
 
     // Merge any additional slash commands from extensions (e.g., Founders).
@@ -500,6 +536,9 @@ export class DiscordService {
 
     const guild = interaction.guild;
     if (!guild) return 'starter';
+
+    // Guild owner is always team tier
+    if (interaction.user.id === guild.ownerId) return 'team';
 
     const memberAny: any = interaction.member as any;
     const roleIds: string[] = (() => {
