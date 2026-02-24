@@ -343,13 +343,16 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'pair') {
+      let pairDeferOk = false;
       try {
         await interaction.deferReply();
+        pairDeferOk = true;
       } catch (deferErr) {
         console.warn('[DiscordChannel] deferReply failed for /pair:', deferErr instanceof Error ? deferErr.message : String(deferErr));
-        return;
+        // Continue anyway — channel.send fallback will handle delivery.
       }
       this.service.registerPendingInteraction(interaction);
+      if (pairDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, '!pair', { explicitInvocation: true });
       return;
     }
@@ -357,11 +360,13 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     if (command === 'ask') {
       // Defer IMMEDIATELY — Discord only gives 3 seconds before the interaction token expires.
       const interactionAge = Date.now() - interaction.createdTimestamp;
+      let deferOk = false;
       try {
         await interaction.deferReply();
+        deferOk = true;
       } catch (deferErr) {
         console.warn(`[DiscordChannel] deferReply failed for /ask (age=${interactionAge}ms):`, deferErr instanceof Error ? deferErr.message : String(deferErr));
-        // Continue anyway — fallback to channel.send() will handle delivery.
+        // Continue anyway — channel.send() fallback in sendMessage will handle delivery.
       }
 
       const question = interaction.options.getString('question', true);
@@ -386,6 +391,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         command: quota.bucket,
         amount: 1,
       });
+      if (deferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, question, {
         explicitInvocation: true,
         explain,
@@ -394,8 +400,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'summarize') {
+      let summarizeDeferOk = false;
       try {
         await interaction.deferReply();
+        summarizeDeferOk = true;
       } catch (deferErr) {
         console.warn('[DiscordChannel] deferReply failed for /summarize:', deferErr instanceof Error ? deferErr.message : String(deferErr));
       }
@@ -420,6 +428,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         command: quota.bucket,
         amount: 1,
       });
+      if (summarizeDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, `Summarize this link:\n${url}`, {
         explicitInvocation: true,
         explain,
@@ -428,8 +437,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'deepdive') {
+      let deepdiveDeferOk = false;
       try {
         await interaction.deferReply();
+        deepdiveDeferOk = true;
       } catch (deferErr) {
         console.warn('[DiscordChannel] deferReply failed for /deepdive:', deferErr instanceof Error ? deferErr.message : String(deferErr));
       }
@@ -454,6 +465,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         command: quota.bucket,
         amount: 1,
       });
+      if (deepdiveDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, `Deep dive:\n${question}`, {
         explicitInvocation: true,
         explain,
@@ -462,8 +474,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'paper') {
+      let paperDeferOk = false;
       try {
         await interaction.deferReply();
+        paperDeferOk = true;
       } catch (deferErr) {
         console.warn('[DiscordChannel] deferReply failed for /paper:', deferErr instanceof Error ? deferErr.message : String(deferErr));
       }
@@ -488,6 +502,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         command: quota.bucket,
         amount: 1,
       });
+      if (paperDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(
         interaction,
         `Summarize this arXiv paper for an AI/LLM practitioner:\n${arxiv}`,

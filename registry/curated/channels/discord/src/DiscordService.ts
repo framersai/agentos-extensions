@@ -33,6 +33,8 @@ export interface DiscordChannelConfig {
 type PendingInteraction = {
   interaction: ChatInputCommandInteraction;
   usedEditReply: boolean;
+  /** Whether deferReply() succeeded. When false, editReply will also fail. */
+  deferred: boolean;
   cleanupTimer: ReturnType<typeof setTimeout>;
   quota?: {
     dayKey: string;
@@ -154,7 +156,7 @@ export class DiscordService {
       this.pendingInteractions.delete(id);
     }, ttlMs);
 
-    this.pendingInteractions.set(id, { interaction, usedEditReply: false, cleanupTimer });
+    this.pendingInteractions.set(id, { interaction, usedEditReply: false, deferred: false, cleanupTimer });
   }
 
   registerPendingInteractionWithQuota(
@@ -166,6 +168,12 @@ export class DiscordService {
     this.registerPendingInteraction(interaction, ttlMs);
     const existing = this.pendingInteractions.get(interaction.id);
     if (existing) existing.quota = { dayKey: quota.dayKey, userId: quota.userId, command: quota.command, amount };
+  }
+
+  /** Mark a pending interaction as successfully deferred (deferReply succeeded). */
+  markInteractionDeferred(interactionId: string): void {
+    const pending = this.pendingInteractions.get(interactionId);
+    if (pending) pending.deferred = true;
   }
 
   async sendMessage(
@@ -182,8 +190,39 @@ export class DiscordService {
       const interactionId = replyTo.slice('interaction:'.length);
       const pending = this.pendingInteractions.get(interactionId);
       if (pending) {
+        // Helper: send as a regular channel message (fallback when interaction methods fail).
+        const sendViaChannel = async (): Promise<{ id: string; channelId: string; timestamp: string }> => {
+          const channel = await this.fetchTextChannel(channelId);
+          // Mention the user so the response is visible even without the interaction UX.
+          const userId = pending.interaction.user?.id;
+          const mention = userId ? `<@${userId}> ` : '';
+          const content = mention + (text || '');
+          const msg = await channel.send({
+            content: content || undefined,
+            embeds: options?.embeds,
+            files: options?.files,
+          });
+          // Count quota on successful delivery via fallback.
+          if (pending.quota) {
+            try {
+              this.state.incrementUsage(pending.quota.dayKey, pending.quota.userId, pending.quota.command, pending.quota.amount);
+              this.state.pruneUsage();
+            } catch { /* ignore */ } finally {
+              pending.quota = undefined;
+            }
+          }
+          return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+        };
+
         if (!pending.usedEditReply) {
           pending.usedEditReply = true;
+
+          // If deferReply never succeeded, skip editReply entirely — it will always fail.
+          if (!pending.deferred) {
+            console.warn('[DiscordService] deferReply was not successful, skipping editReply — using channel.send fallback');
+            return sendViaChannel();
+          }
+
           const embedReply = shouldUseEmbedReplies();
           const brandColor = resolveBrandColor();
           const footer = resolveFooterText();
@@ -229,13 +268,7 @@ export class DiscordService {
             // editReply failed (interaction expired or deferReply didn't register).
             // Fall back to sending as a regular channel message.
             console.warn('[DiscordService] editReply failed, falling back to channel.send:', editErr instanceof Error ? editErr.message : String(editErr));
-            const channel = await this.fetchTextChannel(channelId);
-            const msg = await channel.send({
-              content: text || undefined,
-              embeds: options?.embeds,
-              files: options?.files,
-            });
-            return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+            return sendViaChannel();
           }
         }
 
@@ -248,13 +281,7 @@ export class DiscordService {
           return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
         } catch (followUpErr) {
           console.warn('[DiscordService] followUp failed, falling back to channel.send:', followUpErr instanceof Error ? followUpErr.message : String(followUpErr));
-          const channel = await this.fetchTextChannel(channelId);
-          const msg = await channel.send({
-            content: text || undefined,
-            embeds: options?.embeds,
-            files: options?.files,
-          });
-          return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
+          return sendViaChannel();
         }
       }
     }
