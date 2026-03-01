@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.rabbithole.integrations.wunderbot-feeds",
+  "name": "Wunderbot Feeds",
+  "version": "1.0.0",
+  "description": "Scheduled feed posting — fetches scraped content from Python API and posts formatted Discord embeds on a timer.",
+  "author": {
+    "name": "Rabbit Hole Inc",
+    "url": "https://rabbithole.inc"
+  },
+  "license": "MIT",
+  "agentosVersion": "^2.0.0",
+  "categories": ["integration", "communication"],
+  "platforms": ["discord"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "fetchNews",
+      "displayName": "Fetch News",
+      "description": "Fetch the latest news headlines from Google News via the Python scraper API.",
+      "entry": "./dist/index.js"
+    },
+    {
+      "kind": "tool",
+      "id": "fetchDeals",
+      "displayName": "Fetch Udemy Deals",
+      "description": "Fetch free Udemy course deals from the Python scraper API.",
+      "entry": "./dist/index.js"
+    },
+    {
+      "kind": "tool",
+      "id": "fetchTrades",
+      "displayName": "Fetch Market Data",
+      "description": "Fetch short squeeze stocks and/or trending crypto from the Python scraper API.",
+      "entry": "./dist/index.js"
+    }
+  ],
+  "features": [
+    "Scheduled news posting (6 categories)",
+    "Udemy deals posting",
+    "Short squeeze stocks",
+    "Trending crypto",
+    "Threat intelligence RSS",
+    "Job listings",
+    "AI papers from arXiv",
+    "Uniswap sniper SSE"
+  ],
+  "configuration": {
+    "properties": {
+      "scraper.apiKey": {
+        "type": "string",
+        "description": "API key for the Python scraper service",
+        "secret": true
+      },
+      "discord.botToken": {
+        "type": "string",
+        "description": "Discord bot token for posting embeds",
+        "secret": true
+      }
+    }
+  },
+  "requiredSecrets": ["discord.botToken"]
+}

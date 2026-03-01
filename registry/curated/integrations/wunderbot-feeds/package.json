@@ -1,0 +1,55 @@
+{
+  "name": "@framers/agentos-ext-wunderbot-feeds",
+  "version": "1.0.0",
+  "description": "Scheduled scraper feed posting for Wunderland — fetches from Python scraper API and posts Discord embeds",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./manifest.json": "./manifest.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "agentos",
+    "extension",
+    "integration",
+    "feeds",
+    "scraper",
+    "discord",
+    "news",
+    "crypto"
+  ],
+  "author": {
+    "name": "Rabbit Hole Inc",
+    "url": "https://rabbithole.inc"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
+  "dependencies": {
+    "discord.js": "^14.16.0"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

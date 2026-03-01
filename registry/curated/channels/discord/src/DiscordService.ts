@@ -16,6 +16,7 @@ import {
   type Interaction,
   type ChatInputCommandInteraction,
   type ButtonInteraction,
+  type GuildMember,
   type RESTPostAPIChatInputApplicationCommandsJSONBody,
   ApplicationCommandOptionType,
   type APIEmbed,
@@ -42,6 +43,8 @@ type PendingInteraction = {
     command: QuotaCommand;
     amount: number;
   };
+  /** User's billing tier — used for ephemeral quota notifications. */
+  tier?: Tier;
 };
 
 export class DiscordService {
@@ -49,6 +52,7 @@ export class DiscordService {
   private running = false;
   private messageHandlers: Array<(message: Message) => void> = [];
   private interactionHandlers: Array<(interaction: Interaction) => void> = [];
+  private memberJoinHandlers: Array<(member: GuildMember) => void> = [];
   private pendingInteractions = new Map<string, PendingInteraction>();
   private readonly config: DiscordChannelConfig;
   private readonly state: LocalStateStore;
@@ -66,6 +70,7 @@ export class DiscordService {
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
       GatewayIntentBits.MessageContent,
+      GatewayIntentBits.GuildMembers,
     ];
 
     this.client = new Client({ intents });
@@ -82,6 +87,12 @@ export class DiscordService {
     this.client.on('interactionCreate', (interaction: Interaction) => {
       for (const handler of this.interactionHandlers) {
         handler(interaction);
+      }
+    });
+
+    this.client.on('guildMemberAdd', (member: GuildMember) => {
+      for (const handler of this.memberJoinHandlers) {
+        handler(member);
       }
     });
 
@@ -136,6 +147,10 @@ export class DiscordService {
     if (idx >= 0) this.interactionHandlers.splice(idx, 1);
   }
 
+  onMemberJoin(handler: (member: GuildMember) => void): void {
+    this.memberJoinHandlers.push(handler);
+  }
+
   /** Register additional slash commands to be included in the guild command set. */
   registerSlashCommands(commands: RESTPostAPIChatInputApplicationCommandsJSONBody[]): void {
     this.additionalSlashCommands.push(...commands);
@@ -161,13 +176,16 @@ export class DiscordService {
 
   registerPendingInteractionWithQuota(
     interaction: ChatInputCommandInteraction,
-    quota: { dayKey: string; userId: string; command: QuotaCommand; amount?: number },
+    quota: { dayKey: string; userId: string; command: QuotaCommand; amount?: number; tier?: Tier },
     ttlMs = 15 * 60_000,
   ): void {
     const amount = Number.isFinite(quota.amount) ? Math.max(1, Math.floor(Number(quota.amount))) : 1;
     this.registerPendingInteraction(interaction, ttlMs);
     const existing = this.pendingInteractions.get(interaction.id);
-    if (existing) existing.quota = { dayKey: quota.dayKey, userId: quota.userId, command: quota.command, amount };
+    if (existing) {
+      existing.quota = { dayKey: quota.dayKey, userId: quota.userId, command: quota.command, amount };
+      if (quota.tier) existing.tier = quota.tier;
+    }
   }
 
   /** Mark a pending interaction as successfully deferred (deferReply succeeded). */
@@ -211,6 +229,8 @@ export class DiscordService {
               pending.quota = undefined;
             }
           }
+          // Ephemeral quota notification (fire-and-forget).
+          this.sendQuotaFollowUp(pending).catch(() => {});
           return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
         };
 
@@ -262,6 +282,8 @@ export class DiscordService {
                 pending.quota = undefined;
               }
             }
+            // Ephemeral quota notification (fire-and-forget).
+            this.sendQuotaFollowUp(pending).catch(() => {});
             const msg = await pending.interaction.fetchReply();
             return { id: msg.id, channelId: msg.channelId, timestamp: msg.createdAt.toISOString() };
           } catch (editErr) {
@@ -519,13 +541,97 @@ export class DiscordService {
       },
       {
         name: 'clear',
-        description: 'Clear bot messages from this channel (Team only)',
+        description: 'Clear messages from this channel (Team only)',
         options: [
           {
             name: 'count',
-            description: 'Number of recent messages to scan (default 50, max 100)',
+            description: 'Number of messages to delete (default 50, max 100)',
             type: ApplicationCommandOptionType.Integer,
             required: false,
+          },
+        ],
+      },
+      {
+        name: 'search',
+        description: 'Search the web',
+        options: [
+          {
+            name: 'query',
+            description: 'Search query',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'gif',
+        description: 'Search for a GIF',
+        options: [
+          {
+            name: 'query',
+            description: 'GIF search query',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'image',
+        description: 'Search for stock images',
+        options: [
+          {
+            name: 'query',
+            description: 'Image search query',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'news',
+        description: 'Search for recent news',
+        options: [
+          {
+            name: 'query',
+            description: 'News search query',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'extract',
+        description: 'Extract and summarize content from a URL',
+        options: [
+          {
+            name: 'url',
+            description: 'URL to extract content from',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'research',
+        description: 'Deep research on a topic (web + academic + social)',
+        options: [
+          {
+            name: 'topic',
+            description: 'Topic to research',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'weather',
+        description: 'Get the current weather and forecast',
+        options: [
+          {
+            name: 'location',
+            description: 'City name, zip code, or coordinates',
+            type: ApplicationCommandOptionType.String,
+            required: true,
           },
         ],
       },
@@ -558,8 +664,9 @@ export class DiscordService {
 
   getTierFromInteraction(interaction: ChatInputCommandInteraction): Tier {
     const teamRole = String(process.env['ROLE_TEAM'] || 'Team').trim();
-    const proRole = String(process.env['ROLE_PRO'] || 'Pro').trim();
+    const pioneerRole = String(process.env['ROLE_PIONEER'] || 'Pioneer').trim();
     const enterpriseRole = String(process.env['ROLE_ENTERPRISE_ALIAS'] || 'Enterprise').trim();
+    const explorerRole = String(process.env['ROLE_EXPLORER'] || 'Explorer').trim();
 
     const guild = interaction.guild;
     if (!guild) return 'starter';
@@ -580,8 +687,9 @@ export class DiscordService {
       .filter((n): n is string => typeof n === 'string' && n.length > 0);
 
     if (teamRole && roleNames.includes(teamRole)) return 'team';
-    if (proRole && roleNames.includes(proRole)) return 'pro';
-    if (enterpriseRole && roleNames.includes(enterpriseRole)) return 'pro';
+    if (pioneerRole && roleNames.includes(pioneerRole)) return 'pioneer';
+    if (enterpriseRole && roleNames.includes(enterpriseRole)) return 'pioneer';
+    if (explorerRole && roleNames.includes(explorerRole)) return 'explorer';
     return 'starter';
   }
 
@@ -599,13 +707,15 @@ export class DiscordService {
     if (tier === 'team') return 10_000_000;
     const bucket = this.quotaBucket(command);
     if (bucket === 'deepdive') {
-      const starter = Number(process.env['STARTER_DEEPDIVE_PER_DAY'] ?? 3) || 3;
-      const pro = Number(process.env['PRO_DEEPDIVE_PER_DAY'] ?? 10) || 10;
-      return tier === 'pro' ? pro : starter;
+      const free = Number(process.env['FREE_DEEPDIVE_PER_DAY'] ?? 1) || 1;
+      const explorer = Number(process.env['EXPLORER_DEEPDIVE_PER_DAY'] ?? 5) || 5;
+      const pioneer = Number(process.env['PIONEER_DEEPDIVE_PER_DAY'] ?? 30) || 30;
+      return tier === 'pioneer' ? pioneer : tier === 'explorer' ? explorer : free;
     }
-    const starter = Number(process.env['STARTER_ASK_PER_DAY'] ?? 10) || 10;
-    const pro = Number(process.env['PRO_ASK_PER_DAY'] ?? 30) || 30;
-    return tier === 'pro' ? pro : starter;
+    const free = Number(process.env['FREE_ASK_PER_DAY'] ?? 10) || 10;
+    const explorer = Number(process.env['EXPLORER_ASK_PER_DAY'] ?? 30) || 30;
+    const pioneer = Number(process.env['PIONEER_ASK_PER_DAY'] ?? 100) || 100;
+    return tier === 'pioneer' ? pioneer : tier === 'explorer' ? explorer : free;
   }
 
   checkQuota(userId: string, tier: Tier, command: QuotaCommand): { allowed: boolean; used: number; limit: number; dayKey: string; bucket: QuotaCommand } {
@@ -615,6 +725,26 @@ export class DiscordService {
     const limit = this.quotaLimit(tier, command);
     const allowed = tier === 'team' ? true : used < limit;
     return { allowed, used, limit, dayKey, bucket };
+  }
+
+  /** Send an ephemeral followUp showing remaining quota after a response. */
+  private async sendQuotaFollowUp(pending: PendingInteraction): Promise<void> {
+    const tier = pending.tier;
+    if (!tier || tier === 'team') return; // Team has unlimited — no need to nag.
+
+    const userId = pending.interaction.user.id;
+    const dayKey = this.quotaDayKey();
+
+    const askUsed = this.state.getUsage(dayKey, userId, 'ask');
+    const askLimit = this.quotaLimit(tier, 'ask');
+    const ddUsed = this.state.getUsage(dayKey, userId, 'deepdive');
+    const ddLimit = this.quotaLimit(tier, 'deepdive');
+
+    const askRemaining = Math.max(0, askLimit - askUsed);
+    const ddRemaining = Math.max(0, ddLimit - ddUsed);
+
+    const line = `Credits remaining today: **/ask** ${askRemaining}/${askLimit} · **/deepdive** ${ddRemaining}/${ddLimit}`;
+    await pending.interaction.followUp({ content: line, ephemeral: true });
   }
 
   // Notes / FAQ / Trivia stats

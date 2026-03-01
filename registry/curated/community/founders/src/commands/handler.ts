@@ -124,7 +124,7 @@ const FOUNDERS_BUTTON_PREFIX = 'founders:';
 
 export function createFoundersHandler(config: FoundersHandlerConfig) {
   const { store, channels, timezone } = config;
-  const proRoles = config.proRoles ?? new Set(['Pro', 'Team', 'Enterprise']);
+  const proRoles = config.proRoles ?? new Set(['Explorer', 'Pioneer', 'Team', 'Enterprise']);
   const founderRoleName = config.founderRoleName ?? 'Founder';
 
   function hasProRole(member: GuildMember): boolean {
@@ -200,7 +200,7 @@ export function createFoundersHandler(config: FoundersHandlerConfig) {
     if (!hasProRole(member)) {
       await i.reply({
         content:
-          'The Founders is available to **Pro** subscribers and above.\nUpgrade at **rabbithole.inc** or use `/verify <email>` if you already have a Pro subscription.',
+          'The Founders is available to **Explorer** subscribers and above.\nUpgrade at **rabbithole.inc** or use `/verify <email>` if you already have a subscription.',
         ephemeral: true,
       });
       return;
@@ -280,15 +280,15 @@ export function createFoundersHandler(config: FoundersHandlerConfig) {
 
     await i.reply({
       content:
-        "Welcome to The Founders! \u{1F407} You're now a White Rabbit (Level 1).\nUse `/daily` for check-ins, `/weekly` for updates, and `/profile` to see your card.",
+        "Welcome to The Founders! \u{1F511} You're now a Founder - Curious Alice (Level 1).\nUse `/daily` for check-ins, `/weekly` for updates, and `/profile` to see your card.",
       ephemeral: true,
     });
 
     // DM welcome.
     try {
       await i.user.send(
-        'Welcome to **The Founders**! \u{1F407}\n\n' +
-        "You're now a **White Rabbit** (Level 1). Here's how to get started:\n\n" +
+        'Welcome to **The Founders**! \u{1F511}\n\n' +
+        "You're now a **Founder - Curious Alice** (Level 1). Here's how to get started:\n\n" +
         '\u{1F4CB} Use `/daily` in #daily-standups for daily progress check-ins (+10 XP)\n' +
         '\u{1F4CA} Use `/weekly` in #weekly-updates for weekly reports (+50 XP)\n' +
         '\u{1F4AC} Give feedback in #feedback-exchange with `/feedback @user` (+15 XP each)\n' +
@@ -308,7 +308,7 @@ export function createFoundersHandler(config: FoundersHandlerConfig) {
     if (ch) {
       try {
         await ch.send({
-          embeds: [embedToApi(founderJoinedEmbed(founder, projectName, projectDescription, avatarUrl(member)))],
+          embeds: [embedToApi(founderJoinedEmbed(founder, projectName, projectDescription, avatarUrl(member), member?.displayName))],
         });
       } catch { /* */ }
     }
@@ -571,7 +571,7 @@ export function createFoundersHandler(config: FoundersHandlerConfig) {
       return;
     }
     if (founder.level < 2) {
-      await i.reply({ content: 'Primary project pinning unlocks at **Mad Hatter (Level 2)**.', ephemeral: true });
+      await i.reply({ content: 'Primary project pinning unlocks at **Founder - Caterpillar (Level 2)**.', ephemeral: true });
       return;
     }
     const projectName = i.options.getString('project', true);
@@ -1123,7 +1123,7 @@ export function createFoundersHandler(config: FoundersHandlerConfig) {
       const member = i.member as GuildMember | null;
       if (!member || !hasProRole(member)) {
         await i.reply({
-          content: 'The Founders is available to **Pro** subscribers and above.',
+          content: 'The Founders is available to **Explorer** subscribers and above.',
           ephemeral: true,
         });
         return;

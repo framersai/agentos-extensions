@@ -758,7 +758,7 @@ export class FounderStore {
     const founder = this.getFounder(userId);
     if (!founder) return [false, 'Not a founder.'];
     if (founder.level < 3)
-      return [false, 'Showcase requires Cheshire Cat (Level 3) or higher.'];
+      return [false, 'Showcase requires Founder - Cheshire Cat (Level 3) or higher.'];
     if (founder.lastShowcasePost) {
       try {
         const lastParts = founder.lastShowcasePost.split('-').map(Number);

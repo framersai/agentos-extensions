@@ -15,9 +15,9 @@ function truncate(s: string, max: number): string {
 
 function levelEmoji(level: number): string {
   return (
-    { 1: '\u{1F407}', 2: '\u{1F3A9}', 3: '\u{1F63A}', 4: '\u2764\uFE0F', 5: '\u2728' }[
+    { 1: '\u{1F511}', 2: '\u{1F41B}', 3: '\u{1F63A}', 4: '\u{1F422}', 5: '\u2728' }[
       level
-    ] ?? '\u{1F407}'
+    ] ?? '\u{1F511}'
   );
 }
 
@@ -241,7 +241,7 @@ export function levelUpEmbed(
 export function welcomeProgramEmbed(): Record<string, any> {
   const lines = [
     '**The Founders** is a gamified build-in-public program for builders, makers, and entrepreneurs.',
-    '*Available to Pro subscribers and above.*',
+    '*Available to Explorer subscribers and above.*',
     '',
     '**How it works:**',
     '\u{1F407} Join and create your founder profile',
@@ -274,11 +274,13 @@ export function founderJoinedEmbed(
   projectName: string,
   projectDesc: string | null,
   avatarUrl?: string | null,
+  displayName?: string | null,
 ): Record<string, any> {
   const emoji = levelEmoji(1);
+  const name = displayName || `<@${founder.userId}>`;
   const embed: Record<string, any> = {
     title: '\u{1F389} New Founder Joined!',
-    description: `<@${founder.userId}> joined The Founders as a ${emoji} White Rabbit!`,
+    description: `**${name}** joined The Founders as a ${emoji} Founder - Curious Alice!`,
     color: BRAND_COLOR,
     fields: [{ name: 'Project', value: projectName, inline: true }],
     footer: { text: 'Powered by Wunderbots | rabbithole.inc' },

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-export type Tier = 'starter' | 'pro' | 'team';
+export type Tier = 'starter' | 'explorer' | 'pioneer' | 'team';
 
 export type QuotaCommand = 'ask' | 'summarize' | 'paper' | 'deepdive';
 

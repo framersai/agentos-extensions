@@ -53,11 +53,11 @@ export interface LevelInfo {
 }
 
 export const LEVELS: LevelInfo[] = [
-  { level: 1, name: 'White Rabbit', xp: 0, color: 0xffffff },
-  { level: 2, name: 'Mad Hatter', xp: 500, color: 0x9b59b6 },
-  { level: 3, name: 'Cheshire Cat', xp: 1_500, color: 0xe91e63 },
-  { level: 4, name: 'Queen of Hearts', xp: 4_000, color: 0xe74c3c },
-  { level: 5, name: 'Wonderland Founder', xp: 10_000, color: 0xf1c40f },
+  { level: 1, name: 'Founder - Curious Alice', xp: 0, color: 0xffffff },
+  { level: 2, name: 'Founder - Caterpillar', xp: 500, color: 0x9b59b6 },
+  { level: 3, name: 'Founder - Cheshire Cat', xp: 1_500, color: 0xe91e63 },
+  { level: 4, name: 'Founder - Mock Turtle', xp: 4_000, color: 0xe74c3c },
+  { level: 5, name: 'Founder - Wonderland', xp: 10_000, color: 0xf1c40f },
 ];
 
 export const LEVEL_ROLE_NAMES = LEVELS.map((l) => l.name);

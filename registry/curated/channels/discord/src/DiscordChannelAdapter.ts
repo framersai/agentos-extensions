@@ -65,7 +65,20 @@ export class DiscordChannelAdapter implements IChannelAdapter {
   /** Optional external interaction handlers (e.g., Founders extension). */
   private externalInteractionHandlers: Array<(interaction: Interaction) => Promise<boolean>> = [];
 
+  /**
+   * Delayed response queue: for non-mention messages, wait before responding.
+   * If someone else messages in the same channel before the timer fires, cancel it.
+   * Key = channelId, Value = { timer, message event to emit }.
+   */
+  private pendingResponses = new Map<string, { timer: ReturnType<typeof setTimeout>; event: ChannelEvent<ChannelMessage> }>();
+  private static readonly RESPONSE_DELAY_MS = 2 * 60 * 1000; // 2 minutes
+
   constructor(private readonly service: DiscordService) {}
+
+  /** Expose the underlying DiscordService for integrations (e.g., Founders welcome post). */
+  getService(): DiscordService {
+    return this.service;
+  }
 
   /**
    * Register an external interaction handler that runs before built-in handling.
@@ -105,6 +118,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       }
     }
     this.triviaSessions.clear();
+    for (const p of this.pendingResponses.values()) {
+      clearTimeout(p.timer);
+    }
+    this.pendingResponses.clear();
   }
 
   getConnectionInfo(): ChannelConnectionInfo {
@@ -236,6 +253,24 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     // No-DM policy: ignore direct messages / group DMs.
     if (message.channel.isDMBased()) return;
 
+    const botId = this.service.getClient().user?.id;
+    const channelId = message.channelId;
+
+    // Determine if this is a direct invocation (mention or reply to bot).
+    const mentionsBot = botId ? message.mentions.users.has(botId) : false;
+    const repliesToBot = botId && message.reference?.messageId
+      ? message.channel.messages?.cache.get(message.reference.messageId)?.author?.id === botId
+      : false;
+    const isDirect = mentionsBot || repliesToBot;
+
+    // Any human message in a channel cancels the pending delayed response for that channel.
+    // Someone else is engaging, so the bot stays quiet.
+    const pending = this.pendingResponses.get(channelId);
+    if (pending) {
+      clearTimeout(pending.timer);
+      this.pendingResponses.delete(channelId);
+    }
+
     const sender: RemoteUser = {
       id: message.author.id,
       displayName: message.member?.displayName ?? message.author.displayName ?? undefined,
@@ -247,7 +282,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     const channelMessage: ChannelMessage = {
       messageId: message.id,
       platform: 'discord',
-      conversationId: message.channelId,
+      conversationId: channelId,
       conversationType,
       sender,
       content: [{ type: 'text', text: message.content ?? '' }],
@@ -260,12 +295,26 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     const event: ChannelEvent<ChannelMessage> = {
       type: 'message',
       platform: 'discord',
-      conversationId: message.channelId,
+      conversationId: channelId,
       timestamp: channelMessage.timestamp,
       data: channelMessage,
     };
 
-    this.emit(event);
+    if (isDirect) {
+      // Direct mention or reply to bot → respond immediately.
+      this.emit(event);
+      return;
+    }
+
+    // Non-direct message → queue a delayed response.
+    // If no one else messages in this channel for 2 minutes, emit to the LLM.
+    // The system prompt instructs the LLM to return empty if the message isn't worth responding to.
+    const timer = setTimeout(() => {
+      this.pendingResponses.delete(channelId);
+      this.emit(event);
+    }, DiscordChannelAdapter.RESPONSE_DELAY_MS);
+
+    this.pendingResponses.set(channelId, { timer, event });
   }
 
   private async handleInboundInteraction(interaction: Interaction): Promise<void> {
@@ -313,7 +362,16 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         '`/deepdive question:<text>` — deeper answer (separate quota)',
         '`/summarize url:<link>` — summarize a link (counts as /ask)',
         '`/paper arxiv:<id-or-url>` — summarize an arXiv paper (counts as /ask)',
+        '`/research topic:<text>` — deep research (counts as /deepdive)',
         '`/ask explain:true` — include a tool/API trace after the answer',
+        '',
+        '__Tools__',
+        '`/search query:<text>` — search the web',
+        '`/news query:<text>` — search recent news',
+        '`/weather location:<city>` — current weather and forecast',
+        '`/extract url:<link>` — extract content from a URL',
+        '`/gif query:<text>` — search for a GIF',
+        '`/image query:<text>` — search for stock images',
         '',
         '__Community__',
         '`/trivia` — start a trivia question',
@@ -331,7 +389,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         lines.push(
           '',
           '__Team Commands__',
-          '`/clear [count]` — clear bot messages from this channel',
+          '`/clear [count]` — clear messages from this channel',
           '`/faq_set key:<k> question:<q> answer:<a>` — create/update FAQ entry',
         );
       }
@@ -390,6 +448,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         userId: interaction.user.id,
         command: quota.bucket,
         amount: 1,
+        tier,
       });
       if (deferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, question, {
@@ -427,6 +486,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         userId: interaction.user.id,
         command: quota.bucket,
         amount: 1,
+        tier,
       });
       if (summarizeDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, `Summarize this link:\n${url}`, {
@@ -464,6 +524,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         userId: interaction.user.id,
         command: quota.bucket,
         amount: 1,
+        tier,
       });
       if (deepdiveDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(interaction, `Deep dive:\n${question}`, {
@@ -501,6 +562,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         userId: interaction.user.id,
         command: quota.bucket,
         amount: 1,
+        tier,
       });
       if (paperDeferOk) this.service.markInteractionDeferred(interaction.id);
       this.emitSyntheticInteractionMessage(
@@ -609,7 +671,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     if (command === 'clear') {
       const tier = this.service.getTierFromInteraction(interaction);
       if (tier !== 'team') {
-        await this.safeEphemeralReply(interaction, 'Only **Team** can clear bot messages.');
+        await this.safeEphemeralReply(interaction, 'Only **Team** can clear messages.');
         return;
       }
 
@@ -627,19 +689,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       }
 
       try {
-        const botId = interaction.client.user?.id;
-        const fetched = await (channel as any).messages.fetch({ limit: count });
-        const botMessages = fetched.filter((m: Message) => m.author.id === botId);
-
-        if (botMessages.size === 0) {
-          try { await interaction.editReply(`No bot messages found in the last ${count} messages.`); } catch { /* ignore */ }
-          return;
-        }
-
         // bulkDelete with filterOld=true skips messages older than 14 days instead of throwing
-        const deleted = await (channel as any).bulkDelete(botMessages, true);
+        const deleted = await (channel as any).bulkDelete(count, true);
         try {
-          await interaction.editReply(`Cleared **${deleted.size}** bot message(s) from the last ${count} messages.`);
+          await interaction.editReply(`Cleared **${deleted.size}** message(s).`);
         } catch { /* ignore */ }
       } catch (err) {
         console.error('[DiscordChannel] /clear error:', err instanceof Error ? err.message : String(err));
@@ -680,6 +733,266 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       const id = interaction.options.getInteger('id', true);
       const ok = this.service.deleteNote(interaction.user.id, id);
       await this.safeEphemeralReply(interaction, ok ? `Deleted note **#${id}**.` : `Note **#${id}** not found.`);
+      return;
+    }
+
+    if (command === 'search') {
+      let searchDeferOk = false;
+      try {
+        await interaction.deferReply();
+        searchDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /search:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const query = interaction.options.getString('query', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/search** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (searchDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(interaction, `Search the web for: ${query}`, {
+        explicitInvocation: true,
+      });
+      return;
+    }
+
+    if (command === 'gif') {
+      let gifDeferOk = false;
+      try {
+        await interaction.deferReply();
+        gifDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /gif:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const query = interaction.options.getString('query', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/gif** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (gifDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(
+        interaction,
+        `Find a GIF for: ${query}\n\nUse the giphy_search tool and respond with only the GIF URL, no other text.`,
+        { explicitInvocation: true },
+      );
+      return;
+    }
+
+    if (command === 'image') {
+      let imageDeferOk = false;
+      try {
+        await interaction.deferReply();
+        imageDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /image:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const query = interaction.options.getString('query', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/image** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (imageDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(
+        interaction,
+        `Find stock images for: ${query}\n\nUse the image_search tool and respond with the image URLs.`,
+        { explicitInvocation: true },
+      );
+      return;
+    }
+
+    if (command === 'news') {
+      let newsDeferOk = false;
+      try {
+        await interaction.deferReply();
+        newsDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /news:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const query = interaction.options.getString('query', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/news** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (newsDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(interaction, `Search for recent news about: ${query}`, {
+        explicitInvocation: true,
+      });
+      return;
+    }
+
+    if (command === 'extract') {
+      let extractDeferOk = false;
+      try {
+        await interaction.deferReply();
+        extractDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /extract:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const url = interaction.options.getString('url', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/extract** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (extractDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(interaction, `Extract and summarize the content from this URL:\n${url}`, {
+        explicitInvocation: true,
+      });
+      return;
+    }
+
+    if (command === 'research') {
+      let researchDeferOk = false;
+      try {
+        await interaction.deferReply();
+        researchDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /research:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const topic = interaction.options.getString('topic', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'deepdive');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/research** (counts as **/deepdive**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (researchDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(
+        interaction,
+        `Research this topic thoroughly using web search, academic sources, and social/news trends:\n${topic}`,
+        { explicitInvocation: true },
+      );
+      return;
+    }
+
+    if (command === 'weather') {
+      let weatherDeferOk = false;
+      try {
+        await interaction.deferReply();
+        weatherDeferOk = true;
+      } catch (deferErr) {
+        console.warn('[DiscordChannel] deferReply failed for /weather:', deferErr instanceof Error ? deferErr.message : String(deferErr));
+      }
+
+      const location = interaction.options.getString('location', true);
+
+      const tier = this.service.getTierFromInteraction(interaction);
+      const quota = this.service.checkQuota(interaction.user.id, tier, 'ask');
+      if (!quota.allowed) {
+        try {
+          await interaction.editReply(
+            `Daily quota reached for **/weather** (counts as **/ask**).\nUsed: **${quota.used}/${quota.limit}** (resets daily — ${this.quotaTzLabel()}).\nRun \`/quota\` to see your limits.`,
+          );
+        } catch { /* ignore */ }
+        return;
+      }
+
+      this.service.registerPendingInteractionWithQuota(interaction, {
+        dayKey: quota.dayKey,
+        userId: interaction.user.id,
+        command: quota.bucket,
+        amount: 1,
+        tier,
+      });
+      if (weatherDeferOk) this.service.markInteractionDeferred(interaction.id);
+      this.emitSyntheticInteractionMessage(
+        interaction,
+        `What is the current weather in ${location}? Use the weather_lookup tool.`,
+        { explicitInvocation: true },
+      );
       return;
     }
 
