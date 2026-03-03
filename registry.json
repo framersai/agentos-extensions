@@ -1170,6 +1170,33 @@
         "downloads": 0
       },
       {
+        "id": "com.framers.community.verify",
+        "name": "Discord Verify",
+        "package": "@framers/agentos-ext-verify",
+        "version": "1.0.0",
+        "category": "community",
+        "path": "registry/curated/community/verify",
+        "description": "Link Discord accounts to RabbitHole subscriptions and sync roles based on subscription tier",
+        "author": {
+          "name": "Rabbit Hole Inc"
+        },
+        "features": [],
+        "tools": [],
+        "keywords": [
+          "agentos",
+          "extension",
+          "verify",
+          "discord",
+          "rabbithole"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-verify",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/verify",
+        "verified": true,
+        "verifiedAt": "2026-03-03T00:00:00.000Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
         "id": "com.framers.integrations.telegram",
         "name": "Telegram Bot Extension",
         "package": "@framers/agentos-ext-telegram",
