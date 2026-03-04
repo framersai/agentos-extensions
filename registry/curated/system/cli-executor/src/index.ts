@@ -9,7 +9,6 @@
  * @license MIT
  */
 
-import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
@@ -48,7 +47,14 @@ export interface CLIExecutorExtensionOptions extends ShellConfig {
  * });
  * ```
  */
-export function createExtensionPack(context: ExtensionContext): ExtensionPack {
+export function createExtensionPack(context: {
+  options?: Record<string, unknown>;
+  secrets?: Record<string, string>;
+  logger?: { info: (...args: unknown[]) => void };
+  onActivate?: () => Promise<void>;
+  onDeactivate?: () => Promise<void>;
+  [key: string]: unknown;
+}) {
   const options = (context.options as CLIExecutorExtensionOptions) || {};
 
   let workspaceDir: string | undefined;

@@ -19,8 +19,8 @@ import type {
 } from '../types.js';
 
 // Dynamic import for puppeteer to support environments where it's not available
-let puppeteer: typeof import('puppeteer-core') | null = null;
-let cheerio: typeof import('cheerio') | null = null;
+let puppeteer: any = null;
+let cheerio: any = null;
 
 /**
  * Lazy load puppeteer-core
@@ -162,7 +162,7 @@ export class BrowserService {
     const $ = (await getCheerio()).load(await this.page.content());
     const elements: ScrapeElement[] = [];
 
-    $(selector).each((_, el) => {
+    $(selector).each((_: any, el: any) => {
       const $el = $(el);
       const attributes: Record<string, string> = {};
 

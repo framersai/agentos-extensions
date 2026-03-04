@@ -9,7 +9,6 @@
  * @license MIT
  */
 
-import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
 import { BrowserService } from './services/browserService.js';
 import { NavigateTool } from './tools/navigate.js';
 import { ScrapeTool } from './tools/scrape.js';
@@ -47,7 +46,14 @@ export interface WebBrowserExtensionOptions extends BrowserConfig {
  * });
  * ```
  */
-export function createExtensionPack(context: ExtensionContext): ExtensionPack {
+export function createExtensionPack(context: {
+  options?: Record<string, unknown>;
+  secrets?: Record<string, string>;
+  logger?: { info: (...args: unknown[]) => void };
+  onActivate?: () => Promise<void>;
+  onDeactivate?: () => Promise<void>;
+  [key: string]: unknown;
+}) {
   const options = (context.options as WebBrowserExtensionOptions) || {};
 
   // Initialize browser service with configuration
