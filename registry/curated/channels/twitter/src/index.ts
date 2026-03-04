@@ -124,6 +124,17 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
       { id: 'twitterChannel', kind: 'messaging-channel', priority: 50, payload: adapter },
     ],
     onActivate: async () => {
+      // If no credentials from env/options, try OAuth 2.0 token store
+      if (!config.bearerToken && !config.apiKey) {
+        try {
+          const { FileTokenStore } = await import('@framers/agentos/auth');
+          const tokens = await new FileTokenStore().load('twitter');
+          if (tokens?.accessToken) {
+            config.bearerToken = tokens.accessToken;
+          }
+        } catch { /* FileTokenStore not available — ignore */ }
+      }
+
       await service.initialize();
       const credential = config.bearerToken || config.apiKey || '';
       if (credential) {

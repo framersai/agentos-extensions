@@ -94,6 +94,20 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
       { id: 'instagramChannel', kind: 'messaging-channel', priority: 50, payload: adapter },
     ],
     onActivate: async () => {
+      // If no access token from env/options, try OAuth token store
+      if (!config.accessToken) {
+        try {
+          const { FileTokenStore } = await import('@framers/agentos/auth');
+          const tokens = await new FileTokenStore().load('instagram');
+          if (tokens?.accessToken) {
+            config.accessToken = tokens.accessToken;
+            if (tokens.metadata?.igUserId) {
+              config.igUserId = tokens.metadata.igUserId;
+            }
+          }
+        } catch { /* FileTokenStore not available — ignore */ }
+      }
+
       await adapter.initialize({ platform: 'instagram', credential: config.accessToken });
     },
     onDeactivate: async () => {
