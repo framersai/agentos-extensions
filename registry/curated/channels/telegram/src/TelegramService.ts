@@ -59,15 +59,23 @@ export class TelegramService {
 
     if (this.config.webhookUrl) {
       await this.bot.api.setWebhook(this.config.webhookUrl);
+      this.running = true;
     } else {
-      // Fire-and-forget polling start
-      this.bot.start({
-        drop_pending_updates: true,
-        onStart: () => { this.running = true; },
+      // Start polling with a readiness promise so callers know when the bot is live.
+      await new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Telegram bot polling start timeout after 15s'));
+        }, 15_000);
+        this.bot!.start({
+          drop_pending_updates: true,
+          onStart: () => {
+            clearTimeout(timeout);
+            this.running = true;
+            resolve();
+          },
+        });
       });
     }
-
-    this.running = true;
 
     // Register bot command menu so Telegram shows autocomplete when users type /
     try {
