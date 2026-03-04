@@ -2,7 +2,7 @@
   "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
   "id": "com.framers.channels.whatsapp",
   "name": "WhatsApp Channel Extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bidirectional WhatsApp messaging via Baileys — supports text, images, documents, typing indicators, and groups.",
   "categories": ["channel", "communication"],
   "platforms": ["whatsapp"],
@@ -24,8 +24,10 @@
       "displayName": "WhatsApp Channel Adapter"
     }
   ],
-  "requiredSecrets": ["whatsapp.sessionData"],
+  "requiredSecrets": [],
   "features": [
+    "Interactive QR code authentication",
+    "File-based session persistence",
     "Text messages",
     "Image and document sending",
     "Rate limiting with queue management",

@@ -4,11 +4,17 @@
  * Provides a bidirectional messaging channel adapter using @whiskeysockets/baileys,
  * plus ITool descriptors for programmatic message sending.
  *
+ * Authentication modes:
+ * - session-data: pre-serialized auth state via env/secrets (headless)
+ * - auth-dir: file-based auth with interactive QR code bootstrap (default)
+ *
  * @module @framers/agentos-ext-channel-whatsapp
  */
 
+import * as os from 'node:os';
+import * as path from 'node:path';
 import type { ExtensionContext, ExtensionPack } from '@framers/agentos';
-import { WhatsAppService, type WhatsAppChannelConfig } from './WhatsAppService';
+import { WhatsAppService, type WhatsAppChannelConfig, type WhatsAppAuthConfig } from './WhatsAppService';
 import { WhatsAppChannelAdapter } from './WhatsAppChannelAdapter';
 import { WhatsAppSendMessageTool } from './tools/sendMessage';
 import { WhatsAppSendMediaTool } from './tools/sendMedia';
@@ -16,39 +22,45 @@ import { WhatsAppSendMediaTool } from './tools/sendMedia';
 export interface WhatsAppChannelOptions {
   sessionData?: string;
   sessionDataEnv?: string;
+  authDir?: string;
   phoneNumber?: string;
   reconnect?: { maxRetries: number; delayMs: number };
   rateLimit?: { maxRequests: number; windowMs: number };
   priority?: number;
 }
 
-function resolveSessionData(options: WhatsAppChannelOptions, secrets?: Record<string, string>): string {
-  if (options.sessionData) return options.sessionData;
+/**
+ * Resolve authentication configuration.
+ * Tries sessionData first (options → secrets → env). If not found,
+ * falls back to auth-dir mode with QR code bootstrap.
+ */
+function resolveAuthConfig(
+  options: WhatsAppChannelOptions,
+  secrets?: Record<string, string>,
+): WhatsAppAuthConfig {
+  // Try session data (existing headless approach)
+  if (options.sessionData) return { mode: 'session-data', sessionData: options.sessionData };
+  if (secrets?.['whatsapp.sessionData']) return { mode: 'session-data', sessionData: secrets['whatsapp.sessionData'] };
 
-  // Check secrets map from registry
-  if (secrets?.['whatsapp.sessionData']) return secrets['whatsapp.sessionData'];
-
-  // Environment variable fallback
   const envName = options.sessionDataEnv ?? 'WHATSAPP_SESSION_DATA';
   const envValue = process.env[envName];
-  if (envValue) return envValue;
+  if (envValue) return { mode: 'session-data', sessionData: envValue };
 
-  // Common variations
   for (const v of ['WHATSAPP_SESSION_DATA', 'WHATSAPP_AUTH_STATE']) {
-    if (process.env[v]) return process.env[v]!;
+    if (process.env[v]) return { mode: 'session-data', sessionData: process.env[v]! };
   }
 
-  throw new Error(
-    'WhatsApp session data not found. Provide via options.sessionData, secrets["whatsapp.sessionData"], or WHATSAPP_SESSION_DATA env var.',
-  );
+  // No session data → use auth-dir mode (QR bootstrap)
+  const authDir = options.authDir ?? path.join(os.homedir(), '.wunderland', 'whatsapp-auth');
+  return { mode: 'auth-dir', authDir };
 }
 
 export function createExtensionPack(context: ExtensionContext): ExtensionPack {
   const options = (context.options ?? {}) as WhatsAppChannelOptions & { secrets?: Record<string, string> };
-  const sessionData = resolveSessionData(options, options.secrets);
+  const authConfig = resolveAuthConfig(options, options.secrets);
 
   const config: WhatsAppChannelConfig = {
-    sessionData,
+    auth: authConfig,
     phoneNumber: options.phoneNumber,
     reconnect: options.reconnect ?? { maxRetries: 5, delayMs: 3000 },
     rateLimit: options.rateLimit ?? { maxRequests: 30, windowMs: 1000 },
@@ -63,7 +75,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 
   return {
     name: '@framers/agentos-ext-channel-whatsapp',
-    version: '0.1.0',
+    version: '0.2.0',
     descriptors: [
       { id: 'whatsappChannelSendMessage', kind: 'tool', priority, payload: sendMessageTool },
       { id: 'whatsappChannelSendMedia', kind: 'tool', priority, payload: sendMediaTool },
@@ -71,8 +83,19 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
     ],
     onActivate: async () => {
       await service.initialize();
+
+      // In auth-dir mode, block until QR is scanned and connection is open
+      if (authConfig.mode === 'auth-dir') {
+        context.logger?.info('[WhatsAppChannel] Scan the QR code with WhatsApp on your phone...');
+        await service.waitForConnection();
+        context.logger?.info('[WhatsAppChannel] Successfully authenticated!');
+      }
+
       // Wire adapter event listeners after service is running
-      await adapter.initialize({ platform: 'whatsapp', credential: sessionData });
+      const credential = authConfig.mode === 'session-data'
+        ? authConfig.sessionData
+        : authConfig.authDir;
+      await adapter.initialize({ platform: 'whatsapp', credential });
       context.logger?.info('[WhatsAppChannel] Extension activated');
     },
     onDeactivate: async () => {
@@ -84,5 +107,5 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 }
 
 export { WhatsAppService, WhatsAppChannelAdapter, WhatsAppSendMessageTool, WhatsAppSendMediaTool };
-export type { WhatsAppChannelConfig };
+export type { WhatsAppChannelConfig, WhatsAppAuthConfig };
 export default createExtensionPack;

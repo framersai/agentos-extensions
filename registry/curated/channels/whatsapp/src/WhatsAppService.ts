@@ -1,6 +1,10 @@
 /**
  * @fileoverview WhatsApp SDK wrapper using @whiskeysockets/baileys.
  * Handles socket lifecycle, message sending, and rate limiting.
+ *
+ * Supports two authentication modes:
+ * - session-data: pre-serialized auth state JSON (legacy)
+ * - auth-dir: file-based auth state with interactive QR code bootstrap
  */
 
 // Baileys depends on git-hosted packages. To keep `pnpm install` usable in offline
@@ -32,8 +36,12 @@ type WASocket = any;
 type WAMessage = any;
 type AuthenticationState = any;
 
+export type WhatsAppAuthConfig =
+  | { mode: 'session-data'; sessionData: string }
+  | { mode: 'auth-dir'; authDir: string };
+
 export interface WhatsAppChannelConfig {
-  sessionData: string;
+  auth: WhatsAppAuthConfig;
   phoneNumber?: string;
   reconnect?: { maxRetries: number; delayMs: number };
   rateLimit?: { maxRequests: number; windowMs: number };
@@ -51,6 +59,9 @@ export class WhatsAppService {
   private running = false;
   private messageHandlers: Array<MessageHandler> = [];
   private rateMap = new Map<string, RateState>();
+  private connectionResolve: (() => void) | null = null;
+  private connectionReject: ((err: Error) => void) | null = null;
+  private qrCount = 0;
   private readonly config: Required<
     Pick<WhatsAppChannelConfig, 'reconnect' | 'rateLimit'>
   > & WhatsAppChannelConfig;
@@ -66,21 +77,49 @@ export class WhatsAppService {
   async initialize(): Promise<void> {
     if (this.running) return;
 
-    // Parse session data into auth state
-    const authState = this.parseSessionData(this.config.sessionData);
-
     const baileys = loadBaileys();
     const makeWASocket = baileys?.default ?? baileys;
     const DisconnectReason = baileys?.DisconnectReason;
 
+    let authState: AuthenticationState;
+    let saveCreds: (() => Promise<void>) | null = null;
+    let useQR = false;
+
+    if (this.config.auth.mode === 'session-data') {
+      // Legacy mode: parse pre-serialized auth state
+      authState = this.parseSessionData(this.config.auth.sessionData);
+    } else {
+      // Auth-dir mode: file-based persistence with QR bootstrap
+      const { useMultiFileAuthState } = baileys;
+      const authResult = await useMultiFileAuthState(this.config.auth.authDir);
+      authState = authResult.state;
+      saveCreds = authResult.saveCreds;
+      useQR = true;
+    }
+
     this.sock = makeWASocket({
       auth: authState,
-      printQRInTerminal: false,
+      printQRInTerminal: useQR,
     });
+
+    // Persist credential updates when using auth-dir mode
+    if (saveCreds) {
+      this.sock.ev.on('creds.update', saveCreds);
+    }
 
     // Wire up connection updates
     this.sock.ev.on('connection.update', (update: any) => {
-      const { connection, lastDisconnect } = update;
+      const { connection, lastDisconnect, qr } = update;
+
+      // Track QR code regeneration count
+      if (qr) {
+        this.qrCount++;
+        if (this.qrCount > 5) {
+          this.connectionReject?.(
+            new Error('WhatsApp QR code scan timeout — no scan after 5 attempts. Please try again.'),
+          );
+        }
+      }
 
       if (connection === 'close') {
         const statusCode = (lastDisconnect?.error as any)?.output?.statusCode;
@@ -95,9 +134,13 @@ export class WhatsAppService {
           }, this.config.reconnect.delayMs);
         } else {
           this.running = false;
+          this.connectionReject?.(
+            new Error('WhatsApp connection closed (logged out)'),
+          );
         }
       } else if (connection === 'open') {
         this.running = true;
+        this.connectionResolve?.();
       }
     });
 
@@ -120,13 +163,29 @@ export class WhatsAppService {
       },
     );
 
-    this.running = true;
+    // In session-data mode, mark as running immediately (existing behavior)
+    if (!useQR) {
+      this.running = true;
+    }
+  }
+
+  /**
+   * Wait for the WhatsApp connection to be established.
+   * Used in auth-dir mode to block until QR code is scanned.
+   */
+  waitForConnection(): Promise<void> {
+    if (this.running) return Promise.resolve();
+    return new Promise<void>((resolve, reject) => {
+      this.connectionResolve = resolve;
+      this.connectionReject = reject;
+    });
   }
 
   async shutdown(): Promise<void> {
     if (!this.running || !this.sock) return;
     this.sock.ev.removeAllListeners('messages.upsert');
     this.sock.ev.removeAllListeners('connection.update');
+    this.sock.ev.removeAllListeners('creds.update');
     try {
       this.sock.end(undefined);
     } catch {
@@ -138,6 +197,10 @@ export class WhatsAppService {
 
   get isRunning(): boolean {
     return this.running;
+  }
+
+  get authMode(): string {
+    return this.config.auth.mode;
   }
 
   onMessage(handler: MessageHandler): void {
