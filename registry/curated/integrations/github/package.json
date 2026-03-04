@@ -1,0 +1,50 @@
+{
+  "name": "@framers/agentos-ext-github",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "GitHub API tools for AgentOS — search repos/code, manage issues/PRs, read files, create gists",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "agentos",
+    "extension",
+    "github",
+    "octokit",
+    "developer"
+  ],
+  "author": {
+    "name": "Framers AI",
+    "url": "https://frame.dev"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
+  "dependencies": {
+    "@octokit/rest": "^21.0.0"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/integrations/github"
+  }
+}

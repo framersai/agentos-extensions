@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.integrations.github",
+  "name": "GitHub Extension",
+  "version": "0.1.0",
+  "description": "GitHub API tools — search repos/code, manage issues/PRs, read files, create gists.",
+  "categories": ["tool", "developer"],
+  "extensions": [
+    { "kind": "tool", "id": "githubSearch", "displayName": "GitHub Search" },
+    { "kind": "tool", "id": "githubIssueList", "displayName": "List GitHub Issues" },
+    { "kind": "tool", "id": "githubIssueCreate", "displayName": "Create GitHub Issue" },
+    { "kind": "tool", "id": "githubPrList", "displayName": "List GitHub PRs" },
+    { "kind": "tool", "id": "githubPrCreate", "displayName": "Create GitHub PR" },
+    { "kind": "tool", "id": "githubFileRead", "displayName": "Read GitHub File" },
+    { "kind": "tool", "id": "githubGistCreate", "displayName": "Create GitHub Gist" }
+  ],
+  "requiredSecrets": ["github.token"],
+  "features": [
+    "Repository, code, and issue search",
+    "Issue listing and creation",
+    "Pull request listing and creation",
+    "File content reading from repos",
+    "Gist creation"
+  ]
+}
