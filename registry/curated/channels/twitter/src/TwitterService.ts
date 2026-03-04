@@ -12,7 +12,7 @@ import { TwitterApi } from 'twitter-api-v2';
 // ---------------------------------------------------------------------------
 
 export interface TwitterConfig {
-  bearerToken: string;
+  bearerToken?: string;
   apiKey?: string;
   apiSecret?: string;
   accessToken?: string;
@@ -64,9 +64,6 @@ export class TwitterService {
   }
 
   async initialize(): Promise<void> {
-    // Read-only client (bearer token)
-    this.readClient = new TwitterApi(this.config.bearerToken);
-
     // Read-write client (OAuth 1.0a user context — needed for posting)
     if (this.config.apiKey && this.config.apiSecret && this.config.accessToken && this.config.accessSecret) {
       this.writeClient = new TwitterApi({
@@ -75,6 +72,21 @@ export class TwitterService {
         accessToken: this.config.accessToken,
         accessSecret: this.config.accessSecret,
       });
+    }
+
+    // Read-only client: prefer bearer token, fall back to OAuth client for reading
+    if (this.config.bearerToken) {
+      this.readClient = new TwitterApi(this.config.bearerToken);
+    } else if (this.writeClient) {
+      this.readClient = this.writeClient;
+    }
+
+    if (!this.readClient && !this.writeClient) {
+      throw new Error(
+        'Twitter: no credentials provided. Set TWITTER_BEARER_TOKEN (or X_BEARER_TOKEN) for read-only, '
+        + 'or TWITTER_API_KEY + TWITTER_API_SECRET + TWITTER_ACCESS_TOKEN + TWITTER_ACCESS_SECRET '
+        + '(or X_CONSUMER_KEY + X_CONSUMER_SECRET + X_ACCESS_TOKEN + X_ACCESS_TOKEN_SECRET) for full access.',
+      );
     }
 
     this.running = true;

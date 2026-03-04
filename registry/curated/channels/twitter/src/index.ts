@@ -41,11 +41,25 @@ export interface TwitterChannelOptions {
 
 function resolveConfig(opts: TwitterChannelOptions, secrets: Record<string, string>): TwitterConfig {
   return {
-    bearerToken: opts.bearerToken ?? secrets['twitter.bearerToken'] ?? process.env.TWITTER_BEARER_TOKEN ?? '',
-    apiKey: opts.apiKey ?? secrets['twitter.apiKey'] ?? process.env.TWITTER_API_KEY,
-    apiSecret: opts.apiSecret ?? secrets['twitter.apiSecret'] ?? process.env.TWITTER_API_SECRET,
-    accessToken: opts.accessToken ?? secrets['twitter.accessToken'] ?? process.env.TWITTER_ACCESS_TOKEN,
-    accessSecret: opts.accessSecret ?? secrets['twitter.accessSecret'] ?? process.env.TWITTER_ACCESS_SECRET,
+    bearerToken:
+      opts.bearerToken ?? secrets['twitter.bearerToken']
+      ?? process.env.TWITTER_BEARER_TOKEN ?? process.env.X_BEARER_TOKEN,
+    apiKey:
+      opts.apiKey ?? secrets['twitter.apiKey']
+      ?? process.env.TWITTER_API_KEY ?? process.env.X_API_KEY
+      ?? process.env.X_CONSUMER_KEY ?? process.env.TWITTER_CONSUMER_KEY,
+    apiSecret:
+      opts.apiSecret ?? secrets['twitter.apiSecret']
+      ?? process.env.TWITTER_API_SECRET ?? process.env.X_API_SECRET
+      ?? process.env.X_CONSUMER_SECRET ?? process.env.X_CONSUMER_SECRET_KEY
+      ?? process.env.TWITTER_CONSUMER_SECRET,
+    accessToken:
+      opts.accessToken ?? secrets['twitter.accessToken']
+      ?? process.env.TWITTER_ACCESS_TOKEN ?? process.env.X_ACCESS_TOKEN,
+    accessSecret:
+      opts.accessSecret ?? secrets['twitter.accessSecret']
+      ?? process.env.TWITTER_ACCESS_SECRET ?? process.env.X_ACCESS_SECRET
+      ?? process.env.X_ACCESS_TOKEN_SECRET ?? process.env.TWITTER_ACCESS_TOKEN_SECRET,
   };
 }
 
@@ -110,7 +124,11 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
       { id: 'twitterChannel', kind: 'messaging-channel', priority: 50, payload: adapter },
     ],
     onActivate: async () => {
-      await adapter.initialize({ platform: 'twitter', credential: config.bearerToken });
+      await service.initialize();
+      const credential = config.bearerToken || config.apiKey || '';
+      if (credential) {
+        await adapter.initialize({ platform: 'twitter', credential });
+      }
     },
     onDeactivate: async () => {
       await adapter.shutdown();
