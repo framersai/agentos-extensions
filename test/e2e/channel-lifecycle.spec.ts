@@ -3,35 +3,47 @@
  *
  * Verifies that channel extensions can be loaded via ExtensionManager
  * and that messaging-channel descriptors end up in the correct registry.
+ *
+ * NOTE: We mock TelegramService.prototype methods instead of the grammy
+ * module because grammy is installed inside the telegram extension's own
+ * node_modules, so vi.mock('grammy') (resolved relative to *this* test
+ * file) does not intercept the import from TelegramService.ts.
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock grammy for Telegram extension
-vi.mock('grammy', () => {
-  const mockApi = {
-    sendMessage: vi.fn().mockResolvedValue({ message_id: 1 }),
-    sendChatAction: vi.fn(),
-    setWebhook: vi.fn(),
-    getMe: vi.fn().mockResolvedValue({ id: 1, first_name: 'Bot', username: 'bot' }),
-  };
+/**
+ * Helper: dynamically import the Telegram extension pack and patch
+ * TelegramService so it never touches the real grammy Bot (no network).
+ */
+async function importTelegramPackPatched() {
+  const indexModule = await import(
+    '../../registry/curated/channels/telegram/src/index'
+  );
+  const { TelegramService } = indexModule;
 
-  class MockBot {
-    api = mockApi;
-    on = vi.fn();
-    start = vi.fn().mockImplementation(({ onStart }: any = {}) => { if (onStart) onStart(); });
-    stop = vi.fn().mockResolvedValue(undefined);
-  }
+  // Prevent initialize() from creating a real grammy Bot / making network calls.
+  // Instead, just flip the internal `running` flag so isRunning returns true.
+  vi.spyOn(TelegramService.prototype, 'initialize').mockImplementation(async function (this: any) {
+    this.running = true;
+  });
 
-  return { Bot: MockBot };
-});
+  // Prevent shutdown() from calling bot.stop() on a non-existent bot.
+  vi.spyOn(TelegramService.prototype, 'shutdown').mockImplementation(async function (this: any) {
+    this.running = false;
+    this.bot = null;
+  });
+
+  return indexModule;
+}
 
 describe('E2E: Channel Extension Lifecycle', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should load a channel extension pack and register descriptors', async () => {
-    // Dynamic import after mock setup
-    const { createExtensionPack } = await import(
-      '../../registry/curated/channels/telegram/src/index'
-    );
+    const { createExtensionPack } = await importTelegramPackPatched();
 
     const pack = createExtensionPack({
       options: { botToken: 'test-token' },
@@ -50,9 +62,7 @@ describe('E2E: Channel Extension Lifecycle', () => {
   });
 
   it('should activate and deactivate cleanly', async () => {
-    const { createExtensionPack } = await import(
-      '../../registry/curated/channels/telegram/src/index'
-    );
+    const { createExtensionPack } = await importTelegramPackPatched();
 
     const pack = createExtensionPack({
       options: { botToken: 'test-token' },
@@ -73,9 +83,7 @@ describe('E2E: Channel Extension Lifecycle', () => {
   });
 
   it('should correctly set descriptor priorities', async () => {
-    const { createExtensionPack } = await import(
-      '../../registry/curated/channels/telegram/src/index'
-    );
+    const { createExtensionPack } = await importTelegramPackPatched();
 
     const pack = createExtensionPack({
       options: { botToken: 'test-token', priority: 75 },
@@ -87,9 +95,7 @@ describe('E2E: Channel Extension Lifecycle', () => {
   });
 
   it('should support multiple channel extensions simultaneously', async () => {
-    const { createExtensionPack: createTelegramPack } = await import(
-      '../../registry/curated/channels/telegram/src/index'
-    );
+    const { createExtensionPack: createTelegramPack } = await importTelegramPackPatched();
 
     const pack1 = createTelegramPack({
       options: { botToken: 'token-1' },

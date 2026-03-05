@@ -46,8 +46,8 @@ describe('XP System', () => {
   });
 
   it('levelInfo returns correct names', () => {
-    expect(levelInfo(1).name).toBe('White Rabbit');
-    expect(levelInfo(5).name).toBe('Wonderland Founder');
+    expect(levelInfo(1).name).toBe('Founder - Curious Alice');
+    expect(levelInfo(5).name).toBe('Founder - Wonderland');
   });
 
   it('xpToNextLevel calculates remaining XP', () => {

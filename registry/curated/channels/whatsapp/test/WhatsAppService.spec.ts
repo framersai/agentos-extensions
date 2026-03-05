@@ -28,7 +28,7 @@ import makeWASocket, * as baileysMock from '@whiskeysockets/baileys';
 
 function createConfig(overrides?: Partial<WhatsAppChannelConfig>): WhatsAppChannelConfig {
   return {
-    sessionData: '{"creds":{},"keys":{}}',
+    auth: { mode: 'session-data', sessionData: '{"creds":{},"keys":{}}' },
     ...overrides,
   };
 }
@@ -103,7 +103,9 @@ describe('WhatsAppService', () => {
     });
 
     it('throws when sessionData is invalid JSON', async () => {
-      const service = new WhatsAppService(createConfig({ sessionData: 'not-json' }));
+      const service = new WhatsAppService(
+        createConfig({ auth: { mode: 'session-data', sessionData: 'not-json' } }),
+      );
 
       await expect(service.initialize()).rejects.toThrow('Invalid sessionData');
     });

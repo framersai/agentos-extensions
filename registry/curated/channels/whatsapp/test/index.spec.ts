@@ -161,10 +161,11 @@ describe('createExtensionPack', () => {
       expect(pack.name).toBe('@framers/agentos-ext-channel-whatsapp');
     });
 
-    it('throws if no session data is found anywhere', () => {
-      expect(() => createExtensionPack(createContext({}))).toThrow(
-        'WhatsApp session data not found',
-      );
+    it('falls back to auth-dir mode when no session data is found', () => {
+      // When no session data is available, resolveAuthConfig falls back
+      // to auth-dir mode with QR code bootstrap instead of throwing.
+      const pack = createExtensionPack(createContext({}));
+      expect(pack.name).toBe('@framers/agentos-ext-channel-whatsapp');
     });
   });
 
