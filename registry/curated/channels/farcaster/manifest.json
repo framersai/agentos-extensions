@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.farcaster",
+  "name": "Farcaster Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Farcaster integration — publish casts, reply, like, recast, search, and browse feeds via Neynar API.",
+  "categories": ["channel", "social"],
+  "platforms": ["farcaster"],
+  "sdk": "neynar-api",
+  "extensions": [
+    { "kind": "tool", "id": "farcasterCast", "displayName": "Publish Cast" },
+    { "kind": "tool", "id": "farcasterReply", "displayName": "Reply to Cast" },
+    { "kind": "tool", "id": "farcasterLike", "displayName": "Like Cast" },
+    { "kind": "tool", "id": "farcasterRecast", "displayName": "Recast" },
+    { "kind": "tool", "id": "farcasterSearch", "displayName": "Search Casts" },
+    { "kind": "tool", "id": "farcasterFeed", "displayName": "Get Feed" },
+    { "kind": "messaging-channel", "id": "farcasterChannel", "displayName": "Farcaster Channel Adapter" }
+  ],
+  "requiredSecrets": ["farcaster.neynarApiKey", "farcaster.signerUuid"],
+  "optionalSecrets": ["farcaster.fid"],
+  "features": [
+    "Publish casts with text, embeds, and channel targeting",
+    "Reply to existing casts",
+    "Like and recast for engagement",
+    "Search casts by query",
+    "Browse following and trending feeds",
+    "Retrieve cast details and user profiles"
+  ]
+}

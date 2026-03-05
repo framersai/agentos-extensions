@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.mastodon",
+  "name": "Mastodon Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Mastodon integration — post statuses, reply, boost, favourite, search trends, follow accounts, and track engagement via the Mastodon API.",
+  "categories": ["channel", "social"],
+  "platforms": ["mastodon"],
+  "sdk": "masto",
+  "extensions": [
+    { "kind": "tool", "id": "mastodonPost", "displayName": "Post Status" },
+    { "kind": "tool", "id": "mastodonReply", "displayName": "Reply to Status" },
+    { "kind": "tool", "id": "mastodonBoost", "displayName": "Boost Status" },
+    { "kind": "tool", "id": "mastodonFavourite", "displayName": "Favourite Status" },
+    { "kind": "tool", "id": "mastodonSearch", "displayName": "Search Mastodon" },
+    { "kind": "tool", "id": "mastodonTrending", "displayName": "Get Trending" },
+    { "kind": "tool", "id": "mastodonFollow", "displayName": "Follow Account" },
+    { "kind": "tool", "id": "mastodonAnalytics", "displayName": "Engagement Analytics" },
+    { "kind": "messaging-channel", "id": "mastodonChannel", "displayName": "Mastodon Channel Adapter" }
+  ],
+  "requiredSecrets": ["mastodon.accessToken"],
+  "optionalSecrets": ["mastodon.instanceUrl"],
+  "features": [
+    "Post statuses with text, spoiler text, and media attachments",
+    "Reply to existing statuses",
+    "Boost (reblog) and unboost statuses",
+    "Favourite and unfavourite statuses",
+    "Search accounts, hashtags, and statuses",
+    "Get trending tags, statuses, and links",
+    "Follow and unfollow accounts",
+    "Track engagement analytics (boosts, favourites, replies)",
+    "Support for content warnings and post visibility levels",
+    "Multi-instance support with configurable instance URL"
+  ]
+}

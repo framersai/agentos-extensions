@@ -1,0 +1,27 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.google-business",
+  "name": "Google Business Profile Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Google Business Profile integration — create local posts, reply to reviews, view analytics, and update business information via Google My Business API.",
+  "categories": ["channel", "social"],
+  "platforms": ["google-business"],
+  "sdk": "google-my-business-api",
+  "extensions": [
+    { "kind": "tool", "id": "gbpCreatePost", "displayName": "Create Local Post" },
+    { "kind": "tool", "id": "gbpReply", "displayName": "Reply to Review" },
+    { "kind": "tool", "id": "gbpAnalytics", "displayName": "Get Insights" },
+    { "kind": "tool", "id": "gbpUpdateInfo", "displayName": "Update Business Info" },
+    { "kind": "messaging-channel", "id": "gbpChannel", "displayName": "Google Business Channel Adapter" }
+  ],
+  "requiredSecrets": ["google.accessToken"],
+  "optionalSecrets": ["google.refreshToken", "google.locationId"],
+  "features": [
+    "Create local posts with text, media, events, and offers",
+    "Reply to customer reviews",
+    "Get business reviews and ratings",
+    "View location insights and analytics",
+    "Update business description, website, and contact info",
+    "Manage multiple business locations"
+  ]
+}

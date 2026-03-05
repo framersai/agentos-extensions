@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.threads",
+  "name": "Threads Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Threads integration — post text, images, videos, carousels, reply, quote, like, search user threads, and track engagement analytics via Meta Threads Publishing API.",
+  "categories": ["channel", "social"],
+  "platforms": ["threads"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "threadsPost", "displayName": "Post to Threads" },
+    { "kind": "tool", "id": "threadsReply", "displayName": "Reply to Thread" },
+    { "kind": "tool", "id": "threadsLike", "displayName": "Like Thread Post" },
+    { "kind": "tool", "id": "threadsSearch", "displayName": "Search User Threads" },
+    { "kind": "tool", "id": "threadsAnalytics", "displayName": "Thread Post Analytics" },
+    { "kind": "tool", "id": "threadsQuote", "displayName": "Quote Thread Post" },
+    { "kind": "messaging-channel", "id": "threadsChannel", "displayName": "Threads Channel Adapter" }
+  ],
+  "requiredSecrets": ["threads.accessToken"],
+  "optionalSecrets": ["threads.userId"],
+  "features": [
+    "Post text posts to Threads",
+    "Post image posts with captions",
+    "Post video posts with captions",
+    "Post carousel posts with multiple images/videos",
+    "Reply to existing thread posts",
+    "Like and unlike thread posts",
+    "Quote existing thread posts",
+    "Search/browse user's recent threads",
+    "Get post analytics (views, likes, replies, reposts, quotes)",
+    "Delete thread posts"
+  ]
+}

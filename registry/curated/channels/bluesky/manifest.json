@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.bluesky",
+  "name": "Bluesky Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Bluesky integration — post, reply, like, repost, search, follow, and track engagement via the AT Protocol.",
+  "categories": ["channel", "social"],
+  "platforms": ["bluesky"],
+  "sdk": "@atproto/api",
+  "extensions": [
+    { "kind": "tool", "id": "blueskyPost", "displayName": "Create Post" },
+    { "kind": "tool", "id": "blueskyReply", "displayName": "Reply to Post" },
+    { "kind": "tool", "id": "blueskyLike", "displayName": "Like Post" },
+    { "kind": "tool", "id": "blueskyRepost", "displayName": "Repost" },
+    { "kind": "tool", "id": "blueskySearch", "displayName": "Search Bluesky" },
+    { "kind": "tool", "id": "blueskyFeed", "displayName": "Get Feed" },
+    { "kind": "tool", "id": "blueskyFollow", "displayName": "Follow User" },
+    { "kind": "tool", "id": "blueskyAnalytics", "displayName": "Post Analytics" },
+    { "kind": "messaging-channel", "id": "blueskyChannel", "displayName": "Bluesky Channel Adapter" }
+  ],
+  "requiredSecrets": ["bluesky.handle", "bluesky.appPassword"],
+  "optionalSecrets": ["bluesky.service"],
+  "features": [
+    "Post with text, images, and rich-text facets (mentions, links, hashtags)",
+    "Reply to posts with full thread context",
+    "Like and unlike posts",
+    "Repost and undo reposts",
+    "Search posts and people",
+    "Read timeline and author feeds",
+    "Follow and unfollow users",
+    "Track engagement analytics (likes, reposts, replies)",
+    "Quote posts",
+    "Delete posts"
+  ]
+}

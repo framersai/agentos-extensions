@@ -1,0 +1,34 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.facebook",
+  "name": "Facebook Channel Extension",
+  "version": "0.1.0",
+  "description": "Bidirectional Facebook integration — page posts, photos, videos, comments, likes, shares, and engagement analytics via Meta Graph API v19.",
+  "categories": ["channel", "social"],
+  "platforms": ["facebook"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "facebookPost", "displayName": "Post to Facebook" },
+    { "kind": "tool", "id": "facebookComment", "displayName": "Comment on Post" },
+    { "kind": "tool", "id": "facebookLike", "displayName": "Like Post" },
+    { "kind": "tool", "id": "facebookShare", "displayName": "Share Post" },
+    { "kind": "tool", "id": "facebookSearch", "displayName": "Search Facebook" },
+    { "kind": "tool", "id": "facebookAnalytics", "displayName": "Post Analytics" },
+    { "kind": "tool", "id": "facebookSchedule", "displayName": "Schedule Post" },
+    { "kind": "tool", "id": "facebookPagePost", "displayName": "Post to Page" },
+    { "kind": "messaging-channel", "id": "facebookChannel", "displayName": "Facebook Channel Adapter" }
+  ],
+  "requiredSecrets": ["facebook.accessToken"],
+  "optionalSecrets": ["facebook.pageId", "facebook.pageAccessToken"],
+  "features": [
+    "Post to personal profile and managed pages",
+    "Upload photos and videos to pages",
+    "Comment on posts",
+    "Like and unlike posts",
+    "Share posts with optional commentary",
+    "Search posts, pages, and groups",
+    "Get post engagement analytics (impressions, clicks, reactions)",
+    "Schedule posts for future publishing",
+    "Manage multiple pages via page access tokens"
+  ]
+}

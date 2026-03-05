@@ -1,0 +1,67 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.blog-publisher",
+  "name": "Blog Publisher Channel Extension",
+  "version": "0.1.0",
+  "description": "Unified blog publishing adapter for Dev.to, Hashnode, Medium, and WordPress — publish, update, cross-post, and track analytics across all four platforms from a single interface.",
+  "categories": ["channel", "content", "publishing"],
+  "platforms": ["devto", "hashnode", "medium", "wordpress"],
+  "sdk": "axios",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "blogPublishArticle",
+      "displayName": "Publish Blog Article"
+    },
+    {
+      "kind": "tool",
+      "id": "blogUpdateArticle",
+      "displayName": "Update Blog Article"
+    },
+    {
+      "kind": "tool",
+      "id": "blogListArticles",
+      "displayName": "List Blog Articles"
+    },
+    {
+      "kind": "tool",
+      "id": "blogAnalytics",
+      "displayName": "Blog Article Analytics"
+    },
+    {
+      "kind": "tool",
+      "id": "blogSchedule",
+      "displayName": "Schedule Blog Article"
+    },
+    {
+      "kind": "tool",
+      "id": "blogCrossPost",
+      "displayName": "Cross-Post Blog Article"
+    },
+    {
+      "kind": "messaging-channel",
+      "id": "blogPublisherChannel",
+      "displayName": "Blog Publisher Channel Adapter"
+    }
+  ],
+  "requiredSecrets": [],
+  "optionalSecrets": [
+    "devto.apiKey",
+    "hashnode.apiKey",
+    "hashnode.publicationId",
+    "medium.accessToken",
+    "wordpress.url",
+    "wordpress.username",
+    "wordpress.appPassword"
+  ],
+  "features": [
+    "Publish articles to Dev.to, Hashnode, Medium, and WordPress",
+    "Update existing articles on any platform",
+    "Cross-post with canonical URL preservation",
+    "Schedule articles as drafts with metadata",
+    "Retrieve article analytics (views, reactions, comments)",
+    "List articles across all configured platforms",
+    "Markdown content with cover images and tags",
+    "Automatic platform credential detection from env vars"
+  ]
+}

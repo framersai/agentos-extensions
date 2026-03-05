@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.channels.linkedin",
+  "name": "LinkedIn Channel Extension",
+  "version": "0.1.0",
+  "description": "LinkedIn Marketing API v2 — posts, articles, comments, company pages, search, and engagement analytics.",
+  "categories": ["channel", "social"],
+  "platforms": ["linkedin"],
+  "sdk": "axios",
+  "extensions": [
+    { "kind": "tool", "id": "linkedinPost", "displayName": "Post to LinkedIn" },
+    { "kind": "tool", "id": "linkedinComment", "displayName": "Comment on Post" },
+    { "kind": "tool", "id": "linkedinLike", "displayName": "Like Post" },
+    { "kind": "tool", "id": "linkedinShare", "displayName": "Share Post" },
+    { "kind": "tool", "id": "linkedinSearch", "displayName": "Search LinkedIn" },
+    { "kind": "tool", "id": "linkedinAnalytics", "displayName": "Engagement Analytics" },
+    { "kind": "tool", "id": "linkedinSchedule", "displayName": "Schedule Post" },
+    { "kind": "tool", "id": "linkedinOrgPost", "displayName": "Post to Company Page" },
+    { "kind": "messaging-channel", "id": "linkedinChannel", "displayName": "LinkedIn Channel Adapter" }
+  ],
+  "requiredSecrets": ["linkedin.accessToken"],
+  "optionalSecrets": ["linkedin.clientId", "linkedin.clientSecret", "linkedin.organizationId"],
+  "features": [
+    "Post text, images, videos, and articles to personal profile",
+    "Post to company/organization pages",
+    "Comment on posts",
+    "Like and react to posts",
+    "Share posts with commentary",
+    "Search posts and people",
+    "Track engagement analytics",
+    "Schedule posts for future publishing"
+  ]
+}
