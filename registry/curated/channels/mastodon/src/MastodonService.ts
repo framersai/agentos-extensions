@@ -84,7 +84,7 @@ export class MastodonService {
 
   async postStatus(options: StatusOptions): Promise<StatusResult> {
     const client = this.requireClient();
-    const status = await client.v1.statuses.create({
+    const baseParams = {
       status: options.text,
       spoilerText: options.spoilerText,
       visibility: options.visibility,
@@ -92,12 +92,25 @@ export class MastodonService {
       inReplyToId: options.inReplyToId,
       sensitive: options.sensitive,
       language: options.language,
-      scheduledAt: options.scheduledAt,
-    });
+    };
 
+    if (options.scheduledAt) {
+      const scheduled = await client.v1.statuses.create({
+        ...baseParams,
+        scheduledAt: options.scheduledAt,
+      });
+      return {
+        id: scheduled.id,
+        url: null,
+        // Scheduled status payload does not include rendered content yet.
+        content: options.text,
+      };
+    }
+
+    const status = await client.v1.statuses.create(baseParams);
     return {
       id: status.id,
-      url: status.url,
+      url: status.url ?? null,
       content: status.content,
     };
   }
@@ -170,17 +183,17 @@ export class MastodonService {
     limit?: number,
   ): Promise<mastodon.v1.Tag[] | mastodon.v1.Status[] | mastodon.v1.TrendLink[]> {
     const client = this.requireClient();
-    const params = limit ? { limit } : {};
+    const params = typeof limit === 'number' ? { limit } : undefined;
 
     switch (type) {
       case 'tags':
-        return client.v1.trends.tags.list(params);
+        return params ? client.v1.trends.tags.list(params) : client.v1.trends.tags.list();
       case 'statuses':
         return client.v1.trends.statuses.list(params);
       case 'links':
         return client.v1.trends.links.list(params);
       default:
-        return client.v1.trends.tags.list(params);
+        return params ? client.v1.trends.tags.list(params) : client.v1.trends.tags.list();
     }
   }
 

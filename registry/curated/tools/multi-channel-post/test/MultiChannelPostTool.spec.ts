@@ -68,6 +68,7 @@ describe('MultiChannelPostTool', () => {
       expect(tool.inputSchema.properties).toHaveProperty('platforms');
       expect(tool.inputSchema.properties).toHaveProperty('adaptations');
       expect(tool.inputSchema.properties).toHaveProperty('mediaUrls');
+      expect(tool.inputSchema.properties).toHaveProperty('platformConfigs');
       expect(tool.inputSchema.properties).toHaveProperty('hashtags');
       expect(tool.inputSchema.properties).toHaveProperty('dryRun');
     });
@@ -206,6 +207,7 @@ describe('MultiChannelPostTool', () => {
       await tool.execute({
         content: 'Default content',
         platforms: ['twitter', 'instagram'],
+        mediaUrls: ['https://cdn.example.com/adapt-image.jpg'],
         adaptations: {
           twitter: 'A short tweet',
           instagram: 'A longer Instagram caption with details',
@@ -384,7 +386,11 @@ describe('MultiChannelPostTool', () => {
         'blueskyPost', 'mastodonPost', 'threadsPost',
       ];
 
-      await tool.execute({ content: 'Test', platforms });
+      await tool.execute({
+        content: 'Test',
+        platforms,
+        mediaUrls: ['https://cdn.example.com/tool-map-media.mp4'],
+      });
 
       for (const expected of expectedToolNames) {
         expect(executor).toHaveBeenCalledWith(expected, expect.any(Object));
@@ -414,31 +420,108 @@ describe('MultiChannelPostTool', () => {
       expect(executor).toHaveBeenCalledWith('twitterPost', expect.objectContaining({ text: 'Tweet!' }));
     });
 
-    it('should build instagram args with caption field', async () => {
+    it('should build instagram args with caption + imageUrls', async () => {
       const executor = createMockExecutor();
       tool.setToolExecutor(executor);
-      await tool.execute({ content: 'IG post', platforms: ['instagram'] });
-      expect(executor).toHaveBeenCalledWith('instagramPost', expect.objectContaining({ caption: 'IG post' }));
+      await tool.execute({
+        content: 'IG post',
+        platforms: ['instagram'],
+        mediaUrls: ['https://cdn.example.com/photo.jpg'],
+      });
+      expect(executor).toHaveBeenCalledWith(
+        'instagramPost',
+        expect.objectContaining({
+          caption: 'IG post',
+          imageUrls: ['https://cdn.example.com/photo.jpg'],
+        }),
+      );
     });
 
-    it('should build reddit args with title and text and subreddit', async () => {
+    it('should build reddit args with required content/type fields', async () => {
       const executor = createMockExecutor();
       tool.setToolExecutor(executor);
       await tool.execute({ content: 'Reddit thread', platforms: ['reddit'] });
       expect(executor).toHaveBeenCalledWith(
         'redditSubmitPost',
-        expect.objectContaining({ title: expect.any(String), text: 'Reddit thread', subreddit: 'self' }),
+        expect.objectContaining({
+          subreddit: 'self',
+          title: expect.any(String),
+          content: 'Reddit thread',
+          type: 'text',
+        }),
       );
     });
 
-    it('should build youtube args with title and description', async () => {
+    it('should build youtube args with required videoUrl', async () => {
       const executor = createMockExecutor();
       tool.setToolExecutor(executor);
-      await tool.execute({ content: 'Video description', platforms: ['youtube'] });
+      await tool.execute({
+        content: 'Video description',
+        platforms: ['youtube'],
+        mediaUrls: ['https://cdn.example.com/video.mp4'],
+      });
       expect(executor).toHaveBeenCalledWith(
         'youtubeUpload',
-        expect.objectContaining({ title: expect.any(String), description: 'Video description' }),
+        expect.objectContaining({
+          videoUrl: 'https://cdn.example.com/video.mp4',
+          title: expect.any(String),
+          description: 'Video description',
+        }),
       );
+    });
+
+    it('should fail youtube post when no video URL is provided', async () => {
+      const executor = createMockExecutor();
+      tool.setToolExecutor(executor);
+
+      const result = await tool.execute({
+        content: 'Video description',
+        platforms: ['youtube'],
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.data!.results[0]!.error).toContain('youtube requires videoUrl');
+      expect(executor).not.toHaveBeenCalled();
+    });
+
+    it('should allow platformConfigs overrides for pinterest', async () => {
+      const executor = createMockExecutor();
+      tool.setToolExecutor(executor);
+
+      await tool.execute({
+        content: 'Pin this',
+        platforms: ['pinterest'],
+        mediaUrls: ['https://cdn.example.com/image.jpg'],
+        platformConfigs: {
+          pinterest: {
+            boardId: 'board-123',
+            mediaType: 'image',
+          },
+        },
+      });
+
+      expect(executor).toHaveBeenCalledWith(
+        'pinterestPin',
+        expect.objectContaining({
+          boardId: 'board-123',
+          mediaType: 'image',
+          mediaUrl: 'https://cdn.example.com/image.jpg',
+        }),
+      );
+    });
+
+    it('should fail lemmy post when communityId is missing', async () => {
+      const executor = createMockExecutor();
+      tool.setToolExecutor(executor);
+
+      const result = await tool.execute({
+        content: 'Lemmy post',
+        platforms: ['lemmy'],
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.data!.results[0]!.error).toContain('lemmy requires communityId');
+      expect(executor).not.toHaveBeenCalled();
     });
   });
 });

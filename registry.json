@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-03-04T21:10:17.439Z",
+  "updated": "2026-03-05T06:07:29.819Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -18,12 +18,102 @@
       "provenance",
       "research",
       "system",
+      "tools",
       "voice"
     ],
     "community": []
   },
   "extensions": {
     "curated": [
+      {
+        "id": "com.framers.channels.blog-publisher",
+        "name": "Blog Publisher Channel Extension",
+        "package": "@framers/agentos-ext-channel-blog-publisher",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/blog-publisher",
+        "description": "Unified blog publishing adapter for Dev.to, Hashnode, Medium, and WordPress — publish, update, cross-post, and track analytics across all four platforms from a single interface.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Publish articles to Dev.to, Hashnode, Medium, and WordPress",
+          "Update existing articles on any platform",
+          "Cross-post with canonical URL preservation",
+          "Schedule articles as drafts with metadata",
+          "Retrieve article analytics (views, reactions, comments)",
+          "List articles across all configured platforms",
+          "Markdown content with cover images and tags",
+          "Automatic platform credential detection from env vars"
+        ],
+        "tools": [
+          "blogPublishArticle",
+          "blogUpdateArticle",
+          "blogListArticles",
+          "blogAnalytics",
+          "blogSchedule",
+          "blogCrossPost",
+          "blogPublisherChannel"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "channel",
+          "blog",
+          "devto",
+          "hashnode",
+          "medium",
+          "wordpress",
+          "publishing",
+          "cross-posting"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-blog-publisher",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/blog-publisher",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.bluesky",
+        "name": "Bluesky Channel Extension",
+        "package": "@framers/agentos-ext-channel-bluesky",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/bluesky",
+        "description": "Bidirectional Bluesky integration — post, reply, like, repost, search, follow, and track engagement via the AT Protocol.",
+        "features": [
+          "Post with text, images, and rich-text facets (mentions, links, hashtags)",
+          "Reply to posts with full thread context",
+          "Like and unlike posts",
+          "Repost and undo reposts",
+          "Search posts and people",
+          "Read timeline and author feeds",
+          "Follow and unfollow users",
+          "Track engagement analytics (likes, reposts, replies)",
+          "Quote posts",
+          "Delete posts"
+        ],
+        "tools": [
+          "blueskyPost",
+          "blueskyReply",
+          "blueskyLike",
+          "blueskyRepost",
+          "blueskySearch",
+          "blueskyFeed",
+          "blueskyFollow",
+          "blueskyAnalytics",
+          "blueskyChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-bluesky",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/bluesky",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
       {
         "id": "com.framers.channels.discord",
         "name": "Discord Channel Extension",
@@ -63,7 +153,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-discord",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/discord",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -94,7 +184,78 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-email",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/email",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.facebook",
+        "name": "Facebook Channel Extension",
+        "package": "@framers/agentos-ext-channel-facebook",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/facebook",
+        "description": "Bidirectional Facebook integration — page posts, photos, videos, comments, likes, shares, and engagement analytics via Meta Graph API v19.",
+        "features": [
+          "Post to personal profile and managed pages",
+          "Upload photos and videos to pages",
+          "Comment on posts",
+          "Like and unlike posts",
+          "Share posts with optional commentary",
+          "Search posts, pages, and groups",
+          "Get post engagement analytics (impressions, clicks, reactions)",
+          "Schedule posts for future publishing",
+          "Manage multiple pages via page access tokens"
+        ],
+        "tools": [
+          "facebookPost",
+          "facebookComment",
+          "facebookLike",
+          "facebookShare",
+          "facebookSearch",
+          "facebookAnalytics",
+          "facebookSchedule",
+          "facebookPagePost",
+          "facebookChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-facebook",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/facebook",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.farcaster",
+        "name": "Farcaster Channel Extension",
+        "package": "@framers/agentos-ext-channel-farcaster",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/farcaster",
+        "description": "Bidirectional Farcaster integration — publish casts, reply, like, recast, search, and browse feeds via Neynar API.",
+        "features": [
+          "Publish casts with text, embeds, and channel targeting",
+          "Reply to existing casts",
+          "Like and recast for engagement",
+          "Search casts by query",
+          "Browse following and trending feeds",
+          "Retrieve cast details and user profiles"
+        ],
+        "tools": [
+          "farcasterCast",
+          "farcasterReply",
+          "farcasterLike",
+          "farcasterRecast",
+          "farcasterSearch",
+          "farcasterFeed",
+          "farcasterChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-farcaster",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/farcaster",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -130,7 +291,38 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-feishu",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/feishu",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.google-business",
+        "name": "Google Business Profile Channel Extension",
+        "package": "@framers/agentos-ext-channel-google-business",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/google-business",
+        "description": "Bidirectional Google Business Profile integration — create local posts, reply to reviews, view analytics, and update business information via Google My Business API.",
+        "features": [
+          "Create local posts with text, media, events, and offers",
+          "Reply to customer reviews",
+          "Get business reviews and ratings",
+          "View location insights and analytics",
+          "Update business description, website, and contact info",
+          "Manage multiple business locations"
+        ],
+        "tools": [
+          "gbpCreatePost",
+          "gbpReply",
+          "gbpAnalytics",
+          "gbpUpdateInfo",
+          "gbpChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-business",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-business",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -165,7 +357,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-chat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-chat",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -201,7 +393,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-imessage",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/imessage",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -241,7 +433,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/instagram",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -277,7 +469,40 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-irc",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/irc",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.lemmy",
+        "name": "Lemmy Channel Extension",
+        "package": "@framers/agentos-ext-channel-lemmy",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/lemmy",
+        "description": "Bidirectional Lemmy integration — create posts, comment, vote, search, subscribe to communities, and browse feeds via Lemmy HTTP API.",
+        "features": [
+          "Create posts with text, body, and URL links",
+          "Comment on posts with threaded replies",
+          "Upvote, downvote, and reset votes on posts and comments",
+          "Search posts, comments, and communities",
+          "Subscribe and unsubscribe from communities",
+          "Browse feeds by type (All, Local, Subscribed) and sort order"
+        ],
+        "tools": [
+          "lemmyPost",
+          "lemmyComment",
+          "lemmyVote",
+          "lemmySearch",
+          "lemmySubscribe",
+          "lemmyFeed",
+          "lemmyChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-lemmy",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/lemmy",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -313,7 +538,83 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-line",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/line",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.linkedin",
+        "name": "LinkedIn Channel Extension",
+        "package": "@framers/agentos-ext-channel-linkedin",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/linkedin",
+        "description": "LinkedIn Marketing API v2 — posts, articles, comments, company pages, search, and engagement analytics.",
+        "features": [
+          "Post text, images, videos, and articles to personal profile",
+          "Post to company/organization pages",
+          "Comment on posts",
+          "Like and react to posts",
+          "Share posts with commentary",
+          "Search posts and people",
+          "Track engagement analytics",
+          "Schedule posts for future publishing"
+        ],
+        "tools": [
+          "linkedinPost",
+          "linkedinComment",
+          "linkedinLike",
+          "linkedinShare",
+          "linkedinSearch",
+          "linkedinAnalytics",
+          "linkedinSchedule",
+          "linkedinOrgPost",
+          "linkedinChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-linkedin",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/linkedin",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.mastodon",
+        "name": "Mastodon Channel Extension",
+        "package": "@framers/agentos-ext-channel-mastodon",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/mastodon",
+        "description": "Bidirectional Mastodon integration — post statuses, reply, boost, favourite, search trends, follow accounts, and track engagement via the Mastodon API.",
+        "features": [
+          "Post statuses with text, spoiler text, and media attachments",
+          "Reply to existing statuses",
+          "Boost (reblog) and unboost statuses",
+          "Favourite and unfavourite statuses",
+          "Search accounts, hashtags, and statuses",
+          "Get trending tags, statuses, and links",
+          "Follow and unfollow accounts",
+          "Track engagement analytics (boosts, favourites, replies)",
+          "Support for content warnings and post visibility levels",
+          "Multi-instance support with configurable instance URL"
+        ],
+        "tools": [
+          "mastodonPost",
+          "mastodonReply",
+          "mastodonBoost",
+          "mastodonFavourite",
+          "mastodonSearch",
+          "mastodonTrending",
+          "mastodonFollow",
+          "mastodonAnalytics",
+          "mastodonChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mastodon",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mastodon",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -347,7 +648,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-matrix",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/matrix",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -381,7 +682,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mattermost",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mattermost",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -417,7 +718,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nextcloud",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nextcloud",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -451,7 +752,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nostr",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nostr",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -486,7 +787,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/pinterest",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -534,7 +835,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -568,7 +869,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-signal",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/signal",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -611,7 +912,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-slack",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/slack",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -648,7 +949,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-sms",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/sms",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -683,7 +984,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-teams",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/teams",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -726,7 +1027,44 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/telegram",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.channels.threads",
+        "name": "Threads Channel Extension",
+        "package": "@framers/agentos-ext-channel-threads",
+        "version": "0.1.0",
+        "category": "channels",
+        "path": "registry/curated/channels/threads",
+        "description": "Bidirectional Threads integration — post text, images, videos, carousels, reply, quote, like, search user threads, and track engagement analytics via Meta Threads Publishing API.",
+        "features": [
+          "Post text posts to Threads",
+          "Post image posts with captions",
+          "Post video posts with captions",
+          "Post carousel posts with multiple images/videos",
+          "Reply to existing thread posts",
+          "Like and unlike thread posts",
+          "Quote existing thread posts",
+          "Search/browse user's recent threads",
+          "Get post analytics (views, likes, replies, reposts, quotes)",
+          "Delete thread posts"
+        ],
+        "tools": [
+          "threadsPost",
+          "threadsReply",
+          "threadsLike",
+          "threadsSearch",
+          "threadsAnalytics",
+          "threadsQuote",
+          "threadsChannel"
+        ],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-threads",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/threads",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -760,7 +1098,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -797,7 +1135,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tlon",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tlon",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -831,7 +1169,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitch",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitch",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -874,7 +1212,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -913,7 +1251,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/webchat",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -956,7 +1294,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-whatsapp",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/whatsapp",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -994,7 +1332,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/youtube",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1029,7 +1367,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalo",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1065,7 +1403,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalouser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalouser",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1093,7 +1431,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-notifications",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1136,7 +1474,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1167,7 +1505,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-founders",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/founders",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1191,7 +1529,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-verify",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/verify",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1233,7 +1571,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-github",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/github",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1278,7 +1616,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1322,7 +1660,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-wunderbot-feeds",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/wunderbot-feeds",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1353,7 +1691,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-giphy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/giphy",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1383,7 +1721,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/image-search",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1412,7 +1750,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/voice-synthesis",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1455,7 +1793,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-email-gmail",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/gmail",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1499,7 +1837,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-calendar-google",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/google-calendar",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1540,7 +1878,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1571,7 +1909,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1601,7 +1939,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-content-extraction",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/content-extraction",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1631,7 +1969,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-deep-research",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1659,7 +1997,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-news-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/news-search",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1689,7 +2027,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-weather",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/weather",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1727,7 +2065,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1763,7 +2101,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1805,7 +2143,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-browser-automation",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/browser-automation",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1842,7 +2180,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1872,7 +2210,161 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-credential-vault",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.bulk-scheduler",
+        "name": "Bulk Schedule Posts Tool",
+        "package": "@framers/agentos-ext-tool-bulk-scheduler",
+        "version": "0.1.0",
+        "category": "tools",
+        "path": "registry/curated/tools/bulk-scheduler",
+        "description": "Schedule multiple social media posts at once. Accepts an array of posts with content, platforms, scheduled times, and optional media/hashtags. Supports template variables for dynamic content.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Schedule multiple posts in one operation",
+          "Template variables: {{date}}, {{time}}, {{day}}, {{platform}}",
+          "Per-platform content targeting",
+          "Media attachment support via asset IDs",
+          "Hashtag management",
+          "Validation with graceful per-post error handling",
+          "Chronological scheduling verification"
+        ],
+        "tools": [
+          "bulkSchedule"
+        ],
+        "keywords": [
+          "social",
+          "scheduling",
+          "bulk",
+          "automation",
+          "content-calendar",
+          "posts"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-bulk-scheduler",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/bulk-scheduler",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.media-upload",
+        "name": "Media Upload Tool",
+        "package": "@framers/agentos-ext-tool-media-upload",
+        "version": "0.1.0",
+        "category": "tools",
+        "path": "registry/curated/tools/media-upload",
+        "description": "Upload images, videos, and audio files to the media library for use in social posts. Returns an asset ID that can be referenced in post tools.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Upload images (JPEG, PNG, GIF, WebP, SVG)",
+          "Upload videos (MP4, MOV, WebM)",
+          "Upload audio (MP3, WAV, OGG)",
+          "Automatic MIME type detection",
+          "Tag-based asset organization",
+          "Returns reusable asset ID for post tools"
+        ],
+        "tools": [
+          "mediaUpload"
+        ],
+        "keywords": [
+          "social",
+          "media",
+          "upload",
+          "images",
+          "video",
+          "audio",
+          "asset-management"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-media-upload",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/media-upload",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.multi-channel-post",
+        "name": "Multi-Channel Post Tool",
+        "package": "@framers/agentos-ext-tool-multi-channel-post",
+        "version": "0.1.0",
+        "category": "tools",
+        "path": "registry/curated/tools/multi-channel-post",
+        "description": "Publish adapted content to multiple social platforms simultaneously. Handles platform-specific content adaptation, media format validation, and per-platform result tracking.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Post to multiple platforms in one operation",
+          "Automatic content adaptation per platform",
+          "Per-platform result tracking",
+          "Support for text, images, videos",
+          "Graceful partial failure handling"
+        ],
+        "tools": [
+          "multiChannelPost"
+        ],
+        "keywords": [
+          "social",
+          "multi-channel",
+          "cross-platform",
+          "posting",
+          "content-adaptation"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-multi-channel-post",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/multi-channel-post",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.social-analytics",
+        "name": "Cross-Platform Social Analytics Tool",
+        "package": "@framers/agentos-ext-tool-social-analytics",
+        "version": "0.1.0",
+        "category": "tools",
+        "path": "registry/curated/tools/social-analytics",
+        "description": "Aggregate engagement metrics (likes, comments, shares, impressions, engagement rate) across multiple social platforms in a single query.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Aggregate metrics from multiple platforms",
+          "Per-platform engagement breakdown",
+          "Total engagement rate calculation",
+          "Flexible time range querying",
+          "Graceful per-platform error handling"
+        ],
+        "tools": [
+          "crossPlatformAnalytics"
+        ],
+        "keywords": [
+          "social",
+          "analytics",
+          "engagement",
+          "cross-platform",
+          "metrics"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-social-analytics",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/social-analytics",
+        "verified": true,
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1911,7 +2403,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-plivo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/plivo",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1951,7 +2443,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-telnyx",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/telnyx",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1991,7 +2483,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-twilio",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/twilio",
         "verified": true,
-        "verifiedAt": "2026-03-04T21:10:17.439Z",
+        "verifiedAt": "2026-03-05T06:07:29.819Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
@@ -2028,8 +2520,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 57,
-    "curatedCount": 54,
+    "totalExtensions": 70,
+    "curatedCount": 67,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0

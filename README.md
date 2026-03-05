@@ -63,6 +63,15 @@ All extensions are published to npm under the `@framers` scope.
 | [`@framers/agentos-ext-channel-instagram`](./registry/curated/channels/instagram) | Instagram social channel (Graph API) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-instagram)](https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram) |
 | [`@framers/agentos-ext-channel-reddit`](./registry/curated/channels/reddit) | Reddit social channel (snoowrap) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-reddit)](https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit) |
 | [`@framers/agentos-ext-channel-youtube`](./registry/curated/channels/youtube) | YouTube social channel (googleapis) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-youtube)](https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube) |
+| [`@framers/agentos-ext-channel-linkedin`](./registry/curated/channels/linkedin) | LinkedIn social channel (Marketing API) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-linkedin)](https://www.npmjs.com/package/@framers/agentos-ext-channel-linkedin) |
+| [`@framers/agentos-ext-channel-facebook`](./registry/curated/channels/facebook) | Facebook social channel (Meta Graph API) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-facebook)](https://www.npmjs.com/package/@framers/agentos-ext-channel-facebook) |
+| [`@framers/agentos-ext-channel-threads`](./registry/curated/channels/threads) | Threads social channel (Meta Graph API) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-threads)](https://www.npmjs.com/package/@framers/agentos-ext-channel-threads) |
+| [`@framers/agentos-ext-channel-bluesky`](./registry/curated/channels/bluesky) | Bluesky social channel (AT Protocol) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-bluesky)](https://www.npmjs.com/package/@framers/agentos-ext-channel-bluesky) |
+| [`@framers/agentos-ext-channel-mastodon`](./registry/curated/channels/mastodon) | Mastodon social channel (federated) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-mastodon)](https://www.npmjs.com/package/@framers/agentos-ext-channel-mastodon) |
+| [`@framers/agentos-ext-channel-farcaster`](./registry/curated/channels/farcaster) | Farcaster social channel (Neynar API) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-farcaster)](https://www.npmjs.com/package/@framers/agentos-ext-channel-farcaster) |
+| [`@framers/agentos-ext-channel-lemmy`](./registry/curated/channels/lemmy) | Lemmy federated social channel | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-lemmy)](https://www.npmjs.com/package/@framers/agentos-ext-channel-lemmy) |
+| [`@framers/agentos-ext-channel-google-business`](./registry/curated/channels/google-business) | Google Business Profile channel | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-google-business)](https://www.npmjs.com/package/@framers/agentos-ext-channel-google-business) |
+| [`@framers/agentos-ext-channel-blog-publisher`](./registry/curated/channels/blog-publisher) | Blog publisher (Dev.to, Hashnode, Medium, WordPress) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-blog-publisher)](https://www.npmjs.com/package/@framers/agentos-ext-channel-blog-publisher) |
 | [`@framers/agentos-ext-channel-pinterest`](./registry/curated/channels/pinterest) | Pinterest social channel (API v5) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-pinterest)](https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest) |
 | [`@framers/agentos-ext-channel-tiktok`](./registry/curated/channels/tiktok) | TikTok social channel (API for Business) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-tiktok)](https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok) |
 | [`@framers/agentos-ext-channel-email`](./registry/curated/channels/email) | Email messaging channel (nodemailer/imapflow) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-email)](https://www.npmjs.com/package/@framers/agentos-ext-channel-email) |
@@ -82,7 +91,7 @@ agentos-extensions/
 ├── registry/
 │   ├── curated/           # Official & verified extensions
 │   │   ├── auth/          # Authentication & subscriptions
-│   │   ├── channels/      # Messaging & social channels (28 platforms)
+│   │   ├── channels/      # Messaging & social channels (37 platform packs)
 │   │   ├── communications/# Telegram bot, notifications
 │   │   ├── integrations/  # External services (Telegram API)
 │   │   ├── media/         # Giphy, image search, voice synthesis
@@ -183,6 +192,18 @@ await agentos.initialize({
 | `twitter.accessToken` | `TWITTER_ACCESS_TOKEN` | channel-twitter |
 | `twitter.accessSecret` | `TWITTER_ACCESS_SECRET` | channel-twitter |
 | `instagram.accessToken` | `INSTAGRAM_ACCESS_TOKEN` | channel-instagram |
+| `linkedin.accessToken` | `LINKEDIN_ACCESS_TOKEN` | channel-linkedin |
+| `facebook.accessToken` | `FACEBOOK_ACCESS_TOKEN` | channel-facebook |
+| `threads.accessToken` | `THREADS_ACCESS_TOKEN` | channel-threads |
+| `bluesky.handle` | `BLUESKY_HANDLE` | channel-bluesky |
+| `bluesky.appPassword` | `BLUESKY_APP_PASSWORD` | channel-bluesky |
+| `mastodon.accessToken` | `MASTODON_ACCESS_TOKEN` | channel-mastodon |
+| `farcaster.neynarApiKey` | `FARCASTER_NEYNAR_API_KEY` | channel-farcaster |
+| `farcaster.signerUuid` | `FARCASTER_SIGNER_UUID` | channel-farcaster |
+| `lemmy.instanceUrl` | `LEMMY_INSTANCE_URL` | channel-lemmy |
+| `lemmy.username` | `LEMMY_USERNAME` | channel-lemmy |
+| `lemmy.password` | `LEMMY_PASSWORD` | channel-lemmy |
+| `google.accessToken` | `GOOGLE_ACCESS_TOKEN` | channel-google-business |
 | `reddit.clientId` | `REDDIT_CLIENT_ID` | channel-reddit |
 | `reddit.clientSecret` | `REDDIT_CLIENT_SECRET` | channel-reddit |
 | `reddit.username` | `REDDIT_USERNAME` | channel-reddit |

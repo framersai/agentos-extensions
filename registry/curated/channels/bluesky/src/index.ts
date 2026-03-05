@@ -103,6 +103,19 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
     ],
     onActivate: async () => {
       if (!config.handle || !config.appPassword) {
+        try {
+          const { FileTokenStore } = await import('@framers/agentos/auth');
+          const tokens = await new FileTokenStore().load('bluesky');
+          if (tokens?.accessToken) {
+            const metadata = (tokens as { metadata?: Record<string, string> }).metadata ?? {};
+            config.appPassword = config.appPassword || tokens.accessToken;
+            config.handle = config.handle || metadata.handle || '';
+            config.service = config.service || metadata.service || config.service;
+          }
+        } catch { /* FileTokenStore not available — ignore */ }
+      }
+
+      if (!config.handle || !config.appPassword) {
         throw new Error(
           'Bluesky: no credentials provided. Set BLUESKY_HANDLE (or BSKY_HANDLE) and '
           + 'BLUESKY_APP_PASSWORD (or BSKY_APP_PASSWORD) environment variables, '

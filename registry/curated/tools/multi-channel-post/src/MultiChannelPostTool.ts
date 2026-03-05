@@ -19,6 +19,8 @@ export interface MultiChannelPostInput {
   adaptations?: Record<string, string>;
   /** Optional media URLs to attach. */
   mediaUrls?: string[];
+  /** Optional per-platform argument overrides passed to the platform tool. */
+  platformConfigs?: Record<string, Record<string, unknown>>;
   /** Optional hashtags to include (adapted per platform). */
   hashtags?: string[];
   /** Optional: if true, don't actually post — just show adapted content. */
@@ -88,6 +90,15 @@ export class MultiChannelPostTool {
         type: 'array',
         items: { type: 'string' },
         description: 'Media URLs or file paths to attach',
+      },
+      platformConfigs: {
+        type: 'object',
+        additionalProperties: {
+          type: 'object',
+          additionalProperties: true,
+        },
+        description:
+          'Optional per-platform tool argument overrides (e.g. subreddit, boardId, videoUrl, communityId).',
       },
       hashtags: {
         type: 'array',
@@ -188,7 +199,12 @@ export class MultiChannelPostTool {
 
       try {
         const toolName = this.getPostToolName(platform);
-        const toolArgs = this.buildToolArgs(platform, adaptedContent, args.mediaUrls);
+        const toolArgs = this.buildToolArgs(
+          platform,
+          adaptedContent,
+          args.mediaUrls,
+          args.platformConfigs?.[platform],
+        );
 
         if (this.toolExecutor) {
           const result = await this.toolExecutor(toolName, toolArgs);
@@ -279,34 +295,196 @@ export class MultiChannelPostTool {
     platform: string,
     content: string,
     mediaUrls?: string[],
+    platformConfig?: Record<string, unknown>,
   ): Record<string, unknown> {
-    const mediaPath = mediaUrls?.[0]; // most platforms accept a single primary media
+    const config = platformConfig ?? {};
+    const mediaUrl = this.getOptionalString(config['mediaUrl']) ?? mediaUrls?.[0];
+    const mediaPath = this.getOptionalString(config['mediaPath']) ?? mediaUrl;
 
     switch (platform) {
       case 'twitter':
         return { text: content, mediaPath };
       case 'instagram':
-        return { caption: content, mediaPath };
-      case 'reddit':
-        return { title: content.substring(0, 300), text: content, subreddit: 'self' };
+        return {
+          caption: content,
+          imageUrls: this.requireStringArray(
+            this.getOptionalStringArray(config['imageUrls']) ?? mediaUrls,
+            'instagram requires imageUrls (provide mediaUrls or platformConfigs.instagram.imageUrls)',
+          ),
+        };
+      case 'reddit': {
+        const type =
+          this.getOptionalString(config['type']) ??
+          (mediaUrl ? 'image' : 'text');
+        const title =
+          this.getOptionalString(config['title']) ??
+          content.substring(0, 300);
+        const bodyContent =
+          this.getOptionalString(config['content']) ??
+          (type === 'image' || type === 'link'
+            ? this.requireString(
+                mediaUrl,
+                `reddit ${type} post requires a URL (provide mediaUrls or platformConfigs.reddit.content)`,
+              )
+            : content);
+
+        return {
+          subreddit: this.getOptionalString(config['subreddit']) ?? 'self',
+          title,
+          content: bodyContent,
+          type,
+          pollOptions: this.getOptionalStringArray(config['pollOptions']),
+          pollDurationDays: this.getOptionalNumber(config['pollDurationDays']),
+          flairId: this.getOptionalString(config['flairId']),
+          nsfw: this.getOptionalBoolean(config['nsfw']),
+          spoiler: this.getOptionalBoolean(config['spoiler']),
+        };
+      }
       case 'youtube':
-        return { title: content.substring(0, 100), description: content };
+        return {
+          videoUrl: this.requireString(
+            this.getOptionalString(config['videoUrl']) ?? mediaUrl,
+            'youtube requires videoUrl (provide mediaUrls or platformConfigs.youtube.videoUrl)',
+          ),
+          title:
+            this.getOptionalString(config['title']) ??
+            content.substring(0, 100),
+          description:
+            this.getOptionalString(config['description']) ?? content,
+          tags: this.getOptionalStringArray(config['tags']),
+          categoryId: this.getOptionalString(config['categoryId']),
+          privacyStatus: this.getOptionalString(config['privacyStatus']),
+          mimeType: this.getOptionalString(config['mimeType']),
+        };
       case 'tiktok':
-        return { caption: content, videoPath: mediaPath };
-      case 'pinterest':
-        return { description: content, imageUrl: mediaPath, title: content.substring(0, 100) };
+        return {
+          videoUrl: this.requireString(
+            this.getOptionalString(config['videoUrl']) ?? mediaUrl,
+            'tiktok requires videoUrl (provide mediaUrls or platformConfigs.tiktok.videoUrl)',
+          ),
+          caption: this.getOptionalString(config['caption']) ?? content,
+          hashtags: this.getOptionalStringArray(config['hashtags']),
+          privacyLevel: this.getOptionalString(config['privacyLevel']),
+          disableComment: this.getOptionalBoolean(config['disableComment']),
+          disableDuet: this.getOptionalBoolean(config['disableDuet']),
+          disableStitch: this.getOptionalBoolean(config['disableStitch']),
+          coverTimestampMs: this.getOptionalNumber(config['coverTimestampMs']),
+        };
+      case 'pinterest': {
+        const mediaUrlsForCarousel =
+          this.getOptionalStringArray(config['mediaUrls']);
+        return {
+          boardId: this.requireString(
+            this.getOptionalString(config['boardId']),
+            'pinterest requires boardId (provide platformConfigs.pinterest.boardId)',
+          ),
+          title:
+            this.getOptionalString(config['title']) ??
+            content.substring(0, 100),
+          description:
+            this.getOptionalString(config['description']) ?? content,
+          link: this.getOptionalString(config['link']),
+          mediaType:
+            this.getOptionalString(config['mediaType']) ??
+            (mediaUrlsForCarousel && mediaUrlsForCarousel.length > 1
+              ? 'carousel'
+              : 'image'),
+          mediaUrl: this.requireString(
+            this.getOptionalString(config['mediaUrl']) ?? mediaUrl,
+            'pinterest requires mediaUrl (provide mediaUrls or platformConfigs.pinterest.mediaUrl)',
+          ),
+          mediaUrls: mediaUrlsForCarousel,
+          coverImageUrl: this.getOptionalString(config['coverImageUrl']),
+          altText: this.getOptionalString(config['altText']),
+          hashtags: this.getOptionalStringArray(config['hashtags']),
+        };
+      }
       case 'linkedin':
         return { text: content, mediaPath };
       case 'facebook':
-        return { text: content, mediaPath };
+        return {
+          text: content,
+          mediaPath,
+          link: this.getOptionalString(config['link']),
+          mediaType: this.getOptionalString(config['mediaType']),
+          pageId: this.getOptionalString(config['pageId']),
+        };
       case 'threads':
-        return { text: content, imageUrl: mediaPath };
+        return {
+          text: content,
+          imageUrl: this.getOptionalString(config['imageUrl']) ?? mediaUrl,
+          videoUrl: this.getOptionalString(config['videoUrl']),
+          carouselItems: config['carouselItems'],
+        };
       case 'bluesky':
-        return { text: content };
+        return {
+          text: content,
+          imagePaths: this.getOptionalStringArray(config['imagePaths']),
+          langs: this.getOptionalStringArray(config['langs']),
+        };
       case 'mastodon':
-        return { text: content, mediaPath };
+        return {
+          text: content,
+          mediaPath,
+          spoilerText: this.getOptionalString(config['spoilerText']),
+          visibility: this.getOptionalString(config['visibility']),
+          sensitive: this.getOptionalBoolean(config['sensitive']),
+          language: this.getOptionalString(config['language']),
+        };
+      case 'farcaster':
+        return {
+          text: content,
+          embeds: this.getOptionalStringArray(config['embeds']) ??
+            (mediaUrl ? [mediaUrl] : undefined),
+          channelId: this.getOptionalString(config['channelId']),
+        };
+      case 'lemmy':
+        return {
+          communityId: this.requireNumber(
+            this.getOptionalNumber(config['communityId']),
+            'lemmy requires communityId (provide platformConfigs.lemmy.communityId)',
+          ),
+          name:
+            this.getOptionalString(config['name']) ??
+            content.substring(0, 200),
+          body: this.getOptionalString(config['body']) ?? content,
+          url: this.getOptionalString(config['url']) ?? mediaUrl,
+        };
       default:
         return { text: content, mediaPath };
     }
+  }
+
+  private getOptionalString(value: unknown): string | undefined {
+    return typeof value === 'string' && value.trim() !== '' ? value : undefined;
+  }
+
+  private getOptionalStringArray(value: unknown): string[] | undefined {
+    if (!Array.isArray(value)) return undefined;
+    const values = value.filter((v): v is string => typeof v === 'string' && v.trim() !== '');
+    return values.length ? values : undefined;
+  }
+
+  private getOptionalNumber(value: unknown): number | undefined {
+    return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+  }
+
+  private getOptionalBoolean(value: unknown): boolean | undefined {
+    return typeof value === 'boolean' ? value : undefined;
+  }
+
+  private requireString(value: string | undefined, error: string): string {
+    if (!value) throw new Error(error);
+    return value;
+  }
+
+  private requireNumber(value: number | undefined, error: string): number {
+    if (typeof value !== 'number') throw new Error(error);
+    return value;
+  }
+
+  private requireStringArray(value: string[] | undefined, error: string): string[] {
+    if (!value || value.length === 0) throw new Error(error);
+    return value;
   }
 }

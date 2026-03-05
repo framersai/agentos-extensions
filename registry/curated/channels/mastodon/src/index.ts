@@ -96,6 +96,18 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
       { id: 'mastodonChannel', kind: 'messaging-channel', priority: 50, payload: adapter },
     ],
     onActivate: async () => {
+      if (!config.accessToken) {
+        try {
+          const { FileTokenStore } = await import('@framers/agentos/auth');
+          const tokens = await new FileTokenStore().load('mastodon');
+          if (tokens?.accessToken) {
+            const metadata = (tokens as { metadata?: Record<string, string> }).metadata ?? {};
+            config.accessToken = tokens.accessToken;
+            config.instanceUrl = metadata.instanceUrl || config.instanceUrl;
+          }
+        } catch { /* FileTokenStore not available — ignore */ }
+      }
+
       await service.initialize();
       if (config.accessToken) {
         await adapter.initialize({ platform: 'mastodon', credential: config.accessToken });

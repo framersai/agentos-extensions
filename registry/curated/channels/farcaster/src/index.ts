@@ -99,6 +99,20 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
       { id: 'farcasterChannel', kind: 'messaging-channel', priority: 50, payload: adapter },
     ],
     onActivate: async () => {
+      if (!config.neynarApiKey) {
+        try {
+          const { FileTokenStore } = await import('@framers/agentos/auth');
+          const tokens = await new FileTokenStore().load('farcaster');
+          if (tokens?.accessToken) {
+            const metadata = (tokens as { metadata?: Record<string, string> }).metadata ?? {};
+            config.neynarApiKey = tokens.accessToken;
+            config.signerUuid = config.signerUuid || metadata.signerUuid || '';
+            config.fid = config.fid
+              ?? (metadata.fid ? parseInt(metadata.fid, 10) : undefined);
+          }
+        } catch { /* FileTokenStore not available — ignore */ }
+      }
+
       await service.initialize();
       const credential = config.neynarApiKey || '';
       if (credential) {
