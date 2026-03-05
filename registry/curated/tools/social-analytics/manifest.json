@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.social-analytics",
+  "name": "Cross-Platform Social Analytics Tool",
+  "version": "0.1.0",
+  "description": "Aggregate engagement metrics (likes, comments, shares, impressions, engagement rate) across multiple social platforms in a single query.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["social", "analytics", "engagement", "cross-platform", "metrics"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "social"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "crossPlatformAnalytics",
+      "displayName": "Cross-Platform Analytics",
+      "description": "Aggregate engagement metrics across social platforms",
+      "entry": "./dist/CrossPlatformAnalyticsTool.js"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Aggregate metrics from multiple platforms",
+    "Per-platform engagement breakdown",
+    "Total engagement rate calculation",
+    "Flexible time range querying",
+    "Graceful per-platform error handling"
+  ]
+}

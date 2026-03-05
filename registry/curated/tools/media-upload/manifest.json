@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.media-upload",
+  "name": "Media Upload Tool",
+  "version": "0.1.0",
+  "description": "Upload images, videos, and audio files to the media library for use in social posts. Returns an asset ID that can be referenced in post tools.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["social", "media", "upload", "images", "video", "audio", "asset-management"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "social"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "mediaUpload",
+      "displayName": "Upload Media",
+      "description": "Upload an image, video, or audio file to the media library for use in social posts",
+      "entry": "./dist/MediaUploadTool.js"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Upload images (JPEG, PNG, GIF, WebP, SVG)",
+    "Upload videos (MP4, MOV, WebM)",
+    "Upload audio (MP3, WAV, OGG)",
+    "Automatic MIME type detection",
+    "Tag-based asset organization",
+    "Returns reusable asset ID for post tools"
+  ]
+}

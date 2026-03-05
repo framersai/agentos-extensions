@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.multi-channel-post",
+  "name": "Multi-Channel Post Tool",
+  "version": "0.1.0",
+  "description": "Publish adapted content to multiple social platforms simultaneously. Handles platform-specific content adaptation, media format validation, and per-platform result tracking.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["social", "multi-channel", "cross-platform", "posting", "content-adaptation"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "social"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "multiChannelPost",
+      "displayName": "Post to Multiple Platforms",
+      "description": "Publish content to multiple social media platforms with automatic content adaptation",
+      "entry": "./dist/MultiChannelPostTool.js"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Post to multiple platforms in one operation",
+    "Automatic content adaptation per platform",
+    "Per-platform result tracking",
+    "Support for text, images, videos",
+    "Graceful partial failure handling"
+  ]
+}
