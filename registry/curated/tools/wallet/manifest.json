@@ -1,0 +1,98 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.wallet",
+  "name": "Agent Personal Wallet",
+  "version": "0.2.0",
+  "description": "Give agents their own personal wallet with configurable spending guardrails. Supports Solana, Ethereum, Base, and Polygon with per-category budgets, daily/monthly limits, human-in-the-loop approval thresholds, and Lithic virtual card integration.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["wallet", "crypto", "solana", "ethereum", "spending-policy", "guardrails", "defi", "card", "lithic", "virtual-card"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "finance"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "check_wallet_balance",
+      "displayName": "Check Wallet Balance",
+      "description": "Check the balance of the agent's personal wallet on a given blockchain",
+      "entry": "./dist/tools/CheckBalanceTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "send_crypto",
+      "displayName": "Send Crypto",
+      "description": "Send cryptocurrency with spending policy enforcement",
+      "entry": "./dist/tools/SendCryptoTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "wallet_transaction_history",
+      "displayName": "Wallet Transaction History",
+      "description": "View recent transaction history for the agent's wallet",
+      "entry": "./dist/tools/WalletHistoryTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "issue_virtual_card",
+      "displayName": "Issue Virtual Card",
+      "description": "Issue a new Lithic virtual debit card for the agent with configurable spending limits",
+      "entry": "./dist/tools/IssueCardTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "card_status",
+      "displayName": "Card Status",
+      "description": "Get the current status of the agent's virtual card",
+      "entry": "./dist/tools/CardStatusTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "freeze_card",
+      "displayName": "Freeze Card",
+      "description": "Temporarily freeze the agent's virtual card to pause all transactions",
+      "entry": "./dist/tools/FreezeCardTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "unfreeze_card",
+      "displayName": "Unfreeze Card",
+      "description": "Resume the agent's virtual card after it was frozen",
+      "entry": "./dist/tools/UnfreezeCardTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "card_spending_summary",
+      "displayName": "Card Spending Summary",
+      "description": "Get a spending breakdown by category for the agent's virtual card",
+      "entry": "./dist/tools/CardSpendingSummaryTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "pay_with_card",
+      "displayName": "Pay With Card",
+      "description": "Retrieve card details (PAN, CVV, expiry) for online payments with spending policy enforcement",
+      "entry": "./dist/tools/PayWithCardTool.js"
+    }
+  ],
+  "requiredSecrets": ["WALLET_MASTER_SECRET"],
+  "optionalSecrets": ["LITHIC_API_KEY", "LITHIC_WEBHOOK_SECRET"],
+  "features": [
+    "Multi-chain support (Solana, Ethereum, Base, Polygon)",
+    "AES-256-GCM encrypted key storage",
+    "Configurable spending guardrails per category",
+    "Daily, monthly, and per-transaction limits",
+    "Human-in-the-loop approval for high-value transactions",
+    "Address whitelists and blacklists",
+    "Native token and SPL/ERC-20 token transfers",
+    "Lithic virtual debit card issuance",
+    "MCC-based category mapping for card transactions",
+    "Card freeze/unfreeze controls",
+    "Card spending summary by category"
+  ]
+}
