@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-extensions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "files": [
     "registry.json",
     "types.d.ts",
@@ -34,7 +34,12 @@
     "type": "git",
     "url": "https://github.com/framersai/agentos-extensions.git"
   },
-  "keywords": ["agentos", "extensions", "tools", "plugins"],
+  "keywords": [
+    "agentos",
+    "extensions",
+    "tools",
+    "plugins"
+  ],
   "author": {
     "name": "Framers AI",
     "email": "team@frame.dev",
