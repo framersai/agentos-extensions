@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.site-deploy",
+  "name": "Site Deploy Orchestration",
+  "version": "0.1.0",
+  "description": "High-level deployment orchestrator that deploys sites from source to any supported cloud provider (Vercel, Cloudflare Pages, DigitalOcean, Netlify, Heroku, AWS, Linode, Railway, Fly.io) with optional custom domain registration and DNS configuration via any supported registrar (Porkbun, Namecheap, GoDaddy, Cloudflare).",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["deploy", "cloud", "orchestration", "vercel", "cloudflare", "domain", "dns", "hosting"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "siteDeploy",
+      "displayName": "Deploy Site",
+      "description": "Deploy a site from source to a cloud provider with optional domain setup",
+      "entry": "./dist/SiteDeployTool.js"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Auto-detect framework from source (Next.js, React, Vue, Svelte, Astro, Node, Python, static)",
+    "Auto-select optimal cloud provider based on framework",
+    "Deploy to 9 cloud providers via delegated tool calls",
+    "Register and configure custom domains via 4 registrar integrations",
+    "Dry-run mode to preview deployment plan without executing",
+    "Comprehensive result with deployment URL and domain status"
+  ]
+}

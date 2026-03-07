@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.vercel",
+  "name": "Vercel Cloud Deployment",
+  "version": "0.1.0",
+  "description": "Deploy projects to Vercel, manage deployments, configure custom domains, and set environment variables. Supports Next.js, React, static sites, and serverless functions.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "vercel", "deploy", "hosting", "nextjs", "serverless"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "vercelDeploy", "displayName": "Deploy to Vercel", "entry": "./dist/tools/deploy.js" },
+    { "kind": "tool", "id": "vercelListProjects", "displayName": "List Vercel Projects", "entry": "./dist/tools/listProjects.js" },
+    { "kind": "tool", "id": "vercelGetDeployment", "displayName": "Get Deployment Status", "entry": "./dist/tools/getDeployment.js" },
+    { "kind": "tool", "id": "vercelConfigureDomain", "displayName": "Configure Domain", "entry": "./dist/tools/configureDomain.js" },
+    { "kind": "tool", "id": "vercelSetEnvVars", "displayName": "Set Environment Variables", "entry": "./dist/tools/setEnvVars.js" }
+  ],
+  "requiredSecrets": ["vercel.token"],
+  "features": [
+    "Deploy from Git repositories or local directories",
+    "Automatic framework detection (Next.js, React, Vue, static)",
+    "Custom domain configuration with SSL",
+    "Environment variable management",
+    "Deployment status tracking"
+  ]
+}

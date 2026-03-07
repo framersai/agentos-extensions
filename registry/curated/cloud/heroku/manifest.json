@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.heroku",
+  "name": "Heroku Cloud Deployment",
+  "version": "0.1.0",
+  "description": "Create and manage Heroku apps, deploy from source tarballs, provision addons (Postgres, Redis, etc.), scale dynos, and stream logs via the Heroku Platform API.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "heroku", "deploy", "paas", "dynos", "addons"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "herokuCreateApp", "displayName": "Create Heroku App", "entry": "./dist/tools/createApp.js" },
+    { "kind": "tool", "id": "herokuDeployApp", "displayName": "Deploy Heroku App", "entry": "./dist/tools/deployApp.js" },
+    { "kind": "tool", "id": "herokuAddAddon", "displayName": "Add Heroku Addon", "entry": "./dist/tools/addAddon.js" },
+    { "kind": "tool", "id": "herokuGetLogs", "displayName": "Get Heroku Logs", "entry": "./dist/tools/getLogs.js" },
+    { "kind": "tool", "id": "herokuScaleDynos", "displayName": "Scale Heroku Dynos", "entry": "./dist/tools/scaleDynos.js" }
+  ],
+  "requiredSecrets": ["heroku.apiKey"],
+  "features": [
+    "Create and delete Heroku apps",
+    "Deploy from source tarball URLs",
+    "Provision addons (Postgres, Redis, Papertrail, etc.)",
+    "Scale dyno formation (type and quantity)",
+    "Stream and retrieve application logs"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.aws",
+  "name": "AWS Cloud Services",
+  "version": "0.1.0",
+  "description": "Deploy static sites to S3 with website hosting, manage Lightsail instances, configure Route53 DNS records, deploy apps via AWS Amplify, create CloudFront distributions, and deploy Lambda functions. Uses direct REST API calls with AWS Signature V4 signing — no SDK required.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "aws", "s3", "lambda", "lightsail", "route53", "amplify", "cloudfront", "deploy", "hosting", "dns", "cdn", "serverless"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "awsDeployS3Site", "displayName": "Deploy S3 Static Site", "entry": "./dist/tools/deployS3Site.js" },
+    { "kind": "tool", "id": "awsCreateLightsail", "displayName": "Create Lightsail Instance", "entry": "./dist/tools/createLightsail.js" },
+    { "kind": "tool", "id": "awsDeployAmplify", "displayName": "Deploy via Amplify", "entry": "./dist/tools/deployAmplify.js" },
+    { "kind": "tool", "id": "awsManageRoute53", "displayName": "Manage Route53 DNS", "entry": "./dist/tools/manageRoute53.js" },
+    { "kind": "tool", "id": "awsConfigureCloudFront", "displayName": "Configure CloudFront", "entry": "./dist/tools/configureCloudFront.js" },
+    { "kind": "tool", "id": "awsConfigureLambda", "displayName": "Deploy Lambda Function", "entry": "./dist/tools/configureLambda.js" }
+  ],
+  "requiredSecrets": ["aws.accessKeyId", "aws.secretAccessKey"],
+  "features": [
+    "Deploy static sites to S3 with website hosting and public read access",
+    "Create and manage Lightsail instances with DNS entries",
+    "Configure Route53 DNS records (A, AAAA, CNAME, MX, TXT)",
+    "Deploy applications via AWS Amplify from Git repositories",
+    "Create CloudFront CDN distributions for S3 or custom origins",
+    "Deploy Lambda functions from zip archives with configurable runtime and memory"
+  ]
+}

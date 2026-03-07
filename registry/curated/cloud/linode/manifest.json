@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.linode",
+  "name": "Linode/Akamai Cloud",
+  "version": "0.1.0",
+  "description": "Provision Linode instances, deploy via StackScripts, manage DNS zones and records, and create NodeBalancers for load balancing via the Linode API v4.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "linode", "akamai", "vps", "dns", "nodebalancer", "stackscript"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "linodeCreateInstance", "displayName": "Create Linode Instance", "entry": "./dist/tools/createInstance.js" },
+    { "kind": "tool", "id": "linodeListInstances", "displayName": "List Linode Instances", "entry": "./dist/tools/listInstances.js" },
+    { "kind": "tool", "id": "linodeDeployStackScript", "displayName": "Deploy StackScript", "entry": "./dist/tools/deployStackScript.js" },
+    { "kind": "tool", "id": "linodeManageDns", "displayName": "Manage DNS", "entry": "./dist/tools/manageDns.js" },
+    { "kind": "tool", "id": "linodeDeleteInstance", "displayName": "Delete Linode Instance", "entry": "./dist/tools/deleteInstance.js" },
+    { "kind": "tool", "id": "linodeCreateNodeBalancer", "displayName": "Create NodeBalancer", "entry": "./dist/tools/createNodeBalancer.js" }
+  ],
+  "requiredSecrets": ["linode.token"],
+  "features": [
+    "Create, list, boot, and shutdown Linode instances",
+    "Deploy instances using StackScripts for automated provisioning",
+    "Manage DNS zones and records (A, AAAA, CNAME, MX, TXT, SRV, NS, CAA)",
+    "Create NodeBalancers for load balancing across instances",
+    "List available regions and instance types/plans",
+    "Allocate and manage IP addresses"
+  ]
+}

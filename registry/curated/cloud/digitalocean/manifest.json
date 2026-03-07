@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.digitalocean",
+  "name": "DigitalOcean Cloud Management",
+  "version": "0.1.0",
+  "description": "Manage DigitalOcean App Platform apps, Droplets, DNS records, and deployments. Supports creating and deploying PaaS apps from Git, provisioning VPS droplets, and full DNS record management.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "digitalocean", "droplet", "app-platform", "dns", "vps", "paas"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "doCreateApp", "displayName": "Create DO App", "entry": "./dist/tools/createApp.js" },
+    { "kind": "tool", "id": "doCreateDroplet", "displayName": "Create DO Droplet", "entry": "./dist/tools/createDroplet.js" },
+    { "kind": "tool", "id": "doListResources", "displayName": "List DO Resources", "entry": "./dist/tools/listResources.js" },
+    { "kind": "tool", "id": "doDeployApp", "displayName": "Deploy DO App", "entry": "./dist/tools/deployApp.js" },
+    { "kind": "tool", "id": "doManageDns", "displayName": "Manage DO DNS", "entry": "./dist/tools/manageDns.js" },
+    { "kind": "tool", "id": "doDeleteResource", "displayName": "Delete DO Resource", "entry": "./dist/tools/deleteResource.js" }
+  ],
+  "requiredSecrets": ["digitalocean.token"],
+  "features": [
+    "Create and deploy App Platform apps from Git repositories",
+    "Provision and manage Droplets (VPS instances)",
+    "Full DNS record management (A, AAAA, CNAME, MX, TXT, SRV, NS)",
+    "Trigger deployments on existing apps",
+    "List and delete apps and droplets",
+    "Automatic region and size selection"
+  ]
+}

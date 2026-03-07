@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.domains.cloudflare-registrar",
+  "name": "Cloudflare Registrar",
+  "version": "0.1.0",
+  "description": "List, inspect, and manage domains registered through Cloudflare. Configure DNS records (A, AAAA, CNAME, TXT, MX, NS, SRV, CAA), update registrar settings (auto-renew, lock, privacy), and initiate domain transfers to Cloudflare via the Cloudflare API v4.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["domain", "cloudflare", "registrar", "dns", "transfer", "nameserver"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "domain"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "cfRegListDomains", "displayName": "List Cloudflare Domains", "entry": "./dist/tools/listDomains.js" },
+    { "kind": "tool", "id": "cfRegGetDomainInfo", "displayName": "Get Domain Info", "entry": "./dist/tools/getDomainInfo.js" },
+    { "kind": "tool", "id": "cfRegConfigureDns", "displayName": "Configure DNS Records", "entry": "./dist/tools/configureDns.js" },
+    { "kind": "tool", "id": "cfRegTransferDomain", "displayName": "Transfer Domain to Cloudflare", "entry": "./dist/tools/transferDomain.js" }
+  ],
+  "requiredSecrets": ["cloudflare.apiToken", "cloudflare.accountId"],
+  "features": [
+    "List all domains registered via Cloudflare Registrar",
+    "Get detailed domain info (expiry, auto-renew, privacy, registrar status)",
+    "Full DNS record management (A, AAAA, CNAME, TXT, MX, NS, SRV, CAA)",
+    "Update registrar settings (auto-renew, lock, WHOIS privacy)",
+    "Initiate domain transfers to Cloudflare"
+  ]
+}

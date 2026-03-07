@@ -1,0 +1,31 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.cloudflare-pages",
+  "name": "Cloudflare Pages & Workers",
+  "version": "0.1.0",
+  "description": "Deploy Cloudflare Pages projects, manage DNS records, and deploy Workers. Supports static sites, full-stack frameworks, and edge functions via the Cloudflare API v4.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "cloudflare", "pages", "workers", "dns", "deploy", "edge"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "cfDeployPages", "displayName": "Deploy Cloudflare Pages", "entry": "./dist/tools/deploy.js" },
+    { "kind": "tool", "id": "cfListProjects", "displayName": "List Pages Projects", "entry": "./dist/tools/listProjects.js" },
+    { "kind": "tool", "id": "cfConfigureDns", "displayName": "Configure DNS Records", "entry": "./dist/tools/configureDns.js" },
+    { "kind": "tool", "id": "cfCreateWorker", "displayName": "Deploy Cloudflare Worker", "entry": "./dist/tools/createWorker.js" }
+  ],
+  "requiredSecrets": ["cloudflare.apiToken", "cloudflare.accountId"],
+  "features": [
+    "Deploy Pages projects from Git repositories",
+    "List and inspect Pages project deployments",
+    "Full DNS record management (A, AAAA, CNAME, TXT, MX)",
+    "Deploy Cloudflare Worker scripts to the edge"
+  ]
+}

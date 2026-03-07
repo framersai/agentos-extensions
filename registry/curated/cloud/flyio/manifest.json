@@ -1,0 +1,31 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.flyio",
+  "name": "Fly.io Cloud Deployment",
+  "version": "0.1.0",
+  "description": "Deploy and manage applications on Fly.io using the Machines API. Create apps, launch machines with custom configs, scale instances by count and size, and provision persistent volumes for stateful workloads.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "flyio", "fly", "deploy", "machines", "edge", "volumes"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "flyDeployApp", "displayName": "Deploy Fly.io App", "entry": "./dist/tools/deployApp.js" },
+    { "kind": "tool", "id": "flyListApps", "displayName": "List Fly.io Apps", "entry": "./dist/tools/listApps.js" },
+    { "kind": "tool", "id": "flyScaleApp", "displayName": "Scale Fly.io App", "entry": "./dist/tools/scaleApp.js" },
+    { "kind": "tool", "id": "flyCreateVolume", "displayName": "Create Fly.io Volume", "entry": "./dist/tools/createVolume.js" }
+  ],
+  "requiredSecrets": ["fly.token"],
+  "features": [
+    "Deploy apps with Docker images via the Machines API",
+    "List apps and their machines across regions",
+    "Scale machines by count and VM size",
+    "Create persistent volumes for stateful workloads"
+  ]
+}

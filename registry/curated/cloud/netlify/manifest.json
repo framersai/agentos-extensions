@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.netlify",
+  "name": "Netlify Cloud Deployment",
+  "version": "0.1.0",
+  "description": "Deploy sites to Netlify, manage deployments, configure custom domains, and set environment variables. Supports static sites, Jamstack frameworks, serverless functions, and continuous deployment from Git.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "netlify", "deploy", "hosting", "jamstack", "serverless"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "netlifyDeploySite", "displayName": "Deploy to Netlify", "entry": "./dist/tools/deploy.js" },
+    { "kind": "tool", "id": "netlifyListSites", "displayName": "List Netlify Sites", "entry": "./dist/tools/listSites.js" },
+    { "kind": "tool", "id": "netlifyConfigureDomain", "displayName": "Configure Domain", "entry": "./dist/tools/configureDomain.js" },
+    { "kind": "tool", "id": "netlifySetEnvVars", "displayName": "Set Environment Variables", "entry": "./dist/tools/setEnvVars.js" }
+  ],
+  "requiredSecrets": ["netlify.token"],
+  "features": [
+    "Deploy from Git repositories with continuous deployment",
+    "Automatic framework detection (Next.js, Gatsby, Hugo, static)",
+    "Custom domain configuration with automatic SSL",
+    "Environment variable management per site",
+    "Site listing and deployment status tracking"
+  ]
+}

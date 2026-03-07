@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.domains.porkbun",
+  "name": "Porkbun Domain Registrar",
+  "version": "0.1.0",
+  "description": "Search, register, and manage domains through Porkbun. Configure DNS records (A, AAAA, CNAME, TXT, MX, NS), list owned domains, and initiate domain transfers via the Porkbun API v3.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["domain", "porkbun", "registrar", "dns", "nameserver", "transfer"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "domain"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "porkbunSearchDomain", "displayName": "Search Domain Availability", "entry": "./dist/tools/searchDomain.js" },
+    { "kind": "tool", "id": "porkbunRegisterDomain", "displayName": "Register Domain", "entry": "./dist/tools/registerDomain.js" },
+    { "kind": "tool", "id": "porkbunListDomains", "displayName": "List Owned Domains", "entry": "./dist/tools/listDomains.js" },
+    { "kind": "tool", "id": "porkbunConfigureDns", "displayName": "Configure DNS Records", "entry": "./dist/tools/configureDns.js" },
+    { "kind": "tool", "id": "porkbunTransferDomain", "displayName": "Transfer Domain", "entry": "./dist/tools/transferDomain.js" }
+  ],
+  "requiredSecrets": ["porkbun.apiKey", "porkbun.secretApiKey"],
+  "features": [
+    "Check domain availability and pricing across all TLDs",
+    "Register and purchase domains directly from Porkbun",
+    "Full DNS record management (A, AAAA, CNAME, TXT, MX, NS)",
+    "List and inspect all owned domains",
+    "Initiate domain transfers to Porkbun"
+  ]
+}

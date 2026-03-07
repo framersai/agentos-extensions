@@ -1,0 +1,34 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.domains.namecheap",
+  "name": "Namecheap Domain Registrar",
+  "version": "0.1.0",
+  "description": "Search for available domains, register new domains, list owned domains, and manage DNS records via the Namecheap XML API. Supports both production and sandbox environments.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["domain", "namecheap", "dns", "registrar", "hosting", "nameserver"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "domain"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "namecheapSearchDomain", "displayName": "Search Domain Availability", "entry": "./dist/tools/searchDomain.js" },
+    { "kind": "tool", "id": "namecheapRegisterDomain", "displayName": "Register Domain", "entry": "./dist/tools/registerDomain.js" },
+    { "kind": "tool", "id": "namecheapListDomains", "displayName": "List Owned Domains", "entry": "./dist/tools/listDomains.js" },
+    { "kind": "tool", "id": "namecheapConfigureDns", "displayName": "Configure DNS Records", "entry": "./dist/tools/configureDns.js" },
+    { "kind": "tool", "id": "namecheapGetDnsRecords", "displayName": "Get DNS Records", "entry": "./dist/tools/getDnsRecords.js" }
+  ],
+  "requiredSecrets": ["namecheap.apiUser", "namecheap.apiKey", "namecheap.clientIp"],
+  "features": [
+    "Search domain availability across multiple TLDs",
+    "Register and purchase new domains",
+    "List all domains owned by the account",
+    "Configure DNS host records (A, AAAA, CNAME, MX, TXT, URL, etc.)",
+    "Retrieve current DNS records for any owned domain",
+    "Sandbox environment support for testing"
+  ]
+}

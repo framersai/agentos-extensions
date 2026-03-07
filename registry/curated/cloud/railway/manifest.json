@@ -1,0 +1,31 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.cloud.railway",
+  "name": "Railway Cloud Deployment",
+  "version": "0.1.0",
+  "description": "Deploy services to Railway, manage projects and environments, provision database plugins (Postgres, Redis, MySQL, MongoDB), and stream deployment logs via the Railway GraphQL API.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["cloud", "railway", "deploy", "paas", "graphql", "database"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "cloud"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "railwayDeployService", "displayName": "Deploy Railway Service", "entry": "./dist/tools/deployService.js" },
+    { "kind": "tool", "id": "railwayListServices", "displayName": "List Railway Services", "entry": "./dist/tools/listServices.js" },
+    { "kind": "tool", "id": "railwayAddDatabase", "displayName": "Add Railway Database", "entry": "./dist/tools/addDatabase.js" },
+    { "kind": "tool", "id": "railwayGetLogs", "displayName": "Get Railway Logs", "entry": "./dist/tools/getLogs.js" }
+  ],
+  "requiredSecrets": ["railway.token"],
+  "features": [
+    "Deploy services from Git repositories",
+    "List and manage projects and services",
+    "Provision database plugins (Postgres, Redis, MySQL, MongoDB)",
+    "Retrieve deployment and build logs"
+  ]
+}

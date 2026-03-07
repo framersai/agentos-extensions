@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.domains.godaddy",
+  "name": "GoDaddy Domain Registrar",
+  "version": "0.1.0",
+  "description": "Search for available domains, register new domains, manage DNS records, and retrieve domain details via the GoDaddy API. Supports production and OTE sandbox environments.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["domain", "godaddy", "dns", "registrar", "nameserver", "whois"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "domain"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    { "kind": "tool", "id": "godaddySearchDomain", "displayName": "Search Domain Availability", "entry": "./dist/tools/searchDomain.js" },
+    { "kind": "tool", "id": "godaddyRegisterDomain", "displayName": "Register Domain", "entry": "./dist/tools/registerDomain.js" },
+    { "kind": "tool", "id": "godaddyListDomains", "displayName": "List Domains", "entry": "./dist/tools/listDomains.js" },
+    { "kind": "tool", "id": "godaddyConfigureDns", "displayName": "Configure DNS Records", "entry": "./dist/tools/configureDns.js" },
+    { "kind": "tool", "id": "godaddyGetDomainInfo", "displayName": "Get Domain Info", "entry": "./dist/tools/getDomainInfo.js" }
+  ],
+  "requiredSecrets": ["godaddy.apiKey", "godaddy.apiSecret"],
+  "features": [
+    "Check domain name availability with pricing",
+    "Purchase and register new domain names",
+    "List all domains in your GoDaddy account",
+    "Manage DNS records (A, AAAA, CNAME, MX, TXT, NS, SRV)",
+    "Retrieve domain details including expiry, nameservers, and WHOIS contacts"
+  ]
+}
