@@ -54,39 +54,38 @@ export class TelegramBotService {
   }
   
   /**
-   * Initializes the bot connection
+   * Initializes the bot connection.
+   *
+   * By default the bot is created in **send-only** mode (no polling, no
+   * webhook).  This avoids taking over another process that may already be
+   * polling the same bot token — which would cause Telegram to kick the
+   * existing poller and potentially trigger unwanted side-effects such as
+   * the other process re-registering its own command menu.
+   *
+   * Polling / webhooks are only started when explicitly configured.
    */
   async initialize(): Promise<void> {
     if (this.bot) {
       return; // Already initialized
     }
-    
+
+    // Send-only mode: no polling, no webhook unless explicitly configured
     const options: TelegramBot.ConstructorOptions = {
-      polling: !this.config.webhookUrl,
-      webHook: this.config.webhookUrl ? true : false
+      polling: false,
+      webHook: false,
     };
-    
-    if (options.polling) {
-      options.polling = {
-        interval: this.config.pollingInterval || 300,
-        autoStart: true,
-        params: {
-          timeout: 10
-        }
-      };
-    }
-    
+
     this.bot = new TelegramBot(this.config.botToken, options);
-    
+
     if (this.config.webhookUrl) {
       await this.bot.setWebHook(this.config.webhookUrl);
     }
-    
+
     // Set up error handling
     this.bot.on('error', (error) => {
       console.error('Telegram Bot Error:', error);
     });
-    
+
     this.bot.on('polling_error', (error) => {
       console.error('Telegram Polling Error:', error);
     });
@@ -386,9 +385,9 @@ export class TelegramBotService {
     if (this.bot) {
       if (this.config.webhookUrl) {
         await this.bot.deleteWebHook();
-      } else {
-        this.bot.stopPolling();
       }
+      // stopPolling is safe to call even if polling was never started
+      try { this.bot.stopPolling(); } catch { /* ignore */ }
       this.bot = null;
     }
   }
