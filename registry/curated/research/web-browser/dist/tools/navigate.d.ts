@@ -16,7 +16,7 @@ export declare class NavigateTool implements ITool {
     /** Tool call name used by the LLM / ToolExecutor. */
     readonly name = "browser_navigate";
     readonly displayName = "Browser Navigate";
-    readonly description = "Navigate the browser to a URL and return page text (and optionally HTML).";
+    readonly description = "Navigate the browser to a URL and return full page text, all links on the page, and optionally raw HTML. Use this to visit websites and extract specific information including footer links, navigation items, and page content.";
     readonly category = "research";
     readonly hasSideEffects = false;
     readonly inputSchema: JSONSchemaObject;
@@ -29,6 +29,8 @@ export declare class NavigateTool implements ITool {
         waitFor?: 'load' | 'domcontentloaded' | 'networkidle0' | 'networkidle2';
         returnHtml?: boolean;
         returnText?: boolean;
+        returnLinks?: boolean;
+        maxTextLength?: number;
     }, _context: ToolExecutionContext): Promise<ToolExecutionResult<NavigationResult>>;
     /**
      * Validate input

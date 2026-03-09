@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import { ExtensionContext, ExtensionPack } from '@framers/agentos';
+import { ExtensionPackContext, ExtensionPack } from '@framers/agentos';
 import { SendMessageTool } from './tools/sendMessage';
 import { SendPhotoTool } from './tools/sendPhoto';
 import { SendDocumentTool } from './tools/sendDocument';
@@ -97,7 +97,7 @@ function resolveBotToken(options: TelegramExtensionOptions): string {
 /**
  * Creates the Telegram extension pack
  * 
- * @param {ExtensionContext} context - The extension context
+ * @param {ExtensionPackContext} context - The extension context
  * @returns {ExtensionPack} The configured extension pack
  * 
  * @example
@@ -129,7 +129,7 @@ function resolveBotToken(options: TelegramExtensionOptions): string {
  * });
  * ```
  */
-export function createExtensionPack(context: ExtensionContext): ExtensionPack {
+export function createExtensionPack(context: ExtensionPackContext): ExtensionPack & Record<string, unknown> {
   const options = context.options as TelegramExtensionOptions || {};
   
   // Resolve bot token from various sources
@@ -204,20 +204,20 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
      */
     onActivate: async () => {
       await telegramService.initialize();
-      if (context.onActivate) {
-        await context.onActivate();
+      if ((context as any).onActivate) {
+        await (context as any).onActivate();
       }
-      context.logger?.info('Telegram Extension activated');
+      (context as any).logger?.info('Telegram Extension activated');
     },
     /**
      * Called when extension is deactivated
      */
     onDeactivate: async () => {
       await telegramService.shutdown();
-      if (context.onDeactivate) {
-        await context.onDeactivate();
+      if ((context as any).onDeactivate) {
+        await (context as any).onDeactivate();
       }
-      context.logger?.info('Telegram Extension deactivated');
+      (context as any).logger?.info('Telegram Extension deactivated');
     }
   };
 }

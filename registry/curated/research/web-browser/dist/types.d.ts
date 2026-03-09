@@ -34,6 +34,11 @@ export interface NavigationResult {
     html?: string;
     /** Extracted text content */
     text?: string;
+    /** Links found on the page */
+    links?: {
+        text: string;
+        href: string;
+    }[];
     /** Time taken to load (ms) */
     loadTime: number;
     /** Any console messages */

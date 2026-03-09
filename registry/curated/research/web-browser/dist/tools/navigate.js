@@ -13,7 +13,7 @@ export class NavigateTool {
     /** Tool call name used by the LLM / ToolExecutor. */
     name = 'browser_navigate';
     displayName = 'Browser Navigate';
-    description = 'Navigate the browser to a URL and return page text (and optionally HTML).';
+    description = 'Navigate the browser to a URL and return full page text, all links on the page, and optionally raw HTML. Use this to visit websites and extract specific information including footer links, navigation items, and page content.';
     category = 'research';
     hasSideEffects = false;
     inputSchema = {
@@ -40,6 +40,16 @@ export class NavigateTool {
                 default: true,
                 description: 'Include extracted text in response',
             },
+            returnLinks: {
+                type: 'boolean',
+                default: true,
+                description: 'Include all links found on the page (text + href)',
+            },
+            maxTextLength: {
+                type: 'number',
+                default: 50000,
+                description: 'Maximum characters of page text to return (default 50000)',
+            },
         },
         additionalProperties: false,
     };
@@ -54,6 +64,9 @@ export class NavigateTool {
             const result = await this.browserService.navigate(input.url, {
                 waitFor: input.waitFor,
             });
+            const maxLen = typeof input.maxTextLength === 'number' && input.maxTextLength > 0
+                ? input.maxTextLength
+                : 50000;
             // Optionally strip html/text to reduce response size
             const output = {
                 url: result.url,
@@ -66,8 +79,32 @@ export class NavigateTool {
                 output.html = result.html;
             }
             if (input.returnText !== false) {
-                // Default to returning text
-                output.text = result.text?.slice(0, 10000); // Limit text size
+                const fullLen = result.text?.length || 0;
+                if (fullLen > maxLen) {
+                    output.text = result.text.slice(0, maxLen);
+                    output.textTruncated = true;
+                    output.fullTextLength = fullLen;
+                    output.truncationNote =
+                        `Page text was ${fullLen.toLocaleString()} characters, truncated to ${maxLen.toLocaleString()}. `
+                            + `To get content from specific sections, use browser_scrape with a CSS selector (e.g. 'footer', 'main', '#content'). `
+                            + `Or increase maxTextLength parameter.`;
+                }
+                else {
+                    output.text = result.text;
+                }
+            }
+            // Extract and return all links from the page (default: on)
+            if (input.returnLinks !== false) {
+                try {
+                    const links = await this.browserService.evaluate(() => Array.from(document.querySelectorAll('a[href]')).map(a => ({
+                        text: (a.textContent || '').trim().slice(0, 200),
+                        href: a.href,
+                    })).filter(l => l.href && l.text));
+                    output.links = links;
+                }
+                catch {
+                    // Non-fatal — page may have restrictive CSP
+                }
             }
             return { success: true, output };
         }
