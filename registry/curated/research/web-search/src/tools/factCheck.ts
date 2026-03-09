@@ -77,6 +77,12 @@ export class FactCheckTool implements ITool<FactCheckInput, FactCheckOutput> {
   ) {}
 
   async execute(input: FactCheckInput, _context: ToolExecutionContext): Promise<ToolExecutionResult<FactCheckOutput>> {
+    if (!this.searchService) {
+      return {
+        success: false,
+        error: 'Search service not initialized. Try using browser_navigate to search directly, or set a search API key (SERPER_API_KEY, BRAVE_API_KEY).',
+      };
+    }
     try {
       const checkSources = input.checkSources !== false;
       const requiredConfidence = input.confidence || 'medium';

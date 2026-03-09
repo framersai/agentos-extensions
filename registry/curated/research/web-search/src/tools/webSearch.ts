@@ -73,6 +73,12 @@ export class WebSearchTool implements ITool<WebSearchInput, WebSearchOutput> {
   ) {}
 
   async execute(input: WebSearchInput, _context: ToolExecutionContext): Promise<ToolExecutionResult<WebSearchOutput>> {
+    if (!this.searchService) {
+      return {
+        success: false,
+        error: 'Search service not initialized. Try using browser_navigate to search directly, or set a search API key (SERPER_API_KEY, BRAVE_API_KEY).',
+      };
+    }
     try {
       const useMultiSearch = input.multiSearch ?? this.defaultMultiSearch;
 

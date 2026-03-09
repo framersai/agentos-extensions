@@ -77,6 +77,12 @@ export class ResearchAggregatorTool implements ITool<ResearchAggregatorInput, Re
     input: ResearchAggregatorInput,
     _context: ToolExecutionContext,
   ): Promise<ToolExecutionResult<ResearchAggregatorOutput>> {
+    if (!this.searchService) {
+      return {
+        success: false,
+        error: 'Search service not initialized. Try using browser_navigate to search directly, or set a search API key (SERPER_API_KEY, BRAVE_API_KEY).',
+      };
+    }
     try {
       const sources = input.sources || 3;
       const depth = input.depth || 'moderate';
