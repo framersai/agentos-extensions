@@ -1,0 +1,50 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.agent-delegation",
+  "name": "Agent Delegation",
+  "version": "0.1.0",
+  "description": "Inter-agent communication tools for multi-agent collaboration. Ping, discover, and delegate tasks to remote Wunderland agents over HTTP.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["delegation", "multi-agent", "collaboration", "inter-agent", "swarm"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "orchestration"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "agent_ping",
+      "displayName": "Ping Remote Agent",
+      "description": "Check if a remote Wunderland agent is reachable and get its metadata (name, tools, channels, personas).",
+      "entry": "./dist/AgentPingTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "agent_delegate",
+      "displayName": "Delegate Task to Agent",
+      "description": "Send a task or question to a remote Wunderland agent and receive its response.",
+      "entry": "./dist/AgentDelegateTool.js"
+    },
+    {
+      "kind": "tool",
+      "id": "agent_broadcast",
+      "displayName": "Broadcast to Agents",
+      "description": "Send the same task to multiple remote agents in parallel and aggregate their responses.",
+      "entry": "./dist/AgentBroadcastTool.js"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": [
+    "Ping remote agents to check liveness and capabilities",
+    "Delegate tasks to specific agents by URL",
+    "Broadcast tasks to multiple agents in parallel",
+    "Automatic secret/auth header injection",
+    "Session continuity across delegated conversations",
+    "Timeout and error handling with actionable messages"
+  ]
+}
