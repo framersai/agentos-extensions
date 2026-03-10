@@ -17,6 +17,7 @@ import {
   type ChatInputCommandInteraction,
   type ButtonInteraction,
   type GuildMember,
+  type PartialGuildMember,
   type RESTPostAPIChatInputApplicationCommandsJSONBody,
   ApplicationCommandOptionType,
   type APIEmbed,
@@ -53,7 +54,7 @@ export class DiscordService {
   private messageHandlers: Array<(message: Message) => void> = [];
   private interactionHandlers: Array<(interaction: Interaction) => void> = [];
   private memberJoinHandlers: Array<(member: GuildMember) => void> = [];
-  private memberUpdateHandlers: Array<(before: GuildMember, after: GuildMember) => void> = [];
+  private memberUpdateHandlers: Array<(before: GuildMember | PartialGuildMember, after: GuildMember) => void> = [];
   private pendingInteractions = new Map<string, PendingInteraction>();
   private readonly config: DiscordChannelConfig;
   private readonly state: LocalStateStore;
@@ -97,7 +98,7 @@ export class DiscordService {
       }
     });
 
-    this.client.on('guildMemberUpdate', (before: GuildMember, after: GuildMember) => {
+    this.client.on('guildMemberUpdate', (before: GuildMember | PartialGuildMember, after: GuildMember) => {
       for (const handler of this.memberUpdateHandlers) {
         handler(before, after);
       }
@@ -158,7 +159,7 @@ export class DiscordService {
     this.memberJoinHandlers.push(handler);
   }
 
-  onMemberUpdate(handler: (before: GuildMember, after: GuildMember) => void): void {
+  onMemberUpdate(handler: (before: GuildMember | PartialGuildMember, after: GuildMember) => void): void {
     this.memberUpdateHandlers.push(handler);
   }
 
