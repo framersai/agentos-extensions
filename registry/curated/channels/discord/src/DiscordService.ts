@@ -53,6 +53,7 @@ export class DiscordService {
   private messageHandlers: Array<(message: Message) => void> = [];
   private interactionHandlers: Array<(interaction: Interaction) => void> = [];
   private memberJoinHandlers: Array<(member: GuildMember) => void> = [];
+  private memberUpdateHandlers: Array<(before: GuildMember, after: GuildMember) => void> = [];
   private pendingInteractions = new Map<string, PendingInteraction>();
   private readonly config: DiscordChannelConfig;
   private readonly state: LocalStateStore;
@@ -93,6 +94,12 @@ export class DiscordService {
     this.client.on('guildMemberAdd', (member: GuildMember) => {
       for (const handler of this.memberJoinHandlers) {
         handler(member);
+      }
+    });
+
+    this.client.on('guildMemberUpdate', (before: GuildMember, after: GuildMember) => {
+      for (const handler of this.memberUpdateHandlers) {
+        handler(before, after);
       }
     });
 
@@ -149,6 +156,10 @@ export class DiscordService {
 
   onMemberJoin(handler: (member: GuildMember) => void): void {
     this.memberJoinHandlers.push(handler);
+  }
+
+  onMemberUpdate(handler: (before: GuildMember, after: GuildMember) => void): void {
+    this.memberUpdateHandlers.push(handler);
   }
 
   /** Register additional slash commands to be included in the guild command set. */
