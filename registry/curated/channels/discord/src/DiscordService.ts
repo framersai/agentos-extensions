@@ -112,10 +112,10 @@ export class DiscordService {
         reject(new Error('Discord client ready timeout after 30s'));
       }, 30_000);
 
-      this.client.once('ready', () => {
+      this.client.once('ready', async () => {
         clearTimeout(timeout);
         this.running = true;
-        void this.registerDefaultSlashCommands();
+        await this.registerDefaultSlashCommands();
         resolve();
       });
 
@@ -163,9 +163,14 @@ export class DiscordService {
     this.memberUpdateHandlers.push(handler);
   }
 
-  /** Register additional slash commands to be included in the guild command set. */
+  /** Register additional slash commands to be included in the guild command set.
+   *  If Discord is already initialized, re-syncs commands with the guild. */
   registerSlashCommands(commands: RESTPostAPIChatInputApplicationCommandsJSONBody[]): void {
     this.additionalSlashCommands.push(...commands);
+    // Re-sync if already initialized (extensions registered after startup)
+    if (this.running) {
+      void this.registerDefaultSlashCommands();
+    }
   }
 
   registerPendingInteraction(interaction: ChatInputCommandInteraction, ttlMs = 15 * 60_000): void {
