@@ -34,10 +34,10 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@framers/agentos": "^2.0.0"
+    "@framers/agentos": "^0.1.46"
   },
   "devDependencies": {
-    "@framers/agentos": "^2.0.0",
+    "@framers/agentos": "^0.1.46",
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
