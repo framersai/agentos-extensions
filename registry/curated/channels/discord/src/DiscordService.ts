@@ -9,6 +9,7 @@ import { join } from 'node:path';
 import {
   Client,
   GatewayIntentBits,
+  Partials,
   AttachmentBuilder,
   type Message,
   type TextBasedChannel,
@@ -75,7 +76,10 @@ export class DiscordService {
       GatewayIntentBits.GuildMembers,
     ];
 
-    this.client = new Client({ intents });
+    this.client = new Client({
+      intents,
+      partials: [Partials.GuildMember],
+    });
 
     // Register inbound message listener
     this.client.on('messageCreate', (message: Message) => {
@@ -480,11 +484,11 @@ export class DiscordService {
       },
       {
         name: 'faq',
-        description: 'Show FAQ entries',
+        description: 'Search or browse FAQ entries',
         options: [
           {
             name: 'key',
-            description: 'Optional FAQ key to show a single entry',
+            description: 'FAQ key or search query (e.g. "pricing" or "how do I verify")',
             type: ApplicationCommandOptionType.String,
             required: false,
           },

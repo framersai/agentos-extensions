@@ -30,6 +30,7 @@ import {
   type Message,
 } from 'discord.js';
 import { randomTriviaQuestion, type TriviaQuestion } from './TriviaBank';
+import { FAQMatcher } from './faq-matcher';
 
 export class DiscordChannelAdapter implements IChannelAdapter {
   readonly platform: ChannelPlatform = 'discord';
@@ -615,18 +616,56 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       const key = keyRaw.trim().toLowerCase();
 
       if (key) {
-        const entry = this.service.getFaq(key);
-        if (!entry) {
-          await this.safeEphemeralReply(interaction, `No FAQ entry found for key: \`${key}\`.`);
+        // 1) Try exact slug match first
+        const exactEntry = this.service.getFaq(key);
+        if (exactEntry) {
+          const embed: APIEmbed = {
+            title: `FAQ: ${exactEntry.key}`,
+            description: `**Q:** ${exactEntry.question}\n\n**A:** ${exactEntry.answer}`,
+            color: this.brandColor(),
+            footer: this.brandFooter() ? { text: this.brandFooter()! } : undefined,
+          };
+          await this.safeEphemeralReply(interaction, undefined, { embeds: [embed] });
           return;
         }
-        const embed: APIEmbed = {
-          title: `FAQ: ${entry.key}`,
-          description: `**Q:** ${entry.question}\n\n**A:** ${entry.answer}`,
-          color: this.brandColor(),
-          footer: this.brandFooter() ? { text: this.brandFooter()! } : undefined,
-        };
-        await this.safeEphemeralReply(interaction, undefined, { embeds: [embed] });
+
+        // 2) Fuzzy match — treat the key input as a free-text query
+        const allEntries = this.service.listFaq();
+        if (allEntries.length > 0) {
+          const matcher = new FAQMatcher(allEntries);
+          const results = matcher.match(key, 5, 0.08);
+
+          if (results.length > 0) {
+            const best = results[0]!;
+            const embed: APIEmbed = {
+              title: `FAQ: ${best.key}`,
+              description: `**Q:** ${best.question}\n\n**A:** ${best.answer}`,
+              color: this.brandColor(),
+              footer: this.brandFooter() ? { text: this.brandFooter()! } : undefined,
+            };
+
+            // Build "related" suggestions from remaining matches
+            const related = results.slice(1, 4);
+            let text: string | undefined;
+            if (related.length > 0) {
+              const suggestions = related.map((r) => `\`${r.key}\` — ${r.question}`).join('\n');
+              text = `**Related:**\n${suggestions}`;
+            }
+
+            const replyContent = text
+              ? `${text}\n\nUse \`/faq key:<key>\` to view another entry.`
+              : undefined;
+
+            await this.safeEphemeralReply(interaction, replyContent, { embeds: [embed] });
+            return;
+          }
+        }
+
+        // 3) No match at all — suggest browsing
+        await this.safeEphemeralReply(
+          interaction,
+          `No FAQ entry found for: \`${key}\`.\nUse \`/faq\` without a key to browse all entries.`,
+        );
         return;
       }
 
@@ -642,7 +681,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         '**Rabbit Hole AI — FAQ**',
         ...top.map((e) => `- \`${e.key}\` — ${e.question}`),
         list.length > top.length ? `\n…and ${list.length - top.length} more.` : '',
-        '\nUse `/faq key:<key>` to view one entry.',
+        '\nUse `/faq key:<key>` or `/faq key:<question>` to view an entry.',
       ].filter((l) => l !== '');
       await this.safeEphemeralReply(interaction, lines.join('\n'));
       return;

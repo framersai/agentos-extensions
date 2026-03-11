@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-03-05T06:07:29.819Z",
+  "updated": "2026-03-11T05:21:15.148Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -10,8 +10,10 @@
     "curated": [
       "auth",
       "channels",
+      "cloud",
       "communications",
       "community",
+      "domains",
       "integrations",
       "media",
       "productivity",
@@ -71,7 +73,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-blog-publisher",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/blog-publisher",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -110,7 +112,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-bluesky",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/bluesky",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -153,7 +155,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-discord",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/discord",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -184,7 +186,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-email",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/email",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -222,7 +224,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-facebook",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/facebook",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -255,7 +257,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-farcaster",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/farcaster",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -291,7 +293,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-feishu",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/feishu",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -322,7 +324,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-business",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-business",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -357,7 +359,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-chat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-chat",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -393,7 +395,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-imessage",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/imessage",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -433,7 +435,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/instagram",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -469,7 +471,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-irc",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/irc",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -502,7 +504,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-lemmy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/lemmy",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -538,7 +540,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-line",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/line",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -575,7 +577,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-linkedin",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/linkedin",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -614,7 +616,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mastodon",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mastodon",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -648,7 +650,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-matrix",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/matrix",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -682,7 +684,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mattermost",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mattermost",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -718,7 +720,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nextcloud",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nextcloud",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -752,7 +754,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nostr",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nostr",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -787,7 +789,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/pinterest",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -835,7 +837,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -869,7 +871,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-signal",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/signal",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -912,7 +914,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-slack",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/slack",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -949,7 +951,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-sms",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/sms",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -984,7 +986,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-teams",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/teams",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1027,7 +1029,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/telegram",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1064,7 +1066,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-threads",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/threads",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1098,7 +1100,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1135,7 +1137,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tlon",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tlon",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1169,7 +1171,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitch",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitch",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1212,7 +1214,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1251,7 +1253,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/webchat",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1294,7 +1296,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-whatsapp",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/whatsapp",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1332,7 +1334,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/youtube",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1367,7 +1369,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalo",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1403,7 +1405,395 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalouser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalouser",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.aws",
+        "name": "AWS Cloud Services",
+        "package": "@framers/agentos-ext-cloud-aws",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/aws",
+        "description": "Deploy static sites to S3 with website hosting, manage Lightsail instances, configure Route53 DNS records, deploy apps via AWS Amplify, create CloudFront distributions, and deploy Lambda functions. Uses direct REST API calls with AWS Signature V4 signing — no SDK required.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deploy static sites to S3 with website hosting and public read access",
+          "Create and manage Lightsail instances with DNS entries",
+          "Configure Route53 DNS records (A, AAAA, CNAME, MX, TXT)",
+          "Deploy applications via AWS Amplify from Git repositories",
+          "Create CloudFront CDN distributions for S3 or custom origins",
+          "Deploy Lambda functions from zip archives with configurable runtime and memory"
+        ],
+        "tools": [
+          "awsDeployS3Site",
+          "awsCreateLightsail",
+          "awsDeployAmplify",
+          "awsManageRoute53",
+          "awsConfigureCloudFront",
+          "awsConfigureLambda"
+        ],
+        "keywords": [
+          "cloud",
+          "aws",
+          "s3",
+          "lambda",
+          "lightsail",
+          "route53",
+          "amplify",
+          "cloudfront",
+          "deploy",
+          "hosting",
+          "dns",
+          "cdn",
+          "serverless"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-aws",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/aws",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.cloudflare-pages",
+        "name": "Cloudflare Pages & Workers",
+        "package": "@framers/agentos-ext-cloud-cloudflare-pages",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/cloudflare-pages",
+        "description": "Deploy Cloudflare Pages projects, manage DNS records, and deploy Workers. Supports static sites, full-stack frameworks, and edge functions via the Cloudflare API v4.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deploy Pages projects from Git repositories",
+          "List and inspect Pages project deployments",
+          "Full DNS record management (A, AAAA, CNAME, TXT, MX)",
+          "Deploy Cloudflare Worker scripts to the edge"
+        ],
+        "tools": [
+          "cfDeployPages",
+          "cfListProjects",
+          "cfConfigureDns",
+          "cfCreateWorker"
+        ],
+        "keywords": [
+          "cloud",
+          "cloudflare",
+          "pages",
+          "workers",
+          "dns",
+          "deploy",
+          "edge"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-cloudflare-pages",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/cloudflare-pages",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.digitalocean",
+        "name": "DigitalOcean Cloud Management",
+        "package": "@framers/agentos-ext-cloud-digitalocean",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/digitalocean",
+        "description": "Manage DigitalOcean App Platform apps, Droplets, DNS records, and deployments. Supports creating and deploying PaaS apps from Git, provisioning VPS droplets, and full DNS record management.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Create and deploy App Platform apps from Git repositories",
+          "Provision and manage Droplets (VPS instances)",
+          "Full DNS record management (A, AAAA, CNAME, MX, TXT, SRV, NS)",
+          "Trigger deployments on existing apps",
+          "List and delete apps and droplets",
+          "Automatic region and size selection"
+        ],
+        "tools": [
+          "doCreateApp",
+          "doCreateDroplet",
+          "doListResources",
+          "doDeployApp",
+          "doManageDns",
+          "doDeleteResource"
+        ],
+        "keywords": [
+          "cloud",
+          "digitalocean",
+          "droplet",
+          "app-platform",
+          "dns",
+          "vps",
+          "paas"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-digitalocean",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/digitalocean",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.flyio",
+        "name": "Fly.io Cloud Deployment",
+        "package": "@framers/agentos-ext-cloud-flyio",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/flyio",
+        "description": "Deploy and manage applications on Fly.io using the Machines API. Create apps, launch machines with custom configs, scale instances by count and size, and provision persistent volumes for stateful workloads.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deploy apps with Docker images via the Machines API",
+          "List apps and their machines across regions",
+          "Scale machines by count and VM size",
+          "Create persistent volumes for stateful workloads"
+        ],
+        "tools": [
+          "flyDeployApp",
+          "flyListApps",
+          "flyScaleApp",
+          "flyCreateVolume"
+        ],
+        "keywords": [
+          "cloud",
+          "flyio",
+          "fly",
+          "deploy",
+          "machines",
+          "edge",
+          "volumes"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-flyio",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/flyio",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.heroku",
+        "name": "Heroku Cloud Deployment",
+        "package": "@framers/agentos-ext-cloud-heroku",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/heroku",
+        "description": "Create and manage Heroku apps, deploy from source tarballs, provision addons (Postgres, Redis, etc.), scale dynos, and stream logs via the Heroku Platform API.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Create and delete Heroku apps",
+          "Deploy from source tarball URLs",
+          "Provision addons (Postgres, Redis, Papertrail, etc.)",
+          "Scale dyno formation (type and quantity)",
+          "Stream and retrieve application logs"
+        ],
+        "tools": [
+          "herokuCreateApp",
+          "herokuDeployApp",
+          "herokuAddAddon",
+          "herokuGetLogs",
+          "herokuScaleDynos"
+        ],
+        "keywords": [
+          "cloud",
+          "heroku",
+          "deploy",
+          "paas",
+          "dynos",
+          "addons"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-heroku",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/heroku",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.linode",
+        "name": "Linode/Akamai Cloud",
+        "package": "@framers/agentos-ext-cloud-linode",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/linode",
+        "description": "Provision Linode instances, deploy via StackScripts, manage DNS zones and records, and create NodeBalancers for load balancing via the Linode API v4.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Create, list, boot, and shutdown Linode instances",
+          "Deploy instances using StackScripts for automated provisioning",
+          "Manage DNS zones and records (A, AAAA, CNAME, MX, TXT, SRV, NS, CAA)",
+          "Create NodeBalancers for load balancing across instances",
+          "List available regions and instance types/plans",
+          "Allocate and manage IP addresses"
+        ],
+        "tools": [
+          "linodeCreateInstance",
+          "linodeListInstances",
+          "linodeDeployStackScript",
+          "linodeManageDns",
+          "linodeDeleteInstance",
+          "linodeCreateNodeBalancer"
+        ],
+        "keywords": [
+          "cloud",
+          "linode",
+          "akamai",
+          "vps",
+          "dns",
+          "nodebalancer",
+          "stackscript"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-linode",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/linode",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.netlify",
+        "name": "Netlify Cloud Deployment",
+        "package": "@framers/agentos-ext-cloud-netlify",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/netlify",
+        "description": "Deploy sites to Netlify, manage deployments, configure custom domains, and set environment variables. Supports static sites, Jamstack frameworks, serverless functions, and continuous deployment from Git.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deploy from Git repositories with continuous deployment",
+          "Automatic framework detection (Next.js, Gatsby, Hugo, static)",
+          "Custom domain configuration with automatic SSL",
+          "Environment variable management per site",
+          "Site listing and deployment status tracking"
+        ],
+        "tools": [
+          "netlifyDeploySite",
+          "netlifyListSites",
+          "netlifyConfigureDomain",
+          "netlifySetEnvVars"
+        ],
+        "keywords": [
+          "cloud",
+          "netlify",
+          "deploy",
+          "hosting",
+          "jamstack",
+          "serverless"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-netlify",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/netlify",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.railway",
+        "name": "Railway Cloud Deployment",
+        "package": "@framers/agentos-ext-cloud-railway",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/railway",
+        "description": "Deploy services to Railway, manage projects and environments, provision database plugins (Postgres, Redis, MySQL, MongoDB), and stream deployment logs via the Railway GraphQL API.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deploy services from Git repositories",
+          "List and manage projects and services",
+          "Provision database plugins (Postgres, Redis, MySQL, MongoDB)",
+          "Retrieve deployment and build logs"
+        ],
+        "tools": [
+          "railwayDeployService",
+          "railwayListServices",
+          "railwayAddDatabase",
+          "railwayGetLogs"
+        ],
+        "keywords": [
+          "cloud",
+          "railway",
+          "deploy",
+          "paas",
+          "graphql",
+          "database"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-railway",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/railway",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.cloud.vercel",
+        "name": "Vercel Cloud Deployment",
+        "package": "@framers/agentos-ext-cloud-vercel",
+        "version": "0.1.0",
+        "category": "cloud",
+        "path": "registry/curated/cloud/vercel",
+        "description": "Deploy projects to Vercel, manage deployments, configure custom domains, and set environment variables. Supports Next.js, React, static sites, and serverless functions.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Deploy from Git repositories or local directories",
+          "Automatic framework detection (Next.js, React, Vue, static)",
+          "Custom domain configuration with SSL",
+          "Environment variable management",
+          "Deployment status tracking"
+        ],
+        "tools": [
+          "vercelDeploy",
+          "vercelListProjects",
+          "vercelGetDeployment",
+          "vercelConfigureDomain",
+          "vercelSetEnvVars"
+        ],
+        "keywords": [
+          "cloud",
+          "vercel",
+          "deploy",
+          "hosting",
+          "nextjs",
+          "serverless"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-vercel",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/vercel",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1431,7 +1821,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-notifications",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1474,7 +1864,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1505,7 +1895,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-founders",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/founders",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1529,7 +1919,175 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-verify",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/verify",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.domains.cloudflare-registrar",
+        "name": "Cloudflare Registrar",
+        "package": "@framers/agentos-ext-domain-cloudflare-registrar",
+        "version": "0.1.0",
+        "category": "domains",
+        "path": "registry/curated/domains/cloudflare-registrar",
+        "description": "List, inspect, and manage domains registered through Cloudflare. Configure DNS records (A, AAAA, CNAME, TXT, MX, NS, SRV, CAA), update registrar settings (auto-renew, lock, privacy), and initiate domain transfers to Cloudflare via the Cloudflare API v4.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "List all domains registered via Cloudflare Registrar",
+          "Get detailed domain info (expiry, auto-renew, privacy, registrar status)",
+          "Full DNS record management (A, AAAA, CNAME, TXT, MX, NS, SRV, CAA)",
+          "Update registrar settings (auto-renew, lock, WHOIS privacy)",
+          "Initiate domain transfers to Cloudflare"
+        ],
+        "tools": [
+          "cfRegListDomains",
+          "cfRegGetDomainInfo",
+          "cfRegConfigureDns",
+          "cfRegTransferDomain"
+        ],
+        "keywords": [
+          "domain",
+          "cloudflare",
+          "registrar",
+          "dns",
+          "transfer",
+          "nameserver"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-cloudflare-registrar",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/cloudflare-registrar",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.domains.godaddy",
+        "name": "GoDaddy Domain Registrar",
+        "package": "@framers/agentos-ext-domain-godaddy",
+        "version": "0.1.0",
+        "category": "domains",
+        "path": "registry/curated/domains/godaddy",
+        "description": "Search for available domains, register new domains, manage DNS records, and retrieve domain details via the GoDaddy API. Supports production and OTE sandbox environments.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Check domain name availability with pricing",
+          "Purchase and register new domain names",
+          "List all domains in your GoDaddy account",
+          "Manage DNS records (A, AAAA, CNAME, MX, TXT, NS, SRV)",
+          "Retrieve domain details including expiry, nameservers, and WHOIS contacts"
+        ],
+        "tools": [
+          "godaddySearchDomain",
+          "godaddyRegisterDomain",
+          "godaddyListDomains",
+          "godaddyConfigureDns",
+          "godaddyGetDomainInfo"
+        ],
+        "keywords": [
+          "domain",
+          "godaddy",
+          "dns",
+          "registrar",
+          "nameserver",
+          "whois"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-godaddy",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/godaddy",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.domains.namecheap",
+        "name": "Namecheap Domain Registrar",
+        "package": "@framers/agentos-ext-domain-namecheap",
+        "version": "0.1.0",
+        "category": "domains",
+        "path": "registry/curated/domains/namecheap",
+        "description": "Search for available domains, register new domains, list owned domains, and manage DNS records via the Namecheap XML API. Supports both production and sandbox environments.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Search domain availability across multiple TLDs",
+          "Register and purchase new domains",
+          "List all domains owned by the account",
+          "Configure DNS host records (A, AAAA, CNAME, MX, TXT, URL, etc.)",
+          "Retrieve current DNS records for any owned domain",
+          "Sandbox environment support for testing"
+        ],
+        "tools": [
+          "namecheapSearchDomain",
+          "namecheapRegisterDomain",
+          "namecheapListDomains",
+          "namecheapConfigureDns",
+          "namecheapGetDnsRecords"
+        ],
+        "keywords": [
+          "domain",
+          "namecheap",
+          "dns",
+          "registrar",
+          "hosting",
+          "nameserver"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-namecheap",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/namecheap",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.domains.porkbun",
+        "name": "Porkbun Domain Registrar",
+        "package": "@framers/agentos-ext-domain-porkbun",
+        "version": "0.1.0",
+        "category": "domains",
+        "path": "registry/curated/domains/porkbun",
+        "description": "Search, register, and manage domains through Porkbun. Configure DNS records (A, AAAA, CNAME, TXT, MX, NS), list owned domains, and initiate domain transfers via the Porkbun API v3.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Check domain availability and pricing across all TLDs",
+          "Register and purchase domains directly from Porkbun",
+          "Full DNS record management (A, AAAA, CNAME, TXT, MX, NS)",
+          "List and inspect all owned domains",
+          "Initiate domain transfers to Porkbun"
+        ],
+        "tools": [
+          "porkbunSearchDomain",
+          "porkbunRegisterDomain",
+          "porkbunListDomains",
+          "porkbunConfigureDns",
+          "porkbunTransferDomain"
+        ],
+        "keywords": [
+          "domain",
+          "porkbun",
+          "registrar",
+          "dns",
+          "nameserver",
+          "transfer"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-porkbun",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/porkbun",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1571,7 +2129,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-github",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/github",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1579,7 +2137,7 @@
         "id": "com.framers.integrations.telegram",
         "name": "Telegram Bot Extension",
         "package": "@framers/agentos-ext-telegram",
-        "version": "1.1.0",
+        "version": "1.1.1",
         "category": "integrations",
         "path": "registry/curated/integrations/telegram",
         "description": "Professional Telegram Bot API integration for AgentOS - send messages, manage groups, handle callbacks",
@@ -1616,7 +2174,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1660,7 +2218,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-wunderbot-feeds",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/wunderbot-feeds",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1691,7 +2249,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-giphy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/giphy",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1721,7 +2279,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/image-search",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1750,7 +2308,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/voice-synthesis",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1793,7 +2351,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-email-gmail",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/gmail",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1837,7 +2395,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-calendar-google",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/google-calendar",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1878,7 +2436,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1909,7 +2467,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1939,7 +2497,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-content-extraction",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/content-extraction",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1969,7 +2527,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-deep-research",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1997,7 +2555,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-news-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/news-search",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2027,7 +2585,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-weather",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/weather",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2035,7 +2593,7 @@
         "id": "com.framers.research.web-browser",
         "name": "Web Browser Extension",
         "package": "@framers/agentos-ext-web-browser",
-        "version": "1.1.0",
+        "version": "1.2.1",
         "category": "research",
         "path": "registry/curated/research/web-browser",
         "description": "Browser automation capabilities for AgentOS - navigate pages, scrape content, click links, and capture screenshots",
@@ -2065,7 +2623,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2101,7 +2659,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2143,7 +2701,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-browser-automation",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/browser-automation",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2180,7 +2738,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2210,7 +2768,47 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-credential-vault",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.agent-delegation",
+        "name": "Agent Delegation",
+        "package": "@framers/agentos-ext-agent-delegation",
+        "version": "0.1.0",
+        "category": "tools",
+        "path": "registry/curated/tools/agent-delegation",
+        "description": "Inter-agent communication tools for multi-agent collaboration. Ping, discover, and delegate tasks to remote Wunderland agents over HTTP.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Ping remote agents to check liveness and capabilities",
+          "Delegate tasks to specific agents by URL",
+          "Broadcast tasks to multiple agents in parallel",
+          "Automatic secret/auth header injection",
+          "Session continuity across delegated conversations",
+          "Timeout and error handling with actionable messages"
+        ],
+        "tools": [
+          "agent_ping",
+          "agent_delegate",
+          "agent_broadcast"
+        ],
+        "keywords": [
+          "delegation",
+          "multi-agent",
+          "collaboration",
+          "inter-agent",
+          "swarm"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-agent-delegation",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/agent-delegation",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2250,7 +2848,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-bulk-scheduler",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/bulk-scheduler",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2290,7 +2888,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-media-upload",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/media-upload",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2327,7 +2925,48 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-multi-channel-post",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/multi-channel-post",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.site-deploy",
+        "name": "Site Deploy Orchestration",
+        "package": "@framers/agentos-ext-tool-site-deploy",
+        "version": "0.1.0",
+        "category": "tools",
+        "path": "registry/curated/tools/site-deploy",
+        "description": "High-level deployment orchestrator that deploys sites from source to any supported cloud provider (Vercel, Cloudflare Pages, DigitalOcean, Netlify, Heroku, AWS, Linode, Railway, Fly.io) with optional custom domain registration and DNS configuration via any supported registrar (Porkbun, Namecheap, GoDaddy, Cloudflare).",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Auto-detect framework from source (Next.js, React, Vue, Svelte, Astro, Node, Python, static)",
+          "Auto-select optimal cloud provider based on framework",
+          "Deploy to 9 cloud providers via delegated tool calls",
+          "Register and configure custom domains via 4 registrar integrations",
+          "Dry-run mode to preview deployment plan without executing",
+          "Comprehensive result with deployment URL and domain status"
+        ],
+        "tools": [
+          "siteDeploy"
+        ],
+        "keywords": [
+          "deploy",
+          "cloud",
+          "orchestration",
+          "vercel",
+          "cloudflare",
+          "domain",
+          "dns",
+          "hosting"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-site-deploy",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/site-deploy",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2364,7 +3003,63 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-social-analytics",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/social-analytics",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.tools.wallet",
+        "name": "Agent Personal Wallet",
+        "package": "@framers/agentos-ext-wallet",
+        "version": "0.2.0",
+        "category": "tools",
+        "path": "registry/curated/tools/wallet",
+        "description": "Give agents their own personal wallet with configurable spending guardrails. Supports Solana, Ethereum, Base, and Polygon with per-category budgets, daily/monthly limits, human-in-the-loop approval thresholds, and Lithic virtual card integration.",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [
+          "Multi-chain support (Solana, Ethereum, Base, Polygon)",
+          "AES-256-GCM encrypted key storage",
+          "Configurable spending guardrails per category",
+          "Daily, monthly, and per-transaction limits",
+          "Human-in-the-loop approval for high-value transactions",
+          "Address whitelists and blacklists",
+          "Native token and SPL/ERC-20 token transfers",
+          "Lithic virtual debit card issuance",
+          "MCC-based category mapping for card transactions",
+          "Card freeze/unfreeze controls",
+          "Card spending summary by category"
+        ],
+        "tools": [
+          "check_wallet_balance",
+          "send_crypto",
+          "wallet_transaction_history",
+          "issue_virtual_card",
+          "card_status",
+          "freeze_card",
+          "unfreeze_card",
+          "card_spending_summary",
+          "pay_with_card"
+        ],
+        "keywords": [
+          "wallet",
+          "crypto",
+          "solana",
+          "ethereum",
+          "spending-policy",
+          "guardrails",
+          "defi",
+          "card",
+          "lithic",
+          "virtual-card"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-wallet",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/wallet",
+        "verified": true,
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2403,7 +3098,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-plivo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/plivo",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2443,7 +3138,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-telnyx",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/telnyx",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2483,7 +3178,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-twilio",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/twilio",
         "verified": true,
-        "verifiedAt": "2026-03-05T06:07:29.819Z",
+        "verifiedAt": "2026-03-11T05:21:15.148Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
@@ -2520,8 +3215,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 70,
-    "curatedCount": 67,
+    "totalExtensions": 86,
+    "curatedCount": 83,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0
