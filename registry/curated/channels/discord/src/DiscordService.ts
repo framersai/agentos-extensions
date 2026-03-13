@@ -83,7 +83,8 @@ export class DiscordService {
 
     // Register inbound message listener
     this.client.on('messageCreate', (message: Message) => {
-      // Ignore messages from the bot itself
+      // Ignore messages from the bot itself and all other bots
+      if (message.author.bot) return;
       if (message.author.id === this.client?.user?.id) return;
       for (const handler of this.messageHandlers) {
         handler(message);
