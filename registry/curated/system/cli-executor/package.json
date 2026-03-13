@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-ext-cli-executor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "CLI executor extension for AgentOS - execute shell commands and manage files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -47,6 +47,11 @@
     "type": "git",
     "url": "https://github.com/framersai/agentos-extensions",
     "directory": "registry/curated/system/cli-executor"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5",
+    "mammoth": "^1.8.0",
+    "pdf-parse": "^1.1.1"
   },
   "peerDependencies": {
     "@framers/agentos": "^0.1.0"

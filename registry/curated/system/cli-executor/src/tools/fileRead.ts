@@ -69,6 +69,15 @@ export class FileReadTool implements ITool {
     _context: ToolExecutionContext,
   ): Promise<ToolExecutionResult<FileReadResult>> {
     try {
+      // Redirect binary document formats to read_document tool
+      if (input.path && /\.(xlsx?|docx|pdf)$/i.test(input.path)) {
+        const ext = input.path.match(/\.[^.]+$/)?.[0] || '';
+        return {
+          success: false,
+          error: `Cannot read binary document "${input.path}" with file_read — this will return garbled content. Use the read_document tool instead to parse ${ext} files and extract their text content.`,
+        };
+      }
+
       // Fail-fast: detect directories before requesting any permissions or doing I/O
       try {
         const resolved = resolve(input.path);

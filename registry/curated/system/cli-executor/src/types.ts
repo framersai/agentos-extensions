@@ -218,6 +218,32 @@ export interface ListDirectoryResult {
 }
 
 /**
+ * Document read result
+ */
+export interface DocumentReadResult {
+  /** File path */
+  path: string;
+  /** Detected format */
+  format: string;
+  /** File size in bytes */
+  size: number;
+  /** Human/LLM-readable text representation (always present) */
+  content: string;
+  /** Structured data for spreadsheets */
+  structured?: {
+    sheets?: Array<{
+      name: string;
+      headers: string[];
+      rows: any[][];
+      rowCount: number;
+      truncated: boolean;
+    }>;
+  };
+  /** Document metadata (PDF info, etc.) */
+  metadata?: Record<string, any>;
+}
+
+/**
  * Security check result
  */
 export interface SecurityCheckResult {

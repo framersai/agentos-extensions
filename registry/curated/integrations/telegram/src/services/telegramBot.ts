@@ -18,6 +18,8 @@ export interface TelegramConfig {
     maxRequests: number;
     windowMs: number;
   };
+  /** Send-only mode — skip token validation on init. Avoids ETIMEDOUT hangs. */
+  sendOnly?: boolean;
 }
 
 /**
@@ -69,7 +71,9 @@ export class TelegramBotService {
       return; // Already initialized
     }
 
-    // Send-only mode: no polling, no webhook unless explicitly configured
+    // Send-only mode: no polling, no webhook unless explicitly configured.
+    // This avoids 409 Conflict errors when another process (Rabbithole,
+    // another wunderland instance) is already polling the same bot token.
     const options: TelegramBot.ConstructorOptions = {
       polling: false,
       webHook: false,
@@ -77,24 +81,30 @@ export class TelegramBotService {
 
     this.bot = new TelegramBot(this.config.botToken, options);
 
-    // Set up error handling early (before any API calls)
+    // Only register error handlers — no polling_error handler since polling
+    // is always disabled.  The polling_error event should never fire, but
+    // node-telegram-bot-api has edge cases where it does; registering a
+    // handler for it previously produced confusing "409 Conflict" logs.
     this.bot.on('error', (error: any) => {
       console.error('[Telegram] Bot error:', error?.message ?? error);
     });
 
-    this.bot.on('polling_error', (error: any) => {
-      const code = error?.response?.statusCode ?? error?.code;
-      if (code === 404 || code === 401) {
-        console.error(`[Telegram] Invalid bot token (HTTP ${code}). Check TELEGRAM_BOT_TOKEN and try again.`);
-        try { this.bot?.stopPolling(); } catch { /* ignore */ }
-      } else {
-        console.error('[Telegram] Polling error:', error?.message ?? error);
-      }
-    });
+    if (this.config.sendOnly) {
+      // In send-only mode skip token validation entirely — the first
+      // actual API call (sendMessage etc.) will fail clearly if the
+      // token is bad.  This avoids ETIMEDOUT hangs during CLI startup.
+      return;
+    }
 
-    // Validate token with getMe() — catches bad tokens before they cause polling crashes
+    // Validate token with getMe() — catches bad tokens early.
+    // Use a timeout to avoid hanging on ETIMEDOUT.
     try {
-      const me = await this.bot.getMe();
+      const me = await Promise.race([
+        this.bot.getMe(),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('getMe() timed out after 10s')), 10_000),
+        ),
+      ]);
       console.log(`[Telegram] Bot authenticated as @${me.username} (${me.first_name})`);
     } catch (err: any) {
       const statusCode = err?.response?.statusCode ?? err?.response?.status;
@@ -103,6 +113,8 @@ export class TelegramBotService {
         : statusCode === 401
           ? 'Unauthorized (401). The bot token is incorrect.'
           : `Failed to authenticate: ${err?.message ?? err}`;
+      // Clean up the bot instance on failure
+      try { this.bot.removeAllListeners(); } catch { /* ignore */ }
       this.bot = null;
       throw new Error(`[Telegram] ${msg} Check your TELEGRAM_BOT_TOKEN.`);
     }

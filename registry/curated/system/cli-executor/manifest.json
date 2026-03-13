@@ -2,7 +2,7 @@
   "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
   "id": "com.framers.system.cli-executor",
   "name": "CLI Executor Extension",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Execute shell commands and manage files for AgentOS agents",
   "author": {
     "name": "Frame.dev",
@@ -45,6 +45,20 @@
       "displayName": "List Directory",
       "description": "List files and directories",
       "entry": "./dist/tools/listDir.js"
+    },
+    {
+      "kind": "tool",
+      "id": "create_pdf",
+      "displayName": "Create PDF",
+      "description": "Create a real PDF document from text content",
+      "entry": "./dist/tools/createPdf.js"
+    },
+    {
+      "kind": "tool",
+      "id": "read_document",
+      "displayName": "Read Document",
+      "description": "Extract text from xlsx, csv, docx, pdf files",
+      "entry": "./dist/tools/readDocument.js"
     }
   ],
   "configuration": {

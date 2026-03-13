@@ -68,6 +68,14 @@ export class FileWriteTool implements ITool {
     _context: ToolExecutionContext,
   ): Promise<ToolExecutionResult<FileWriteResult>> {
     try {
+      // Redirect PDF writes to create_pdf tool
+      if (input.path && /\.pdf$/i.test(input.path)) {
+        return {
+          success: false,
+          error: 'Cannot write PDF files with file_write — this produces a plain text file with a .pdf extension. Use the create_pdf tool instead to generate a real PDF document.',
+        };
+      }
+
       const result = await this.shellService.writeFile(input.path, input.content, {
         encoding: input.encoding,
         append: input.append,

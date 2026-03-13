@@ -21,6 +21,8 @@ export interface TelegramChannelOptions {
   defaultParseMode?: 'Markdown' | 'MarkdownV2' | 'HTML';
   rateLimit?: { maxRequests: number; windowMs: number };
   priority?: number;
+  /** Send-only mode — no polling, no webhook. Avoids 409 Conflict errors. */
+  sendOnly?: boolean;
 }
 
 function resolveBotToken(options: TelegramChannelOptions, secrets?: Record<string, string>): string {
@@ -54,6 +56,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
     pollingTimeout: options.pollingTimeout,
     defaultParseMode: options.defaultParseMode ?? 'HTML',
     rateLimit: options.rateLimit ?? { maxRequests: 30, windowMs: 1000 },
+    sendOnly: options.sendOnly,
   };
 
   const service = new TelegramService(config);

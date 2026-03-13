@@ -44,6 +44,8 @@ export interface TelegramExtensionOptions {
   };
   /** Extension priority in the stack */
   priority?: number;
+  /** Send-only mode — skip token validation, no polling. For CLI contexts. */
+  sendOnly?: boolean;
 }
 
 /**
@@ -145,7 +147,8 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     rateLimit: options.rateLimit || {
       maxRequests: 30,
       windowMs: 1000 // Telegram's rate limit is ~30 msgs/sec
-    }
+    },
+    sendOnly: options.sendOnly,
   };
   
   const telegramService = new TelegramBotService(telegramConfig);
@@ -203,7 +206,16 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
      * Called when extension is activated
      */
     onActivate: async () => {
-      await telegramService.initialize();
+      try {
+        await telegramService.initialize();
+      } catch (err: any) {
+        // Don't crash the CLI for Telegram issues — log and continue.
+        // The tools will fail individually if the bot isn't initialized.
+        const msg = err?.message ?? String(err);
+        (context as any).logger?.warn?.(`[Telegram] Extension activation failed: ${msg}`);
+        console.warn(`[Telegram] Extension activation failed: ${msg}`);
+        return;
+      }
       if ((context as any).onActivate) {
         await (context as any).onActivate();
       }

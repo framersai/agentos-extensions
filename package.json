@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-extensions",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "files": [
     "registry.json",
     "types.d.ts",

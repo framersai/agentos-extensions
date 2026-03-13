@@ -17,6 +17,8 @@ import { ExecuteTool } from './tools/execute.js';
 import { FileReadTool } from './tools/fileRead.js';
 import { FileWriteTool } from './tools/fileWrite.js';
 import { ListDirectoryTool } from './tools/listDir.js';
+import { CreatePdfTool } from './tools/createPdf.js';
+import { ReadDocumentTool } from './tools/readDocument.js';
 import type { ShellConfig } from './types.js';
 
 /**
@@ -110,10 +112,12 @@ export function createExtensionPack(context: {
   const fileReadTool = new FileReadTool(shellService);
   const fileWriteTool = new FileWriteTool(shellService);
   const listDirectoryTool = new ListDirectoryTool(shellService);
+  const createPdfTool = new CreatePdfTool();
+  const readDocumentTool = new ReadDocumentTool(shellService);
 
   return {
     name: '@framers/agentos-ext-cli-executor',
-    version: '1.1.0',
+    version: '1.2.0',
     descriptors: [
       {
         id: executeTool.name,
@@ -138,6 +142,18 @@ export function createExtensionPack(context: {
         kind: 'tool',
         priority: options.priority || 50,
         payload: listDirectoryTool,
+      },
+      {
+        id: createPdfTool.name,
+        kind: 'tool',
+        priority: options.priority || 50,
+        payload: createPdfTool,
+      },
+      {
+        id: readDocumentTool.name,
+        kind: 'tool',
+        priority: options.priority || 50,
+        payload: readDocumentTool,
       },
     ],
 
@@ -175,6 +191,8 @@ export { ExecuteTool } from './tools/execute.js';
 export { FileReadTool } from './tools/fileRead.js';
 export { FileWriteTool } from './tools/fileWrite.js';
 export { ListDirectoryTool } from './tools/listDir.js';
+export { CreatePdfTool } from './tools/createPdf.js';
+export { ReadDocumentTool } from './tools/readDocument.js';
 export * from './types.js';
 
 // Default export for convenience

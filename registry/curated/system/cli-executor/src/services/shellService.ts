@@ -386,6 +386,21 @@ export class ShellService {
   }
 
   /**
+   * Read a file as a raw Buffer (for binary document formats).
+   * Enforces the same filesystem security policy as readFile.
+   */
+  async readFileBuffer(filePath: string): Promise<{ buffer: Buffer; path: string; size: number }> {
+    const absolutePath = this.resolveAbsolutePath(filePath);
+    await this.assertFilesystemAllowed('read', absolutePath);
+    const stats = await fs.stat(absolutePath);
+    if (stats.isDirectory()) {
+      throw new Error(`"${filePath}" is a directory, not a file`);
+    }
+    const buffer = await fs.readFile(absolutePath);
+    return { buffer, path: absolutePath, size: stats.size };
+  }
+
+  /**
    * Write to a file
    */
   async writeFile(

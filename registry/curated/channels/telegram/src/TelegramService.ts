@@ -11,6 +11,12 @@ export interface TelegramChannelConfig {
   pollingTimeout?: number;
   defaultParseMode?: 'Markdown' | 'MarkdownV2' | 'HTML';
   rateLimit?: { maxRequests: number; windowMs: number };
+  /**
+   * When true, the service only sends messages — no polling or webhook.
+   * Useful for CLI / tool contexts where another process may already be
+   * polling the same bot token.
+   */
+  sendOnly?: boolean;
 }
 
 function normalizeTelegramThreadId(
@@ -57,7 +63,17 @@ export class TelegramService {
       }
     });
 
-    if (this.config.webhookUrl) {
+    if (this.config.sendOnly) {
+      // Send-only mode: validate token, skip polling/webhook.
+      // This avoids 409 Conflict errors when another process is already polling
+      // the same bot token (e.g., Rabbithole, another wunderland instance).
+      try {
+        await this.bot.api.getMe();
+      } catch (err: any) {
+        throw new Error(`Telegram bot token validation failed: ${err?.message ?? err}`);
+      }
+      this.running = true;
+    } else if (this.config.webhookUrl) {
       await this.bot.api.setWebhook(this.config.webhookUrl);
       this.running = true;
     } else {
