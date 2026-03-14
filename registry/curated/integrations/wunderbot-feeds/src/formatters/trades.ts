@@ -4,7 +4,7 @@
  */
 
 import type { DiscordEmbed, ShortSqueezeStock, TrendingCoin, TrendingCryptoHistory } from '../types.js';
-import { BRAND_COLOR, truncate, nowIso, faviconUrl, humanNumber, EMBED_DESCRIPTION_LIMIT, EMBED_TITLE_LIMIT } from './common.js';
+import { BRAND_COLOR, truncate, nowIso, humanNumber, EMBED_DESCRIPTION_LIMIT, EMBED_TITLE_LIMIT } from './common.js';
 
 // ---------------------------------------------------------------------------
 // Short Squeeze
@@ -43,8 +43,7 @@ export function formatShortSqueezeEmbed(stocks: ShortSqueezeStock[]): DiscordEmb
     color: BRAND_COLOR,
     timestamp: nowIso(),
     author: { name: '📉 Wunderland Markets' },
-    footer: { text: 'highshortinterest.com • Powered by Wunderbots | rabbithole.inc' },
-    thumbnail: { url: faviconUrl('highshortinterest.com') },
+    footer: { text: 'Powered by Wunderbots | rabbithole.inc' },
   };
 }
 
@@ -136,7 +135,6 @@ export function formatTrendingCryptoEmbed(
     color: BRAND_COLOR,
     timestamp: nowIso(),
     author: { name: '📈 Wunderland Markets' },
-    footer: { text: 'coingecko.com • Powered by Wunderbots | rabbithole.inc' },
-    thumbnail: { url: faviconUrl('coingecko.com') },
+    footer: { text: 'Powered by Wunderbots | rabbithole.inc' },
   };
 }

@@ -93,7 +93,7 @@ export function formatDealsEmbeds(deals: UdemyDeal[]): DiscordEmbed[] {
       description: chunk,
       color: BRAND_COLOR,
       timestamp: nowIso(),
-      footer: { text: `udemy.com • ${lines.length} courses • Powered by Wunderbots | rabbithole.inc` },
+      footer: { text: `${lines.length} courses • Powered by Wunderbots | rabbithole.inc` },
     };
     if (idx === 0) {
       embed.title = truncate(`🎓 Free Udemy Courses — ${lines.length} new`, EMBED_TITLE_LIMIT);
