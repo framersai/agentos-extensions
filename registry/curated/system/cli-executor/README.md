@@ -6,6 +6,7 @@ Execute shell commands, run scripts, and manage files for AgentOS agents. This i
 
 - **Shell Execution**: Run any shell command with output capture
 - **File Management**: Read, write, and list files/directories
+- **Document I/O**: Read and write xlsx, csv, docx, and pdf files
 - **Security Controls**: Dangerous command detection and blocking
 - **Cross-Platform**: Works on Windows, macOS, and Linux
 
@@ -100,6 +101,104 @@ const result = await gmi.executeTool('list_directory', {
 });
 // Returns: { path, entries: [{ name, path, type, size, ... }], count }
 ```
+
+### read_document
+
+Read and extract text from binary document formats (xlsx, xls, csv, tsv, docx, pdf).
+
+```typescript
+// Read an Excel spreadsheet
+const result = await gmi.executeTool('read_document', {
+  path: './data/report.xlsx',
+  sheet: 'Q1 Revenue',  // optional: specific sheet
+  maxRows: 200          // optional: limit rows (default: 500)
+});
+// Returns: { path, format, size, content (markdown tables), structured: { sheets }, metadata }
+
+// Read a Word document
+const doc = await gmi.executeTool('read_document', {
+  path: './docs/proposal.docx'
+});
+// Returns: { path, format, size, content (extracted text), metadata }
+
+// Read a PDF
+const pdf = await gmi.executeTool('read_document', {
+  path: './reports/annual.pdf'
+});
+// Returns: { path, format, size, content (extracted text), metadata: { pages, info } }
+```
+
+**Note:** `file_read` automatically redirects binary formats (.xlsx, .docx, .pdf) to `read_document` with a helpful error message.
+
+### create_pdf
+
+Create a real PDF document from text content.
+
+```typescript
+const result = await gmi.executeTool('create_pdf', {
+  path: './output/report.pdf',
+  content: 'Annual Report\n\nRevenue increased 25% year over year...',
+  title: 'Annual Report 2026',
+  author: 'Research Agent',
+  fontSize: 11
+});
+// Returns: { path, pages, bytes }
+```
+
+### create_spreadsheet
+
+Create an Excel (.xlsx) or CSV file from structured data.
+
+```typescript
+// From headers + rows (2D array)
+const result = await gmi.executeTool('create_spreadsheet', {
+  path: './output/data.xlsx',
+  headers: ['Name', 'Age', 'City'],
+  rows: [['Alice', 30, 'NYC'], ['Bob', 25, 'SF']],
+  sheetName: 'Contacts'
+});
+// Returns: { path, format, rows, bytes }
+
+// From array of objects
+const result = await gmi.executeTool('create_spreadsheet', {
+  path: './output/users.xlsx',
+  data: [
+    { name: 'Alice', age: 30, city: 'NYC' },
+    { name: 'Bob', age: 25, city: 'SF' }
+  ]
+});
+
+// From a markdown table
+const result = await gmi.executeTool('create_spreadsheet', {
+  path: './output/report.csv',
+  markdown: '| Product | Sales |\n| --- | --- |\n| Widget | 1500 |\n| Gadget | 2300 |'
+});
+
+// CSV output (auto-detected from extension)
+const csv = await gmi.executeTool('create_spreadsheet', {
+  path: './output/export.csv',
+  headers: ['id', 'value'],
+  rows: [['1', '100'], ['2', '200']]
+});
+```
+
+### create_document
+
+Create a Word document (.docx) from text or markdown content.
+
+```typescript
+const result = await gmi.executeTool('create_document', {
+  path: './output/report.docx',
+  content: '# Quarterly Report\n\n## Summary\n\nRevenue was **$1.5M**, up *25%* from last quarter.\n\n- Widget sales: $800K\n- Gadget sales: $700K',
+  title: 'Q1 Report',
+  author: 'Research Agent'
+});
+// Returns: { path, paragraphs, bytes }
+```
+
+Supported markdown: `# headings` (H1-H6), `**bold**`, `*italic*`, `- bullet lists`.
+
+**Note:** `file_write` automatically redirects .pdf, .xlsx, and .docx to the dedicated creation tools with a helpful error message.
 
 ## Security
 
@@ -243,6 +342,37 @@ const logs = await gmi.executeTool('file_read', {
 
 // Parse and analyze
 const errorCount = logs.output.content.match(/ERROR/g)?.length || 0;
+```
+
+### Document Processing Pipeline
+
+```typescript
+// Read a spreadsheet, analyze it, write a report
+const data = await gmi.executeTool('read_document', {
+  path: './data/sales.xlsx',
+  sheet: 'Q1'
+});
+
+// Create a summary report as Word doc
+await gmi.executeTool('create_document', {
+  path: './output/summary.docx',
+  content: `# Sales Summary\n\n${data.output.content}`,
+  title: 'Q1 Sales Summary'
+});
+
+// Export processed data as CSV
+await gmi.executeTool('create_spreadsheet', {
+  path: './output/processed.csv',
+  headers: ['Region', 'Total'],
+  rows: processedData
+});
+
+// Generate PDF invoice
+await gmi.executeTool('create_pdf', {
+  path: './output/invoice.pdf',
+  content: invoiceText,
+  title: 'Invoice #1234'
+});
 ```
 
 ## The Two Primitives Theory
