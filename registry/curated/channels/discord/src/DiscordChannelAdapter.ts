@@ -74,6 +74,21 @@ export class DiscordChannelAdapter implements IChannelAdapter {
   private pendingResponses = new Map<string, { timer: ReturnType<typeof setTimeout>; event: ChannelEvent<ChannelMessage> }>();
   private static readonly RESPONSE_DELAY_MS = 2 * 60 * 1000; // 2 minutes
 
+  /** Greeting/filler patterns that should never trigger a bot response (non-mention). */
+  private static readonly IGNORE_PATTERNS = [
+    /^(hey|hi|hello|yo|sup|gm|gn|good\s*(morning|night|evening|afternoon)|howdy|what'?s?\s*up|welcome|wb|brb|afk|ttyl|cya|bye|later|peace|cheers|thanks|thx|ty|np|gg|lol|lmao|haha|heh|nice|cool|dope|sick|bet|facts|fr|real|true|based|mood|same|word|damn|wow|oof|rip|f\b|w\b|l\b)/i,
+    /^.{0,5}$/,  // Very short messages (1-5 chars) like "k", "ok", "ya"
+    /^<a?:\w+:\d+>$/,  // Just a custom emoji
+    /^https?:\/\/\S+$/,  // Just a link with no commentary
+  ];
+
+  /** Pre-filter obvious non-response messages before sending to LLM. */
+  private static shouldIgnoreMessage(content: string): boolean {
+    const trimmed = content.trim();
+    if (!trimmed) return true;
+    return DiscordChannelAdapter.IGNORE_PATTERNS.some(p => p.test(trimmed));
+  }
+
   constructor(private readonly service: DiscordService) {}
 
   /** Expose the underlying DiscordService for integrations (e.g., Founders welcome post). */
@@ -304,6 +319,12 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     if (isDirect) {
       // Direct mention or reply to bot → respond immediately.
       this.emit(event);
+      return;
+    }
+
+    // Pre-filter: skip messages that are obviously not worth sending to the LLM.
+    // This saves API costs and prevents the bot from responding to casual chatter.
+    if (DiscordChannelAdapter.shouldIgnoreMessage(message.content ?? '')) {
       return;
     }
 
