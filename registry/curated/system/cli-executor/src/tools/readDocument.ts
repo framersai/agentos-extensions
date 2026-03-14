@@ -150,7 +150,7 @@ async function parseDocx(
 async function parsePdf(
   buffer: Buffer,
 ): Promise<Pick<DocumentReadResult, 'content' | 'metadata'>> {
-  // pdf-parse has no types — import default export
+  // @ts-expect-error pdf-parse has no type declarations
   const pdfParse = (await import('pdf-parse')).default;
   const result = await pdfParse(buffer);
   return {
