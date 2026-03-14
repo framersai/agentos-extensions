@@ -49,6 +49,7 @@
     "directory": "registry/curated/system/cli-executor"
   },
   "dependencies": {
+    "docx": "^9.0.2",
     "xlsx": "^0.18.5",
     "mammoth": "^1.8.0",
     "pdf-parse": "^1.1.1"

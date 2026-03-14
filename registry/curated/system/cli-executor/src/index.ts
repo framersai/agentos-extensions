@@ -18,6 +18,8 @@ import { FileReadTool } from './tools/fileRead.js';
 import { FileWriteTool } from './tools/fileWrite.js';
 import { ListDirectoryTool } from './tools/listDir.js';
 import { CreatePdfTool } from './tools/createPdf.js';
+import { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
+import { CreateDocumentTool } from './tools/createDocument.js';
 import { ReadDocumentTool } from './tools/readDocument.js';
 import type { ShellConfig } from './types.js';
 
@@ -113,6 +115,8 @@ export function createExtensionPack(context: {
   const fileWriteTool = new FileWriteTool(shellService);
   const listDirectoryTool = new ListDirectoryTool(shellService);
   const createPdfTool = new CreatePdfTool();
+  const createSpreadsheetTool = new CreateSpreadsheetTool();
+  const createDocumentTool = new CreateDocumentTool();
   const readDocumentTool = new ReadDocumentTool(shellService);
 
   return {
@@ -148,6 +152,18 @@ export function createExtensionPack(context: {
         kind: 'tool',
         priority: options.priority || 50,
         payload: createPdfTool,
+      },
+      {
+        id: createSpreadsheetTool.name,
+        kind: 'tool',
+        priority: options.priority || 50,
+        payload: createSpreadsheetTool,
+      },
+      {
+        id: createDocumentTool.name,
+        kind: 'tool',
+        priority: options.priority || 50,
+        payload: createDocumentTool,
       },
       {
         id: readDocumentTool.name,
@@ -192,6 +208,8 @@ export { FileReadTool } from './tools/fileRead.js';
 export { FileWriteTool } from './tools/fileWrite.js';
 export { ListDirectoryTool } from './tools/listDir.js';
 export { CreatePdfTool } from './tools/createPdf.js';
+export { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
+export { CreateDocumentTool } from './tools/createDocument.js';
 export { ReadDocumentTool } from './tools/readDocument.js';
 export * from './types.js';
 

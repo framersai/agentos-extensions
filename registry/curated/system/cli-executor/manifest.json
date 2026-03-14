@@ -55,6 +55,20 @@
     },
     {
       "kind": "tool",
+      "id": "create_spreadsheet",
+      "displayName": "Create Spreadsheet",
+      "description": "Create an Excel (.xlsx) or CSV file from structured data",
+      "entry": "./dist/tools/createSpreadsheet.js"
+    },
+    {
+      "kind": "tool",
+      "id": "create_document",
+      "displayName": "Create Document",
+      "description": "Create a Word document (.docx) from text or markdown",
+      "entry": "./dist/tools/createDocument.js"
+    },
+    {
+      "kind": "tool",
       "id": "read_document",
       "displayName": "Read Document",
       "description": "Extract text from xlsx, csv, docx, pdf files",

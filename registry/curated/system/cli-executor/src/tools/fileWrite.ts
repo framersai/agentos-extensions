@@ -68,11 +68,23 @@ export class FileWriteTool implements ITool {
     _context: ToolExecutionContext,
   ): Promise<ToolExecutionResult<FileWriteResult>> {
     try {
-      // Redirect PDF writes to create_pdf tool
+      // Redirect binary document writes to dedicated tools
       if (input.path && /\.pdf$/i.test(input.path)) {
         return {
           success: false,
           error: 'Cannot write PDF files with file_write — this produces a plain text file with a .pdf extension. Use the create_pdf tool instead to generate a real PDF document.',
+        };
+      }
+      if (input.path && /\.xlsx?$/i.test(input.path)) {
+        return {
+          success: false,
+          error: 'Cannot write spreadsheet files with file_write — this produces a plain text file with an Excel extension. Use the create_spreadsheet tool instead to generate a real .xlsx file.',
+        };
+      }
+      if (input.path && /\.docx$/i.test(input.path)) {
+        return {
+          success: false,
+          error: 'Cannot write Word documents with file_write — this produces a plain text file with a .docx extension. Use the create_document tool instead to generate a real .docx file.',
         };
       }
 
