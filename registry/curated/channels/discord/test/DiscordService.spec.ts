@@ -54,6 +54,13 @@ vi.mock('discord.js', () => {
       MessageContent: 32768,
       DirectMessages: 4096,
     },
+    Partials: {
+      GuildMember: 1,
+      Channel: 2,
+      Message: 3,
+      User: 4,
+      Reaction: 5,
+    },
     AttachmentBuilder: MockAttachmentBuilder,
     ChannelType: {
       DM: 1,
