@@ -72,6 +72,85 @@ describe('@framers/agentos-ext-cli-executor filesystem policy', () => {
     await fs.rm(outside, { recursive: true, force: true });
   });
 
+  it('addReadRoot dynamically grants read access to a previously blocked path', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'agentos-fs-roots-'));
+    const outside = await fs.mkdtemp(path.join(os.tmpdir(), 'agentos-fs-outside-'));
+    const outsideFile = path.join(outside, 'data.txt');
+    await fs.writeFile(outsideFile, 'external data', 'utf8');
+
+    const service = new ShellService({
+      workingDirectory: root,
+      filesystem: { allowRead: true, readRoots: [root] },
+    });
+
+    // Should fail before addReadRoot
+    await expect(service.readFile(outsideFile, { encoding: 'utf8' }))
+      .rejects
+      .toThrow(/outside allowed filesystem read roots/i);
+
+    // Dynamically grant access
+    service.addReadRoot(outside);
+
+    // Should succeed after addReadRoot
+    const result = await service.readFile(outsideFile, { encoding: 'utf8' });
+    expect(result.content).toBe('external data');
+
+    await fs.rm(root, { recursive: true, force: true });
+    await fs.rm(outside, { recursive: true, force: true });
+  });
+
+  it('addWriteRoot dynamically grants write access to a previously blocked path', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'agentos-fs-roots-'));
+    const outside = await fs.mkdtemp(path.join(os.tmpdir(), 'agentos-fs-outside-'));
+
+    const service = new ShellService({
+      workingDirectory: root,
+      filesystem: { allowWrite: true, writeRoots: [root] },
+    });
+
+    const outsideFile = path.join(outside, 'output.txt');
+
+    // Should fail before addWriteRoot
+    await expect(service.writeFile(outsideFile, 'data'))
+      .rejects
+      .toThrow(/outside allowed filesystem write roots/i);
+
+    // Dynamically grant access
+    service.addWriteRoot(outside);
+
+    // Should succeed after addWriteRoot
+    const result = await service.writeFile(outsideFile, 'data');
+    expect(result.path).toBe(outsideFile);
+    const content = await fs.readFile(outsideFile, 'utf8');
+    expect(content).toBe('data');
+
+    await fs.rm(root, { recursive: true, force: true });
+    await fs.rm(outside, { recursive: true, force: true });
+  });
+
+  it('addReadRoot deduplicates paths', () => {
+    const service = new ShellService({
+      filesystem: { allowRead: true, readRoots: ['/tmp'] },
+    });
+
+    service.addReadRoot('/tmp');
+    service.addReadRoot('/tmp');
+
+    // Access the config via any to check deduplication
+    const roots = (service as any).config.filesystem.readRoots;
+    expect(roots.filter((r: string) => r === path.resolve('/tmp')).length).toBe(1);
+  });
+
+  it('addReadRoot initializes filesystem config if undefined', () => {
+    const service = new ShellService({});
+    service.addReadRoot('/tmp');
+
+    const config = (service as any).config;
+    expect(config.filesystem).toBeDefined();
+    expect(config.filesystem.allowRead).toBe(true);
+    expect(config.filesystem.readRoots).toContain(path.resolve('/tmp'));
+  });
+
   it('creates agent workspace directories on activate', async () => {
     const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), 'agentos-agent-workspace-'));
     const pack = createExtensionPack({
