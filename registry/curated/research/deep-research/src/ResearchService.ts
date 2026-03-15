@@ -436,15 +436,59 @@ export class ResearchService {
     };
   }
 
+  /** Map common category keywords to actual subreddit names. */
+  private static readonly REDDIT_CATEGORY_MAP: Record<string, string[]> = {
+    'indiehackers': ['SideProject', 'indiebiz', 'EntrepreneurRideAlong', 'microsaas'],
+    'saas': ['SaaS', 'microsaas', 'startups'],
+    'marketvalidation': ['Entrepreneur', 'startups', 'smallbusiness'],
+    'techtrends': ['technology', 'programming', 'webdev'],
+    'ai': ['artificial', 'MachineLearning', 'LocalLLaMA'],
+    'startup': ['startups', 'Entrepreneur', 'smallbusiness'],
+    'webdev': ['webdev', 'javascript', 'reactjs'],
+    'crypto': ['CryptoCurrency', 'ethereum', 'defi'],
+    'devtools': ['devops', 'selfhosted', 'opensource'],
+    'marketing': ['digital_marketing', 'SEO', 'socialmedia'],
+    'design': ['web_design', 'UI_Design', 'userexperience'],
+    'remote': ['remotework', 'digitalnomad', 'WorkOnline'],
+  };
+
   private async getRedditTrends(category?: string): Promise<TrendingResult> {
-    const subreddit = category ?? 'all';
-    const response = await this.httpClient.get(`https://www.reddit.com/r/${subreddit}/hot.json?limit=20`, {
-      headers: { 'User-Agent': 'AgentOS-DeepResearch/0.1.0' },
-    });
-    const posts = response.data?.data?.children ?? [];
+    // Resolve category to real subreddit(s)
+    const key = (category ?? '').toLowerCase().replace(/[^a-z]/g, '');
+    const subreddits = ResearchService.REDDIT_CATEGORY_MAP[key] ?? [category ?? 'all'];
+
+    // Fetch from multiple subreddits in parallel
+    const allPosts: any[] = [];
+    await Promise.all(
+      subreddits.map(async (sub) => {
+        try {
+          const response = await this.httpClient.get(
+            `https://www.reddit.com/r/${sub}/hot.json?limit=10`,
+            { headers: { 'User-Agent': 'AgentOS-DeepResearch/0.1.0' } },
+          );
+          const posts = response.data?.data?.children ?? [];
+          allPosts.push(...posts);
+        } catch {
+          // Subreddit may not exist or be private — skip silently
+        }
+      }),
+    );
+
+    // Sort by score and deduplicate
+    const seen = new Set<string>();
+    const unique = allPosts
+      .filter((p: any) => {
+        const id = p.data?.id;
+        if (!id || seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      })
+      .sort((a: any, b: any) => (b.data?.score ?? 0) - (a.data?.score ?? 0))
+      .slice(0, 20);
+
     return {
       platform: 'reddit',
-      trends: posts.map((p: any) => ({
+      trends: unique.map((p: any) => ({
         title: p.data.title ?? '',
         description: p.data.selftext?.slice(0, 200),
         url: `https://reddit.com${p.data.permalink}`,
