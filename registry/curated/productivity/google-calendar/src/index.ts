@@ -52,7 +52,7 @@ export function createExtensionPack(context: ExtensionContext): ExtensionPack {
 
   const clientId = resolveSecret('clientId', options, ['GOOGLE_CLIENT_ID']);
   const clientSecret = resolveSecret('clientSecret', options, ['GOOGLE_CLIENT_SECRET']);
-  const refreshToken = resolveSecret('refreshToken', options, ['GOOGLE_REFRESH_TOKEN']);
+  const refreshToken = resolveSecret('refreshToken', options, ['GOOGLE_REFRESH_TOKEN', 'GOOGLE_CALENDAR_REFRESH_TOKEN']);
 
   const config: GoogleCalendarConfig = {
     clientId,

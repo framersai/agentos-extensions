@@ -36,5 +36,7 @@ packages:
   - "registry/curated/voice/twilio"
   - "registry/curated/voice/telnyx"
   - "registry/curated/voice/plivo"
+  - "registry/curated/tools/image-generation"
+  - "registry/curated/research/stealth-browser"
   - "registry/curated/productivity/google-calendar"
   - "registry/curated/productivity/gmail"
