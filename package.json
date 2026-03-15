@@ -59,7 +59,7 @@
   "packageManager": "pnpm@10.15.1",
   "pnpm": {
     "overrides": {
-      "@framers/agentos": "^0.1.0"
+      "@framers/agentos": "^0.1.47"
     }
   },
   "devDependencies": {
