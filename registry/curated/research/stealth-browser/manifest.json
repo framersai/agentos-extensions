@@ -1,0 +1,104 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.research.stealth-browser",
+  "name": "Stealth Browser Extension",
+  "version": "1.0.0",
+  "description": "Stealth browser automation with anti-detection — bypasses bot protection on sites like Amazon, eBay, LinkedIn using puppeteer-extra with stealth plugin",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["browser", "stealth", "anti-detection", "scraping", "puppeteer-extra", "bot-bypass", "automation"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["productivity", "research", "automation"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions"
+  },
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "stealth_navigate",
+      "displayName": "Stealth Navigate to URL",
+      "description": "Navigate stealth browser to a URL with anti-detection, bypassing bot protection",
+      "entry": "./dist/tools/navigate.js"
+    },
+    {
+      "kind": "tool",
+      "id": "stealth_scrape",
+      "displayName": "Stealth Scrape Content",
+      "description": "Extract content from bot-protected pages using CSS selectors with stealth browser",
+      "entry": "./dist/tools/scrape.js"
+    },
+    {
+      "kind": "tool",
+      "id": "stealth_click",
+      "displayName": "Stealth Click Element",
+      "description": "Click on an element in stealth browser with human-like behavior",
+      "entry": "./dist/tools/click.js"
+    },
+    {
+      "kind": "tool",
+      "id": "stealth_type",
+      "displayName": "Stealth Type Text",
+      "description": "Type text into input fields with human-like keystroke timing in stealth browser",
+      "entry": "./dist/tools/type.js"
+    },
+    {
+      "kind": "tool",
+      "id": "stealth_screenshot",
+      "displayName": "Stealth Screenshot",
+      "description": "Capture screenshot of bot-protected page via stealth browser",
+      "entry": "./dist/tools/screenshot.js"
+    },
+    {
+      "kind": "tool",
+      "id": "stealth_snapshot",
+      "displayName": "Stealth Page Snapshot",
+      "description": "Extract structured DOM snapshot from bot-protected page via stealth browser",
+      "entry": "./dist/tools/snapshot.js"
+    }
+  ],
+  "configuration": {
+    "properties": {
+      "browser.headless": {
+        "type": "boolean",
+        "default": true,
+        "description": "Run browser in headless mode (use 'new' headless for better stealth)"
+      },
+      "browser.timeout": {
+        "type": "number",
+        "default": 30000,
+        "minimum": 5000,
+        "maximum": 120000,
+        "description": "Default timeout for browser operations (ms)"
+      },
+      "browser.userAgent": {
+        "type": "string",
+        "description": "Override user agent string (auto-rotated if not set)"
+      },
+      "browser.viewport.width": {
+        "type": "number",
+        "default": 1920,
+        "description": "Browser viewport width"
+      },
+      "browser.viewport.height": {
+        "type": "number",
+        "default": 1080,
+        "description": "Browser viewport height"
+      },
+      "stealth.evasions": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable all stealth evasion techniques"
+      }
+    }
+  },
+  "dependencies": {
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-core": "^22.0.0"
+  }
+}
