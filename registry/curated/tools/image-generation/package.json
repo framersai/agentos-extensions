@@ -1,0 +1,13 @@
+{
+  "name": "@framers/agentos-ext-image-generation",
+  "version": "1.0.0",
+  "description": "Image generation extension for AgentOS — DALL-E 3 and Stability AI",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@framers/agentos": "workspace:*"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "com.framers.tools.image-generation",
+  "name": "@framers/agentos-ext-image-generation",
+  "displayName": "Image Generation",
+  "version": "1.0.0",
+  "description": "Generate images from text prompts using DALL-E 3 or Stability AI.",
+  "category": "tool",
+  "author": "Framers AI",
+  "license": "MIT",
+  "entry": "./src/index.ts",
+  "tools": ["generate_image"],
+  "requiredSecrets": [
+    {
+      "id": "openai.apiKey",
+      "envVar": "OPENAI_API_KEY",
+      "description": "OpenAI API key for DALL-E 3 image generation",
+      "optional": true,
+      "docsUrl": "https://platform.openai.com/api-keys"
+    },
+    {
+      "id": "stability.apiKey",
+      "envVar": "STABILITY_API_KEY",
+      "description": "Stability AI API key for Stable Diffusion image generation",
+      "optional": true,
+      "docsUrl": "https://platform.stability.ai/account/keys"
+    }
+  ],
+  "keywords": ["image", "generation", "dall-e", "stable-diffusion", "ai-art", "text-to-image"]
+}
