@@ -60,6 +60,7 @@
   "devDependencies": {
     "@framers/agentos": "workspace:*",
     "@types/node": "^20.0.0",
+    "jszip": "^3.10.1",
     "typescript": "^5.4.0",
     "vitest": "^1.6.0"
   }
