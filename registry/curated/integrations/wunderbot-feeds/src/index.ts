@@ -58,6 +58,9 @@ interface PostRecord {
 
 const recentPosts: PostRecord[] = [];
 const MAX_POST_HISTORY = 50;
+const CATEGORY_DAILY_POST_LIMIT = 2;
+const MAX_APPROVED_ARTICLES_PER_CYCLE = 2;
+const CATEGORY_DAILY_WINDOW_MS = 24 * 3600_000;
 
 function addPostRecord(title: string, category: string): void {
   recentPosts.push({ title, category, postedAt: Date.now() });
@@ -76,6 +79,24 @@ function getRecentPostsSummary(): string {
   return `Posts in the last 48 hours (${last48h.length} total):\n${lines.join('\n')}`;
 }
 
+function getRecentCategoryPostCount(category: string, windowMs = CATEGORY_DAILY_WINDOW_MS): number {
+  const now = Date.now();
+  return recentPosts.filter((post) => post.category === category && now - post.postedAt < windowMs).length;
+}
+
+function getRemainingDailySlots(category: string): number {
+  const used = getRecentCategoryPostCount(category);
+  return Math.max(0, CATEGORY_DAILY_POST_LIMIT - used);
+}
+
+function fallbackSelection(
+  articles: Array<{ title: string; summary?: string; url?: string }>,
+  maxSelections: number,
+): boolean[] {
+  const fallbackCount = Math.min(Math.max(0, maxSelections), 1);
+  return articles.map((_, i) => i < fallbackCount);
+}
+
 /**
  * Ask an LLM whether articles are worth posting to the Discord community.
  * Returns an array of booleans (one per article) — true = post it.
@@ -85,11 +106,17 @@ async function judgeArticles(
   category: string,
   logger: Logger,
 ): Promise<boolean[]> {
+  const remainingSlots = Math.min(MAX_APPROVED_ARTICLES_PER_CYCLE, getRemainingDailySlots(category));
+  if (remainingSlots <= 0) {
+    log(logger, `${category}: daily cap reached, skipping judge`);
+    return articles.map(() => false);
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     // No API key — fall back to posting the first article only
     log(logger, 'No OPENAI_API_KEY — skipping LLM judge, posting first article only');
-    return articles.map((_, i) => i === 0);
+    return fallbackSelection(articles, remainingSlots);
   }
 
   const recentSummary = getRecentPostsSummary();
@@ -104,8 +131,10 @@ RULES:
 - Only approve articles that are genuinely interesting, surprising, or important
 - Reject anything that's clickbait, mundane, or repeats topics already posted recently
 - Max 1-2 articles per category per day. If we already posted similar content today, reject everything
+- Right now you may approve AT MOST ${remainingSlots} article(s) for this category
 - Breaking news, novel discoveries, major industry shifts = always post
 - Generic "X company did Y" or rehashed takes = skip
+- Prefer stories that will still feel discussion-worthy tomorrow or next week, not just this hour
 - Be VERY selective. When in doubt, don't post. Quality over quantity.
 
 RECENT POST HISTORY:
@@ -114,8 +143,16 @@ ${recentSummary}
 CANDIDATE ARTICLES (category: ${category}):
 ${articleList}
 
-For each article, respond with ONLY a JSON array of booleans. Example: [true, false, true]
-No explanation needed. Just the array.`;
+Respond with ONLY JSON in this exact shape:
+{"approved_indexes":[0,2]}
+
+Rules for approved_indexes:
+- use 0-based indexes from the numbered list above
+- keep them in ranked order, best first
+- include no more than ${remainingSlots} indexes
+- if nothing is worth posting, return {"approved_indexes":[]}
+
+No markdown. No explanation. JSON only.`;
 
   try {
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -128,31 +165,36 @@ No explanation needed. Just the array.`;
         model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 100,
-        temperature: 0.3,
+        temperature: 0.15,
       }),
     });
 
     if (!res.ok) {
       log(logger, `LLM judge API error ${res.status} — falling back to first article only`);
-      return articles.map((_, i) => i === 0);
+      return fallbackSelection(articles, remainingSlots);
     }
 
     const data = await res.json() as any;
     const content = data?.choices?.[0]?.message?.content?.trim() ?? '';
 
-    // Parse JSON array from response
-    const match = content.match(/\[[\s\S]*?\]/);
+    const match = content.match(/\{[\s\S]*\}/);
     if (!match) {
       log(logger, `LLM judge returned unparseable response: ${content.slice(0, 100)}`);
-      return articles.map((_, i) => i === 0);
+      return fallbackSelection(articles, remainingSlots);
     }
 
-    const decisions: boolean[] = JSON.parse(match[0]);
-    // Pad/trim to match article count
-    return articles.map((_, i) => decisions[i] === true);
+    const parsed = JSON.parse(match[0]) as { approved_indexes?: unknown };
+    const rawIndexes = Array.isArray(parsed?.approved_indexes) ? parsed.approved_indexes : [];
+    const approvedIndexes = Array.from(new Set(
+      rawIndexes
+        .map((value) => Number(value))
+        .filter((value) => Number.isInteger(value) && value >= 0 && value < articles.length),
+    )).slice(0, remainingSlots);
+
+    return articles.map((_, i) => approvedIndexes.includes(i));
   } catch (err: any) {
     log(logger, `LLM judge error: ${err.message} — falling back to first article only`);
-    return articles.map((_, i) => i === 0);
+    return fallbackSelection(articles, remainingSlots);
   }
 }
 
@@ -306,6 +348,12 @@ function registerFeedJobs(
             continue;
           }
 
+          const remainingSlots = Math.min(MAX_APPROVED_ARTICLES_PER_CYCLE, getRemainingDailySlots(cat));
+          if (remainingSlots <= 0) {
+            log(logger, `${cat} news: daily cap already reached, skipping`);
+            continue;
+          }
+
           // LLM judges which articles are worth posting
           const decisions = await judgeArticles(
             articles.map((a: any) => ({ title: a.title, summary: a.summary, url: a.url })),
@@ -313,7 +361,7 @@ function registerFeedJobs(
             logger,
           );
 
-          const approved = articles.filter((_: any, i: number) => decisions[i]);
+          const approved = articles.filter((_: any, i: number) => decisions[i]).slice(0, remainingSlots);
           log(logger, `${cat} news: LLM approved ${approved.length}/${articles.length} articles`);
 
           if (approved.length === 0) continue;
@@ -348,13 +396,19 @@ function registerFeedJobs(
         return;
       }
 
+      const remainingSlots = Math.min(MAX_APPROVED_ARTICLES_PER_CYCLE, getRemainingDailySlots('threat-intel'));
+      if (remainingSlots <= 0) {
+        log(logger, 'Threat intel: daily cap already reached, skipping');
+        return;
+      }
+
       const decisions = await judgeArticles(
         data.articles.map((a: any) => ({ title: a.title, summary: a.summary, url: a.url })),
         'threat-intel',
         logger,
       );
 
-      const approved = data.articles.filter((_: any, i: number) => decisions[i]);
+      const approved = data.articles.filter((_: any, i: number) => decisions[i]).slice(0, remainingSlots);
       log(logger, `Threat intel: LLM approved ${approved.length}/${data.articles.length}`);
 
       if (approved.length === 0) return;
@@ -369,7 +423,7 @@ function registerFeedJobs(
     timers.push(setInterval(job, t.threat_intel));
   }
 
-  // --- AI Papers (with dedup + LLM digest) ---
+  // --- AI Papers (with server-side dedup + LLM digest) ---
   if (ch.ai_papers) {
     const postedPaperKeys = new Set<string>();
     const job = wrapJob('ai-papers', logger, async () => {
@@ -379,20 +433,33 @@ function registerFeedJobs(
         log(logger, 'AI papers: no new papers');
         return;
       }
-      const embeds = formatPaperEmbeds(data.papers);
+
       let posted = 0;
-      for (let i = 0; i < embeds.length; i++) {
-        const paper = data.papers[i];
+      for (const paper of data.papers) {
         const dedupeKey = paper.dedupe_key || paper.url || paper.title;
 
-        // Local dedup guard
+        // Local dedup guard (survives within a process lifetime)
         if (postedPaperKeys.has(dedupeKey)) {
           log(logger, `AI papers: skipping already-posted "${paper.title?.slice(0, 50)}"`);
           continue;
         }
 
-        await poster.postEmbeds(ch.ai_papers, [embeds[i]]);
-        posted++;
+        // Skip papers without a proper digest — don't post raw abstracts
+        if (!paper.digest || paper.digest.trim().length < 50) {
+          log(logger, `AI papers: skipping "${paper.title?.slice(0, 50)}" — no digest (OpenAI quota may be exhausted)`);
+          // Still mark as posted so we don't retry every cycle
+          try {
+            await client.markPaperPosted(ch.ai_papers, dedupeKey, paper.document_id);
+          } catch { /* non-critical */ }
+          postedPaperKeys.add(dedupeKey);
+          continue;
+        }
+
+        const embeds = formatPaperEmbeds([paper]);
+        if (embeds.length > 0) {
+          await poster.postEmbeds(ch.ai_papers, [embeds[0]]);
+          posted++;
+        }
 
         // Mark posted in KB store so it won't be returned again
         try {
@@ -698,5 +765,16 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     },
   };
 }
+
+export const __testing = {
+  addPostRecord,
+  getRecentPostsSummary,
+  getRecentCategoryPostCount,
+  getRemainingDailySlots,
+  judgeArticles,
+  resetRecentPosts(): void {
+    recentPosts.length = 0;
+  },
+};
 
 export default createExtensionPack;
