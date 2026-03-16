@@ -82,11 +82,61 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     /^https?:\/\/\S+$/,  // Just a link with no commentary
   ];
 
+  /**
+   * Feed / board channels where the bot may answer direct mentions, but must
+   * never proactively jump into the conversation on its own.
+   */
+  private static readonly PROACTIVE_OPT_OUT_CHANNELS = new Set([
+    'us-news',
+    'world-news',
+    'tech-news',
+    'finance-news',
+    'science-news',
+    'media-news',
+    'threat-intel',
+    'ai-papers',
+    'udemy-deals',
+    'short-squeeze',
+    'crypto-trending',
+    'trending-crypto',
+    'uniswap-sniper',
+  ]);
+
   /** Pre-filter obvious non-response messages before sending to LLM. */
   private static shouldIgnoreMessage(content: string): boolean {
     const trimmed = content.trim();
     if (!trimmed) return true;
     return DiscordChannelAdapter.IGNORE_PATTERNS.some(p => p.test(trimmed));
+  }
+
+  private static normalizeChannelName(name: string): string {
+    return String(name ?? '')
+      .replace(/\p{Extended_Pictographic}/gu, '')
+      .replace(/[\u{FE0F}\u{200D}]/gu, '')
+      .replace(/^[#\s\-_]+/, '')
+      .replace(/[#\s\-_]+$/, '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+  }
+
+  private static isProactiveOptOutChannel(message: Message): boolean {
+    const names = new Set<string>();
+
+    if ('name' in message.channel) {
+      const currentName = DiscordChannelAdapter.normalizeChannelName((message.channel as any).name ?? '');
+      if (currentName) names.add(currentName);
+    }
+
+    const parentName = DiscordChannelAdapter.normalizeChannelName((message.channel as any)?.parent?.name ?? '');
+    if (parentName) names.add(parentName);
+
+    for (const name of names) {
+      if (DiscordChannelAdapter.PROACTIVE_OPT_OUT_CHANNELS.has(name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   constructor(private readonly service: DiscordService) {}
@@ -319,6 +369,11 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     if (isDirect) {
       // Direct mention or reply to bot → respond immediately.
       this.emit(event);
+      return;
+    }
+
+    // Feed channels should stay clean unless a human explicitly invokes the bot.
+    if (DiscordChannelAdapter.isProactiveOptOutChannel(message)) {
       return;
     }
 
@@ -696,7 +751,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         return;
       }
 
-      // Group by category, show organized browse view
+      // Group by category, show organized browse view in an embed (avoids 2000-char content limit)
       const CATEGORY_LABELS: Record<string, string> = {
         general: 'General',
         features: 'Features & Platform',
@@ -716,12 +771,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         (grouped[cat] ??= []).push(entry);
       }
 
-      // Sort entries within each category
       for (const entries of Object.values(grouped)) {
         entries.sort((a, b) => a.key.localeCompare(b.key));
       }
 
-      // Build categorized display (ordered by CATEGORY_LABELS then alphabetical)
       const categoryOrder = Object.keys(CATEGORY_LABELS);
       const sortedCats = Object.keys(grouped).sort((a, b) => {
         const ai = categoryOrder.indexOf(a);
@@ -729,25 +782,35 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
       });
 
-      const lines: string[] = [`**Rabbit Hole AI — FAQ** (${list.length} entries)\n`];
+      const lines: string[] = [];
       for (const cat of sortedCats) {
         const entries = grouped[cat]!;
         const label = CATEGORY_LABELS[cat] || cat.charAt(0).toUpperCase() + cat.slice(1);
-        lines.push(`__${label}__ (${entries.length})`);
-        const shown = entries.slice(0, 5);
+        lines.push(`**${label}** (${entries.length})`);
+        const shown = entries.slice(0, 3);
         for (const e of shown) {
-          lines.push(`  \`${e.key}\` — ${e.question}`);
+          lines.push(`\`${e.key}\` — ${e.question}`);
         }
-        if (entries.length > 5) {
-          lines.push(`  _…+${entries.length - 5} more_`);
+        if (entries.length > 3) {
+          lines.push(`_…+${entries.length - 3} more_`);
         }
         lines.push('');
       }
 
-      lines.push('Use `/faq key:<key>` or `/faq key:<question>` to view an entry.');
-      lines.push('You can also type a question naturally, e.g. `/faq key:how do I deploy?`');
+      // Trim to fit embed description limit (4096 chars)
+      let description = lines.join('\n');
+      if (description.length > 4000) {
+        description = description.slice(0, 3997) + '…';
+      }
 
-      await this.safeEphemeralReply(interaction, lines.join('\n'));
+      const browseEmbed: APIEmbed = {
+        title: `Rabbit Hole AI — FAQ (${list.length} entries)`,
+        description,
+        color: this.brandColor(),
+        footer: { text: 'Use /faq key:<question> to search · e.g. /faq key:how do I deploy?' },
+      };
+
+      await this.safeEphemeralReply(interaction, undefined, { embeds: [browseEmbed] });
       return;
     }
 
@@ -1266,9 +1329,9 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     extra?: { embeds?: APIEmbed[] },
   ): Promise<void> {
     try {
-      await interaction.reply({ content, embeds: extra?.embeds, ephemeral: true });
-    } catch {
-      // ignore
+      await interaction.reply({ content: content || undefined, embeds: extra?.embeds, ephemeral: true });
+    } catch (err: any) {
+      console.error(`[DiscordChannel] safeEphemeralReply failed for /${interaction.commandName}:`, err?.message ?? err);
     }
   }
 
