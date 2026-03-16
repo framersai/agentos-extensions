@@ -35,14 +35,126 @@ import { formatSniperEmbed } from './formatters/sniper.js';
 // Defaults
 // ---------------------------------------------------------------------------
 
+/** Scrape intervals — how often to CHECK for new content (not how often to post). */
 const DEFAULT_TIMERS = {
-  news: 43_200_000,        // 12h — max 1-2 posts per category twice a day
-  threat_intel: 43_200_000,
-  ai_papers: 43_200_000,
+  news: 14_400_000,        // 4h — check for news, LLM decides if it's worth posting
+  threat_intel: 14_400_000,
+  ai_papers: 14_400_000,
   deals: 43_200_000,       // 12h
   trades: 43_200_000,
   jobs: 86_400_000,        // 24h
 };
+
+// ---------------------------------------------------------------------------
+// LLM Post Judge — decides if an article is worth posting
+// ---------------------------------------------------------------------------
+
+/** Recent post history for LLM context. */
+interface PostRecord {
+  title: string;
+  category: string;
+  postedAt: number; // epoch ms
+}
+
+const recentPosts: PostRecord[] = [];
+const MAX_POST_HISTORY = 50;
+
+function addPostRecord(title: string, category: string): void {
+  recentPosts.push({ title, category, postedAt: Date.now() });
+  if (recentPosts.length > MAX_POST_HISTORY) recentPosts.shift();
+}
+
+function getRecentPostsSummary(): string {
+  const now = Date.now();
+  const last48h = recentPosts.filter(p => now - p.postedAt < 48 * 3600_000);
+  if (last48h.length === 0) return 'No posts in the last 48 hours.';
+
+  const lines = last48h.map(p => {
+    const hoursAgo = Math.round((now - p.postedAt) / 3600_000);
+    return `- [${p.category}] "${p.title}" (${hoursAgo}h ago)`;
+  });
+  return `Posts in the last 48 hours (${last48h.length} total):\n${lines.join('\n')}`;
+}
+
+/**
+ * Ask an LLM whether articles are worth posting to the Discord community.
+ * Returns an array of booleans (one per article) — true = post it.
+ */
+async function judgeArticles(
+  articles: Array<{ title: string; summary?: string; url?: string }>,
+  category: string,
+  logger: Logger,
+): Promise<boolean[]> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    // No API key — fall back to posting the first article only
+    log(logger, 'No OPENAI_API_KEY — skipping LLM judge, posting first article only');
+    return articles.map((_, i) => i === 0);
+  }
+
+  const recentSummary = getRecentPostsSummary();
+
+  const articleList = articles.map((a, i) =>
+    `${i + 1}. "${a.title}"${a.summary ? `\n   Summary: ${a.summary.slice(0, 200)}` : ''}`
+  ).join('\n');
+
+  const prompt = `You are a content curator for a tech Discord community (Rabbit Hole Inc). Your job is to decide which articles are worth posting. The community is sophisticated — engineers, founders, security researchers, crypto traders.
+
+RULES:
+- Only approve articles that are genuinely interesting, surprising, or important
+- Reject anything that's clickbait, mundane, or repeats topics already posted recently
+- Max 1-2 articles per category per day. If we already posted similar content today, reject everything
+- Breaking news, novel discoveries, major industry shifts = always post
+- Generic "X company did Y" or rehashed takes = skip
+- Be VERY selective. When in doubt, don't post. Quality over quantity.
+
+RECENT POST HISTORY:
+${recentSummary}
+
+CANDIDATE ARTICLES (category: ${category}):
+${articleList}
+
+For each article, respond with ONLY a JSON array of booleans. Example: [true, false, true]
+No explanation needed. Just the array.`;
+
+  try {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 100,
+        temperature: 0.3,
+      }),
+    });
+
+    if (!res.ok) {
+      log(logger, `LLM judge API error ${res.status} — falling back to first article only`);
+      return articles.map((_, i) => i === 0);
+    }
+
+    const data = await res.json() as any;
+    const content = data?.choices?.[0]?.message?.content?.trim() ?? '';
+
+    // Parse JSON array from response
+    const match = content.match(/\[[\s\S]*?\]/);
+    if (!match) {
+      log(logger, `LLM judge returned unparseable response: ${content.slice(0, 100)}`);
+      return articles.map((_, i) => i === 0);
+    }
+
+    const decisions: boolean[] = JSON.parse(match[0]);
+    // Pad/trim to match article count
+    return articles.map((_, i) => decisions[i] === true);
+  } catch (err: any) {
+    log(logger, `LLM judge error: ${err.message} — falling back to first article only`);
+    return articles.map((_, i) => i === 0);
+  }
+}
 
 const NEWS_CATEGORIES = ['us', 'world', 'tech', 'finance', 'science', 'media'] as const;
 
@@ -177,7 +289,7 @@ function registerFeedJobs(
   const ch = config.channels;
   const t = { ...DEFAULT_TIMERS, ...config.timers };
 
-  // --- News (6 categories, run SEQUENTIALLY to avoid OOM on low-RAM servers) ---
+  // --- News (6 categories, LLM-judged posting) ---
   const newsChannels = NEWS_CATEGORIES
     .map((cat) => ({ cat, channelId: ch[`${cat}_news`] }))
     .filter((c) => c.channelId);
@@ -187,10 +299,29 @@ function registerFeedJobs(
       for (const { cat, channelId } of newsChannels) {
         try {
           log(logger, `Fetching ${cat} news...`);
-          const data = await client.fetchNews(cat, 2);
-          const embeds = formatNewsEmbeds(data.articles as any, cat);
-          for (const embed of embeds) {
-            await poster.postEmbeds(channelId, [embed]);
+          const data = await client.fetchNews(cat, 5);
+          const articles = data.articles as any[];
+          if (!articles.length) {
+            log(logger, `${cat} news: no articles`);
+            continue;
+          }
+
+          // LLM judges which articles are worth posting
+          const decisions = await judgeArticles(
+            articles.map((a: any) => ({ title: a.title, summary: a.summary, url: a.url })),
+            cat,
+            logger,
+          );
+
+          const approved = articles.filter((_: any, i: number) => decisions[i]);
+          log(logger, `${cat} news: LLM approved ${approved.length}/${articles.length} articles`);
+
+          if (approved.length === 0) continue;
+
+          const embeds = formatNewsEmbeds(approved, cat);
+          for (let i = 0; i < embeds.length; i++) {
+            await poster.postEmbeds(channelId, [embeds[i]]);
+            addPostRecord(approved[i]?.title ?? 'unknown', cat);
           }
           log(logger, `Posted ${embeds.length} ${cat} news embeds (${data.elapsed_seconds}s)`);
         } catch (err) {
@@ -207,14 +338,30 @@ function registerFeedJobs(
     timers.push(initialTimer as unknown as NodeJS.Timeout);
   }
 
-  // --- Threat Intel (RSS-based, lightweight — fire immediately) ---
+  // --- Threat Intel (RSS-based, LLM-judged) ---
   if (ch.threat_intelligence) {
     const job = wrapJob('threat-intel', logger, async () => {
       log(logger, 'Fetching threat intel...');
       const data = await client.fetchThreatIntel(5);
-      const embeds = formatThreatIntelEmbeds(data.articles);
-      for (const embed of embeds) {
-        await poster.postEmbeds(ch.threat_intelligence, [embed]);
+      if (!data.articles.length) {
+        log(logger, 'Threat intel: no articles');
+        return;
+      }
+
+      const decisions = await judgeArticles(
+        data.articles.map((a: any) => ({ title: a.title, summary: a.summary, url: a.url })),
+        'threat-intel',
+        logger,
+      );
+
+      const approved = data.articles.filter((_: any, i: number) => decisions[i]);
+      log(logger, `Threat intel: LLM approved ${approved.length}/${data.articles.length}`);
+
+      if (approved.length === 0) return;
+      const embeds = formatThreatIntelEmbeds(approved);
+      for (let i = 0; i < embeds.length; i++) {
+        await poster.postEmbeds(ch.threat_intelligence, [embeds[i]]);
+        addPostRecord(approved[i]?.title ?? 'unknown', 'threat-intel');
       }
       log(logger, `Posted ${embeds.length} threat intel articles`);
     });
