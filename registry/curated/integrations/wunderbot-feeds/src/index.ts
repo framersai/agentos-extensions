@@ -36,12 +36,12 @@ import { formatSniperEmbed } from './formatters/sniper.js';
 // ---------------------------------------------------------------------------
 
 const DEFAULT_TIMERS = {
-  news: 7_440_000,         // ~2h4m
-  threat_intel: 7_440_000,
-  ai_papers: 7_440_000,
-  deals: 3_720_000,        // ~1h2m
-  trades: 3_720_000,
-  jobs: 14_400_000,        // 4h
+  news: 43_200_000,        // 12h — max 1-2 posts per category twice a day
+  threat_intel: 43_200_000,
+  ai_papers: 43_200_000,
+  deals: 43_200_000,       // 12h
+  trades: 43_200_000,
+  jobs: 86_400_000,        // 24h
 };
 
 const NEWS_CATEGORIES = ['us', 'world', 'tech', 'finance', 'science', 'media'] as const;
@@ -187,7 +187,7 @@ function registerFeedJobs(
       for (const { cat, channelId } of newsChannels) {
         try {
           log(logger, `Fetching ${cat} news...`);
-          const data = await client.fetchNews(cat, 10);
+          const data = await client.fetchNews(cat, 2);
           const embeds = formatNewsEmbeds(data.articles as any, cat);
           for (const embed of embeds) {
             await poster.postEmbeds(channelId, [embed]);
