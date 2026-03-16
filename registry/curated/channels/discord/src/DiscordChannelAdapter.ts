@@ -696,14 +696,57 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         return;
       }
 
-      list.sort((a, b) => a.key.localeCompare(b.key));
-      const top = list.slice(0, 20);
-      const lines = [
-        '**Rabbit Hole AI — FAQ**',
-        ...top.map((e) => `- \`${e.key}\` — ${e.question}`),
-        list.length > top.length ? `\n…and ${list.length - top.length} more.` : '',
-        '\nUse `/faq key:<key>` or `/faq key:<question>` to view an entry.',
-      ].filter((l) => l !== '');
+      // Group by category, show organized browse view
+      const CATEGORY_LABELS: Record<string, string> = {
+        general: 'General',
+        features: 'Features & Platform',
+        billing: 'Billing & Pricing',
+        technical: 'Technical',
+        discord: 'Discord & Server',
+        founders: 'The Founders',
+        socialclub: 'Social Club',
+        security: 'Security & Privacy',
+        legal: 'Legal',
+        troubleshooting: 'Troubleshooting',
+      };
+
+      const grouped: Record<string, typeof list> = {};
+      for (const entry of list) {
+        const cat = entry.category || 'general';
+        (grouped[cat] ??= []).push(entry);
+      }
+
+      // Sort entries within each category
+      for (const entries of Object.values(grouped)) {
+        entries.sort((a, b) => a.key.localeCompare(b.key));
+      }
+
+      // Build categorized display (ordered by CATEGORY_LABELS then alphabetical)
+      const categoryOrder = Object.keys(CATEGORY_LABELS);
+      const sortedCats = Object.keys(grouped).sort((a, b) => {
+        const ai = categoryOrder.indexOf(a);
+        const bi = categoryOrder.indexOf(b);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+      });
+
+      const lines: string[] = [`**Rabbit Hole AI — FAQ** (${list.length} entries)\n`];
+      for (const cat of sortedCats) {
+        const entries = grouped[cat]!;
+        const label = CATEGORY_LABELS[cat] || cat.charAt(0).toUpperCase() + cat.slice(1);
+        lines.push(`__${label}__ (${entries.length})`);
+        const shown = entries.slice(0, 5);
+        for (const e of shown) {
+          lines.push(`  \`${e.key}\` — ${e.question}`);
+        }
+        if (entries.length > 5) {
+          lines.push(`  _…+${entries.length - 5} more_`);
+        }
+        lines.push('');
+      }
+
+      lines.push('Use `/faq key:<key>` or `/faq key:<question>` to view an entry.');
+      lines.push('You can also type a question naturally, e.g. `/faq key:how do I deploy?`');
+
       await this.safeEphemeralReply(interaction, lines.join('\n'));
       return;
     }

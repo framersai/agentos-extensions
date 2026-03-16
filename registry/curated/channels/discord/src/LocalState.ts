@@ -16,6 +16,7 @@ export type FaqEntry = {
   key: string;
   question: string;
   answer: string;
+  category?: string;
   updatedAt: string;
   updatedBy: string;
 };
