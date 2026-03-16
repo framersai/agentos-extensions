@@ -177,32 +177,37 @@ function registerFeedJobs(
   const ch = config.channels;
   const t = { ...DEFAULT_TIMERS, ...config.timers };
 
-  // --- News (6 categories, staggered by 30s each) ---
-  for (let i = 0; i < NEWS_CATEGORIES.length; i++) {
-    const cat = NEWS_CATEGORIES[i];
-    const channelId = ch[`${cat}_news`];
-    if (!channelId) continue;
+  // --- News (6 categories, run SEQUENTIALLY to avoid OOM on low-RAM servers) ---
+  const newsChannels = NEWS_CATEGORIES
+    .map((cat) => ({ cat, channelId: ch[`${cat}_news`] }))
+    .filter((c) => c.channelId);
 
-    const stagger = i * 30_000; // stagger categories so they don't all hit at once
-    const job = wrapJob(`news/${cat}`, logger, async () => {
-      log(logger, `Fetching ${cat} news...`);
-      const data = await client.fetchNews(cat, 10);
-      const embeds = formatNewsEmbeds(data.articles as any, cat);
-      for (const embed of embeds) {
-        await poster.postEmbeds(channelId, [embed]);
+  if (newsChannels.length > 0) {
+    const sequentialNewsJob = wrapJob('news', logger, async () => {
+      for (const { cat, channelId } of newsChannels) {
+        try {
+          log(logger, `Fetching ${cat} news...`);
+          const data = await client.fetchNews(cat, 10);
+          const embeds = formatNewsEmbeds(data.articles as any, cat);
+          for (const embed of embeds) {
+            await poster.postEmbeds(channelId, [embed]);
+          }
+          log(logger, `Posted ${embeds.length} ${cat} news embeds (${data.elapsed_seconds}s)`);
+        } catch (err) {
+          logError(logger, `news/${cat} failed: ${err}`);
+        }
       }
-      log(logger, `Posted ${embeds.length} ${cat} news embeds (${data.elapsed_seconds}s)`);
     });
 
-    // Initial fetch after stagger, then repeat on timer
+    // Initial fetch after 30s (let fast feeds go first), then repeat on timer
     const initialTimer = setTimeout(() => {
-      job();
-      timers.push(setInterval(job, t.news));
-    }, stagger);
+      sequentialNewsJob();
+      timers.push(setInterval(sequentialNewsJob, t.news));
+    }, 30_000);
     timers.push(initialTimer as unknown as NodeJS.Timeout);
   }
 
-  // --- Threat Intel ---
+  // --- Threat Intel (RSS-based, lightweight — fire immediately) ---
   if (ch.threat_intelligence) {
     const job = wrapJob('threat-intel', logger, async () => {
       log(logger, 'Fetching threat intel...');
@@ -213,7 +218,7 @@ function registerFeedJobs(
       }
       log(logger, `Posted ${embeds.length} threat intel articles`);
     });
-    job(); // fire immediately
+    job(); // fire immediately — RSS only, no Chrome
     timers.push(setInterval(job, t.threat_intel));
   }
 
@@ -256,7 +261,7 @@ function registerFeedJobs(
     timers.push(setInterval(job, t.ai_papers));
   }
 
-  // --- Udemy Deals ---
+  // --- Udemy Deals (uses Selenium — stagger 45 min after startup to avoid overlapping with news) ---
   if (ch.udemy_deals) {
     const postedDealTitles = new Set<string>();
     const job = wrapJob('deals', logger, async () => {
@@ -275,8 +280,11 @@ function registerFeedJobs(
       }
       log(logger, `Posted ${posted} new deal embeds (${postedDealTitles.size} total seen)`);
     });
-    job(); // fire immediately
-    timers.push(setInterval(job, t.deals));
+    const dealsInitial = setTimeout(() => {
+      job();
+      timers.push(setInterval(job, t.deals));
+    }, 45 * 60_000); // 45 min delay — let news finish first
+    timers.push(dealsInitial as unknown as NodeJS.Timeout);
   }
 
   // --- Short Squeeze ---
@@ -321,29 +329,33 @@ function registerFeedJobs(
     timers.push(setInterval(job, t.trades));
   }
 
-  // --- Jobs (one per job title config) ---
+  // --- Jobs (run sequentially, staggered 60 min after startup) ---
   if (config.jobs?.length) {
     const location = config.locations?.[0] ?? 'United States';
-    for (let i = 0; i < config.jobs.length; i++) {
-      const jobConfig = config.jobs[i];
-      if (!jobConfig.channelId) continue;
+    const jobConfigs = config.jobs.filter((j: any) => j.channelId);
 
-      const stagger = i * 10_000;
-      const job = wrapJob(`jobs/${jobConfig.title}`, logger, async () => {
-        log(logger, `Fetching jobs: ${jobConfig.title}...`);
-        const data = await client.fetchJobs(jobConfig.title, location, 15);
-        const embeds = formatJobEmbeds(data.jobs, jobConfig.title);
-        for (const embed of embeds) {
-          await poster.postEmbeds(jobConfig.channelId, [embed]);
+    if (jobConfigs.length > 0) {
+      const sequentialJobsJob = wrapJob('jobs', logger, async () => {
+        for (const jobConfig of jobConfigs) {
+          try {
+            log(logger, `Fetching jobs: ${jobConfig.title}...`);
+            const data = await client.fetchJobs(jobConfig.title, location, 15);
+            const embeds = formatJobEmbeds(data.jobs, jobConfig.title);
+            for (const embed of embeds) {
+              await poster.postEmbeds(jobConfig.channelId, [embed]);
+            }
+            log(logger, `Posted ${embeds.length} job embeds for "${jobConfig.title}"`);
+          } catch (err) {
+            logError(logger, `jobs/${jobConfig.title} failed: ${err}`);
+          }
         }
-        log(logger, `Posted ${embeds.length} job embeds for "${jobConfig.title}"`);
       });
 
-      const initialTimer = setTimeout(() => {
-        job();
-        timers.push(setInterval(job, t.jobs));
-      }, stagger);
-      timers.push(initialTimer as unknown as NodeJS.Timeout);
+      const jobsInitial = setTimeout(() => {
+        sequentialJobsJob();
+        timers.push(setInterval(sequentialJobsJob, t.jobs));
+      }, 60 * 60_000); // 60 min delay — let news + deals finish first
+      timers.push(jobsInitial as unknown as NodeJS.Timeout);
     }
   }
 

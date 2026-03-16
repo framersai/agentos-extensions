@@ -12,6 +12,10 @@ import { ExecuteTool } from './tools/execute.js';
 import { FileReadTool } from './tools/fileRead.js';
 import { FileWriteTool } from './tools/fileWrite.js';
 import { ListDirectoryTool } from './tools/listDir.js';
+import { CreatePdfTool } from './tools/createPdf.js';
+import { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
+import { CreateDocumentTool } from './tools/createDocument.js';
+import { ReadDocumentTool } from './tools/readDocument.js';
 import type { ShellConfig } from './types.js';
 /**
  * Extension configuration options
@@ -72,6 +76,26 @@ export declare function createExtensionPack(context: {
         kind: string;
         priority: number;
         payload: ListDirectoryTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: CreatePdfTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: CreateSpreadsheetTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: CreateDocumentTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: ReadDocumentTool;
     })[];
     /**
      * Called when extension is activated
@@ -87,6 +111,10 @@ export { ExecuteTool } from './tools/execute.js';
 export { FileReadTool } from './tools/fileRead.js';
 export { FileWriteTool } from './tools/fileWrite.js';
 export { ListDirectoryTool } from './tools/listDir.js';
+export { CreatePdfTool } from './tools/createPdf.js';
+export { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
+export { CreateDocumentTool } from './tools/createDocument.js';
+export { ReadDocumentTool } from './tools/readDocument.js';
 export * from './types.js';
 export default createExtensionPack;
 //# sourceMappingURL=index.d.ts.map

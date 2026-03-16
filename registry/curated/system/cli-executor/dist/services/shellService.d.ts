@@ -11,6 +11,16 @@ import type { ShellConfig, ExecutionResult, ScriptOptions, ScriptResult, FileRea
 export declare class ShellService {
     private config;
     constructor(config?: ShellConfig);
+    /**
+     * Dynamically grant read access to an additional root directory.
+     * Used by the runtime when folder access is approved at the guardrails layer.
+     */
+    addReadRoot(rootPath: string): void;
+    /**
+     * Dynamically grant write access to an additional root directory.
+     * Used by the runtime when folder access is approved at the guardrails layer.
+     */
+    addWriteRoot(rootPath: string): void;
     private resolveAbsolutePath;
     private isFilesystemPolicyEnabled;
     private isWithinRoot;
@@ -40,6 +50,15 @@ export declare class ShellService {
      * Read a file
      */
     readFile(filePath: string, options?: FileReadOptions): Promise<FileReadResult>;
+    /**
+     * Read a file as a raw Buffer (for binary document formats).
+     * Enforces the same filesystem security policy as readFile.
+     */
+    readFileBuffer(filePath: string): Promise<{
+        buffer: Buffer;
+        path: string;
+        size: number;
+    }>;
     /**
      * Write to a file
      */

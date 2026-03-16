@@ -41,6 +41,38 @@ export class ShellService {
             ...config,
         };
     }
+    /**
+     * Dynamically grant read access to an additional root directory.
+     * Used by the runtime when folder access is approved at the guardrails layer.
+     */
+    addReadRoot(rootPath) {
+        if (!this.config.filesystem) {
+            this.config.filesystem = { allowRead: true, readRoots: [] };
+        }
+        if (!this.config.filesystem.readRoots) {
+            this.config.filesystem.readRoots = [];
+        }
+        const resolved = path.resolve(rootPath);
+        if (!this.config.filesystem.readRoots.includes(resolved)) {
+            this.config.filesystem.readRoots.push(resolved);
+        }
+    }
+    /**
+     * Dynamically grant write access to an additional root directory.
+     * Used by the runtime when folder access is approved at the guardrails layer.
+     */
+    addWriteRoot(rootPath) {
+        if (!this.config.filesystem) {
+            this.config.filesystem = { allowWrite: true, writeRoots: [] };
+        }
+        if (!this.config.filesystem.writeRoots) {
+            this.config.filesystem.writeRoots = [];
+        }
+        const resolved = path.resolve(rootPath);
+        if (!this.config.filesystem.writeRoots.includes(resolved)) {
+            this.config.filesystem.writeRoots.push(resolved);
+        }
+    }
     resolveAbsolutePath(filePath) {
         const baseDir = this.config.workingDirectory || process.cwd();
         const abs = path.isAbsolute(filePath) ? filePath : path.resolve(baseDir, filePath);
@@ -331,6 +363,20 @@ export class ShellService {
             truncated,
             encoding,
         };
+    }
+    /**
+     * Read a file as a raw Buffer (for binary document formats).
+     * Enforces the same filesystem security policy as readFile.
+     */
+    async readFileBuffer(filePath) {
+        const absolutePath = this.resolveAbsolutePath(filePath);
+        await this.assertFilesystemAllowed('read', absolutePath);
+        const stats = await fs.stat(absolutePath);
+        if (stats.isDirectory()) {
+            throw new Error(`"${filePath}" is a directory, not a file`);
+        }
+        const buffer = await fs.readFile(absolutePath);
+        return { buffer, path: absolutePath, size: stats.size };
     }
     /**
      * Write to a file

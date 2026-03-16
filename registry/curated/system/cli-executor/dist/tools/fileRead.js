@@ -4,6 +4,8 @@
  *
  * @module @framers/agentos-ext-cli-executor
  */
+import { stat } from 'node:fs/promises';
+import { resolve } from 'node:path';
 /**
  * Tool for reading files
  */
@@ -53,6 +55,28 @@ export class FileReadTool {
      */
     async execute(input, _context) {
         try {
+            // Redirect binary document formats to read_document tool
+            if (input.path && /\.(xlsx?|docx|pdf)$/i.test(input.path)) {
+                const ext = input.path.match(/\.[^.]+$/)?.[0] || '';
+                return {
+                    success: false,
+                    error: `Cannot read binary document "${input.path}" with file_read — this will return garbled content. Use the read_document tool instead to parse ${ext} files and extract their text content.`,
+                };
+            }
+            // Fail-fast: detect directories before requesting any permissions or doing I/O
+            try {
+                const resolved = resolve(input.path);
+                const stats = await stat(resolved);
+                if (stats.isDirectory()) {
+                    return {
+                        success: false,
+                        error: `"${input.path}" is a directory, not a file. Use list_directory to view directory contents.`,
+                    };
+                }
+            }
+            catch {
+                // Path doesn't exist or can't be stat'd — let readFile handle it
+            }
             const result = await this.shellService.readFile(input.path, {
                 encoding: input.encoding,
                 maxBytes: input.maxBytes,
