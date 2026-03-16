@@ -1,13 +1,49 @@
 {
   "name": "@framers/agentos-ext-image-generation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Image generation extension for AgentOS — DALL-E 3 and Stability AI",
-  "type": "module",
-  "main": "src/index.ts",
-  "exports": {
-    ".": "./src/index.ts"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "clean": "rm -rf dist"
+  },
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
+  "keywords": [
+    "agentos",
+    "extension",
+    "image-generation",
+    "openai",
+    "stability"
+  ],
+  "author": {
+    "name": "Framers AI",
+    "url": "https://frame.dev"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
   },
   "dependencies": {
     "@framers/agentos": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions",
+    "directory": "registry/curated/tools/image-generation"
   }
 }
