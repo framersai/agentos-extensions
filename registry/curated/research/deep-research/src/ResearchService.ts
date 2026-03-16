@@ -452,6 +452,30 @@ export class ResearchService {
     'remote': ['remotework', 'digitalnomad', 'WorkOnline'],
   };
 
+  /**
+   * Fetch raw JSON from any Reddit URL by appending .json.
+   * Works for subreddits, posts, user profiles, search results, etc.
+   * Example: reddit.com/r/programming → reddit.com/r/programming.json
+   */
+  async fetchRedditJson(redditUrl: string): Promise<any> {
+    // Normalize: strip trailing slash, ensure .json suffix
+    let url = redditUrl.replace(/\/+$/, '');
+    if (!url.endsWith('.json')) {
+      // Strip query params, add .json, re-add query params
+      const [base, query] = url.split('?');
+      url = `${base}.json${query ? `?${query}` : ''}`;
+    }
+    // Ensure https://www.reddit.com prefix
+    if (!url.startsWith('http')) {
+      url = `https://www.reddit.com${url.startsWith('/') ? '' : '/'}${url}`;
+    }
+
+    const response = await this.httpClient.get(url, {
+      headers: { 'User-Agent': 'AgentOS-DeepResearch/0.1.0' },
+    });
+    return response.data ?? response;
+  }
+
   private async getRedditTrends(category?: string): Promise<TrendingResult> {
     // Resolve category to real subreddit(s)
     const key = (category ?? '').toLowerCase().replace(/[^a-z]/g, '');
