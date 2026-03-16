@@ -76,12 +76,27 @@ function truncate(text: string, maxChars: number): string {
 
 export class DeepResearchEngine {
   private readonly config: DeepResearchEngineConfig;
+  /** Per-call progress override set by {@link research}. */
+  private activeProgressOverride: ((event: ResearchProgressEvent) => void) | null = null;
 
   constructor(config: DeepResearchEngineConfig) {
     this.config = config;
   }
 
-  async research(input: DeepResearchInput): Promise<DeepResearchOutput> {
+  /**
+   * Run the research pipeline.
+   * @param input Research query and options.
+   * @param onProgressOverride Optional per-call progress callback that takes
+   *   priority over the one provided at construction time. This allows callers
+   *   (like DeepResearchTool) to forward runtime progress to the tool-calling
+   *   layer without rebuilding the engine.
+   */
+  async research(
+    input: DeepResearchInput,
+    onProgressOverride?: (event: ResearchProgressEvent) => void,
+  ): Promise<DeepResearchOutput> {
+    this.activeProgressOverride = onProgressOverride ?? null;
+    try {
     const depth: ResearchDepth = input.depth ?? 'moderate';
     const maxIterations = input.maxIterations ?? ITERATION_DEFAULTS[depth];
     const budgetConfig: ResearchBudget = { ...BUDGET_DEFAULTS[depth], ...input.budget };
@@ -293,6 +308,9 @@ export class DeepResearchEngine {
         iterations: tree.iterations,
       },
     };
+    } finally {
+      this.activeProgressOverride = null;
+    }
   }
 
   // ── Private: Node helpers ──
@@ -521,7 +539,8 @@ export class DeepResearchEngine {
     tree: ResearchTree,
     currentQuery?: string,
   ): void {
-    if (!this.config.onProgress) return;
+    const cb = this.activeProgressOverride ?? this.config.onProgress;
+    if (!cb) return;
 
     const findings = this.collectAllFindings(tree);
     const sources = new Set<string>();
@@ -540,6 +559,6 @@ export class DeepResearchEngine {
       budget: budget.getUsed(),
     };
 
-    this.config.onProgress(event);
+    cb(event);
   }
 }

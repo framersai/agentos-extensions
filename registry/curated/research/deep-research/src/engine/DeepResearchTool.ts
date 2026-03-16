@@ -6,8 +6,18 @@
  */
 
 import type { ITool, JSONSchemaObject, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
-import type { DeepResearchInput, DeepResearchOutput } from './types.js';
+import type { DeepResearchInput, DeepResearchOutput, ResearchProgressEvent, ResearchPhase } from './types.js';
 import { DeepResearchEngine } from './DeepResearchEngine.js';
+
+/** Human-readable labels for each research phase. */
+const PHASE_LABELS: Record<ResearchPhase, string> = {
+  decomposing: 'Decomposing query into sub-questions',
+  searching: 'Searching sources',
+  extracting: 'Extracting content from sources',
+  analyzing_gaps: 'Analyzing knowledge gaps',
+  synthesizing: 'Synthesizing report',
+  complete: 'Research complete',
+};
 
 export class DeepResearchTool implements ITool<DeepResearchInput, DeepResearchOutput> {
   public readonly id = 'deep-research-v1';
@@ -60,10 +70,30 @@ export class DeepResearchTool implements ITool<DeepResearchInput, DeepResearchOu
 
   async execute(
     input: DeepResearchInput,
-    _context: ToolExecutionContext,
+    context: ToolExecutionContext,
   ): Promise<ToolExecutionResult<DeepResearchOutput>> {
+    // Build a per-call progress bridge: translate ResearchProgressEvent into
+    // the generic onToolProgress shape expected by the wunderland runtime.
+    const ctxAny = context as unknown as Record<string, unknown>;
+    const runtimeProgressCb = typeof ctxAny['onToolProgress'] === 'function'
+      ? ctxAny['onToolProgress'] as (info: { phase: string; message: string; progress?: number }) => void
+      : null;
+
+    const onProgress = runtimeProgressCb
+      ? (event: ResearchProgressEvent) => {
+          const label = PHASE_LABELS[event.phase] ?? event.phase;
+          const detail = event.currentQuery ? ` "${event.currentQuery}"` : '';
+          const sources = event.sourcesCount > 0 ? `, ${event.sourcesCount} sources` : '';
+          const message = `${label}${detail} (iter ${event.iteration}/${event.totalIterations}, ${event.findingsCount} findings${sources})`;
+          const progress = event.totalIterations > 0
+            ? Math.min(event.iteration / event.totalIterations, 1)
+            : undefined;
+          runtimeProgressCb({ phase: event.phase, message, progress });
+        }
+      : undefined;
+
     try {
-      const result = await this.engine.research(input);
+      const result = await this.engine.research(input, onProgress);
       return { success: true, output: result };
     } catch (error: any) {
       return { success: false, error: error?.message || String(error) };
