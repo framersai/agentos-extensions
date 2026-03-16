@@ -666,14 +666,40 @@ export class DiscordService {
     try {
       if (guildId) {
         const guild = await this.client.guilds.fetch(guildId);
-        await guild.commands.set(allCommands);
+        const existing = await guild.commands.fetch();
+        const existingByKey = new Map(
+          existing.map((command) => [`${command.type}:${command.name}`, command]),
+        );
+
+        for (const command of allCommands) {
+          const key = `${command.type ?? 1}:${command.name}`;
+          const match = existingByKey.get(key);
+          if (match) {
+            await match.edit(command);
+          } else {
+            await guild.commands.create(command);
+          }
+        }
         return;
       }
     } catch {
       // Fall back to global registration if guild fetch/registration fails.
     }
 
-    await this.client.application.commands.set(allCommands);
+    const existing = await this.client.application.commands.fetch();
+    const existingByKey = new Map(
+      existing.map((command) => [`${command.type}:${command.name}`, command]),
+    );
+
+    for (const command of allCommands) {
+      const key = `${command.type ?? 1}:${command.name}`;
+      const match = existingByKey.get(key);
+      if (match) {
+        await match.edit(command);
+      } else {
+        await this.client.application.commands.create(command);
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------

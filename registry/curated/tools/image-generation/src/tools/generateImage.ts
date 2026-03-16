@@ -14,7 +14,16 @@ export interface GenerateImageInput {
   provider?: 'openai' | 'stability';
 }
 
-export class GenerateImageTool implements ITool<GenerateImageInput> {
+export interface GenerateImageOutput {
+  url: string;
+  revisedPrompt?: string;
+  provider: string;
+  model: string;
+  size: string;
+}
+
+export class GenerateImageTool implements ITool<GenerateImageInput, GenerateImageOutput> {
+  readonly id = 'tool.generate_image';
   readonly name = 'generate_image';
   readonly displayName = 'Generate Image';
   readonly description = 'Generate an image from a text prompt using DALL-E 3 or Stability AI. Returns a URL to the generated image.';
@@ -61,30 +70,32 @@ export class GenerateImageTool implements ITool<GenerateImageInput> {
   async execute(
     args: GenerateImageInput,
     _context?: ToolExecutionContext,
-  ): Promise<ToolExecutionResult> {
+  ): Promise<ToolExecutionResult<GenerateImageOutput>> {
     try {
       const result = await this.service.generateImage(args as GenerateImageOptions);
 
       return {
         success: true,
-        data: {
+        output: {
           url: result.url,
           revisedPrompt: result.revisedPrompt,
           provider: result.provider,
           model: result.model,
           size: result.size,
         },
-        displayText: result.revisedPrompt
-          ? `Image generated (${result.model}): ${result.url}\nRevised prompt: ${result.revisedPrompt}`
-          : `Image generated (${result.model}): ${result.url}`,
+        details: {
+          displayText: result.revisedPrompt
+            ? `Image generated (${result.model}): ${result.url}\nRevised prompt: ${result.revisedPrompt}`
+            : `Image generated (${result.model}): ${result.url}`,
+        },
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       return {
         success: false,
         error: message,
-        apiKeyGuidance: message.includes('API_KEY')
-          ? message
+        details: message.includes('API_KEY')
+          ? { apiKeyGuidance: message }
           : undefined,
       };
     }
