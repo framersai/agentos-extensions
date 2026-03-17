@@ -517,8 +517,8 @@ describe('createExtensionPack', () => {
     logger: { info: () => undefined },
   });
 
-  it('includes all 8 tool descriptors', () => {
-    expect(pack.descriptors).toHaveLength(8);
+  it('includes all 6 tool descriptors', () => {
+    expect(pack.descriptors).toHaveLength(6);
     expect(pack.descriptors.every((d: any) => d.kind === 'tool')).toBe(true);
   });
 
@@ -526,12 +526,10 @@ describe('createExtensionPack', () => {
     const names = pack.descriptors.map((d: any) => d.id).sort();
     expect(names).toEqual([
       'create_document',
-      'create_pdf',
       'create_spreadsheet',
       'file_read',
       'file_write',
       'list_directory',
-      'read_document',
       'shell_execute',
     ]);
   });
