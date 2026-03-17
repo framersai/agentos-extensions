@@ -8,14 +8,6 @@
  * @version 1.1.0
  * @license MIT
  */
-import { ExecuteTool } from './tools/execute.js';
-import { FileReadTool } from './tools/fileRead.js';
-import { FileWriteTool } from './tools/fileWrite.js';
-import { ListDirectoryTool } from './tools/listDir.js';
-import { CreatePdfTool } from './tools/createPdf.js';
-import { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
-import { CreateDocumentTool } from './tools/createDocument.js';
-import { ReadDocumentTool } from './tools/readDocument.js';
 import type { ShellConfig } from './types.js';
 /**
  * Extension configuration options
@@ -56,47 +48,12 @@ export declare function createExtensionPack(context: {
 }): {
     name: string;
     version: string;
-    descriptors: ({
-        id: string;
+    descriptors: {
+        id: any;
         kind: string;
         priority: number;
-        payload: ExecuteTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: FileReadTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: FileWriteTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: ListDirectoryTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: CreatePdfTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: CreateSpreadsheetTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: CreateDocumentTool;
-    } | {
-        id: string;
-        kind: string;
-        priority: number;
-        payload: ReadDocumentTool;
-    })[];
+        payload: any;
+    }[];
     /**
      * Called when extension is activated
      */
