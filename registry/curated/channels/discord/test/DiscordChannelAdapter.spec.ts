@@ -47,10 +47,31 @@ function createMockService() {
       tag: 'Bot#0001',
     }),
     getClient: vi.fn().mockReturnValue({
+      user: { id: 'bot-1' },
       channels: { fetch: vi.fn().mockResolvedValue(mockChannel) },
     }),
     _mockChannel: mockChannel,
     _mockMsg: mockMsg,
+  } as any;
+}
+
+function createInboundMessage(overrides: any = {}) {
+  return {
+    id: 'msg-1',
+    channelId: 'ch-1',
+    createdAt: new Date('2026-03-16T12:00:00Z'),
+    content: 'this sounds genuinely interesting and worth discussing',
+    author: { id: 'user-1', username: 'alice', bot: false },
+    member: { displayName: 'Alice' },
+    mentions: { users: { has: vi.fn().mockReturnValue(false) } },
+    reference: undefined,
+    channel: {
+      isDMBased: () => false,
+      name: 'general',
+      parent: null,
+      messages: { cache: { get: vi.fn().mockReturnValue(undefined) } },
+    },
+    ...overrides,
   } as any;
 }
 
@@ -59,6 +80,7 @@ describe('DiscordChannelAdapter', () => {
   let mockService: ReturnType<typeof createMockService>;
 
   beforeEach(() => {
+    vi.useRealTimers();
     mockService = createMockService();
     adapter = new DiscordChannelAdapter(mockService);
   });
@@ -172,6 +194,60 @@ describe('DiscordChannelAdapter', () => {
       mockService.isRunning = false;
       const info = adapter.getConnectionInfo();
       expect(info.status).toBe('disconnected');
+    });
+  });
+
+  describe('inbound proactive reply guardrails', () => {
+    it('does not queue proactive replies in feed channels', () => {
+      vi.useFakeTimers();
+      const handler = vi.fn();
+      adapter.on(handler);
+
+      const message = createInboundMessage({
+        channel: {
+          isDMBased: () => false,
+          name: 'tech-news',
+          parent: null,
+          messages: { cache: { get: vi.fn().mockReturnValue(undefined) } },
+        },
+      });
+
+      (adapter as any).handleInboundMessage(message);
+      vi.advanceTimersByTime(2 * 60 * 1000 + 1);
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('still emits direct mentions in feed channels immediately', () => {
+      const handler = vi.fn();
+      adapter.on(handler);
+
+      const message = createInboundMessage({
+        channel: {
+          isDMBased: () => false,
+          name: 'tech-news',
+          parent: null,
+          messages: { cache: { get: vi.fn().mockReturnValue(undefined) } },
+        },
+        mentions: { users: { has: vi.fn().mockReturnValue(true) } },
+      });
+
+      (adapter as any).handleInboundMessage(message);
+
+      expect(handler).toHaveBeenCalledTimes(1);
+    });
+
+    it('still queues proactive candidates in regular channels', () => {
+      vi.useFakeTimers();
+      const handler = vi.fn();
+      adapter.on(handler);
+
+      const message = createInboundMessage();
+      (adapter as any).handleInboundMessage(message);
+
+      expect(handler).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(2 * 60 * 1000 + 1);
+      expect(handler).toHaveBeenCalledTimes(1);
     });
   });
 

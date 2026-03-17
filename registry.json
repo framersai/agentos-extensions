@@ -2290,19 +2290,26 @@
         "version": "2.0.0",
         "category": "media",
         "path": "registry/curated/media/voice-synthesis",
-        "description": "Text-to-speech synthesis via ElevenLabs for generating agent voice audio",
+        "description": "Voice synthesis and transcription tools via OpenAI, ElevenLabs, Deepgram, and local Ollama/Whisper-compatible runtimes",
         "author": {
           "name": "Frame.dev"
         },
         "features": [],
         "tools": [
-          "text_to_speech"
+          "text_to_speech",
+          "speech_to_text"
         ],
         "keywords": [
           "tts",
+          "stt",
           "voice",
           "speech",
+          "transcription",
+          "openai",
           "elevenlabs",
+          "deepgram",
+          "ollama",
+          "whisper",
           "audio"
         ],
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",

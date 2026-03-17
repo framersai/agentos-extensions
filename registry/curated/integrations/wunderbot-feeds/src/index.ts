@@ -16,6 +16,10 @@ import type {
   JSONSchemaObject,
 } from '@framers/agentos';
 
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { dirname, join } from 'node:path';
+
 import { Client, GatewayIntentBits, ActivityType } from 'discord.js';
 
 import type { FeedsConfig, SniperEvent } from './types.js';
@@ -61,13 +65,74 @@ const MAX_POST_HISTORY = 50;
 const CATEGORY_DAILY_POST_LIMIT = 2;
 const MAX_APPROVED_ARTICLES_PER_CYCLE = 2;
 const CATEGORY_DAILY_WINDOW_MS = 24 * 3600_000;
+const POST_HISTORY_MAX_AGE_MS = 7 * 24 * 3600_000;
+let recentPostsHydrated = false;
 
-function addPostRecord(title: string, category: string): void {
-  recentPosts.push({ title, category, postedAt: Date.now() });
-  if (recentPosts.length > MAX_POST_HISTORY) recentPosts.shift();
+function resolvePostHistoryFile(): string {
+  return process.env.WUNDERBOT_FEEDS_STATE_FILE || join(homedir(), '.wunderland', 'wunderbot-feeds-post-history.json');
+}
+
+function pruneRecentPosts(now = Date.now()): void {
+  for (let i = recentPosts.length - 1; i >= 0; i--) {
+    const post = recentPosts[i];
+    if (!post || !Number.isFinite(post.postedAt) || now - post.postedAt > POST_HISTORY_MAX_AGE_MS) {
+      recentPosts.splice(i, 1);
+    }
+  }
+
+  if (recentPosts.length > MAX_POST_HISTORY) {
+    recentPosts.splice(0, recentPosts.length - MAX_POST_HISTORY);
+  }
+}
+
+function hydrateRecentPosts(): void {
+  if (recentPostsHydrated) return;
+  recentPostsHydrated = true;
+
+  try {
+    const file = resolvePostHistoryFile();
+    if (!existsSync(file)) return;
+
+    const parsed = JSON.parse(readFileSync(file, 'utf8')) as unknown;
+    if (!Array.isArray(parsed)) return;
+
+    recentPosts.length = 0;
+    for (const entry of parsed) {
+      if (!entry || typeof entry !== 'object') continue;
+      const title = String((entry as any).title ?? '').trim();
+      const category = String((entry as any).category ?? '').trim();
+      const postedAt = Number((entry as any).postedAt);
+      if (!title || !category || !Number.isFinite(postedAt)) continue;
+      recentPosts.push({ title, category, postedAt });
+    }
+    pruneRecentPosts();
+  } catch (error: any) {
+    console.warn(`[wunderbot-feeds] Failed to load post history: ${error?.message ?? error}`);
+  }
+}
+
+function persistRecentPosts(): void {
+  hydrateRecentPosts();
+  pruneRecentPosts();
+
+  try {
+    const file = resolvePostHistoryFile();
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, JSON.stringify(recentPosts, null, 2));
+  } catch (error: any) {
+    console.warn(`[wunderbot-feeds] Failed to persist post history: ${error?.message ?? error}`);
+  }
+}
+
+function addPostRecord(title: string, category: string, postedAt = Date.now()): void {
+  hydrateRecentPosts();
+  recentPosts.push({ title, category, postedAt });
+  pruneRecentPosts(postedAt);
+  persistRecentPosts();
 }
 
 function getRecentPostsSummary(): string {
+  hydrateRecentPosts();
   const now = Date.now();
   const last48h = recentPosts.filter(p => now - p.postedAt < 48 * 3600_000);
   if (last48h.length === 0) return 'No posts in the last 48 hours.';
@@ -80,6 +145,7 @@ function getRecentPostsSummary(): string {
 }
 
 function getRecentCategoryPostCount(category: string, windowMs = CATEGORY_DAILY_WINDOW_MS): number {
+  hydrateRecentPosts();
   const now = Date.now();
   return recentPosts.filter((post) => post.category === category && now - post.postedAt < windowMs).length;
 }
@@ -700,6 +766,7 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
       const poster = new DiscordPoster(botToken);
 
       log(logger, `Activating feeds → ${scraperApiUrl}`);
+      hydrateRecentPosts();
 
       // Register cron jobs
       intervalTimers = registerFeedJobs(client, poster, feedsConfig, logger);
@@ -772,8 +839,12 @@ export const __testing = {
   getRecentCategoryPostCount,
   getRemainingDailySlots,
   judgeArticles,
+  hydrateRecentPosts,
+  persistRecentPosts,
+  resolvePostHistoryFile,
   resetRecentPosts(): void {
     recentPosts.length = 0;
+    recentPostsHydrated = false;
   },
 };
 

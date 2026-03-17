@@ -2,19 +2,34 @@
   "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
   "id": "com.framers.media.voice-synthesis",
   "name": "Voice Synthesis Extension",
-  "version": "1.0.0",
-  "description": "Text-to-speech synthesis via ElevenLabs for generating agent voice audio",
+  "version": "2.0.0",
+  "description": "Voice synthesis and transcription tools via OpenAI, ElevenLabs, Deepgram, and local Ollama/Whisper-compatible runtimes",
   "author": { "name": "Frame.dev" },
   "license": "MIT",
-  "keywords": ["tts", "voice", "speech", "elevenlabs", "audio"],
+  "keywords": ["tts", "stt", "voice", "speech", "transcription", "openai", "elevenlabs", "deepgram", "ollama", "whisper", "audio"],
   "agentosVersion": "^2.0.0",
   "categories": ["media", "communication"],
   "extensions": [
-    { "kind": "tool", "id": "text_to_speech", "displayName": "Text to Speech", "entry": "./dist/tools/textToSpeech.js" }
+    { "kind": "tool", "id": "text_to_speech", "displayName": "Text to Speech", "entry": "./dist/tools/textToSpeech.js" },
+    { "kind": "tool", "id": "speech_to_text", "displayName": "Speech to Text", "entry": "./dist/tools/speechToText.js" }
   ],
   "configuration": {
     "properties": {
-      "elevenlabs.apiKey": { "type": "string", "secret": true }
+      "openai.apiKey": { "type": "string", "secret": true },
+      "openai.baseUrl": { "type": "string" },
+      "deepgram.apiKey": { "type": "string", "secret": true },
+      "deepgram.baseUrl": { "type": "string" },
+      "elevenlabs.apiKey": { "type": "string", "secret": true },
+      "ollama.baseUrl": { "type": "string" },
+      "whisperLocal.baseUrl": { "type": "string" },
+      "tts.defaultProvider": {
+        "type": "string",
+        "enum": ["auto", "openai", "elevenlabs", "ollama"]
+      },
+      "stt.defaultProvider": {
+        "type": "string",
+        "enum": ["auto", "openai", "deepgram", "whisper-local"]
+      }
     }
   }
 }
