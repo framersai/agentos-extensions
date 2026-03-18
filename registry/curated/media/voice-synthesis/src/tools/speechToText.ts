@@ -552,7 +552,7 @@ export class SpeechToTextTool implements ITool<STTInput, STTOutput> {
         additionalProperties: true,
       },
     },
-    anyOf: [{ required: ['audioBase64'] }, { required: ['audioUrl'] }],
+    required: [],
   };
 
   private readonly config: ResolvedSttConfig;
