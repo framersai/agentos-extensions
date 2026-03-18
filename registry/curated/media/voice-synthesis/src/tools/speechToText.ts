@@ -552,7 +552,6 @@ export class SpeechToTextTool implements ITool<STTInput, STTOutput> {
         additionalProperties: true,
       },
     },
-    required: [],
   };
 
   private readonly config: ResolvedSttConfig;
