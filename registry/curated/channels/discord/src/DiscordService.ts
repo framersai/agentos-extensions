@@ -580,6 +580,12 @@ export class DiscordService {
             type: ApplicationCommandOptionType.Boolean,
             required: false,
           },
+          {
+            name: 'session',
+            description: 'Start a 10-question session in a thread',
+            type: ApplicationCommandOptionType.Boolean,
+            required: false,
+          },
         ],
       },
       {

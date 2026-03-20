@@ -145,7 +145,7 @@ interface OpenTDBResult {
 }
 
 /** Fetch a batch of questions from Open Trivia DB. */
-async function fetchOpenTDB(
+export async function fetchOpenTDB(
   amount: number,
   category?: number,
   difficulty?: Difficulty,

@@ -29,11 +29,13 @@ import {
   type Interaction,
   type Message,
 } from 'discord.js';
-import { randomTriviaQuestion } from './TriviaBank';
 import { FAQMatcher } from './faq-matcher';
 import {
   getQuestion,
   getDailyQuestion,
+  fetchOpenTDB,
+  categoryByName,
+  randomTriviaQuestion,
   TRIVIA_CATEGORIES,
   DIFFICULTY_POINTS,
   triviaLevelForPoints,
@@ -74,6 +76,31 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       isDaily: boolean;
     }
   >();
+
+  private triviaSessionFlows = new Map<
+    string,
+    {
+      threadId: string;
+      userId: string;
+      questions: TriviaQ[];
+      currentIndex: number;
+      results: Array<{
+        correct: boolean;
+        skipped: boolean;
+        timeMs: number;
+        pointsEarned: number;
+      }>;
+      startedAtMs: number;
+      questionPostedAtMs: number;
+      currentMessageId: string;
+      timeoutTimer: ReturnType<typeof setTimeout> | null;
+      category: string;
+      difficulty: Difficulty;
+      _sessionCleanup?: ReturnType<typeof setTimeout>;
+    }
+  >();
+
+  private activeSessionUsers = new Set<string>();
 
   /** Optional external interaction handlers (e.g., Founders extension). */
   private externalInteractionHandlers: Array<(interaction: Interaction) => Promise<boolean>> = [];
@@ -196,6 +223,12 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       }
     }
     this.triviaSessions.clear();
+    for (const s of this.triviaSessionFlows.values()) {
+      if (s.timeoutTimer) clearTimeout(s.timeoutTimer);
+      if (s._sessionCleanup) clearTimeout(s._sessionCleanup);
+    }
+    this.triviaSessionFlows.clear();
+    this.activeSessionUsers.clear();
     for (const p of this.pendingResponses.values()) {
       clearTimeout(p.timer);
     }
@@ -1193,6 +1226,71 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         }
       }
 
+      const isSession = interaction.options.getBoolean('session') ?? false;
+
+      if (isSession) {
+        if (this.activeSessionUsers.has(interaction.user.id)) {
+          await this.safeEphemeralReply(interaction, 'You already have an active trivia session. Finish it first!');
+          return;
+        }
+
+        const cat = categoryInput ? categoryByName(categoryInput) : undefined;
+        const catName = cat?.name ?? 'Mixed';
+        const diff = difficultyInput ?? 'medium';
+        const diffLabel = diff.charAt(0).toUpperCase() + diff.slice(1);
+
+        const questions = await fetchOpenTDB(10, cat?.id, diff);
+        if (questions.length < 5) {
+          await this.safeEphemeralReply(interaction, 'Could not fetch enough questions. Try again in a moment.');
+          return;
+        }
+
+        await interaction.deferReply();
+        const channel = interaction.channel;
+        if (!channel || !('threads' in channel)) {
+          await interaction.editReply('Cannot create threads in this channel.');
+          return;
+        }
+
+        const threadName = `🧠 Trivia: ${catName} (${diffLabel}) — ${interaction.user.displayName}`;
+        const thread = await (channel as any).threads.create({
+          name: threadName.slice(0, 100),
+          autoArchiveDuration: 60,
+          type: ChannelType.PublicThread,
+        });
+
+        await interaction.editReply(`Session started! Head to ${thread}`);
+
+        this.activeSessionUsers.add(interaction.user.id);
+        const session = {
+          threadId: thread.id,
+          userId: interaction.user.id,
+          questions,
+          currentIndex: 0,
+          results: [] as Array<{ correct: boolean; skipped: boolean; timeMs: number; pointsEarned: number }>,
+          startedAtMs: Date.now(),
+          questionPostedAtMs: Date.now(),
+          currentMessageId: '',
+          timeoutTimer: null as ReturnType<typeof setTimeout> | null,
+          category: cat?.name ?? '',
+          difficulty: diff,
+        };
+        this.triviaSessionFlows.set(thread.id, session);
+
+        // 10-minute overall session inactivity timeout
+        (session as any)._sessionCleanup = setTimeout(() => {
+          if (this.triviaSessionFlows.has(thread.id)) {
+            this.triviaSessionFlows.delete(thread.id);
+            this.activeSessionUsers.delete(interaction.user.id);
+            thread.send({ content: '⏰ Session expired due to inactivity.' }).catch(() => {});
+            thread.setArchived(true).catch(() => {});
+          }
+        }, 10 * 60_000);
+
+        await this.postSessionQuestion(thread, session);
+        return;
+      }
+
       let q: TriviaQ;
       try {
         q = isDaily
@@ -1394,6 +1492,51 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     const messageId = interaction.message?.id;
     if (!messageId) return;
 
+    if (interaction.customId.startsWith('rh_session:')) {
+      const parts = interaction.customId.split(':');
+      const sessionThreadId = parts[1] ?? '';
+      const choiceIdx = parseInt(parts[2] ?? '', 10);
+      const sessionFlow = this.triviaSessionFlows.get(sessionThreadId);
+
+      if (!sessionFlow) {
+        try { await interaction.reply({ content: 'This session has expired.', ephemeral: true }); } catch {}
+        return;
+      }
+
+      if (interaction.user.id !== sessionFlow.userId) {
+        try { await interaction.reply({ content: 'Only the session starter can answer.', ephemeral: true }); } catch {}
+        return;
+      }
+
+      if (sessionFlow.timeoutTimer) clearTimeout(sessionFlow.timeoutTimer);
+
+      const q = sessionFlow.questions[sessionFlow.currentIndex]!;
+      const correct = choiceIdx === q.answerIndex;
+      const elapsed = Date.now() - sessionFlow.questionPostedAtMs;
+
+      let pts = 0;
+      if (correct) {
+        pts = DIFFICULTY_POINTS[q.difficulty];
+        if (elapsed < 5000) pts += 10;
+        else if (elapsed < 10000) pts += 5;
+      }
+
+      sessionFlow.results.push({ correct, skipped: false, timeMs: elapsed, pointsEarned: pts });
+
+      const correctLetter = ['A', 'B', 'C', 'D'][q.answerIndex] || 'A';
+      const feedback = correct
+        ? `✅ Correct! +${pts} pts`
+        : `❌ Wrong. Answer: **${correctLetter}**`;
+
+      try { await interaction.reply({ content: `${feedback}\n${q.explanation}`, ephemeral: true }); } catch {}
+
+      try {
+        const thread = await interaction.client.channels.fetch(sessionThreadId);
+        await this.advanceSession(thread, sessionFlow);
+      } catch {}
+      return;
+    }
+
     const session = this.triviaSessions.get(messageId);
     if (!session) return;
 
@@ -1514,6 +1657,123 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     } catch {
       // ignore
     }
+  }
+
+  private async postSessionQuestion(thread: any, session: any): Promise<void> {
+    const q = session.questions[session.currentIndex]!;
+    const num = session.currentIndex + 1;
+    const total = session.questions.length;
+    const pts = DIFFICULTY_POINTS[q.difficulty as Difficulty];
+
+    const catEmoji = TRIVIA_CATEGORIES.find(
+      (c) => q.category.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]!),
+    )?.emoji ?? '🧠';
+
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:0`).setLabel('A').setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:1`).setLabel('B').setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:2`).setLabel('C').setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:3`).setLabel('D').setStyle(ButtonStyle.Secondary),
+    );
+
+    const embed: APIEmbed = {
+      title: `Question ${num}/${total}`,
+      description: [
+        `**${q.question}**`,
+        '',
+        `**A.** ${q.choices[0]}`,
+        `**B.** ${q.choices[1]}`,
+        `**C.** ${q.choices[2]}`,
+        `**D.** ${q.choices[3]}`,
+        '',
+        `${catEmoji} ${q.category} · ${pts} pts · 30s`,
+      ].join('\n'),
+      color: this.brandColor(),
+    };
+
+    const msg = await thread.send({ embeds: [embed], components: [row] });
+    session.currentMessageId = msg.id;
+    session.questionPostedAtMs = Date.now();
+
+    if (session.timeoutTimer) clearTimeout(session.timeoutTimer);
+    session.timeoutTimer = setTimeout(() => {
+      session.results.push({ correct: false, skipped: true, timeMs: 30000, pointsEarned: 0 });
+      this.advanceSession(thread, session);
+    }, 30_000);
+  }
+
+  private async advanceSession(thread: any, session: any): Promise<void> {
+    session.currentIndex++;
+
+    try {
+      const prevMsg = await thread.messages.fetch(session.currentMessageId);
+      await prevMsg.edit({ components: [] });
+    } catch { /* ignore */ }
+
+    if (session.currentIndex >= session.questions.length) {
+      await this.endSession(thread, session);
+      return;
+    }
+
+    await this.postSessionQuestion(thread, session);
+  }
+
+  private async endSession(thread: any, session: any): Promise<void> {
+    if (session.timeoutTimer) clearTimeout(session.timeoutTimer);
+    if (session._sessionCleanup) clearTimeout(session._sessionCleanup);
+
+    const correct = session.results.filter((r: any) => r.correct).length;
+    const skipped = session.results.filter((r: any) => r.skipped).length;
+    const basePoints = session.results.reduce((sum: number, r: any) => sum + r.pointsEarned, 0);
+
+    const allAnswered = skipped === 0 && session.results.length === session.questions.length;
+    const bonusMultiplier = allAnswered ? 1.5 : 1.0;
+    const totalPoints = Math.round(basePoints * bonusMultiplier);
+    const bonusPoints = totalPoints - basePoints;
+
+    // Record points — empty category string for mixed sessions intentionally
+    // skips category stat updates in LocalState.recordTriviaPlay
+    const answeredCount = session.results.filter((r: any) => !r.skipped).length;
+    const pointsPerAnswer = answeredCount > 0 ? totalPoints / answeredCount : 0;
+    let distributed = 0;
+    for (let i = 0; i < session.results.length; i++) {
+      const r = session.results[i]!;
+      if (!r.skipped) {
+        const isLast = distributed === answeredCount - 1;
+        const pts = isLast ? totalPoints - (distributed > 0 ? Math.round(pointsPerAnswer) * distributed : 0) : Math.round(pointsPerAnswer);
+        this.service.recordTriviaPlay(session.userId, r.correct, pts, session.category);
+        distributed++;
+      }
+    }
+
+    const stats = this.service.getTriviaStats(session.userId);
+    const lvl = stats ? triviaLevelForPoints(stats.points) : triviaLevelForPoints(0);
+
+    const lines = [
+      `**Session Complete!**`,
+      '',
+      `**Score:** ${correct}/${session.questions.length} correct`,
+      `**Points:** ${basePoints}${allAnswered ? ` + ${bonusPoints} completion bonus = **${totalPoints}**` : ` = **${totalPoints}**`}`,
+      skipped > 0 ? `**Skipped:** ${skipped} (no completion bonus)` : '**Bonus:** 1.5x completion bonus applied!',
+      '',
+      stats ? `${lvl.emoji} **${lvl.name}** · ${stats.points} pts total` : '',
+    ];
+
+    const embed: APIEmbed = {
+      title: '🏁 Session Results',
+      description: lines.filter(Boolean).join('\n'),
+      color: this.brandColor(),
+      footer: this.brandFooter() ? { text: this.brandFooter()! } : undefined,
+    };
+
+    await thread.send({ embeds: [embed] });
+
+    this.triviaSessionFlows.delete(session.threadId);
+    this.activeSessionUsers.delete(session.userId);
+
+    try {
+      await thread.setArchived(true);
+    } catch { /* ignore */ }
   }
 
   private quotaTzLabel(): string {
