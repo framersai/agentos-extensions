@@ -598,6 +598,12 @@ export class DiscordService {
               { name: 'All Time', value: 'all' },
             ],
           },
+          {
+            name: 'category',
+            description: 'Filter by category (Science, History, Film, etc.)',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+          },
         ],
       },
       {
@@ -882,6 +888,10 @@ export class DiscordService {
 
   getTriviaStats(userId: string) {
     return this.state.getTriviaStats(userId);
+  }
+
+  triviaCategoryLeaderboard(category: string, limit = 10) {
+    return this.state.triviaCategoryLeaderboard(category, limit);
   }
 }
 

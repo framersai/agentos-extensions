@@ -1267,6 +1267,39 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'trivia_leaderboard') {
+      const categoryInput = interaction.options.getString('category') ?? undefined;
+
+      if (categoryInput) {
+        const catEmoji = TRIVIA_CATEGORIES.find(
+          (c) => categoryInput.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]!),
+        )?.emoji ?? '📋';
+        const catName = TRIVIA_CATEGORIES.find(
+          (c) => categoryInput.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]!),
+        )?.name ?? categoryInput;
+
+        const catRows = this.service.triviaCategoryLeaderboard(catName, 10);
+        if (catRows.length === 0) {
+          await this.safeEphemeralReply(
+            interaction,
+            `No one has answered 5+ questions in **${catName}** yet. Be the first!`,
+          );
+          return;
+        }
+
+        const lines = [
+          `**${catEmoji} ${catName} — Trivia Leaderboard**`,
+          '',
+          ...catRows.map((r, idx) => {
+            const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `**${idx + 1}.**`;
+            return `${medal} <@${r.userId}> — ${r.wins}/${r.plays} (${r.winRate}%)`;
+          }),
+          '',
+          '_Minimum 5 questions to qualify._',
+        ];
+        await this.safeEphemeralReply(interaction, lines.join('\n'));
+        return;
+      }
+
       const periodInput = interaction.options.getString('period') ?? 'all';
       const period = periodInput === 'all' ? undefined : (periodInput as 'daily' | 'weekly' | 'monthly');
       const rows = this.service.triviaLeaderboard(10, period);

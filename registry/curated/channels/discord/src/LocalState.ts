@@ -332,6 +332,26 @@ export class LocalStateStore {
   getTriviaStats(userId: string): TriviaStats | null {
     return (this.state.trivia.statsByUser[userId] as TriviaStats) ?? null;
   }
+
+  triviaCategoryLeaderboard(
+    category: string,
+    limit = 10,
+  ): Array<{ userId: string; wins: number; plays: number; winRate: number }> {
+    const rows: Array<{ userId: string; wins: number; plays: number; winRate: number }> = [];
+    for (const [userId, stats] of Object.entries(this.state.trivia.statsByUser || {})) {
+      const s = stats as TriviaStats;
+      const catStats = s.categories?.[category];
+      if (!catStats || catStats.plays < 5) continue;
+      rows.push({
+        userId,
+        wins: catStats.wins,
+        plays: catStats.plays,
+        winRate: Math.round((catStats.wins / catStats.plays) * 100),
+      });
+    }
+    rows.sort((a, b) => b.winRate - a.winRate || b.wins - a.wins);
+    return rows.slice(0, Math.max(1, Math.min(25, limit)));
+  }
 }
 
 /** ISO 8601 week number. */
