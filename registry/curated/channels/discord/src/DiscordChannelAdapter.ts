@@ -1430,6 +1430,39 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       return;
     }
 
+    if (command === 'trivia_end') {
+      // Find this user's active session
+      let foundSession: any = null;
+      let foundThread: any = null;
+      for (const [threadId, session] of this.triviaSessionFlows.entries()) {
+        if (session.userId === interaction.user.id) {
+          foundSession = session;
+          try {
+            foundThread = await interaction.client.channels.fetch(threadId);
+          } catch { /* ignore */ }
+          break;
+        }
+      }
+
+      if (!foundSession) {
+        await this.safeEphemeralReply(interaction, 'You don\'t have an active trivia session.');
+        return;
+      }
+
+      await this.safeEphemeralReply(interaction, 'Ending your session...');
+
+      if (foundThread) {
+        await this.endSession(foundThread, foundSession);
+      } else {
+        // Thread gone, just cleanup
+        this.triviaSessionFlows.delete(foundSession.threadId);
+        this.activeSessionUsers.delete(foundSession.userId);
+        if (foundSession.timeoutTimer) clearTimeout(foundSession.timeoutTimer);
+        if (foundSession._sessionCleanup) clearTimeout(foundSession._sessionCleanup);
+      }
+      return;
+    }
+
     if (command === 'trivia_stats') {
       const stats = this.service.getTriviaStats(interaction.user.id);
       if (!stats || stats.plays === 0) {

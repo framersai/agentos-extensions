@@ -655,6 +655,10 @@ export class DiscordService {
         description: 'View your trivia stats, level, streaks, and category breakdown',
       },
       {
+        name: 'trivia_end',
+        description: 'End your current trivia session early (keeps points earned so far)',
+      },
+      {
         name: 'clear',
         description: 'Clear messages from this channel (Team only)',
         options: [
