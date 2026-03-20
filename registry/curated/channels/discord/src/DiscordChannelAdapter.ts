@@ -1525,6 +1525,35 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     const messageId = interaction.message?.id;
     if (!messageId) return;
 
+    // End Session button
+    if (interaction.customId.startsWith('rh_session_end:')) {
+      const sessionThreadId = interaction.customId.split(':')[1] ?? '';
+      const sessionFlow = this.triviaSessionFlows.get(sessionThreadId);
+
+      if (!sessionFlow) {
+        try { await interaction.reply({ content: 'No active session.', ephemeral: true }); } catch {}
+        return;
+      }
+
+      if (interaction.user.id !== sessionFlow.userId) {
+        try { await interaction.reply({ content: 'Only the session starter can end it.', ephemeral: true }); } catch {}
+        return;
+      }
+
+      try { await interaction.reply({ content: 'Ending session...', ephemeral: true }); } catch {}
+
+      try {
+        const thread = await interaction.client.channels.fetch(sessionThreadId);
+        await this.endSession(thread, sessionFlow);
+      } catch {
+        this.triviaSessionFlows.delete(sessionThreadId);
+        this.activeSessionUsers.delete(sessionFlow.userId);
+        if (sessionFlow.timeoutTimer) clearTimeout(sessionFlow.timeoutTimer);
+        if (sessionFlow._sessionCleanup) clearTimeout(sessionFlow._sessionCleanup);
+      }
+      return;
+    }
+
     if (interaction.customId.startsWith('rh_session:')) {
       const parts = interaction.customId.split(':');
       const sessionThreadId = parts[1] ?? '';
@@ -1702,11 +1731,14 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       (c) => q.category.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]!),
     )?.emoji ?? '🧠';
 
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    const answerRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:0`).setLabel('A').setStyle(ButtonStyle.Secondary),
       new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:1`).setLabel('B').setStyle(ButtonStyle.Secondary),
       new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:2`).setLabel('C').setStyle(ButtonStyle.Secondary),
       new ButtonBuilder().setCustomId(`rh_session:${session.threadId}:3`).setLabel('D').setStyle(ButtonStyle.Secondary),
+    );
+    const endRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder().setCustomId(`rh_session_end:${session.threadId}`).setLabel('End Session').setStyle(ButtonStyle.Danger).setEmoji('🛑'),
     );
 
     const embed: APIEmbed = {
@@ -1724,7 +1756,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       color: this.brandColor(),
     };
 
-    const msg = await thread.send({ embeds: [embed], components: [row] });
+    const msg = await thread.send({ embeds: [embed], components: [answerRow, endRow] });
     session.currentMessageId = msg.id;
     session.questionPostedAtMs = Date.now();
 
