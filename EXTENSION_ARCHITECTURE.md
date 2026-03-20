@@ -99,9 +99,50 @@ At runtime, secrets resolve from:
 
 For tooling and safety, prefer `requiredSecrets` + `ctx.getSecret()` over ad-hoc `process.env` lookups.
 
+## Shared Service Registry
+
+Heavy singletons — NER models, embedding indexes, database connection pools — should not be initialized once per tool or per descriptor. The `ISharedServiceRegistry` allows extensions to share these resources across descriptors within the same pack, and optionally across packs.
+
+### `context.services.getOrCreate()`
+
+The activation context exposes a `services` handle with a `getOrCreate` factory method:
+
+```ts
+async onActivate(ctx) {
+  // Loads the NER model once; subsequent calls return the cached instance.
+  const nerModel = await ctx.services.getOrCreate('ner-model', async () => {
+    const { NerModel } = await import('./NerModel.js');
+    return NerModel.load(); // ~110MB, lazy-loaded on first use
+  });
+
+  // Pass the shared instance to each tool descriptor
+  this.scanTool.setNerModel(nerModel);
+  this.redactTool.setNerModel(nerModel);
+}
+```
+
+### Key Behaviours
+
+| Behaviour | Detail |
+|-----------|--------|
+| **Singleton scope** | One instance per key per `ExtensionManager` lifetime |
+| **Lazy initialisation** | Factory only runs on first `getOrCreate` call for that key |
+| **Cross-pack sharing** | Keys are global to the runtime — coordinate with a namespaced key (e.g. `pii:ner-model`) |
+| **Lifecycle** | `ExtensionManager` calls `shutdown()` on registered services when the agent tears down |
+
+### When to Use
+
+- ML models with significant load time or memory footprint (NER, embeddings)
+- Database or HTTP connection pools shared across multiple tools
+- Caches (LRU, TTL) that should survive individual tool calls
+- OAuth token stores refreshed by a background timer
+
+Avoid using shared services for stateful, request-scoped data — each tool execution should be stateless beyond what the shared service intentionally holds.
+
 ## Best Practices
 
 - Keep `ITool.name` stable; it is the public API for tool calling.
 - Set `ITool.hasSideEffects = true` for write/execute tools so hosts can gate approvals.
 - Keep descriptor `priority` undefined by default so hosts can control pack ordering via the manifest.
 - Define strict `inputSchema`/`outputSchema` and return structured errors in `ToolExecutionResult`.
+- Use `context.services.getOrCreate()` for any resource costing >10ms to initialise or >1MB to hold in memory.
