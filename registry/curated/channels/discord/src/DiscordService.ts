@@ -555,11 +555,54 @@ export class DiscordService {
       },
       {
         name: 'trivia',
-        description: 'Start a trivia question (anyone can answer once)',
+        description: 'Start a trivia question — random or pick a category',
+        options: [
+          {
+            name: 'category',
+            description: 'Question category (Science, History, Film, Video Games, etc.)',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+          },
+          {
+            name: 'difficulty',
+            description: 'Question difficulty',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+            choices: [
+              { name: 'Easy (10 pts)', value: 'easy' },
+              { name: 'Medium (20 pts)', value: 'medium' },
+              { name: 'Hard (30 pts)', value: 'hard' },
+            ],
+          },
+          {
+            name: 'daily',
+            description: 'Play today\'s daily challenge (1 attempt, hard, 50 pts)',
+            type: ApplicationCommandOptionType.Boolean,
+            required: false,
+          },
+        ],
       },
       {
         name: 'trivia_leaderboard',
-        description: 'Show trivia leaderboard',
+        description: 'Show trivia leaderboard — all-time, daily, weekly, or monthly',
+        options: [
+          {
+            name: 'period',
+            description: 'Leaderboard period',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+            choices: [
+              { name: 'Today', value: 'daily' },
+              { name: 'This Week', value: 'weekly' },
+              { name: 'This Month', value: 'monthly' },
+              { name: 'All Time', value: 'all' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'trivia_stats',
+        description: 'View your trivia stats, level, streaks, and category breakdown',
       },
       {
         name: 'clear',
@@ -821,12 +864,24 @@ export class DiscordService {
     return this.state.listFaq();
   }
 
-  recordTriviaPlay(userId: string, won: boolean) {
-    return this.state.recordTriviaPlay(userId, won);
+  recordTriviaPlay(userId: string, won: boolean, earnedPoints = 0, category = '') {
+    return this.state.recordTriviaPlay(userId, won, earnedPoints, category);
   }
 
-  triviaLeaderboard(limit = 10) {
-    return this.state.triviaLeaderboard(limit);
+  recordDailyChallenge(userId: string, dateKey: string) {
+    return this.state.recordDailyChallenge(userId, dateKey);
+  }
+
+  hasDoneDaily(userId: string, dateKey: string) {
+    return this.state.hasDoneDaily(userId, dateKey);
+  }
+
+  triviaLeaderboard(limit = 10, period?: 'daily' | 'weekly' | 'monthly') {
+    return this.state.triviaLeaderboard(limit, period);
+  }
+
+  getTriviaStats(userId: string) {
+    return this.state.getTriviaStats(userId);
   }
 }
 

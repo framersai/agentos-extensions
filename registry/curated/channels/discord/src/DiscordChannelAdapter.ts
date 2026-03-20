@@ -29,8 +29,18 @@ import {
   type Interaction,
   type Message,
 } from 'discord.js';
-import { randomTriviaQuestion, type TriviaQuestion } from './TriviaBank';
+import { randomTriviaQuestion } from './TriviaBank';
 import { FAQMatcher } from './faq-matcher';
+import {
+  getQuestion,
+  getDailyQuestion,
+  TRIVIA_CATEGORIES,
+  DIFFICULTY_POINTS,
+  triviaLevelForPoints,
+  nextTriviaLevel,
+  type Difficulty,
+  type TriviaQuestion as TriviaQ,
+} from './TriviaBank';
 
 export class DiscordChannelAdapter implements IChannelAdapter {
   readonly platform: ChannelPlatform = 'discord';
@@ -56,10 +66,12 @@ export class DiscordChannelAdapter implements IChannelAdapter {
   private triviaSessions = new Map<
     string,
     {
-      question: TriviaQuestion;
+      question: TriviaQ;
       answeredUserIds: Set<string>;
       expiresAtMs: number;
       cleanupTimer: ReturnType<typeof setTimeout>;
+      startedAtMs: number;
+      isDaily: boolean;
     }
   >();
 
@@ -451,8 +463,10 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         '`/image query:<text>` — search for stock images',
         '',
         '__Community__',
-        '`/trivia` — start a trivia question',
-        '`/trivia_leaderboard` — trivia leaderboard',
+        '`/trivia` — trivia from 17 categories (4,000+ questions)',
+        '`/trivia daily:True` — daily challenge (hard, 50 pts, 1 attempt)',
+        '`/trivia_leaderboard` — leaderboard (daily/weekly/monthly/all-time)',
+        '`/trivia_stats` — your level, streaks, and category breakdown',
         '',
         '__Utilities__',
         '`/quota` — view your remaining daily quotas',
@@ -1163,7 +1177,38 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'trivia') {
-      const q = randomTriviaQuestion();
+      const isDaily = interaction.options.getBoolean('daily') ?? false;
+      const categoryInput = interaction.options.getString('category') ?? undefined;
+      const difficultyInput = (interaction.options.getString('difficulty') ?? undefined) as Difficulty | undefined;
+
+      // Daily challenge: 1 attempt per day
+      if (isDaily) {
+        const today = new Date().toISOString().slice(0, 10);
+        if (this.service.hasDoneDaily(interaction.user.id, today)) {
+          await this.safeEphemeralReply(
+            interaction,
+            "You've already completed today's daily challenge. Come back tomorrow!",
+          );
+          return;
+        }
+      }
+
+      let q: TriviaQ;
+      try {
+        q = isDaily
+          ? await getDailyQuestion()
+          : await getQuestion(categoryInput, difficultyInput);
+      } catch {
+        q = randomTriviaQuestion(); // last-resort fallback
+      }
+
+      const catEmoji = TRIVIA_CATEGORIES.find(
+        (c) => q.category.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]!),
+      )?.emoji ?? '🧠';
+
+      const diffLabel = q.difficulty.charAt(0).toUpperCase() + q.difficulty.slice(1);
+      const pts = isDaily ? 50 : DIFFICULTY_POINTS[q.difficulty];
+
       const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId(`rh_trivia:${q.id}:0`).setLabel('A').setStyle(ButtonStyle.Secondary),
         new ButtonBuilder().setCustomId(`rh_trivia:${q.id}:1`).setLabel('B').setStyle(ButtonStyle.Secondary),
@@ -1171,8 +1216,9 @@ export class DiscordChannelAdapter implements IChannelAdapter {
         new ButtonBuilder().setCustomId(`rh_trivia:${q.id}:3`).setLabel('D').setStyle(ButtonStyle.Secondary),
       );
 
+      const titlePrefix = isDaily ? '📅 Daily Challenge' : `${catEmoji} Trivia`;
       const embed: APIEmbed = {
-        title: 'Rabbit Hole Trivia',
+        title: titlePrefix,
         description: [
           `**${q.question}**`,
           '',
@@ -1181,7 +1227,8 @@ export class DiscordChannelAdapter implements IChannelAdapter {
           `**C.** ${q.choices[2]}`,
           `**D.** ${q.choices[3]}`,
           '',
-          '_Click a button to answer (one attempt per user)._',
+          `${catEmoji} ${q.category} · **${diffLabel}** · ${pts} pts${isDaily ? ' · 1 attempt' : ''}`,
+          '_Click a button to answer — speed bonus for fast answers!_',
         ].join('\n'),
         color: this.brandColor(),
         footer: this.brandFooter() ? { text: this.brandFooter()! } : undefined,
@@ -1210,6 +1257,8 @@ export class DiscordChannelAdapter implements IChannelAdapter {
           answeredUserIds: new Set<string>(),
           expiresAtMs: Date.now() + ttlMs,
           cleanupTimer,
+          startedAtMs: Date.now(),
+          isDaily,
         });
       } catch {
         // ignore
@@ -1218,17 +1267,83 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     }
 
     if (command === 'trivia_leaderboard') {
-      const rows = this.service.triviaLeaderboard(10);
+      const periodInput = interaction.options.getString('period') ?? 'all';
+      const period = periodInput === 'all' ? undefined : (periodInput as 'daily' | 'weekly' | 'monthly');
+      const rows = this.service.triviaLeaderboard(10, period);
+
       if (rows.length === 0) {
-        await this.safeEphemeralReply(interaction, 'No trivia stats yet. Run `/trivia` to start!');
+        const msg = period
+          ? `No trivia activity ${period === 'daily' ? 'today' : period === 'weekly' ? 'this week' : 'this month'} yet. Be the first — run \`/trivia\`!`
+          : 'No trivia stats yet. Run `/trivia` to start!';
+        await this.safeEphemeralReply(interaction, msg);
         return;
       }
 
+      const periodLabels = {
+        daily: "Today's",
+        weekly: "This Week's",
+        monthly: "This Month's",
+      };
+      const title = period ? `${periodLabels[period]} Trivia Leaderboard` : 'All-Time Trivia Leaderboard';
+
       const lines = [
-        '**Trivia Leaderboard**',
-        ...rows.map((r, idx) => `**${idx + 1}.** <@${r.userId}> — **${r.wins}** wins / ${r.plays} plays`),
+        `**${title}**`,
+        '',
+        ...rows.map((r, idx) => {
+          const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `**${idx + 1}.**`;
+          const lvl = triviaLevelForPoints(r.points);
+          return `${medal} <@${r.userId}> — **${r.points}** pts · ${r.wins}W/${r.plays}P · ${lvl.emoji} ${lvl.name}`;
+        }),
       ];
       await this.safeEphemeralReply(interaction, lines.join('\n'));
+      return;
+    }
+
+    if (command === 'trivia_stats') {
+      const stats = this.service.getTriviaStats(interaction.user.id);
+      if (!stats || stats.plays === 0) {
+        await this.safeEphemeralReply(
+          interaction,
+          "You haven't played any trivia yet! Run `/trivia` to get started.",
+        );
+        return;
+      }
+
+      const lvl = triviaLevelForPoints(stats.points);
+      const nxt = nextTriviaLevel(stats.points);
+      const winRate = stats.plays > 0 ? Math.round((stats.wins / stats.plays) * 100) : 0;
+
+      const lines = [
+        `${lvl.emoji} **${lvl.name}** (Level ${lvl.level})`,
+        '',
+        `**Points:** ${stats.points}${nxt ? ` · ${nxt.minPoints - stats.points} pts to ${nxt.emoji} ${nxt.name}` : ' · MAX LEVEL'}`,
+        `**Record:** ${stats.wins}W / ${stats.plays}P (${winRate}% win rate)`,
+        `**Streak:** ${stats.streak} current · ${stats.bestStreak} best`,
+        `**Daily Challenges:** ${stats.dailyChallenges?.length ?? 0} completed`,
+      ];
+
+      // Category breakdown (top 5)
+      const cats = Object.entries(stats.categories || {})
+        .sort(([, a], [, b]) => b.plays - a.plays)
+        .slice(0, 5);
+      if (cats.length > 0) {
+        lines.push('', '**Top Categories:**');
+        for (const [catName, catStats] of cats) {
+          const catEmoji = TRIVIA_CATEGORIES.find(
+            (c) => catName.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]!),
+          )?.emoji ?? '📋';
+          const catRate = catStats.plays > 0 ? Math.round((catStats.wins / catStats.plays) * 100) : 0;
+          lines.push(`${catEmoji} ${catName}: ${catStats.wins}/${catStats.plays} (${catRate}%)`);
+        }
+      }
+
+      const embed: APIEmbed = {
+        title: '📊 Your Trivia Stats',
+        description: lines.join('\n'),
+        color: this.brandColor(),
+        footer: this.brandFooter() ? { text: this.brandFooter()! } : undefined,
+      };
+      await this.safeEphemeralReply(interaction, undefined, { embeds: [embed] });
       return;
     }
   }
@@ -1282,23 +1397,87 @@ export class DiscordChannelAdapter implements IChannelAdapter {
     session.answeredUserIds.add(interaction.user.id);
 
     const correct = choiceIndex === session.question.answerIndex;
+    const q = session.question;
+
+    // Calculate points
+    let earnedPoints = 0;
+    const bonusParts: string[] = [];
+
+    if (correct) {
+      // Base points
+      const base = session.isDaily ? 50 : DIFFICULTY_POINTS[q.difficulty];
+      earnedPoints += base;
+      bonusParts.push(`Base: +${base}`);
+
+      // Speed bonus
+      const elapsed = (Date.now() - session.startedAtMs) / 1000;
+      if (elapsed < 5) {
+        earnedPoints += 10;
+        bonusParts.push('⚡ Speed: +10');
+      } else if (elapsed < 10) {
+        earnedPoints += 5;
+        bonusParts.push('⚡ Speed: +5');
+      }
+
+      // Streak bonus (based on pre-update streak)
+      const prevStats = this.service.getTriviaStats(interaction.user.id);
+      const currentStreak = (prevStats?.streak ?? 0) + 1;
+      const streakBonus = Math.min(currentStreak * 5, 25);
+      if (streakBonus > 0) {
+        earnedPoints += streakBonus;
+        bonusParts.push(`🔥 Streak (${currentStreak}): +${streakBonus}`);
+      }
+    }
+
+    let updatedStats;
     try {
-      this.service.recordTriviaPlay(interaction.user.id, correct);
+      updatedStats = this.service.recordTriviaPlay(
+        interaction.user.id,
+        correct,
+        earnedPoints,
+        q.category,
+      );
+      if (session.isDaily && correct) {
+        const today = new Date().toISOString().slice(0, 10);
+        this.service.recordDailyChallenge(interaction.user.id, today);
+      }
     } catch {
       // ignore
     }
 
-    const correctLetter = ['A', 'B', 'C', 'D'][session.question.answerIndex] || 'A';
-    const prefix = correct ? '✅ Correct!' : '❌ Not quite.';
-    const content = [
-      prefix,
-      correct ? `+1 win recorded.` : `Correct answer: **${correctLetter}**.`,
-      '',
-      session.question.explanation,
-    ].join('\n');
+    const correctLetter = ['A', 'B', 'C', 'D'][q.answerIndex] || 'A';
+
+    const lines: string[] = [];
+    if (correct) {
+      lines.push(`✅ **Correct!** +${earnedPoints} pts`);
+      if (bonusParts.length > 1) lines.push(bonusParts.join(' · '));
+    } else {
+      lines.push(`❌ Not quite. Correct answer: **${correctLetter}**`);
+      if (updatedStats && (updatedStats.bestStreak ?? 0) > 0) {
+        lines.push(`Streak reset (best: ${updatedStats.bestStreak})`);
+      }
+    }
+
+    lines.push('', q.explanation);
+
+    if (updatedStats) {
+      const lvl = triviaLevelForPoints(updatedStats.points);
+      const nxt = nextTriviaLevel(updatedStats.points);
+      lines.push(
+        '',
+        `${lvl.emoji} ${lvl.name} · **${updatedStats.points}** pts total${nxt ? ` · ${nxt.minPoints - updatedStats.points} to ${nxt.emoji}` : ''}`,
+      );
+
+      // Level up notification
+      const prevPts = updatedStats.points - earnedPoints;
+      const prevLvl = triviaLevelForPoints(prevPts);
+      if (lvl.level > prevLvl.level) {
+        lines.push(`\n🎉 **LEVEL UP!** You are now ${lvl.emoji} **${lvl.name}**!`);
+      }
+    }
 
     try {
-      await interaction.reply({ content, ephemeral: true });
+      await interaction.reply({ content: lines.join('\n'), ephemeral: true });
     } catch {
       // ignore
     }
