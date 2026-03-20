@@ -227,7 +227,8 @@ export interface FeedChannels {
   cmc_trending: string;
   uniswap_sniper: string;
   debug: string;
-  [key: string]: string;
+  github?: string;
+  [key: string]: string | undefined;
 }
 
 export interface JobConfig {

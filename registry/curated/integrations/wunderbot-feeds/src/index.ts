@@ -34,6 +34,7 @@ import { formatJobEmbeds } from './formatters/jobs.js';
 import { formatThreatIntelEmbeds } from './formatters/threatIntel.js';
 import { formatPaperEmbeds } from './formatters/papers.js';
 import { formatSniperEmbed } from './formatters/sniper.js';
+import { formatGitHubReleaseEmbed, type GitHubRelease } from './formatters/github.js';
 
 // ---------------------------------------------------------------------------
 // Defaults
@@ -48,6 +49,20 @@ const DEFAULT_TIMERS = {
   trades: 43_200_000,
   jobs: 86_400_000,        // 24h
 };
+
+const GITHUB_RELEASE_REPOS = [
+  'jddunn/wunderland',
+  'framersai/agentos',
+  'framersai/agentos-extensions',
+  'framersai/agentos-skills',
+  'framersai/agentos-skills-registry',
+  'framersai/agentos-extensions-registry',
+  'framersai/sql-storage-adapter',
+];
+
+const GITHUB_RELEASES_INTERVAL_MS = 30 * 60_000;
+const lastSeenRelease = new Map<string, string>();
+let githubFirstRun = true;
 
 // ---------------------------------------------------------------------------
 // LLM Post Judge — decides if an article is worth posting
@@ -384,6 +399,82 @@ function wrapJob(name: string, logger: Logger, fn: () => Promise<void>): () => v
 }
 
 // ---------------------------------------------------------------------------
+// GitHub releases poll
+// ---------------------------------------------------------------------------
+
+async function pollGitHubReleases(
+  poster: DiscordPoster,
+  channelId: string,
+  logger: Logger,
+): Promise<void> {
+  const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
+  const headers: Record<string, string> = {
+    'Accept': 'application/vnd.github+json',
+    'User-Agent': 'wunderbot-feeds',
+  };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  let totalPosted = 0;
+
+  for (const repo of GITHUB_RELEASE_REPOS) {
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${repo}/releases?per_page=5`,
+        { headers, signal: AbortSignal.timeout(10_000) },
+      );
+
+      if (res.status === 403) {
+        log(logger, `GitHub rate limited for ${repo} — skipping`);
+        continue;
+      }
+      if (res.status === 404) {
+        continue;
+      }
+      if (!res.ok) continue;
+
+      const releases = (await res.json()) as GitHubRelease[];
+      if (!Array.isArray(releases) || releases.length === 0) continue;
+
+      releases.sort((a, b) =>
+        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+      );
+
+      const lastSeen = lastSeenRelease.get(repo);
+
+      if (githubFirstRun || !lastSeen) {
+        const newest = releases[releases.length - 1]!;
+        lastSeenRelease.set(repo, newest.published_at);
+        continue;
+      }
+
+      const lastSeenMs = new Date(lastSeen).getTime();
+      const newReleases = releases.filter(
+        (r) => new Date(r.published_at).getTime() > lastSeenMs,
+      );
+
+      for (const release of newReleases) {
+        const embed = formatGitHubReleaseEmbed(repo, release, 0x8B6914);
+        await poster.postEmbeds(channelId, [embed]);
+        totalPosted++;
+        log(logger, `Posted GitHub release: ${repo} ${release.tag_name}`);
+      }
+
+      if (newReleases.length > 0) {
+        const newest = newReleases[newReleases.length - 1]!;
+        lastSeenRelease.set(repo, newest.published_at);
+      }
+    } catch (err: any) {
+      logError(logger, `GitHub release poll failed for ${repo}: ${err.message}`);
+    }
+  }
+
+  githubFirstRun = false;
+  if (totalPosted > 0) {
+    log(logger, `Posted ${totalPosted} GitHub releases`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Cron registration
 // ---------------------------------------------------------------------------
 
@@ -637,6 +728,15 @@ function registerFeedJobs(
       }, 60 * 60_000); // 60 min delay — let news + deals finish first
       timers.push(jobsInitial as unknown as NodeJS.Timeout);
     }
+  }
+
+  // --- GitHub releases ---
+  if (ch.github) {
+    const githubJob = wrapJob('github-releases', logger, async () => {
+      await pollGitHubReleases(poster, ch.github as string, logger);
+    });
+    githubJob(); // immediate first run (records IDs, doesn't post)
+    timers.push(setInterval(githubJob, GITHUB_RELEASES_INTERVAL_MS));
   }
 
   return timers;
