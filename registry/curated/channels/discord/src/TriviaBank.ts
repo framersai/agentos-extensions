@@ -63,8 +63,8 @@ export function categoryByName(name: string): TriviaCategory | undefined {
 
 export const DIFFICULTY_POINTS: Record<Difficulty, number> = {
   easy: 10,
-  medium: 20,
-  hard: 30,
+  medium: 25,
+  hard: 50,
 };
 
 // ── Trivia Levels ───────────────────────────────────────────────────────────
@@ -76,12 +76,31 @@ export type TriviaLevel = {
   minPoints: number;
 };
 
+/**
+ * Trivia levels — exponential curve for long-term progression.
+ *
+ * At ~25 pts/question average (medium difficulty):
+ *   L1→L2:   20 questions    (~1 session)
+ *   L2→L3:   40 more         (~2 sessions)
+ *   L3→L4:   80 more         (~1 day)
+ *   L4→L5:  140 more         (~2-3 days)
+ *   L5→L6:  240 more         (~1 week)
+ *   L6→L7:  400 more         (~2 weeks)
+ *   L7→L8:  600 more         (~1 month)
+ *   L8→L9: 1000 more         (~2 months)
+ *   L9→L10: 2000+ more       (~6+ months, prestige)
+ */
 export const TRIVIA_LEVELS: TriviaLevel[] = [
-  { level: 1, name: 'Trivia Novice', emoji: '🌱', minPoints: 0 },
-  { level: 2, name: 'Quiz Apprentice', emoji: '📖', minPoints: 500 },
-  { level: 3, name: 'Knowledge Seeker', emoji: '🔍', minPoints: 2000 },
-  { level: 4, name: 'Trivia Master', emoji: '🏆', minPoints: 5000 },
-  { level: 5, name: 'Grandmaster', emoji: '👑', minPoints: 15000 },
+  { level: 1,  name: 'Trivia Novice',      emoji: '🌱', minPoints: 0 },
+  { level: 2,  name: 'Quiz Apprentice',     emoji: '📖', minPoints: 500 },
+  { level: 3,  name: 'Knowledge Seeker',    emoji: '🔍', minPoints: 1_500 },
+  { level: 4,  name: 'Lore Keeper',         emoji: '📜', minPoints: 3_500 },
+  { level: 5,  name: 'Trivia Adept',        emoji: '⚡', minPoints: 7_000 },
+  { level: 6,  name: 'Quiz Master',         emoji: '🎯', minPoints: 13_000 },
+  { level: 7,  name: 'Sage',                emoji: '🧙', minPoints: 23_000 },
+  { level: 8,  name: 'Oracle',              emoji: '🔮', minPoints: 38_000 },
+  { level: 9,  name: 'Grandmaster',         emoji: '🏆', minPoints: 63_000 },
+  { level: 10, name: 'Omniscient',          emoji: '👑', minPoints: 113_000 },
 ];
 
 export function triviaLevelForPoints(points: number): TriviaLevel {
