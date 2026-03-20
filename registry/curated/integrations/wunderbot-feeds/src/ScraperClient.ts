@@ -9,6 +9,7 @@ import type {
   TrendingCryptoResponse,
   ThreatIntelResponse,
   JobsResponse,
+  YCJobsResponse,
   PapersResponse,
   SniperStatus,
 } from './types.js';
@@ -64,6 +65,10 @@ export class ScraperClient {
   async fetchJobs(title: string, location: string, limit = 15): Promise<JobsResponse> {
     const params = new URLSearchParams({ title, location, limit: String(limit) });
     return this.get<JobsResponse>(`/api/v1/jobs?${params}`, NEWS_TIMEOUT);
+  }
+
+  async fetchYCJobs(limit = 30): Promise<YCJobsResponse> {
+    return this.get<YCJobsResponse>(`/api/v1/jobs/yc?limit=${limit}`, NEWS_TIMEOUT);
   }
 
   async fetchPapers(limit = 5, channelId?: string): Promise<PapersResponse> {

@@ -209,6 +209,40 @@ export interface DiscordEmbed {
   fields?: Array<{ name: string; value: string; inline?: boolean }>;
 }
 
+// ── YC Jobs ─────────────────────────────────────────────────────────────────
+
+export interface YCJobListing {
+  hn_id: string;
+  company: string;
+  company_tagline: string;
+  yc_batch: string;
+  logo_url: string;
+  title: string;
+  salary: string;
+  equity: string;
+  location: string;
+  is_remote: boolean;
+  job_type: string;
+  role: string;
+  experience: string;
+  visa: string;
+  description: string;
+  apply_url: string;
+  url: string;
+  source_type: 'yc_structured' | 'external_regex';
+  confidence: number;
+  posted_at: number;
+  founded: string;
+  company_status: string;
+  company_website: string;
+}
+
+export interface YCJobsResponse {
+  source: string;
+  jobs: YCJobListing[];
+  elapsed_seconds: number;
+}
+
 // ---------------------------------------------------------------------------
 // Feed config
 // ---------------------------------------------------------------------------
