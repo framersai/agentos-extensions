@@ -35,6 +35,7 @@ import { formatThreatIntelEmbeds } from './formatters/threatIntel.js';
 import { formatPaperEmbeds } from './formatters/papers.js';
 import { formatSniperEmbed } from './formatters/sniper.js';
 import { formatGitHubReleaseEmbed, type GitHubRelease } from './formatters/github.js';
+import { formatYCJobEmbed } from './formatters/yc-jobs.js';
 
 // ---------------------------------------------------------------------------
 // Defaults
@@ -737,6 +738,37 @@ function registerFeedJobs(
     });
     githubJob(); // immediate first run (records IDs, doesn't post)
     timers.push(setInterval(githubJob, GITHUB_RELEASES_INTERVAL_MS));
+  }
+
+  // --- YC Jobs (daily) ---
+  const YC_JOBS_INTERVAL_MS = 24 * 3600_000; // 24 hours
+  const YC_JOBS_INITIAL_DELAY_MS = 2 * 3600_000; // 2 hours after startup
+
+  // YC jobs post to the same #jobs-software channel as LinkedIn jobs.
+  const ycJobsChannelId = (ch as any).jobs_software || config.jobs?.[0]?.channelId;
+  if (ycJobsChannelId) {
+    const ycJobsJob = wrapJob('yc-jobs', logger, async () => {
+      try {
+        const data = await client.fetchYCJobs(30);
+        if (!data.jobs?.length) {
+          log(logger, 'YC jobs: no new listings');
+          return;
+        }
+        let posted = 0;
+        for (const job of data.jobs) {
+          const embed = formatYCJobEmbed(job);
+          await poster.postEmbeds(ycJobsChannelId, [embed]);
+          posted++;
+        }
+        log(logger, `Posted ${posted} YC jobs (${data.elapsed_seconds}s)`);
+      } catch (err: any) {
+        logError(logger, `YC jobs feed failed: ${err.message}`);
+      }
+    });
+    setTimeout(() => {
+      ycJobsJob();
+      timers.push(setInterval(ycJobsJob, YC_JOBS_INTERVAL_MS));
+    }, YC_JOBS_INITIAL_DELAY_MS);
   }
 
   return timers;
