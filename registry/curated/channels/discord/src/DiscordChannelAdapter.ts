@@ -1209,6 +1209,15 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       return;
     }
 
+    if (command === 'trivia' || command === 'trivia_leaderboard' || command === 'trivia_stats' || command === 'trivia_end') {
+      // Trivia commands restricted to #games channel
+      const channelName = DiscordChannelAdapter.normalizeChannelName((interaction.channel as any)?.name ?? '');
+      if (channelName !== 'games') {
+        await this.safeEphemeralReply(interaction, 'Trivia commands are only available in **#games**! Head over there to play.');
+        return;
+      }
+    }
+
     if (command === 'trivia') {
       const isDaily = interaction.options.getBoolean('daily') ?? false;
       const categoryInput = interaction.options.getString('category') ?? undefined;
