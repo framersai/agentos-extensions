@@ -12,6 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout agentos core (peer dependency)
+        uses: actions/checkout@v4
+        with:
+          repository: framersai/agentos
+          path: packages/agentos
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
@@ -22,6 +29,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
+
+      - name: Build agentos core
+        run: cd packages/agentos && pnpm install --no-frozen-lockfile && pnpm run build
 
       - name: Build extensions
         run: pnpm run build

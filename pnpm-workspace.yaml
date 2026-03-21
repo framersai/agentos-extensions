@@ -1,4 +1,5 @@
 packages:
+  - "packages/agentos"
   - "registry/curated/auth"
   - "registry/curated/provenance/anchor-providers"
   - "registry/curated/provenance/wunderland-tip-ingestion"
