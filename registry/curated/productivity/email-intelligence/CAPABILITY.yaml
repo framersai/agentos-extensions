@@ -1,0 +1,5 @@
+name: email-intelligence
+displayName: Email Intelligence
+description: Query email threads, projects, attachments and generate reports
+category: productivity
+tags: [email, gmail, intelligence, rag, projects, reports]

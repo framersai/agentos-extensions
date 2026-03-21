@@ -1,0 +1,39 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.productivity.email-intelligence",
+  "name": "Email Intelligence Extension",
+  "version": "0.1.0",
+  "description": "Query email threads, projects, attachments and generate reports via backend REST API.",
+  "categories": ["productivity", "email", "intelligence"],
+  "platforms": ["email"],
+  "sdk": "rest",
+  "extensions": [
+    { "kind": "tool", "id": "searchAcrossThreads", "displayName": "Search Across Threads" },
+    { "kind": "tool", "id": "getThreadHierarchy", "displayName": "Get Thread Hierarchy" },
+    { "kind": "tool", "id": "listProjects", "displayName": "List Projects" },
+    { "kind": "tool", "id": "getProjectSummary", "displayName": "Get Project Summary" },
+    { "kind": "tool", "id": "getProjectTimeline", "displayName": "Get Project Timeline" },
+    { "kind": "tool", "id": "listAccounts", "displayName": "List Accounts" },
+    { "kind": "tool", "id": "getAttachment", "displayName": "Get Attachment" },
+    { "kind": "tool", "id": "createProject", "displayName": "Create Project" },
+    { "kind": "tool", "id": "addThreadToProject", "displayName": "Add Thread to Project" },
+    { "kind": "tool", "id": "generateReport", "displayName": "Generate Report" },
+    { "kind": "tool", "id": "getDigestPreview", "displayName": "Get Digest Preview" },
+    { "kind": "tool", "id": "syncStatus", "displayName": "Sync Status" }
+  ],
+  "requiredSecrets": [
+    "internal.apiSecret"
+  ],
+  "features": [
+    "Full-text semantic search across email threads",
+    "Thread hierarchy and conversation view",
+    "Project-based email organization",
+    "Project summaries and timelines",
+    "Multi-account support",
+    "Attachment metadata retrieval",
+    "Project creation and thread assignment",
+    "Automated project reports",
+    "Digest previews",
+    "Account sync status monitoring"
+  ]
+}
