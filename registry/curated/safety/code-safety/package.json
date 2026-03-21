@@ -25,5 +25,13 @@
     "vitest": "^1.6.0"
   },
   "license": "MIT",
-  "author": "Frame.dev"
+  "author": "Frame.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/safety/code-safety"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
