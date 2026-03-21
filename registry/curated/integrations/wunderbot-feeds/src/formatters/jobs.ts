@@ -41,7 +41,7 @@ export function formatJobEmbeds(jobs: JobListing[], searchTitle = 'Jobs'): Disco
       meta.push(`\u{1f4b0} ${job.salary}`);
     }
     if (job.is_remote) {
-      meta.push('\u{1f3e0} Remote');
+      meta.push('\u{1f30d} **Remote**');
     }
     if (meta.length > 0) {
       line += '\n\u2003' + meta.join(' \u00b7 ');

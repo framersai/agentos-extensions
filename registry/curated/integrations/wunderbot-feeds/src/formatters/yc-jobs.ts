@@ -5,12 +5,23 @@
 import type { DiscordEmbed, YCJobListing } from '../types.js';
 import { BRAND_COLOR, truncate, nowIso, EMBED_DESCRIPTION_LIMIT } from './common.js';
 
+/** Green accent for remote jobs to make them visually pop. */
+const REMOTE_COLOR = 0x2ecc71;
+
 /**
  * Format a single YC job listing as a Discord embed.
  * Each job gets its own embed (unlike LinkedIn which batches).
+ * Remote jobs get a green accent color and prominent badge.
  */
 export function formatYCJobEmbed(job: YCJobListing): DiscordEmbed {
+  const isRemote = job.is_remote || /\bremote\b/i.test(job.location || '');
   const lines: string[] = [];
+
+  // Remote banner (prominent, top of embed)
+  if (isRemote) {
+    lines.push('> \u{1F30D} **REMOTE** \u2014 Work from anywhere');
+    lines.push('');
+  }
 
   // Company line
   const batchTag = job.yc_batch ? ` (YC ${job.yc_batch})` : '';
@@ -28,8 +39,12 @@ export function formatYCJobEmbed(job: YCJobListing): DiscordEmbed {
 
   // Location + job type
   const locParts: string[] = [];
-  if (job.location) locParts.push(`\u{1F4CD} ${job.location}`);
-  if (job.is_remote) locParts.push('\u{1F3E0} Remote');
+  if (job.location && !isRemote) {
+    locParts.push(`\u{1F4CD} ${job.location}`);
+  } else if (job.location && isRemote) {
+    // Show location as optional/HQ if remote
+    locParts.push(`\u{1F4CD} ${job.location} (HQ)`);
+  }
   if (job.job_type) locParts.push(`\u{1F3E2} ${job.job_type}`);
   if (locParts.length > 0) lines.push(locParts.join(' \u00b7 '));
 
@@ -52,9 +67,11 @@ export function formatYCJobEmbed(job: YCJobListing): DiscordEmbed {
     lines.push(`[Apply \u2192](${applyUrl})`);
   }
 
+  // Title with remote badge
+  const remoteBadge = isRemote ? ' \u{1F30D}' : '';
   const titleText = job.title
-    ? `\u{1F4BC} ${truncate(job.title, 200)}`
-    : '\u{1F4BC} Job Opening';
+    ? `\u{1F4BC} ${truncate(job.title, 190)}${remoteBadge}`
+    : `\u{1F4BC} Job Opening${remoteBadge}`;
 
   let footerText = 'Powered by Wunderbots | rabbithole.inc';
   if (job.source_type === 'external_regex' && job.confidence < 0.5) {
@@ -64,7 +81,7 @@ export function formatYCJobEmbed(job: YCJobListing): DiscordEmbed {
   const embed: DiscordEmbed = {
     title: titleText,
     description: truncate(lines.join('\n'), EMBED_DESCRIPTION_LIMIT),
-    color: BRAND_COLOR,
+    color: isRemote ? REMOTE_COLOR : BRAND_COLOR,
     timestamp: nowIso(),
     footer: { text: footerText },
   };
