@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-03-21T00:00:00.000Z",
+  "updated": "2026-03-21T23:06:28.956Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -12,7 +12,6 @@
       "channels",
       "cloud",
       "communications",
-      "community",
       "domains",
       "integrations",
       "media",
@@ -35,7 +34,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/blog-publisher",
-        "description": "Unified blog publishing adapter for Dev.to, Hashnode, Medium, and WordPress \u2014 publish, update, cross-post, and track analytics across all four platforms from a single interface.",
+        "description": "Unified blog publishing adapter for Dev.to, Hashnode, Medium, and WordPress — publish, update, cross-post, and track analytics across all four platforms from a single interface.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -74,7 +73,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-blog-publisher",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/blog-publisher",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -85,7 +84,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/bluesky",
-        "description": "Bidirectional Bluesky integration \u2014 post, reply, like, repost, search, follow, and track engagement via the AT Protocol.",
+        "description": "Bidirectional Bluesky integration — post, reply, like, repost, search, follow, and track engagement via the AT Protocol.",
         "features": [
           "Post with text, images, and rich-text facets (mentions, links, hashtags)",
           "Reply to posts with full thread context",
@@ -113,7 +112,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-bluesky",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/bluesky",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -124,7 +123,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/discord",
-        "description": "Bidirectional Discord messaging via discord.js \u2014 supports text, embeds, images, documents, threads, reactions, and guild management.",
+        "description": "Bidirectional Discord messaging via discord.js — supports text, embeds, images, documents, threads, reactions, and guild management.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -156,7 +155,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-discord",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/discord",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -167,7 +166,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/email",
-        "description": "Bidirectional email integration \u2014 send, read, search, extract verification codes, and reply to email threads via SMTP and IMAP.",
+        "description": "Bidirectional email integration — send, read, search, extract verification codes, and reply to email threads via SMTP and IMAP.",
         "features": [
           "Send emails with text, HTML, and attachments via SMTP",
           "Read inbox and other IMAP folders",
@@ -187,7 +186,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-email",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/email",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -198,7 +197,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/facebook",
-        "description": "Bidirectional Facebook integration \u2014 page posts, photos, videos, comments, likes, shares, and engagement analytics via Meta Graph API v19.",
+        "description": "Bidirectional Facebook integration — page posts, photos, videos, comments, likes, shares, and engagement analytics via Meta Graph API v19.",
         "features": [
           "Post to personal profile and managed pages",
           "Upload photos and videos to pages",
@@ -225,7 +224,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-facebook",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/facebook",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -236,7 +235,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/farcaster",
-        "description": "Bidirectional Farcaster integration \u2014 publish casts, reply, like, recast, search, and browse feeds via Neynar API.",
+        "description": "Bidirectional Farcaster integration — publish casts, reply, like, recast, search, and browse feeds via Neynar API.",
         "features": [
           "Publish casts with text, embeds, and channel targeting",
           "Reply to existing casts",
@@ -258,7 +257,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-farcaster",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/farcaster",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -269,7 +268,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/feishu",
-        "description": "Feishu (Lark) bot via official SDK \u2014 supports outbound messages + inbound webhooks.",
+        "description": "Feishu (Lark) bot via official SDK — supports outbound messages + inbound webhooks.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -294,7 +293,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-feishu",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/feishu",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -305,7 +304,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/google-business",
-        "description": "Bidirectional Google Business Profile integration \u2014 create local posts, reply to reviews, view analytics, and update business information via Google My Business API.",
+        "description": "Bidirectional Google Business Profile integration — create local posts, reply to reviews, view analytics, and update business information via Google My Business API.",
         "features": [
           "Create local posts with text, media, events, and offers",
           "Reply to customer reviews",
@@ -325,7 +324,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-business",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-business",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -336,7 +335,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/google-chat",
-        "description": "Google Workspace Chat via Cloud API \u2014 supports outbound messages + inbound webhooks.",
+        "description": "Google Workspace Chat via Cloud API — supports outbound messages + inbound webhooks.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -360,7 +359,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-google-chat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-chat",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -371,7 +370,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/imessage",
-        "description": "iMessage bridge via BlueBubbles \u2014 macOS server required. Supports outbound sends + inbound webhooks.",
+        "description": "iMessage bridge via BlueBubbles — macOS server required. Supports outbound sends + inbound webhooks.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -396,7 +395,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-imessage",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/imessage",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -407,7 +406,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/instagram",
-        "description": "Full Instagram integration \u2014 post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API with browser automation fallback.",
+        "description": "Full Instagram integration — post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API with browser automation fallback.",
         "features": [
           "Post single photos and multi-image carousels",
           "Upload Reels with captions and hashtags",
@@ -436,7 +435,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-instagram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/instagram",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -447,7 +446,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/irc",
-        "description": "IRC channel adapter \u2014 supports inbound/outbound messages and channel joins.",
+        "description": "IRC channel adapter — supports inbound/outbound messages and channel joins.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -472,7 +471,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-irc",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/irc",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -483,7 +482,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/lemmy",
-        "description": "Bidirectional Lemmy integration \u2014 create posts, comment, vote, search, subscribe to communities, and browse feeds via Lemmy HTTP API.",
+        "description": "Bidirectional Lemmy integration — create posts, comment, vote, search, subscribe to communities, and browse feeds via Lemmy HTTP API.",
         "features": [
           "Create posts with text, body, and URL links",
           "Comment on posts with threaded replies",
@@ -505,7 +504,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-lemmy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/lemmy",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -516,7 +515,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/line",
-        "description": "LINE Messaging API \u2014 inbound webhook (signature-verified) + outbound messaging.",
+        "description": "LINE Messaging API — inbound webhook (signature-verified) + outbound messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -541,7 +540,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-line",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/line",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -552,7 +551,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/linkedin",
-        "description": "LinkedIn Marketing API v2 \u2014 posts, articles, comments, company pages, search, and engagement analytics.",
+        "description": "LinkedIn Marketing API v2 — posts, articles, comments, company pages, search, and engagement analytics.",
         "features": [
           "Post text, images, videos, and articles to personal profile",
           "Post to company/organization pages",
@@ -578,7 +577,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-linkedin",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/linkedin",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -589,7 +588,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/mastodon",
-        "description": "Bidirectional Mastodon integration \u2014 post statuses, reply, boost, favourite, search trends, follow accounts, and track engagement via the Mastodon API.",
+        "description": "Bidirectional Mastodon integration — post statuses, reply, boost, favourite, search trends, follow accounts, and track engagement via the Mastodon API.",
         "features": [
           "Post statuses with text, spoiler text, and media attachments",
           "Reply to existing statuses",
@@ -617,7 +616,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mastodon",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mastodon",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -628,7 +627,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/matrix",
-        "description": "Matrix/Element via matrix-bot-sdk \u2014 decentralized, federated messaging.",
+        "description": "Matrix/Element via matrix-bot-sdk — decentralized, federated messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -651,7 +650,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-matrix",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/matrix",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -662,7 +661,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/mattermost",
-        "description": "Mattermost self-hosted chat \u2014 supports outbound posts and inbound WebSocket events.",
+        "description": "Mattermost self-hosted chat — supports outbound posts and inbound WebSocket events.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -685,7 +684,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-mattermost",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/mattermost",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -696,7 +695,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/nextcloud",
-        "description": "Nextcloud Talk bot API \u2014 self-hosted, privacy-focused team messaging via webhook bots.",
+        "description": "Nextcloud Talk bot API — self-hosted, privacy-focused team messaging via webhook bots.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -721,7 +720,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nextcloud",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nextcloud",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -732,7 +731,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/nostr",
-        "description": "Nostr relay messaging via nostr-tools \u2014 decentralized, censorship-resistant encrypted DMs (NIP-04).",
+        "description": "Nostr relay messaging via nostr-tools — decentralized, censorship-resistant encrypted DMs (NIP-04).",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -755,7 +754,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-nostr",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/nostr",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -766,7 +765,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/pinterest",
-        "description": "Pinterest integration \u2014 create pins, manage boards, search content, discover trends, track analytics, and schedule posts via Pinterest API v5.",
+        "description": "Pinterest integration — create pins, manage boards, search content, discover trends, track analytics, and schedule posts via Pinterest API v5.",
         "features": [
           "Create image, video, and idea pins",
           "Create and manage boards and sections",
@@ -790,7 +789,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-pinterest",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/pinterest",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -801,7 +800,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/reddit",
-        "description": "Bidirectional Reddit interaction via snoowrap \u2014 supports posting, commenting, voting, searching, trending, subscriptions, messaging, and analytics.",
+        "description": "Bidirectional Reddit interaction via snoowrap — supports posting, commenting, voting, searching, trending, subscriptions, messaging, and analytics.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -838,7 +837,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-reddit",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -849,7 +848,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/signal",
-        "description": "Signal messenger integration via signal-cli \u2014 end-to-end encrypted messaging.",
+        "description": "Signal messenger integration via signal-cli — end-to-end encrypted messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -872,7 +871,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-signal",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/signal",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -883,7 +882,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/slack",
-        "description": "Bidirectional Slack messaging via @slack/bolt \u2014 supports text, rich text, images, documents, threads, reactions, and group chat.",
+        "description": "Bidirectional Slack messaging via @slack/bolt — supports text, rich text, images, documents, threads, reactions, and group chat.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -915,7 +914,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-slack",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/slack",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -926,7 +925,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/sms",
-        "description": "SMS messaging via Twilio \u2014 inbound webhook + outbound sends.",
+        "description": "SMS messaging via Twilio — inbound webhook + outbound sends.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -952,7 +951,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-sms",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/sms",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -963,7 +962,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/teams",
-        "description": "Microsoft Teams bot via Bot Framework \u2014 supports inbound webhooks + proactive outbound sends.",
+        "description": "Microsoft Teams bot via Bot Framework — supports inbound webhooks + proactive outbound sends.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -987,7 +986,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-teams",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/teams",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -998,7 +997,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/telegram",
-        "description": "Bidirectional Telegram messaging via grammY \u2014 supports text, images, documents, inline keyboards, and groups.",
+        "description": "Bidirectional Telegram messaging via grammY — supports text, images, documents, inline keyboards, and groups.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1030,7 +1029,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/telegram",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1041,7 +1040,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/threads",
-        "description": "Bidirectional Threads integration \u2014 post text, images, videos, carousels, reply, quote, like, search user threads, and track engagement analytics via Meta Threads Publishing API.",
+        "description": "Bidirectional Threads integration — post text, images, videos, carousels, reply, quote, like, search user threads, and track engagement analytics via Meta Threads Publishing API.",
         "features": [
           "Post text posts to Threads",
           "Post image posts with captions",
@@ -1067,7 +1066,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-threads",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/threads",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1078,7 +1077,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/tiktok",
-        "description": "TikTok integration \u2014 upload videos, discover trending sounds and hashtags, search content, track analytics, and engage with the community via TikTok API for Business.",
+        "description": "TikTok integration — upload videos, discover trending sounds and hashtags, search content, track analytics, and engage with the community via TikTok API for Business.",
         "features": [
           "Upload videos with captions and hashtags",
           "Discover trending sounds and hashtags",
@@ -1101,7 +1100,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1112,7 +1111,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/tlon",
-        "description": "Tlon / Urbit messaging \u2014 peer-to-peer, identity-sovereign communication.",
+        "description": "Tlon / Urbit messaging — peer-to-peer, identity-sovereign communication.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1138,7 +1137,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-tlon",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tlon",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1149,7 +1148,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/twitch",
-        "description": "Twitch IRC chat via tmi.js \u2014 supports inbound/outbound chat messaging.",
+        "description": "Twitch IRC chat via tmi.js — supports inbound/outbound chat messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1172,7 +1171,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitch",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitch",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1183,7 +1182,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/twitter",
-        "description": "Bidirectional Twitter/X integration \u2014 post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
+        "description": "Bidirectional Twitter/X integration — post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
         "features": [
           "Post tweets with text, images, video, and polls",
           "Reply to tweets and quote tweets",
@@ -1215,7 +1214,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-twitter",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1226,7 +1225,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/webchat",
-        "description": "Lightweight web chat channel adapter \u2014 delegates to WunderlandGateway (Socket.IO) for transport. No external SDK required.",
+        "description": "Lightweight web chat channel adapter — delegates to WunderlandGateway (Socket.IO) for transport. No external SDK required.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1254,7 +1253,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-webchat",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/webchat",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1265,7 +1264,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/whatsapp",
-        "description": "Bidirectional WhatsApp messaging via Baileys \u2014 supports text, images, documents, typing indicators, and groups.",
+        "description": "Bidirectional WhatsApp messaging via Baileys — supports text, images, documents, typing indicators, and groups.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1297,7 +1296,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-whatsapp",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/whatsapp",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1308,7 +1307,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/youtube",
-        "description": "YouTube integration \u2014 upload videos, publish Shorts, comment on videos, search content, discover trending, track analytics, manage playlists, and schedule publishing via YouTube Data API v3.",
+        "description": "YouTube integration — upload videos, publish Shorts, comment on videos, search content, discover trending, track analytics, manage playlists, and schedule publishing via YouTube Data API v3.",
         "features": [
           "Upload videos with metadata (title, description, tags, category)",
           "Publish YouTube Shorts",
@@ -1335,7 +1334,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-youtube",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/youtube",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1346,7 +1345,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/zalo",
-        "description": "Zalo Bot API \u2014 text messaging with optional webhook or long-polling.",
+        "description": "Zalo Bot API — text messaging with optional webhook or long-polling.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1370,7 +1369,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalo",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1406,7 +1405,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-channel-zalouser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalouser",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1417,7 +1416,7 @@
         "version": "0.1.0",
         "category": "cloud",
         "path": "registry/curated/cloud/aws",
-        "description": "Deploy static sites to S3 with website hosting, manage Lightsail instances, configure Route53 DNS records, deploy apps via AWS Amplify, create CloudFront distributions, and deploy Lambda functions. Uses direct REST API calls with AWS Signature V4 signing \u2014 no SDK required.",
+        "description": "Deploy static sites to S3 with website hosting, manage Lightsail instances, configure Route53 DNS records, deploy apps via AWS Amplify, create CloudFront distributions, and deploy Lambda functions. Uses direct REST API calls with AWS Signature V4 signing — no SDK required.",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
@@ -1457,7 +1456,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-aws",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/aws",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1498,7 +1497,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-cloudflare-pages",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/cloudflare-pages",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1543,7 +1542,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-digitalocean",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/digitalocean",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1584,7 +1583,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-flyio",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/flyio",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1626,7 +1625,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-heroku",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/heroku",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1671,7 +1670,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-linode",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/linode",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1712,7 +1711,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-netlify",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/netlify",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1752,7 +1751,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-railway",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/railway",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1794,7 +1793,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cloud-vercel",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/vercel",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1805,7 +1804,7 @@
         "version": "0.1.0",
         "category": "communications",
         "path": "registry/curated/communications/notifications",
-        "description": "Unified multi-channel notification router \u2014 send, broadcast, and schedule notifications across all configured channels.",
+        "description": "Unified multi-channel notification router — send, broadcast, and schedule notifications across all configured channels.",
         "features": [
           "Send notifications via a specific channel or the highest-priority available channel",
           "Broadcast notifications to all registered channels simultaneously",
@@ -1822,7 +1821,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-notifications",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1865,62 +1864,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.community.founders",
-        "name": "The Founders",
-        "package": "@framers/agentos-ext-founders",
-        "version": "1.0.0",
-        "category": "community",
-        "path": "registry/curated/community/founders",
-        "description": "Gamified build-in-public program \u2014 daily standups, weekly updates, XP levels, streaks, milestones, cofounder matching, and project showcase",
-        "author": {
-          "name": "Rabbit Hole Inc"
-        },
-        "features": [],
-        "tools": [
-          "founders_query"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "founders",
-          "gamification",
-          "xp",
-          "leaderboard",
-          "discord"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-founders",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/founders",
-        "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.community.verify",
-        "name": "Discord verification \u2014 link Discord accounts to RabbitHole subscriptions and sync roles",
-        "package": "@framers/agentos-ext-verify",
-        "version": "1.0.0",
-        "category": "community",
-        "path": "registry/curated/community/verify",
-        "description": "Discord verification \u2014 link Discord accounts to RabbitHole subscriptions and sync roles",
-        "features": [],
-        "tools": [],
-        "keywords": [
-          "agentos",
-          "extension",
-          "verify",
-          "discord",
-          "rabbithole"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-verify",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/community/verify",
-        "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -1961,7 +1905,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-cloudflare-registrar",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/cloudflare-registrar",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2003,7 +1947,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-godaddy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/godaddy",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2046,7 +1990,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-namecheap",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/namecheap",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2088,7 +2032,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-domain-porkbun",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/porkbun",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2099,7 +2043,7 @@
         "version": "0.1.0",
         "category": "integrations",
         "path": "registry/curated/integrations/github",
-        "description": "GitHub API tools \u2014 search repos/code, manage issues/PRs, read files, create gists.",
+        "description": "GitHub API tools — search repos/code, manage issues/PRs, read files, create gists.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -2130,7 +2074,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-github",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/github",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2175,51 +2119,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-telegram",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/telegram",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.rabbithole.integrations.wunderbot-feeds",
-        "name": "Wunderbot Feeds",
-        "package": "@framers/agentos-ext-wunderbot-feeds",
-        "version": "1.0.0",
-        "category": "integrations",
-        "path": "registry/curated/integrations/wunderbot-feeds",
-        "description": "Scheduled feed posting \u2014 fetches scraped content from Python API and posts formatted Discord embeds on a timer.",
-        "author": {
-          "name": "Rabbit Hole Inc",
-          "url": "https://rabbithole.inc"
-        },
-        "features": [
-          "Scheduled news posting (6 categories)",
-          "Udemy deals posting",
-          "Short squeeze stocks",
-          "Trending crypto",
-          "Threat intelligence RSS",
-          "Job listings",
-          "AI papers from arXiv",
-          "Uniswap sniper SSE"
-        ],
-        "tools": [
-          "fetchNews",
-          "fetchDeals",
-          "fetchTrades"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "integration",
-          "feeds",
-          "scraper",
-          "discord",
-          "news",
-          "crypto"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-wunderbot-feeds",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/wunderbot-feeds",
-        "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2250,7 +2150,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-giphy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/giphy",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2280,7 +2180,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/image-search",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2316,7 +2216,59 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-synthesis",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/voice-synthesis",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.productivity.email-intelligence",
+        "name": "Email Intelligence Extension",
+        "package": "@framers/agentos-ext-email-intelligence",
+        "version": "0.1.0",
+        "category": "productivity",
+        "path": "registry/curated/productivity/email-intelligence",
+        "description": "Query email threads, projects, attachments and generate reports via backend REST API.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Full-text semantic search across email threads",
+          "Thread hierarchy and conversation view",
+          "Project-based email organization",
+          "Project summaries and timelines",
+          "Multi-account support",
+          "Attachment metadata retrieval",
+          "Project creation and thread assignment",
+          "Automated project reports",
+          "Digest previews",
+          "Account sync status monitoring"
+        ],
+        "tools": [
+          "searchAcrossThreads",
+          "getThreadHierarchy",
+          "listProjects",
+          "getProjectSummary",
+          "getProjectTimeline",
+          "listAccounts",
+          "getAttachment",
+          "createProject",
+          "addThreadToProject",
+          "generateReport",
+          "getDigestPreview",
+          "syncStatus"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "email",
+          "intelligence",
+          "productivity"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-email-intelligence",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/email-intelligence",
+        "verified": true,
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2327,7 +2279,7 @@
         "version": "0.1.0",
         "category": "productivity",
         "path": "registry/curated/productivity/gmail",
-        "description": "Gmail email integration with OAuth2 \u2014 list, read, send, reply, search messages and manage labels.",
+        "description": "Gmail email integration with OAuth2 — list, read, send, reply, search messages and manage labels.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -2359,7 +2311,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-email-gmail",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/gmail",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2370,7 +2322,7 @@
         "version": "0.1.0",
         "category": "productivity",
         "path": "registry/curated/productivity/google-calendar",
-        "description": "Google Calendar integration with OAuth2 auth and event management \u2014 supports event CRUD, free/busy queries, and multi-calendar listing.",
+        "description": "Google Calendar integration with OAuth2 auth and event management — supports event CRUD, free/busy queries, and multi-calendar listing.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -2403,7 +2355,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-calendar-google",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/google-calendar",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2414,7 +2366,7 @@
         "version": "1.1.0",
         "category": "provenance",
         "path": "registry/curated/provenance/anchor-providers",
-        "description": "External anchor providers for the AgentOS provenance system \u2014 WORM storage, transparency logs, and blockchain timestamping",
+        "description": "External anchor providers for the AgentOS provenance system — WORM storage, transparency logs, and blockchain timestamping",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
@@ -2444,38 +2396,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
-        "verificationChecklistVersion": "1.0.0",
-        "downloads": 0
-      },
-      {
-        "id": "com.framers.provenance.wunderland-tip-ingestion",
-        "name": "Wunderland Tip Ingestion",
-        "package": "@framers/agentos-ext-tip-ingestion",
-        "version": "1.1.0",
-        "category": "provenance",
-        "path": "registry/curated/provenance/wunderland-tip-ingestion",
-        "description": "Deterministic IPFS pinning and on-chain tip ingestion utilities for Wunderland agents",
-        "author": {
-          "name": "Frame.dev",
-          "email": "support@frame.dev",
-          "url": "https://github.com/framersai"
-        },
-        "features": [],
-        "tools": [],
-        "keywords": [
-          "wunderland",
-          "agentos",
-          "provenance",
-          "tip-ingestion",
-          "ipfs",
-          "solana",
-          "blockchain"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/wunderland-tip-ingestion",
-        "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2505,7 +2426,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-content-extraction",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/content-extraction",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2535,7 +2456,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-deep-research",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2563,7 +2484,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-news-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/news-search",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2574,7 +2495,7 @@
         "version": "1.0.0",
         "category": "research",
         "path": "registry/curated/research/stealth-browser",
-        "description": "Stealth browser automation with anti-detection \u2014 bypasses bot protection on sites like Amazon, eBay, LinkedIn using puppeteer-extra with stealth plugin",
+        "description": "Stealth browser automation with anti-detection — bypasses bot protection on sites like Amazon, eBay, LinkedIn using puppeteer-extra with stealth plugin",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
@@ -2601,7 +2522,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-stealth-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/stealth-browser",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2631,7 +2552,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-weather",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/weather",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2669,7 +2590,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-browser",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-browser",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2705,7 +2626,102 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-search",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-search",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.safety.code-safety",
+        "name": "Static analysis guardrail for detecting dangerous code patterns in AgentOS",
+        "package": "@framers/agentos-ext-code-safety",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/code-safety",
+        "description": "Static analysis guardrail for detecting dangerous code patterns in AgentOS",
+        "author": "Frame.dev",
+        "features": [],
+        "tools": [],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-code-safety",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/code-safety",
+        "verified": true,
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.safety.grounding-guard",
+        "name": "NLI-based factual grounding verification guardrail for AgentOS",
+        "package": "@framers/agentos-ext-grounding-guard",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/grounding-guard",
+        "description": "NLI-based factual grounding verification guardrail for AgentOS",
+        "author": "Frame.dev",
+        "features": [],
+        "tools": [],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-grounding-guard",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/grounding-guard",
+        "verified": true,
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.safety.ml-classifiers",
+        "name": "ML-based content classification guardrail (toxicity, injection, jailbreak) for AgentOS",
+        "package": "@framers/agentos-ext-ml-classifiers",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/ml-classifiers",
+        "description": "ML-based content classification guardrail (toxicity, injection, jailbreak) for AgentOS",
+        "author": "Frame.dev",
+        "features": [],
+        "tools": [],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-ml-classifiers",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/ml-classifiers",
+        "verified": true,
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.safety.pii-redaction",
+        "name": "Four-tier PII detection and redaction guardrail for AgentOS",
+        "package": "@framers/agentos-ext-pii-redaction",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/pii-redaction",
+        "description": "Four-tier PII detection and redaction guardrail for AgentOS",
+        "author": "Frame.dev",
+        "features": [],
+        "tools": [],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-pii-redaction",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/pii-redaction",
+        "verified": true,
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.safety.topicality",
+        "name": "Semantic topic enforcement guardrail with drift detection for AgentOS",
+        "package": "@framers/agentos-ext-topicality",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/topicality",
+        "description": "Semantic topic enforcement guardrail with drift detection for AgentOS",
+        "author": "Frame.dev",
+        "features": [],
+        "tools": [],
+        "keywords": [],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-topicality",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/topicality",
+        "verified": true,
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2716,7 +2732,7 @@
         "version": "0.1.0",
         "category": "system",
         "path": "registry/curated/system/browser-automation",
-        "description": "Full browser automation for autonomous agents \u2014 navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies. Powered by Playwright with persistent session support.",
+        "description": "Full browser automation for autonomous agents — navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies. Powered by Playwright with persistent session support.",
         "features": [
           "Navigate to any URL with full page rendering",
           "Click elements by CSS selector, text content, or ARIA role",
@@ -2724,7 +2740,7 @@
           "Capture full-page or element screenshots",
           "Extract text, HTML, or structured data from DOM",
           "Wait for selectors, navigation, or custom conditions",
-          "Smart page snapshot \u2014 inventory of all interactive elements",
+          "Smart page snapshot — inventory of all interactive elements",
           "Execute arbitrary JavaScript in page context",
           "Persistent login sessions via cookie/localStorage storage",
           "CAPTCHA solving via 2captcha (reCAPTCHA, hCaptcha, Turnstile)",
@@ -2747,7 +2763,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-browser-automation",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/browser-automation",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2788,7 +2804,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-cli-executor",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/cli-executor",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2818,7 +2834,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-credential-vault",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2858,7 +2874,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-agent-delegation",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/agent-delegation",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2898,7 +2914,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-bulk-scheduler",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/bulk-scheduler",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2924,7 +2940,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-image-generation",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/image-generation",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -2964,7 +2980,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-media-upload",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/media-upload",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3001,7 +3017,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-multi-channel-post",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/multi-channel-post",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3042,7 +3058,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-site-deploy",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/site-deploy",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3079,7 +3095,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-tool-social-analytics",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/social-analytics",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3135,7 +3151,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-wallet",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/wallet",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3146,7 +3162,7 @@
         "version": "0.1.0",
         "category": "voice",
         "path": "registry/curated/voice/plivo",
-        "description": "Plivo telephony provider for voice calls \u2014 supports outbound/inbound calls, XML response generation, notify and conversation modes.",
+        "description": "Plivo telephony provider for voice calls — supports outbound/inbound calls, XML response generation, notify and conversation modes.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -3174,7 +3190,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-plivo",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/plivo",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3185,7 +3201,7 @@
         "version": "0.1.0",
         "category": "voice",
         "path": "registry/curated/voice/telnyx",
-        "description": "Telnyx telephony provider for voice calls via Call Control v2 \u2014 outbound/inbound calls, TTS speak commands, and bidirectional media streaming.",
+        "description": "Telnyx telephony provider for voice calls via Call Control v2 — outbound/inbound calls, TTS speak commands, and bidirectional media streaming.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -3214,7 +3230,7 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-telnyx",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/telnyx",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       },
@@ -3225,7 +3241,7 @@
         "version": "0.1.0",
         "category": "voice",
         "path": "registry/curated/voice/twilio",
-        "description": "Twilio telephony provider for voice calls \u2014 supports outbound/inbound calls, TwiML, media streams, and bidirectional audio.",
+        "description": "Twilio telephony provider for voice calls — supports outbound/inbound calls, TwiML, media streams, and bidirectional audio.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -3254,187 +3270,9 @@
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-voice-twilio",
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/twilio",
         "verified": true,
-        "verifiedAt": "2026-03-18T00:19:24.545Z",
+        "verifiedAt": "2026-03-21T23:06:28.956Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
-      },
-      {
-        "id": "com.framers.safety.pii-redaction",
-        "name": "PII Redaction Guardrail",
-        "package": "@framers/agentos-ext-pii-redaction",
-        "version": "0.1.0",
-        "category": "safety",
-        "path": "registry/curated/safety/pii-redaction",
-        "description": "Four-tier PII detection and redaction guardrail with regex, NLP, NER, and LLM-judge recognizers. Supports 18 entity types with configurable redaction styles (placeholder, mask, hash, encrypt).",
-        "author": {
-          "name": "Framers AI",
-          "url": "https://frame.dev"
-        },
-        "features": [
-          "18 PII entity types (EMAIL, PHONE, SSN, etc.)",
-          "Four-tier detection pipeline (regex, NLP, NER, LLM judge)",
-          "Configurable redaction styles (placeholder, mask, hash, encrypt)",
-          "pii_scan tool for on-demand detection",
-          "pii_redact tool for on-demand redaction",
-          "Streaming and final-response evaluation"
-        ],
-        "tools": [
-          "pii_scan",
-          "pii_redact"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "guardrail",
-          "safety",
-          "pii",
-          "redaction",
-          "privacy"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-pii-redaction",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/pii-redaction"
-      },
-      {
-        "id": "com.framers.safety.ml-classifiers",
-        "name": "ML Content Classifier Guardrail",
-        "package": "@framers/agentos-ext-ml-classifiers",
-        "version": "0.1.0",
-        "category": "safety",
-        "path": "registry/curated/safety/ml-classifiers",
-        "description": "ML-based content classification guardrail with built-in toxicity, prompt-injection, and jailbreak classifiers powered by ONNX/WASM inference via @huggingface/transformers.",
-        "author": {
-          "name": "Framers AI",
-          "url": "https://frame.dev"
-        },
-        "features": [
-          "Three built-in classifiers: toxicity, injection, jailbreak",
-          "ONNX/WASM inference via @huggingface/transformers",
-          "Configurable block/flag/warn thresholds",
-          "Streaming sliding-window evaluation",
-          "classify_content tool for on-demand analysis",
-          "Custom classifier support via IContentClassifier"
-        ],
-        "tools": [
-          "classify_content"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "guardrail",
-          "safety",
-          "ml",
-          "toxicity",
-          "injection",
-          "jailbreak"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-ml-classifiers",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/ml-classifiers"
-      },
-      {
-        "id": "com.framers.safety.topicality",
-        "name": "Topicality Enforcement Guardrail",
-        "package": "@framers/agentos-ext-topicality",
-        "version": "0.1.0",
-        "category": "safety",
-        "path": "registry/curated/safety/topicality",
-        "description": "Semantic topic enforcement guardrail with allowed/forbidden topic sets, off-topic detection, and EMA-based session drift tracking.",
-        "author": {
-          "name": "Framers AI",
-          "url": "https://frame.dev"
-        },
-        "features": [
-          "Allowed and forbidden topic enforcement",
-          "Semantic similarity via embedding centroids",
-          "Session-level EMA drift detection",
-          "check_topic tool for on-demand analysis",
-          "Configurable thresholds and actions",
-          "Built-in topic presets (customer support, etc.)"
-        ],
-        "tools": [
-          "check_topic"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "guardrail",
-          "safety",
-          "topicality",
-          "topics",
-          "drift"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-topicality",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/topicality"
-      },
-      {
-        "id": "com.framers.safety.code-safety",
-        "name": "Code Safety Scanner Guardrail",
-        "package": "@framers/agentos-ext-code-safety",
-        "version": "0.1.0",
-        "category": "safety",
-        "path": "registry/curated/safety/code-safety",
-        "description": "Static analysis guardrail that detects dangerous code patterns (shell injection, SQL injection, file system abuse, etc.) in agent-generated code blocks.",
-        "author": {
-          "name": "Framers AI",
-          "url": "https://frame.dev"
-        },
-        "features": [
-          "Regex-based static analysis rules",
-          "Built-in rules for shell, SQL, filesystem, network dangers",
-          "Configurable severity actions (block, flag, warn)",
-          "scan_code tool for on-demand analysis",
-          "Custom rule support",
-          "Auto-extraction of fenced code blocks"
-        ],
-        "tools": [
-          "scan_code"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "guardrail",
-          "safety",
-          "code",
-          "static-analysis",
-          "injection"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-code-safety",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/code-safety"
-      },
-      {
-        "id": "com.framers.safety.grounding-guard",
-        "name": "Grounding Verification Guardrail",
-        "package": "@framers/agentos-ext-grounding-guard",
-        "version": "0.1.0",
-        "category": "safety",
-        "path": "registry/curated/safety/grounding-guard",
-        "description": "NLI-based factual grounding verification guardrail that checks agent output claims against RAG source documents using Natural Language Inference.",
-        "author": {
-          "name": "Framers AI",
-          "url": "https://frame.dev"
-        },
-        "features": [
-          "NLI-based claim verification (entailment/contradiction)",
-          "Streaming sentence-boundary buffering with real-time checks",
-          "Comprehensive final-pass claim extraction and batch verification",
-          "check_grounding tool for on-demand verification",
-          "LLM escalation for ambiguous claims",
-          "Configurable contradiction and unverifiable actions"
-        ],
-        "tools": [
-          "check_grounding"
-        ],
-        "keywords": [
-          "agentos",
-          "extension",
-          "guardrail",
-          "safety",
-          "grounding",
-          "nli",
-          "rag",
-          "hallucination"
-        ],
-        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-grounding-guard",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/grounding-guard"
       }
     ],
     "community": [],
@@ -3469,8 +3307,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 88,
-    "curatedCount": 85,
+    "totalExtensions": 90,
+    "curatedCount": 87,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0
