@@ -1,0 +1,32 @@
+{
+  "name": "@framers/agentos-ext-grounding-guard",
+  "version": "0.1.0",
+  "description": "NLI-based factual grounding verification guardrail for AgentOS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist", "src", "SKILL.md", "manifest.json"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0"
+  },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^3.0.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "typescript": "^5.5.0",
+    "vitest": "^1.6.0"
+  },
+  "license": "MIT",
+  "author": "Frame.dev"
+}

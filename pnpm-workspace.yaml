@@ -40,3 +40,8 @@ packages:
   - "registry/curated/research/stealth-browser"
   - "registry/curated/productivity/google-calendar"
   - "registry/curated/productivity/gmail"
+  - "registry/curated/safety/pii-redaction"
+  - "registry/curated/safety/ml-classifiers"
+  - "registry/curated/safety/topicality"
+  - "registry/curated/safety/code-safety"
+  - "registry/curated/safety/grounding-guard"

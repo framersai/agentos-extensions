@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-03-18T00:19:24.545Z",
+  "updated": "2026-03-21T00:00:00.000Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -19,6 +19,7 @@
       "productivity",
       "provenance",
       "research",
+      "safety",
       "system",
       "tools",
       "voice"
@@ -34,7 +35,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/blog-publisher",
-        "description": "Unified blog publishing adapter for Dev.to, Hashnode, Medium, and WordPress — publish, update, cross-post, and track analytics across all four platforms from a single interface.",
+        "description": "Unified blog publishing adapter for Dev.to, Hashnode, Medium, and WordPress \u2014 publish, update, cross-post, and track analytics across all four platforms from a single interface.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -84,7 +85,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/bluesky",
-        "description": "Bidirectional Bluesky integration — post, reply, like, repost, search, follow, and track engagement via the AT Protocol.",
+        "description": "Bidirectional Bluesky integration \u2014 post, reply, like, repost, search, follow, and track engagement via the AT Protocol.",
         "features": [
           "Post with text, images, and rich-text facets (mentions, links, hashtags)",
           "Reply to posts with full thread context",
@@ -123,7 +124,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/discord",
-        "description": "Bidirectional Discord messaging via discord.js — supports text, embeds, images, documents, threads, reactions, and guild management.",
+        "description": "Bidirectional Discord messaging via discord.js \u2014 supports text, embeds, images, documents, threads, reactions, and guild management.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -166,7 +167,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/email",
-        "description": "Bidirectional email integration — send, read, search, extract verification codes, and reply to email threads via SMTP and IMAP.",
+        "description": "Bidirectional email integration \u2014 send, read, search, extract verification codes, and reply to email threads via SMTP and IMAP.",
         "features": [
           "Send emails with text, HTML, and attachments via SMTP",
           "Read inbox and other IMAP folders",
@@ -197,7 +198,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/facebook",
-        "description": "Bidirectional Facebook integration — page posts, photos, videos, comments, likes, shares, and engagement analytics via Meta Graph API v19.",
+        "description": "Bidirectional Facebook integration \u2014 page posts, photos, videos, comments, likes, shares, and engagement analytics via Meta Graph API v19.",
         "features": [
           "Post to personal profile and managed pages",
           "Upload photos and videos to pages",
@@ -235,7 +236,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/farcaster",
-        "description": "Bidirectional Farcaster integration — publish casts, reply, like, recast, search, and browse feeds via Neynar API.",
+        "description": "Bidirectional Farcaster integration \u2014 publish casts, reply, like, recast, search, and browse feeds via Neynar API.",
         "features": [
           "Publish casts with text, embeds, and channel targeting",
           "Reply to existing casts",
@@ -268,7 +269,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/feishu",
-        "description": "Feishu (Lark) bot via official SDK — supports outbound messages + inbound webhooks.",
+        "description": "Feishu (Lark) bot via official SDK \u2014 supports outbound messages + inbound webhooks.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -304,7 +305,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/google-business",
-        "description": "Bidirectional Google Business Profile integration — create local posts, reply to reviews, view analytics, and update business information via Google My Business API.",
+        "description": "Bidirectional Google Business Profile integration \u2014 create local posts, reply to reviews, view analytics, and update business information via Google My Business API.",
         "features": [
           "Create local posts with text, media, events, and offers",
           "Reply to customer reviews",
@@ -335,7 +336,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/google-chat",
-        "description": "Google Workspace Chat via Cloud API — supports outbound messages + inbound webhooks.",
+        "description": "Google Workspace Chat via Cloud API \u2014 supports outbound messages + inbound webhooks.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -370,7 +371,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/imessage",
-        "description": "iMessage bridge via BlueBubbles — macOS server required. Supports outbound sends + inbound webhooks.",
+        "description": "iMessage bridge via BlueBubbles \u2014 macOS server required. Supports outbound sends + inbound webhooks.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -406,7 +407,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/instagram",
-        "description": "Full Instagram integration — post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API with browser automation fallback.",
+        "description": "Full Instagram integration \u2014 post photos, reels, stories, carousels, manage DMs, research hashtags, and track engagement via Instagram Graph API with browser automation fallback.",
         "features": [
           "Post single photos and multi-image carousels",
           "Upload Reels with captions and hashtags",
@@ -446,7 +447,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/irc",
-        "description": "IRC channel adapter — supports inbound/outbound messages and channel joins.",
+        "description": "IRC channel adapter \u2014 supports inbound/outbound messages and channel joins.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -482,7 +483,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/lemmy",
-        "description": "Bidirectional Lemmy integration — create posts, comment, vote, search, subscribe to communities, and browse feeds via Lemmy HTTP API.",
+        "description": "Bidirectional Lemmy integration \u2014 create posts, comment, vote, search, subscribe to communities, and browse feeds via Lemmy HTTP API.",
         "features": [
           "Create posts with text, body, and URL links",
           "Comment on posts with threaded replies",
@@ -515,7 +516,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/line",
-        "description": "LINE Messaging API — inbound webhook (signature-verified) + outbound messaging.",
+        "description": "LINE Messaging API \u2014 inbound webhook (signature-verified) + outbound messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -551,7 +552,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/linkedin",
-        "description": "LinkedIn Marketing API v2 — posts, articles, comments, company pages, search, and engagement analytics.",
+        "description": "LinkedIn Marketing API v2 \u2014 posts, articles, comments, company pages, search, and engagement analytics.",
         "features": [
           "Post text, images, videos, and articles to personal profile",
           "Post to company/organization pages",
@@ -588,7 +589,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/mastodon",
-        "description": "Bidirectional Mastodon integration — post statuses, reply, boost, favourite, search trends, follow accounts, and track engagement via the Mastodon API.",
+        "description": "Bidirectional Mastodon integration \u2014 post statuses, reply, boost, favourite, search trends, follow accounts, and track engagement via the Mastodon API.",
         "features": [
           "Post statuses with text, spoiler text, and media attachments",
           "Reply to existing statuses",
@@ -627,7 +628,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/matrix",
-        "description": "Matrix/Element via matrix-bot-sdk — decentralized, federated messaging.",
+        "description": "Matrix/Element via matrix-bot-sdk \u2014 decentralized, federated messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -661,7 +662,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/mattermost",
-        "description": "Mattermost self-hosted chat — supports outbound posts and inbound WebSocket events.",
+        "description": "Mattermost self-hosted chat \u2014 supports outbound posts and inbound WebSocket events.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -695,7 +696,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/nextcloud",
-        "description": "Nextcloud Talk bot API — self-hosted, privacy-focused team messaging via webhook bots.",
+        "description": "Nextcloud Talk bot API \u2014 self-hosted, privacy-focused team messaging via webhook bots.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -731,7 +732,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/nostr",
-        "description": "Nostr relay messaging via nostr-tools — decentralized, censorship-resistant encrypted DMs (NIP-04).",
+        "description": "Nostr relay messaging via nostr-tools \u2014 decentralized, censorship-resistant encrypted DMs (NIP-04).",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -765,7 +766,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/pinterest",
-        "description": "Pinterest integration — create pins, manage boards, search content, discover trends, track analytics, and schedule posts via Pinterest API v5.",
+        "description": "Pinterest integration \u2014 create pins, manage boards, search content, discover trends, track analytics, and schedule posts via Pinterest API v5.",
         "features": [
           "Create image, video, and idea pins",
           "Create and manage boards and sections",
@@ -800,7 +801,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/reddit",
-        "description": "Bidirectional Reddit interaction via snoowrap — supports posting, commenting, voting, searching, trending, subscriptions, messaging, and analytics.",
+        "description": "Bidirectional Reddit interaction via snoowrap \u2014 supports posting, commenting, voting, searching, trending, subscriptions, messaging, and analytics.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -848,7 +849,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/signal",
-        "description": "Signal messenger integration via signal-cli — end-to-end encrypted messaging.",
+        "description": "Signal messenger integration via signal-cli \u2014 end-to-end encrypted messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -882,7 +883,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/slack",
-        "description": "Bidirectional Slack messaging via @slack/bolt — supports text, rich text, images, documents, threads, reactions, and group chat.",
+        "description": "Bidirectional Slack messaging via @slack/bolt \u2014 supports text, rich text, images, documents, threads, reactions, and group chat.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -925,7 +926,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/sms",
-        "description": "SMS messaging via Twilio — inbound webhook + outbound sends.",
+        "description": "SMS messaging via Twilio \u2014 inbound webhook + outbound sends.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -962,7 +963,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/teams",
-        "description": "Microsoft Teams bot via Bot Framework — supports inbound webhooks + proactive outbound sends.",
+        "description": "Microsoft Teams bot via Bot Framework \u2014 supports inbound webhooks + proactive outbound sends.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -997,7 +998,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/telegram",
-        "description": "Bidirectional Telegram messaging via grammY — supports text, images, documents, inline keyboards, and groups.",
+        "description": "Bidirectional Telegram messaging via grammY \u2014 supports text, images, documents, inline keyboards, and groups.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1040,7 +1041,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/threads",
-        "description": "Bidirectional Threads integration — post text, images, videos, carousels, reply, quote, like, search user threads, and track engagement analytics via Meta Threads Publishing API.",
+        "description": "Bidirectional Threads integration \u2014 post text, images, videos, carousels, reply, quote, like, search user threads, and track engagement analytics via Meta Threads Publishing API.",
         "features": [
           "Post text posts to Threads",
           "Post image posts with captions",
@@ -1077,7 +1078,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/tiktok",
-        "description": "TikTok integration — upload videos, discover trending sounds and hashtags, search content, track analytics, and engage with the community via TikTok API for Business.",
+        "description": "TikTok integration \u2014 upload videos, discover trending sounds and hashtags, search content, track analytics, and engage with the community via TikTok API for Business.",
         "features": [
           "Upload videos with captions and hashtags",
           "Discover trending sounds and hashtags",
@@ -1111,7 +1112,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/tlon",
-        "description": "Tlon / Urbit messaging — peer-to-peer, identity-sovereign communication.",
+        "description": "Tlon / Urbit messaging \u2014 peer-to-peer, identity-sovereign communication.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1148,7 +1149,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/twitch",
-        "description": "Twitch IRC chat via tmi.js — supports inbound/outbound chat messaging.",
+        "description": "Twitch IRC chat via tmi.js \u2014 supports inbound/outbound chat messaging.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1182,7 +1183,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/twitter",
-        "description": "Bidirectional Twitter/X integration — post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
+        "description": "Bidirectional Twitter/X integration \u2014 post tweets, reply, quote, thread, search trends, DM, and track engagement via Twitter API v2.",
         "features": [
           "Post tweets with text, images, video, and polls",
           "Reply to tweets and quote tweets",
@@ -1225,7 +1226,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/webchat",
-        "description": "Lightweight web chat channel adapter — delegates to WunderlandGateway (Socket.IO) for transport. No external SDK required.",
+        "description": "Lightweight web chat channel adapter \u2014 delegates to WunderlandGateway (Socket.IO) for transport. No external SDK required.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1264,7 +1265,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/whatsapp",
-        "description": "Bidirectional WhatsApp messaging via Baileys — supports text, images, documents, typing indicators, and groups.",
+        "description": "Bidirectional WhatsApp messaging via Baileys \u2014 supports text, images, documents, typing indicators, and groups.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1307,7 +1308,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/youtube",
-        "description": "YouTube integration — upload videos, publish Shorts, comment on videos, search content, discover trending, track analytics, manage playlists, and schedule publishing via YouTube Data API v3.",
+        "description": "YouTube integration \u2014 upload videos, publish Shorts, comment on videos, search content, discover trending, track analytics, manage playlists, and schedule publishing via YouTube Data API v3.",
         "features": [
           "Upload videos with metadata (title, description, tags, category)",
           "Publish YouTube Shorts",
@@ -1345,7 +1346,7 @@
         "version": "0.1.0",
         "category": "channels",
         "path": "registry/curated/channels/zalo",
-        "description": "Zalo Bot API — text messaging with optional webhook or long-polling.",
+        "description": "Zalo Bot API \u2014 text messaging with optional webhook or long-polling.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -1416,7 +1417,7 @@
         "version": "0.1.0",
         "category": "cloud",
         "path": "registry/curated/cloud/aws",
-        "description": "Deploy static sites to S3 with website hosting, manage Lightsail instances, configure Route53 DNS records, deploy apps via AWS Amplify, create CloudFront distributions, and deploy Lambda functions. Uses direct REST API calls with AWS Signature V4 signing — no SDK required.",
+        "description": "Deploy static sites to S3 with website hosting, manage Lightsail instances, configure Route53 DNS records, deploy apps via AWS Amplify, create CloudFront distributions, and deploy Lambda functions. Uses direct REST API calls with AWS Signature V4 signing \u2014 no SDK required.",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
@@ -1804,7 +1805,7 @@
         "version": "0.1.0",
         "category": "communications",
         "path": "registry/curated/communications/notifications",
-        "description": "Unified multi-channel notification router — send, broadcast, and schedule notifications across all configured channels.",
+        "description": "Unified multi-channel notification router \u2014 send, broadcast, and schedule notifications across all configured channels.",
         "features": [
           "Send notifications via a specific channel or the highest-priority available channel",
           "Broadcast notifications to all registered channels simultaneously",
@@ -1875,7 +1876,7 @@
         "version": "1.0.0",
         "category": "community",
         "path": "registry/curated/community/founders",
-        "description": "Gamified build-in-public program — daily standups, weekly updates, XP levels, streaks, milestones, cofounder matching, and project showcase",
+        "description": "Gamified build-in-public program \u2014 daily standups, weekly updates, XP levels, streaks, milestones, cofounder matching, and project showcase",
         "author": {
           "name": "Rabbit Hole Inc"
         },
@@ -1901,12 +1902,12 @@
       },
       {
         "id": "com.framers.community.verify",
-        "name": "Discord verification — link Discord accounts to RabbitHole subscriptions and sync roles",
+        "name": "Discord verification \u2014 link Discord accounts to RabbitHole subscriptions and sync roles",
         "package": "@framers/agentos-ext-verify",
         "version": "1.0.0",
         "category": "community",
         "path": "registry/curated/community/verify",
-        "description": "Discord verification — link Discord accounts to RabbitHole subscriptions and sync roles",
+        "description": "Discord verification \u2014 link Discord accounts to RabbitHole subscriptions and sync roles",
         "features": [],
         "tools": [],
         "keywords": [
@@ -2098,7 +2099,7 @@
         "version": "0.1.0",
         "category": "integrations",
         "path": "registry/curated/integrations/github",
-        "description": "GitHub API tools — search repos/code, manage issues/PRs, read files, create gists.",
+        "description": "GitHub API tools \u2014 search repos/code, manage issues/PRs, read files, create gists.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -2185,7 +2186,7 @@
         "version": "1.0.0",
         "category": "integrations",
         "path": "registry/curated/integrations/wunderbot-feeds",
-        "description": "Scheduled feed posting — fetches scraped content from Python API and posts formatted Discord embeds on a timer.",
+        "description": "Scheduled feed posting \u2014 fetches scraped content from Python API and posts formatted Discord embeds on a timer.",
         "author": {
           "name": "Rabbit Hole Inc",
           "url": "https://rabbithole.inc"
@@ -2326,7 +2327,7 @@
         "version": "0.1.0",
         "category": "productivity",
         "path": "registry/curated/productivity/gmail",
-        "description": "Gmail email integration with OAuth2 — list, read, send, reply, search messages and manage labels.",
+        "description": "Gmail email integration with OAuth2 \u2014 list, read, send, reply, search messages and manage labels.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -2369,7 +2370,7 @@
         "version": "0.1.0",
         "category": "productivity",
         "path": "registry/curated/productivity/google-calendar",
-        "description": "Google Calendar integration with OAuth2 auth and event management — supports event CRUD, free/busy queries, and multi-calendar listing.",
+        "description": "Google Calendar integration with OAuth2 auth and event management \u2014 supports event CRUD, free/busy queries, and multi-calendar listing.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -2413,7 +2414,7 @@
         "version": "1.1.0",
         "category": "provenance",
         "path": "registry/curated/provenance/anchor-providers",
-        "description": "External anchor providers for the AgentOS provenance system — WORM storage, transparency logs, and blockchain timestamping",
+        "description": "External anchor providers for the AgentOS provenance system \u2014 WORM storage, transparency logs, and blockchain timestamping",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
@@ -2573,7 +2574,7 @@
         "version": "1.0.0",
         "category": "research",
         "path": "registry/curated/research/stealth-browser",
-        "description": "Stealth browser automation with anti-detection — bypasses bot protection on sites like Amazon, eBay, LinkedIn using puppeteer-extra with stealth plugin",
+        "description": "Stealth browser automation with anti-detection \u2014 bypasses bot protection on sites like Amazon, eBay, LinkedIn using puppeteer-extra with stealth plugin",
         "author": {
           "name": "Frame.dev",
           "email": "support@frame.dev",
@@ -2715,7 +2716,7 @@
         "version": "0.1.0",
         "category": "system",
         "path": "registry/curated/system/browser-automation",
-        "description": "Full browser automation for autonomous agents — navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies. Powered by Playwright with persistent session support.",
+        "description": "Full browser automation for autonomous agents \u2014 navigate URLs, interact with DOM elements, capture screenshots, solve captchas, and rotate proxies. Powered by Playwright with persistent session support.",
         "features": [
           "Navigate to any URL with full page rendering",
           "Click elements by CSS selector, text content, or ARIA role",
@@ -2723,7 +2724,7 @@
           "Capture full-page or element screenshots",
           "Extract text, HTML, or structured data from DOM",
           "Wait for selectors, navigation, or custom conditions",
-          "Smart page snapshot — inventory of all interactive elements",
+          "Smart page snapshot \u2014 inventory of all interactive elements",
           "Execute arbitrary JavaScript in page context",
           "Persistent login sessions via cookie/localStorage storage",
           "CAPTCHA solving via 2captcha (reCAPTCHA, hCaptcha, Turnstile)",
@@ -3145,7 +3146,7 @@
         "version": "0.1.0",
         "category": "voice",
         "path": "registry/curated/voice/plivo",
-        "description": "Plivo telephony provider for voice calls — supports outbound/inbound calls, XML response generation, notify and conversation modes.",
+        "description": "Plivo telephony provider for voice calls \u2014 supports outbound/inbound calls, XML response generation, notify and conversation modes.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -3184,7 +3185,7 @@
         "version": "0.1.0",
         "category": "voice",
         "path": "registry/curated/voice/telnyx",
-        "description": "Telnyx telephony provider for voice calls via Call Control v2 — outbound/inbound calls, TTS speak commands, and bidirectional media streaming.",
+        "description": "Telnyx telephony provider for voice calls via Call Control v2 \u2014 outbound/inbound calls, TTS speak commands, and bidirectional media streaming.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -3224,7 +3225,7 @@
         "version": "0.1.0",
         "category": "voice",
         "path": "registry/curated/voice/twilio",
-        "description": "Twilio telephony provider for voice calls — supports outbound/inbound calls, TwiML, media streams, and bidirectional audio.",
+        "description": "Twilio telephony provider for voice calls \u2014 supports outbound/inbound calls, TwiML, media streams, and bidirectional audio.",
         "author": {
           "name": "Framers AI",
           "url": "https://frame.dev"
@@ -3256,6 +3257,184 @@
         "verifiedAt": "2026-03-18T00:19:24.545Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
+      },
+      {
+        "id": "com.framers.safety.pii-redaction",
+        "name": "PII Redaction Guardrail",
+        "package": "@framers/agentos-ext-pii-redaction",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/pii-redaction",
+        "description": "Four-tier PII detection and redaction guardrail with regex, NLP, NER, and LLM-judge recognizers. Supports 18 entity types with configurable redaction styles (placeholder, mask, hash, encrypt).",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "18 PII entity types (EMAIL, PHONE, SSN, etc.)",
+          "Four-tier detection pipeline (regex, NLP, NER, LLM judge)",
+          "Configurable redaction styles (placeholder, mask, hash, encrypt)",
+          "pii_scan tool for on-demand detection",
+          "pii_redact tool for on-demand redaction",
+          "Streaming and final-response evaluation"
+        ],
+        "tools": [
+          "pii_scan",
+          "pii_redact"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "guardrail",
+          "safety",
+          "pii",
+          "redaction",
+          "privacy"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-pii-redaction",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/pii-redaction"
+      },
+      {
+        "id": "com.framers.safety.ml-classifiers",
+        "name": "ML Content Classifier Guardrail",
+        "package": "@framers/agentos-ext-ml-classifiers",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/ml-classifiers",
+        "description": "ML-based content classification guardrail with built-in toxicity, prompt-injection, and jailbreak classifiers powered by ONNX/WASM inference via @huggingface/transformers.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Three built-in classifiers: toxicity, injection, jailbreak",
+          "ONNX/WASM inference via @huggingface/transformers",
+          "Configurable block/flag/warn thresholds",
+          "Streaming sliding-window evaluation",
+          "classify_content tool for on-demand analysis",
+          "Custom classifier support via IContentClassifier"
+        ],
+        "tools": [
+          "classify_content"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "guardrail",
+          "safety",
+          "ml",
+          "toxicity",
+          "injection",
+          "jailbreak"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-ml-classifiers",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/ml-classifiers"
+      },
+      {
+        "id": "com.framers.safety.topicality",
+        "name": "Topicality Enforcement Guardrail",
+        "package": "@framers/agentos-ext-topicality",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/topicality",
+        "description": "Semantic topic enforcement guardrail with allowed/forbidden topic sets, off-topic detection, and EMA-based session drift tracking.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Allowed and forbidden topic enforcement",
+          "Semantic similarity via embedding centroids",
+          "Session-level EMA drift detection",
+          "check_topic tool for on-demand analysis",
+          "Configurable thresholds and actions",
+          "Built-in topic presets (customer support, etc.)"
+        ],
+        "tools": [
+          "check_topic"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "guardrail",
+          "safety",
+          "topicality",
+          "topics",
+          "drift"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-topicality",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/topicality"
+      },
+      {
+        "id": "com.framers.safety.code-safety",
+        "name": "Code Safety Scanner Guardrail",
+        "package": "@framers/agentos-ext-code-safety",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/code-safety",
+        "description": "Static analysis guardrail that detects dangerous code patterns (shell injection, SQL injection, file system abuse, etc.) in agent-generated code blocks.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "Regex-based static analysis rules",
+          "Built-in rules for shell, SQL, filesystem, network dangers",
+          "Configurable severity actions (block, flag, warn)",
+          "scan_code tool for on-demand analysis",
+          "Custom rule support",
+          "Auto-extraction of fenced code blocks"
+        ],
+        "tools": [
+          "scan_code"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "guardrail",
+          "safety",
+          "code",
+          "static-analysis",
+          "injection"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-code-safety",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/code-safety"
+      },
+      {
+        "id": "com.framers.safety.grounding-guard",
+        "name": "Grounding Verification Guardrail",
+        "package": "@framers/agentos-ext-grounding-guard",
+        "version": "0.1.0",
+        "category": "safety",
+        "path": "registry/curated/safety/grounding-guard",
+        "description": "NLI-based factual grounding verification guardrail that checks agent output claims against RAG source documents using Natural Language Inference.",
+        "author": {
+          "name": "Framers AI",
+          "url": "https://frame.dev"
+        },
+        "features": [
+          "NLI-based claim verification (entailment/contradiction)",
+          "Streaming sentence-boundary buffering with real-time checks",
+          "Comprehensive final-pass claim extraction and batch verification",
+          "check_grounding tool for on-demand verification",
+          "LLM escalation for ambiguous claims",
+          "Configurable contradiction and unverifiable actions"
+        ],
+        "tools": [
+          "check_grounding"
+        ],
+        "keywords": [
+          "agentos",
+          "extension",
+          "guardrail",
+          "safety",
+          "grounding",
+          "nli",
+          "rag",
+          "hallucination"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-grounding-guard",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/grounding-guard"
       }
     ],
     "community": [],
