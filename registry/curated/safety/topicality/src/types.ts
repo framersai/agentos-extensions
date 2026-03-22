@@ -280,7 +280,7 @@ export interface TopicState {
 // ---------------------------------------------------------------------------
 
 /**
- * Top-level configuration object passed to the `createTopicalityPack()` factory.
+ * Top-level configuration object passed to the `createTopicalityGuardrail()` factory.
  *
  * Every property is optional; applying zero-config produces a permissive pack
  * with no topic filtering and no drift detection.
@@ -388,7 +388,7 @@ export interface TopicalityPackOptions {
  *
  * @example
  * ```ts
- * const pack = createTopicalityPack({
+ * const pack = createTopicalityGuardrail({
  *   allowedTopics: TOPIC_PRESETS.customerSupport,
  *   forbiddenTopics: TOPIC_PRESETS.commonUnsafe,
  * });

@@ -7,7 +7,7 @@ import { CodeSafetyScanner } from './CodeSafetyScanner';
 import { CodeSafetyGuardrail } from './CodeSafetyGuardrail';
 import { ScanCodeTool } from './tools/ScanCodeTool';
 
-export function createCodeSafetyPack(options?: CodeSafetyPackOptions): ExtensionPack {
+export function createCodeSafetyGuardrail(options?: CodeSafetyPackOptions): ExtensionPack {
   const opts = options ?? {};
   const rules = buildRuleSet(opts);
   const severityActions = { ...DEFAULT_SEVERITY_ACTIONS, ...opts.severityActions };
@@ -27,7 +27,7 @@ export function createCodeSafetyPack(options?: CodeSafetyPackOptions): Extension
 }
 
 export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
-  return createCodeSafetyPack(context.options as CodeSafetyPackOptions);
+  return createCodeSafetyGuardrail(context.options as CodeSafetyPackOptions);
 }
 
 function buildRuleSet(opts: CodeSafetyPackOptions): ICodeSafetyRule[] {
@@ -41,3 +41,6 @@ function buildRuleSet(opts: CodeSafetyPackOptions): ICodeSafetyRule[] {
 }
 
 export * from './types';
+
+/** @deprecated Use createCodeSafetyGuardrail instead */
+export const createCodeSafetyPack = createCodeSafetyGuardrail;

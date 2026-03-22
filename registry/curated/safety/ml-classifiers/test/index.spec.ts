@@ -3,12 +3,12 @@
  * @description Unit tests for the ML Classifier pack factory.
  *
  * Tests verify:
- *  - createMLClassifierPack returns an ExtensionPack with name 'ml-classifiers'
+ *  - createMLClassifierGuardrail returns an ExtensionPack with name 'ml-classifiers'
  *    and version '1.0.0'
  *  - The pack provides exactly 2 descriptors: 1 guardrail + 1 tool
  *  - Guardrail descriptor has id 'ml-classifier-guardrail' and kind 'guardrail'
  *  - Tool descriptor has id 'classify_content' and kind 'tool'
- *  - createExtensionPack bridges context.options to createMLClassifierPack
+ *  - createExtensionPack bridges context.options to createMLClassifierGuardrail
  *  - Disabled / selective classifiers work correctly
  *  - onActivate rebuilds components with the shared registry
  *  - onDeactivate disposes orchestrator and clears buffer
@@ -16,7 +16,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  createMLClassifierPack,
+  createMLClassifierGuardrail,
   createExtensionPack,
 } from '../src/index';
 import { SharedServiceRegistry } from '@framers/agentos';
@@ -94,7 +94,7 @@ import { JailbreakClassifier } from '../src/classifiers/JailbreakClassifier';
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('createMLClassifierPack', () => {
+describe('createMLClassifierGuardrail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -105,12 +105,12 @@ describe('createMLClassifierPack', () => {
 
   describe('pack identity', () => {
     it('returns an ExtensionPack with name "ml-classifiers"', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       expect(pack.name).toBe('ml-classifiers');
     });
 
     it('returns an ExtensionPack with version "1.0.0"', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       expect(pack.version).toBe('1.0.0');
     });
   });
@@ -121,33 +121,33 @@ describe('createMLClassifierPack', () => {
 
   describe('descriptors', () => {
     it('provides exactly 2 descriptors', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       expect(pack.descriptors).toHaveLength(2);
     });
 
     it('has a guardrail descriptor with id "ml-classifier-guardrail"', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const guardrailDescriptor = pack.descriptors.find((d) => d.id === 'ml-classifier-guardrail');
 
       expect(guardrailDescriptor).toBeDefined();
     });
 
     it('guardrail descriptor has kind "guardrail"', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const guardrailDescriptor = pack.descriptors.find((d) => d.id === 'ml-classifier-guardrail');
 
       expect(guardrailDescriptor?.kind).toBe(EXTENSION_KIND_GUARDRAIL);
     });
 
     it('guardrail descriptor has priority 5', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const guardrailDescriptor = pack.descriptors.find((d) => d.id === 'ml-classifier-guardrail');
 
       expect(guardrailDescriptor?.priority).toBe(5);
     });
 
     it('guardrail descriptor has a non-null payload', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const guardrailDescriptor = pack.descriptors.find((d) => d.id === 'ml-classifier-guardrail');
 
       expect(guardrailDescriptor?.payload).toBeDefined();
@@ -155,28 +155,28 @@ describe('createMLClassifierPack', () => {
     });
 
     it('has a tool descriptor with id "classify_content"', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'classify_content');
 
       expect(toolDescriptor).toBeDefined();
     });
 
     it('tool descriptor has kind "tool"', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'classify_content');
 
       expect(toolDescriptor?.kind).toBe(EXTENSION_KIND_TOOL);
     });
 
     it('tool descriptor has priority 0', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'classify_content');
 
       expect(toolDescriptor?.priority).toBe(0);
     });
 
     it('tool descriptor has a non-null payload', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'classify_content');
 
       expect(toolDescriptor?.payload).toBeDefined();
@@ -190,7 +190,7 @@ describe('createMLClassifierPack', () => {
 
   describe('zero-config classifier instantiation', () => {
     it('instantiates all three built-in classifiers when no classifiers option is given', () => {
-      createMLClassifierPack();
+      createMLClassifierGuardrail();
 
       // Each built-in classifier should have been constructed once.
       expect(ToxicityClassifier).toHaveBeenCalledOnce();
@@ -199,7 +199,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('instantiates all three built-in classifiers when classifiers is an empty array', () => {
-      createMLClassifierPack({ classifiers: [] });
+      createMLClassifierGuardrail({ classifiers: [] });
 
       expect(ToxicityClassifier).toHaveBeenCalledOnce();
       expect(InjectionClassifier).toHaveBeenCalledOnce();
@@ -213,7 +213,7 @@ describe('createMLClassifierPack', () => {
 
   describe('selective classifiers', () => {
     it('only instantiates ToxicityClassifier when classifiers: ["toxicity"]', () => {
-      createMLClassifierPack({ classifiers: ['toxicity'] });
+      createMLClassifierGuardrail({ classifiers: ['toxicity'] });
 
       expect(ToxicityClassifier).toHaveBeenCalledOnce();
       expect(InjectionClassifier).not.toHaveBeenCalled();
@@ -221,7 +221,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('only instantiates InjectionClassifier when classifiers: ["injection"]', () => {
-      createMLClassifierPack({ classifiers: ['injection'] });
+      createMLClassifierGuardrail({ classifiers: ['injection'] });
 
       expect(ToxicityClassifier).not.toHaveBeenCalled();
       expect(InjectionClassifier).toHaveBeenCalledOnce();
@@ -229,7 +229,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('only instantiates JailbreakClassifier when classifiers: ["jailbreak"]', () => {
-      createMLClassifierPack({ classifiers: ['jailbreak'] });
+      createMLClassifierGuardrail({ classifiers: ['jailbreak'] });
 
       expect(ToxicityClassifier).not.toHaveBeenCalled();
       expect(InjectionClassifier).not.toHaveBeenCalled();
@@ -237,7 +237,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('instantiates toxicity and jailbreak but not injection when specified', () => {
-      createMLClassifierPack({ classifiers: ['toxicity', 'jailbreak'] });
+      createMLClassifierGuardrail({ classifiers: ['toxicity', 'jailbreak'] });
 
       expect(ToxicityClassifier).toHaveBeenCalledOnce();
       expect(InjectionClassifier).not.toHaveBeenCalled();
@@ -245,7 +245,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('still provides 2 descriptors when only 1 classifier is enabled', () => {
-      const pack = createMLClassifierPack({ classifiers: ['toxicity'] });
+      const pack = createMLClassifierGuardrail({ classifiers: ['toxicity'] });
 
       // The guardrail and tool are always present regardless of classifier count.
       expect(pack.descriptors).toHaveLength(2);
@@ -268,7 +268,7 @@ describe('createMLClassifierPack', () => {
       };
 
       // Should not throw when a custom classifier is provided.
-      const pack = createMLClassifierPack({
+      const pack = createMLClassifierGuardrail({
         classifiers: ['toxicity'],
         customClassifiers: [customClassifier],
       });
@@ -284,7 +284,7 @@ describe('createMLClassifierPack', () => {
 
   describe('onActivate lifecycle hook', () => {
     it('rebuilds components when onActivate is called with a shared registry', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
 
       // Record the number of classifier constructions at pack-creation time.
       const constructsBefore =
@@ -306,7 +306,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('descriptors still reflect the rebuilt components after onActivate', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       const sharedRegistry = new SharedServiceRegistry();
       pack.onActivate!({ services: sharedRegistry });
 
@@ -315,7 +315,7 @@ describe('createMLClassifierPack', () => {
     });
 
     it('does not throw when onActivate is called without services', () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
 
       // Context without a services field should be handled gracefully.
       expect(() => pack.onActivate!({})).not.toThrow();
@@ -328,7 +328,7 @@ describe('createMLClassifierPack', () => {
 
   describe('onDeactivate lifecycle hook', () => {
     it('resolves without throwing', async () => {
-      const pack = createMLClassifierPack();
+      const pack = createMLClassifierGuardrail();
       await expect(pack.onDeactivate!()).resolves.toBeUndefined();
     });
   });
@@ -340,7 +340,7 @@ describe('createMLClassifierPack', () => {
   describe('options passthrough', () => {
     it('accepts and applies streaming mode options without throwing', () => {
       expect(() =>
-        createMLClassifierPack({
+        createMLClassifierGuardrail({
           streamingMode: true,
           chunkSize: 150,
           contextSize: 30,
@@ -352,7 +352,7 @@ describe('createMLClassifierPack', () => {
 
     it('accepts custom thresholds without throwing', () => {
       expect(() =>
-        createMLClassifierPack({
+        createMLClassifierGuardrail({
           thresholds: {
             blockThreshold: 0.95,
             flagThreshold: 0.75,
@@ -393,7 +393,7 @@ describe('createExtensionPack', () => {
     expect(pack.descriptors).toHaveLength(2);
   });
 
-  it('bridges context.options to createMLClassifierPack — classifiers subset', () => {
+  it('bridges context.options to createMLClassifierGuardrail — classifiers subset', () => {
     const context: ExtensionPackContext = {
       options: {
         classifiers: ['toxicity'],
@@ -408,7 +408,7 @@ describe('createExtensionPack', () => {
     expect(JailbreakClassifier).not.toHaveBeenCalled();
   });
 
-  it('bridges context.options to createMLClassifierPack — thresholds', () => {
+  it('bridges context.options to createMLClassifierGuardrail — thresholds', () => {
     const context: ExtensionPackContext = {
       options: {
         thresholds: { blockThreshold: 0.99 },

@@ -1,14 +1,14 @@
 /**
  * @fileoverview Pack factory for the ML Classifier Guardrail Extension Pack.
  *
- * Exports the main `createMLClassifierPack()` factory that assembles the
+ * Exports the main `createMLClassifierGuardrail()` factory that assembles the
  * ML classifier guardrail and the `classify_content` tool into a single
  * {@link ExtensionPack} ready for registration with the AgentOS extension
  * manager.
  *
  * Also exports a `createExtensionPack()` bridge function that conforms to
  * the AgentOS manifest factory convention, delegating to
- * `createMLClassifierPack()` with options extracted from the
+ * `createMLClassifierGuardrail()` with options extracted from the
  * {@link ExtensionPackContext}.
  *
  * ### Default behaviour (zero-config)
@@ -32,13 +32,13 @@
  *
  * @example
  * ```typescript
- * import { createMLClassifierPack } from './ml-classifiers';
+ * import { createMLClassifierGuardrail } from './ml-classifiers';
  *
  * // All built-in classifiers at default thresholds:
- * const pack = createMLClassifierPack();
+ * const pack = createMLClassifierGuardrail();
  *
  * // Toxicity only with custom block threshold:
- * const strictPack = createMLClassifierPack({
+ * const strictPack = createMLClassifierGuardrail({
  *   classifiers: ['toxicity'],
  *   thresholds: { blockThreshold: 0.85 },
  *   streamingMode: true,
@@ -73,7 +73,7 @@ import type { IContentClassifier } from './IContentClassifier';
  * Re-export all types from the ML classifier type definitions so consumers
  * can import everything from a single entry point:
  * ```ts
- * import { createMLClassifierPack, DEFAULT_THRESHOLDS } from './ml-classifiers';
+ * import { createMLClassifierGuardrail, DEFAULT_THRESHOLDS } from './ml-classifiers';
  * ```
  */
 export * from './types';
@@ -102,7 +102,7 @@ export * from './types';
  * @returns A fully-configured {@link ExtensionPack} with one guardrail
  *          descriptor and one tool descriptor.
  */
-export function createMLClassifierPack(options?: MLClassifierPackOptions): ExtensionPack {
+export function createMLClassifierGuardrail(options?: MLClassifierPackOptions): ExtensionPack {
   /**
    * Resolved options — default to empty object so every sub-check can
    * safely use `opts.foo` without null-guarding the whole `options` reference.
@@ -356,7 +356,7 @@ export function createMLClassifierPack(options?: MLClassifierPackOptions): Exten
  *
  * Conforms to the convention expected by the extension loader when resolving
  * packs from manifests.  Extracts `options` from the {@link ExtensionPackContext}
- * and delegates to {@link createMLClassifierPack}.
+ * and delegates to {@link createMLClassifierGuardrail}.
  *
  * @param context - Manifest context containing optional pack options, secret
  *                  resolver, and shared service registry.
@@ -379,5 +379,8 @@ export function createMLClassifierPack(options?: MLClassifierPackOptions): Exten
  * ```
  */
 export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
-  return createMLClassifierPack(context.options as MLClassifierPackOptions);
+  return createMLClassifierGuardrail(context.options as MLClassifierPackOptions);
 }
+
+/** @deprecated Use createMLClassifierGuardrail instead */
+export const createMLClassifierPack = createMLClassifierGuardrail;

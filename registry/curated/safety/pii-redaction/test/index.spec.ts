@@ -3,17 +3,17 @@
  * @description Unit tests for the PII redaction pack factory.
  *
  * Tests verify:
- * - createPiiRedactionPack returns an ExtensionPack with correct name/version
+ * - createPiiRedactionGuardrail returns an ExtensionPack with correct name/version
  * - The pack provides exactly 3 descriptors: 1 guardrail + 2 tools
  * - Guardrail has id 'pii-redaction-guardrail'
  * - Tools have ids 'pii_scan' and 'pii_redact'
- * - createExtensionPack bridges context.options to createPiiRedactionPack
+ * - createExtensionPack bridges context.options to createPiiRedactionGuardrail
  * - onActivate rebuilds components with the shared registry
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  createPiiRedactionPack,
+  createPiiRedactionGuardrail,
   createExtensionPack,
 } from '../src/index';
 import { SharedServiceRegistry } from '@framers/agentos';
@@ -50,26 +50,26 @@ import { PiiDetectionPipeline } from '../src/PiiDetectionPipeline';
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('createPiiRedactionPack', () => {
+describe('createPiiRedactionGuardrail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should return an ExtensionPack with correct name and version', () => {
-    const pack = createPiiRedactionPack();
+    const pack = createPiiRedactionGuardrail();
 
     expect(pack.name).toBe('pii-redaction');
     expect(pack.version).toBe('1.0.0');
   });
 
   it('should provide exactly 3 descriptors', () => {
-    const pack = createPiiRedactionPack();
+    const pack = createPiiRedactionGuardrail();
 
     expect(pack.descriptors).toHaveLength(3);
   });
 
   it('should have a guardrail descriptor with id "pii-redaction-guardrail"', () => {
-    const pack = createPiiRedactionPack();
+    const pack = createPiiRedactionGuardrail();
     const guardrailDescriptor = pack.descriptors.find(
       (d) => d.id === 'pii-redaction-guardrail',
     );
@@ -81,7 +81,7 @@ describe('createPiiRedactionPack', () => {
   });
 
   it('should have tool descriptors with ids "pii_scan" and "pii_redact"', () => {
-    const pack = createPiiRedactionPack();
+    const pack = createPiiRedactionGuardrail();
 
     const scanDescriptor = pack.descriptors.find((d) => d.id === 'pii_scan');
     const redactDescriptor = pack.descriptors.find((d) => d.id === 'pii_redact');
@@ -96,7 +96,7 @@ describe('createPiiRedactionPack', () => {
   });
 
   it('should rebuild components when onActivate is called with shared registry', () => {
-    const pack = createPiiRedactionPack();
+    const pack = createPiiRedactionGuardrail();
 
     // Record the initial pipeline construction count.
     const initialCallCount = (PiiDetectionPipeline as any).mock.calls.length;
@@ -115,7 +115,7 @@ describe('createPiiRedactionPack', () => {
   });
 
   it('should accept options and pass them through to components', () => {
-    const pack = createPiiRedactionPack({
+    const pack = createPiiRedactionGuardrail({
       entityTypes: ['EMAIL', 'PHONE'],
       redactionStyle: 'mask',
       guardrailScope: 'input',
@@ -136,7 +136,7 @@ describe('createExtensionPack', () => {
     vi.clearAllMocks();
   });
 
-  it('should bridge context.options to createPiiRedactionPack', () => {
+  it('should bridge context.options to createPiiRedactionGuardrail', () => {
     const context: ExtensionPackContext = {
       options: {
         entityTypes: ['SSN', 'CREDIT_CARD'],

@@ -2,14 +2,14 @@
  * @file index.ts
  * @description Pack factory for the Grounding Guard extension pack.
  *
- * Exports the main `createGroundingGuardPack()` factory function that
+ * Exports the main `createGroundingGuardrail()` factory function that
  * assembles the {@link GroundingGuardrail} guardrail and the
  * {@link CheckGroundingTool} tool into a single {@link ExtensionPack}
  * ready for registration with the AgentOS extension manager.
  *
  * Also exports a `createExtensionPack()` bridge function that conforms to
  * the AgentOS manifest factory convention, delegating to
- * `createGroundingGuardPack()` with options extracted from the
+ * `createGroundingGuardrail()` with options extracted from the
  * {@link ExtensionPackContext}.
  *
  * ### Lifecycle
@@ -52,7 +52,7 @@ import { CheckGroundingTool } from './tools/CheckGroundingTool';
  * Re-export all types from the grounding guard type definitions so consumers
  * can import everything from a single entry point:
  * ```ts
- * import { createGroundingGuardPack, GroundingGuardOptions } from './grounding-guard';
+ * import { createGroundingGuardrail, GroundingGuardOptions } from './grounding-guard';
  * ```
  */
 export * from './types';
@@ -81,20 +81,20 @@ export * from './types';
  *
  * @example
  * ```typescript
- * import { createGroundingGuardPack } from './grounding-guard';
+ * import { createGroundingGuardrail } from './grounding-guard';
  *
  * // Zero-config — uses default NLI model and thresholds:
- * const pack = createGroundingGuardPack();
+ * const pack = createGroundingGuardrail();
  *
  * // Custom thresholds and block action:
- * const strictPack = createGroundingGuardPack({
+ * const strictPack = createGroundingGuardrail({
  *   entailmentThreshold: 0.8,
  *   contradictionAction: 'block',
  *   maxUnverifiableRatio: 0.3,
  * });
  * ```
  */
-export function createGroundingGuardPack(
+export function createGroundingGuardrail(
   options?: GroundingGuardOptions,
 ): ExtensionPack {
   /** Resolved options (defaults to empty object for zero-config). */
@@ -289,7 +289,7 @@ export function createGroundingGuardPack(
  *
  * Conforms to the convention expected by the extension loader when resolving
  * packs from manifests.  Extracts `options` from the {@link ExtensionPackContext}
- * and delegates to {@link createGroundingGuardPack}.
+ * and delegates to {@link createGroundingGuardrail}.
  *
  * @param context - Manifest context containing optional pack options, secret
  *                  resolver, and shared service registry.
@@ -311,5 +311,8 @@ export function createGroundingGuardPack(
  * ```
  */
 export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
-  return createGroundingGuardPack(context.options as GroundingGuardOptions);
+  return createGroundingGuardrail(context.options as GroundingGuardOptions);
 }
+
+/** @deprecated Use createGroundingGuardrail instead */
+export const createGroundingGuardPack = createGroundingGuardrail;

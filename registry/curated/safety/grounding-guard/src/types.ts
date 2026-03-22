@@ -212,7 +212,7 @@ export interface GroundingResult {
 // ---------------------------------------------------------------------------
 
 /**
- * Top-level configuration object passed to `createGroundingGuardPack()`.
+ * Top-level configuration object passed to `createGroundingGuardrail()`.
  *
  * All fields are optional; sensible defaults are documented per-field.  A
  * zero-config setup will use `cross-encoder/nli-deberta-v3-small` with

@@ -192,7 +192,7 @@ export interface ModelDownloadProgress {
 /**
  * Top-level configuration for the ML Classifier Extension Pack.
  *
- * Passed to `createMLClassifierPack()` (or the NestJS module factory) to
+ * Passed to `createMLClassifierGuardrail()` (or the NestJS module factory) to
  * control which classifiers are active, how models are loaded, and how the
  * sliding-window streaming evaluation behaves.
  *

@@ -1,14 +1,14 @@
 /**
  * @fileoverview Pack factory for the Topicality Guardrail Extension Pack.
  *
- * Exports the main `createTopicalityPack()` factory that assembles the
+ * Exports the main `createTopicalityGuardrail()` factory that assembles the
  * {@link TopicalityGuardrail} and the {@link CheckTopicTool} into a single
  * {@link ExtensionPack} ready for registration with the AgentOS extension
  * manager.
  *
  * Also exports a `createExtensionPack()` bridge function that conforms to
  * the AgentOS manifest factory convention, delegating to
- * `createTopicalityPack()` with options extracted from the
+ * `createTopicalityGuardrail()` with options extracted from the
  * {@link ExtensionPackContext}.
  *
  * ### Default behaviour (zero-config)
@@ -24,9 +24,9 @@
  *
  * @example
  * ```typescript
- * import { createTopicalityPack, TOPIC_PRESETS } from './topicality';
+ * import { createTopicalityGuardrail, TOPIC_PRESETS } from './topicality';
  *
- * const pack = createTopicalityPack({
+ * const pack = createTopicalityGuardrail({
  *   allowedTopics: TOPIC_PRESETS.customerSupport,
  *   forbiddenTopics: TOPIC_PRESETS.commonUnsafe,
  * });
@@ -52,7 +52,7 @@ import { CheckTopicTool } from './tools/CheckTopicTool';
  * Re-export all types from the topicality type definitions so consumers
  * can import everything from a single entry point:
  * ```ts
- * import { createTopicalityPack, TOPIC_PRESETS } from './topicality';
+ * import { createTopicalityGuardrail, TOPIC_PRESETS } from './topicality';
  * ```
  */
 export * from './types';
@@ -72,7 +72,7 @@ export * from './types';
  * @returns A fully-configured {@link ExtensionPack} with one guardrail
  *          descriptor and one tool descriptor.
  */
-export function createTopicalityPack(options?: TopicalityPackOptions): ExtensionPack {
+export function createTopicalityGuardrail(options?: TopicalityPackOptions): ExtensionPack {
   /**
    * Resolved options — default to empty object so every sub-check can
    * safely use `opts.foo` without null-guarding the whole `options` reference.
@@ -275,7 +275,7 @@ export function createTopicalityPack(options?: TopicalityPackOptions): Extension
  *
  * Conforms to the convention expected by the extension loader when resolving
  * packs from manifests.  Extracts `options` from the {@link ExtensionPackContext}
- * and delegates to {@link createTopicalityPack}.
+ * and delegates to {@link createTopicalityGuardrail}.
  *
  * @param context - Manifest context containing optional pack options, secret
  *                  resolver, and shared service registry.
@@ -298,5 +298,8 @@ export function createTopicalityPack(options?: TopicalityPackOptions): Extension
  * ```
  */
 export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
-  return createTopicalityPack(context.options as TopicalityPackOptions);
+  return createTopicalityGuardrail(context.options as TopicalityPackOptions);
 }
+
+/** @deprecated Use createTopicalityGuardrail instead */
+export const createTopicalityPack = createTopicalityGuardrail;

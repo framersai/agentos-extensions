@@ -2,14 +2,14 @@
  * @file index.ts
  * @description Pack factory for the PII Redaction extension pack.
  *
- * This module exports the main `createPiiRedactionPack()` factory function
+ * This module exports the main `createPiiRedactionGuardrail()` factory function
  * that assembles the guardrail, scan tool, and redact tool into a single
  * {@link ExtensionPack} ready for registration with the AgentOS extension
  * manager.
  *
  * It also exports a `createExtensionPack()` bridge function that conforms to
  * the AgentOS manifest factory convention, delegating to
- * `createPiiRedactionPack()` with options extracted from the
+ * `createPiiRedactionGuardrail()` with options extracted from the
  * {@link ExtensionPackContext}.
  *
  * ### Lifecycle
@@ -41,7 +41,7 @@ import { PiiRedactTool } from './tools/PiiRedactTool';
  * Re-export all types from the PII redaction type definitions so consumers
  * can import everything from a single entry point:
  * ```ts
- * import { createPiiRedactionPack, PiiEntityType } from './pii-redaction';
+ * import { createPiiRedactionGuardrail, PiiEntityType } from './pii-redaction';
  * ```
  */
 export * from './types';
@@ -73,16 +73,16 @@ export * from './types';
  *
  * @example
  * ```ts
- * import { createPiiRedactionPack } from './pii-redaction';
+ * import { createPiiRedactionGuardrail } from './pii-redaction';
  *
- * const pack = createPiiRedactionPack({
+ * const pack = createPiiRedactionGuardrail({
  *   entityTypes: ['EMAIL', 'PHONE', 'SSN'],
  *   redactionStyle: 'mask',
  *   guardrailScope: 'both',
  * });
  * ```
  */
-export function createPiiRedactionPack(
+export function createPiiRedactionGuardrail(
   options?: PiiRedactionPackOptions,
 ): ExtensionPack {
   /** Resolved options (defaults to empty object for zero-config). */
@@ -202,7 +202,7 @@ export function createPiiRedactionPack(
  *
  * This function conforms to the convention expected by the extension loader
  * when resolving packs from manifests.  It extracts `options` from the
- * {@link ExtensionPackContext} and delegates to {@link createPiiRedactionPack}.
+ * {@link ExtensionPackContext} and delegates to {@link createPiiRedactionGuardrail}.
  *
  * @param context - Manifest context containing optional pack options, secret
  *                  resolver, and shared service registry.
@@ -219,5 +219,8 @@ export function createPiiRedactionPack(
  * ```
  */
 export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
-  return createPiiRedactionPack(context.options as PiiRedactionPackOptions);
+  return createPiiRedactionGuardrail(context.options as PiiRedactionPackOptions);
 }
+
+/** @deprecated Use createPiiRedactionGuardrail instead */
+export const createPiiRedactionPack = createPiiRedactionGuardrail;

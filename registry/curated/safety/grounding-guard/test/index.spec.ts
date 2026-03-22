@@ -1,7 +1,7 @@
 /**
  * @fileoverview Unit tests for the grounding guard pack factory.
  *
- * Tests the `createGroundingGuardPack()` factory function and the
+ * Tests the `createGroundingGuardrail()` factory function and the
  * `createExtensionPack()` manifest bridge.
  *
  * Test coverage:
@@ -16,7 +16,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  createGroundingGuardPack,
+  createGroundingGuardrail,
   createExtensionPack,
 } from '../src/index';
 import { EXTENSION_KIND_GUARDRAIL, EXTENSION_KIND_TOOL } from '@framers/agentos';
@@ -51,19 +51,19 @@ function createMockRegistry(): ISharedServiceRegistry {
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('createGroundingGuardPack', () => {
+describe('createGroundingGuardrail', () => {
   // -------------------------------------------------------------------------
   // 1. Pack name and version
   // -------------------------------------------------------------------------
 
   describe('pack identity', () => {
     it('has name "grounding-guard"', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       expect(pack.name).toBe('grounding-guard');
     });
 
     it('has version "1.0.0"', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       expect(pack.version).toBe('1.0.0');
     });
   });
@@ -74,42 +74,42 @@ describe('createGroundingGuardPack', () => {
 
   describe('descriptors', () => {
     it('returns exactly 2 descriptors', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       expect(pack.descriptors).toHaveLength(2);
     });
 
     it('has a guardrail descriptor with id "grounding-guardrail"', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const guardrail = pack.descriptors.find((d) => d.id === 'grounding-guardrail');
       expect(guardrail).toBeDefined();
     });
 
     it('has a tool descriptor with id "check_grounding"', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const tool = pack.descriptors.find((d) => d.id === 'check_grounding');
       expect(tool).toBeDefined();
     });
 
     it('guardrail descriptor has kind EXTENSION_KIND_GUARDRAIL', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const guardrail = pack.descriptors.find((d) => d.id === 'grounding-guardrail');
       expect(guardrail!.kind).toBe(EXTENSION_KIND_GUARDRAIL);
     });
 
     it('tool descriptor has kind EXTENSION_KIND_TOOL', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const tool = pack.descriptors.find((d) => d.id === 'check_grounding');
       expect(tool!.kind).toBe(EXTENSION_KIND_TOOL);
     });
 
     it('guardrail descriptor has priority 8', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const guardrail = pack.descriptors.find((d) => d.id === 'grounding-guardrail');
       expect(guardrail!.priority).toBe(8);
     });
 
     it('tool descriptor has priority 0', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const tool = pack.descriptors.find((d) => d.id === 'check_grounding');
       expect(tool!.priority).toBe(0);
     });
@@ -153,7 +153,7 @@ describe('createGroundingGuardPack', () => {
 
   describe('onActivate', () => {
     it('rebuilds components with the manager-provided shared registry', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
 
       // Get initial descriptor references.
       const initialGuardrail = pack.descriptors.find((d) => d.id === 'grounding-guardrail')!.payload;
@@ -176,7 +176,7 @@ describe('createGroundingGuardPack', () => {
     });
 
     it('does not throw when called without services', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       // Activation with empty context should not throw.
       expect(() => pack.onActivate!({})).not.toThrow();
     });
@@ -188,7 +188,7 @@ describe('createGroundingGuardPack', () => {
 
   describe('onDeactivate', () => {
     it('calls checker.dispose and guardrail.clearBuffers without throwing', async () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
 
       // onDeactivate should complete without errors even on a fresh pack
       // (no streams opened, no NLI pipeline loaded).
@@ -197,7 +197,7 @@ describe('createGroundingGuardPack', () => {
 
     it('releases NLI pipeline via the shared registry', async () => {
       const registry = createMockRegistry();
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
 
       // Activate with our mock registry so it's used by the checker.
       pack.onActivate!({ services: registry });
@@ -216,7 +216,7 @@ describe('createGroundingGuardPack', () => {
 
   describe('descriptor getter', () => {
     it('descriptors reflect rebuilt components after onActivate', () => {
-      const pack = createGroundingGuardPack();
+      const pack = createGroundingGuardrail();
       const beforePayload = pack.descriptors[0].payload;
 
       // Rebuild by activating with a new registry.

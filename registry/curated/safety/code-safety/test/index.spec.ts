@@ -3,19 +3,19 @@
  * @description Unit tests for the code safety pack factory.
  *
  * Tests verify:
- * - createCodeSafetyPack returns an ExtensionPack with correct name/version
+ * - createCodeSafetyGuardrail returns an ExtensionPack with correct name/version
  * - The pack provides exactly 2 descriptors: 1 guardrail + 1 tool
  * - Guardrail has id 'code-safety-guardrail'
  * - Tool has id 'scan_code'
  * - disabledRules removes rules from the active set
  * - customRules adds rules to the active set
  * - includeDefaultRules: false uses only custom rules
- * - createExtensionPack bridges context.options to createCodeSafetyPack
+ * - createExtensionPack bridges context.options to createCodeSafetyGuardrail
  */
 
 import { describe, it, expect } from 'vitest';
 import {
-  createCodeSafetyPack,
+  createCodeSafetyGuardrail,
   createExtensionPack,
 } from '../src/index';
 import {
@@ -27,25 +27,25 @@ import type { ICodeSafetyRule } from '../src/types';
 import { DEFAULT_RULES } from '../src/DefaultRules';
 
 // ---------------------------------------------------------------------------
-// Tests — createCodeSafetyPack
+// Tests — createCodeSafetyGuardrail
 // ---------------------------------------------------------------------------
 
-describe('createCodeSafetyPack', () => {
+describe('createCodeSafetyGuardrail', () => {
   it('should return an ExtensionPack with correct name and version', () => {
-    const pack = createCodeSafetyPack();
+    const pack = createCodeSafetyGuardrail();
 
     expect(pack.name).toBe('code-safety');
     expect(pack.version).toBe('1.0.0');
   });
 
   it('should provide exactly 2 descriptors', () => {
-    const pack = createCodeSafetyPack();
+    const pack = createCodeSafetyGuardrail();
 
     expect(pack.descriptors).toHaveLength(2);
   });
 
   it('should have a guardrail descriptor with id "code-safety-guardrail"', () => {
-    const pack = createCodeSafetyPack();
+    const pack = createCodeSafetyGuardrail();
     const guardrailDescriptor = pack.descriptors.find(
       (d) => d.id === 'code-safety-guardrail',
     );
@@ -57,7 +57,7 @@ describe('createCodeSafetyPack', () => {
   });
 
   it('should have a tool descriptor with id "scan_code"', () => {
-    const pack = createCodeSafetyPack();
+    const pack = createCodeSafetyGuardrail();
     const toolDescriptor = pack.descriptors.find((d) => d.id === 'scan_code');
 
     expect(toolDescriptor).toBeDefined();
@@ -67,7 +67,7 @@ describe('createCodeSafetyPack', () => {
   });
 
   it('should work with zero-config (no options)', () => {
-    const pack = createCodeSafetyPack();
+    const pack = createCodeSafetyGuardrail();
 
     expect(pack.name).toBe('code-safety');
     expect(pack.descriptors).toHaveLength(2);
@@ -79,14 +79,14 @@ describe('createCodeSafetyPack', () => {
 
     // The pack builds the scanner internally, but we can verify indirectly:
     // A pack with a disabled rule is still structurally valid.
-    const pack = createCodeSafetyPack({ disabledRules: [ruleToDisable] });
+    const pack = createCodeSafetyGuardrail({ disabledRules: [ruleToDisable] });
 
     expect(pack.descriptors).toHaveLength(2);
     expect(pack.name).toBe('code-safety');
   });
 
   it('disabledRules should not crash when given unknown rule IDs', () => {
-    const pack = createCodeSafetyPack({ disabledRules: ['nonexistent-rule-xyz'] });
+    const pack = createCodeSafetyGuardrail({ disabledRules: ['nonexistent-rule-xyz'] });
 
     expect(pack.descriptors).toHaveLength(2);
   });
@@ -103,7 +103,7 @@ describe('createCodeSafetyPack', () => {
       },
     };
 
-    const pack = createCodeSafetyPack({ customRules: [customRule] });
+    const pack = createCodeSafetyGuardrail({ customRules: [customRule] });
 
     // Pack should still have the standard 2 descriptors.
     expect(pack.descriptors).toHaveLength(2);
@@ -122,7 +122,7 @@ describe('createCodeSafetyPack', () => {
       },
     };
 
-    const pack = createCodeSafetyPack({
+    const pack = createCodeSafetyGuardrail({
       includeDefaultRules: false,
       customRules: [customRule],
     });
@@ -133,14 +133,14 @@ describe('createCodeSafetyPack', () => {
   });
 
   it('includeDefaultRules: false with no customRules should produce empty ruleset (pack still valid)', () => {
-    const pack = createCodeSafetyPack({ includeDefaultRules: false });
+    const pack = createCodeSafetyGuardrail({ includeDefaultRules: false });
 
     expect(pack.descriptors).toHaveLength(2);
     expect(pack.name).toBe('code-safety');
   });
 
   it('severityActions override should be accepted without error', () => {
-    const pack = createCodeSafetyPack({
+    const pack = createCodeSafetyGuardrail({
       severityActions: { medium: 'block', low: 'block' },
     });
 
@@ -153,7 +153,7 @@ describe('createCodeSafetyPack', () => {
 // ---------------------------------------------------------------------------
 
 describe('createExtensionPack', () => {
-  it('should bridge context.options to createCodeSafetyPack', () => {
+  it('should bridge context.options to createCodeSafetyGuardrail', () => {
     const context: ExtensionPackContext = {
       options: {
         disabledRules: ['code-injection-eval'],

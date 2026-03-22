@@ -2,19 +2,19 @@
  * @fileoverview Unit tests for the Topicality pack factory.
  *
  * Tests verify:
- *  - createTopicalityPack returns an ExtensionPack with name 'topicality'
+ *  - createTopicalityGuardrail returns an ExtensionPack with name 'topicality'
  *    and version '1.0.0'
  *  - The pack provides exactly 2 descriptors: 1 guardrail + 1 tool
  *  - Guardrail descriptor has id 'topicality-guardrail' and kind 'guardrail'
  *  - Tool descriptor has id 'check_topic' and kind 'tool'
- *  - createExtensionPack bridges context.options to createTopicalityPack
+ *  - createExtensionPack bridges context.options to createTopicalityGuardrail
  *  - onActivate rebuilds components with the shared registry
  *  - onDeactivate clears drift tracker sessions
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  createTopicalityPack,
+  createTopicalityGuardrail,
   createExtensionPack,
 } from '../src/index';
 import { SharedServiceRegistry } from '@framers/agentos';
@@ -46,7 +46,7 @@ const mockEmbeddingFn = vi.fn(async (texts: string[]): Promise<number[][]> => {
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('createTopicalityPack', () => {
+describe('createTopicalityGuardrail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -57,13 +57,13 @@ describe('createTopicalityPack', () => {
 
   describe('pack identity', () => {
     it('returns an ExtensionPack with name "topicality"', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
 
       expect(pack.name).toBe('topicality');
     });
 
     it('returns an ExtensionPack with version "1.0.0"', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
 
       expect(pack.version).toBe('1.0.0');
     });
@@ -75,13 +75,13 @@ describe('createTopicalityPack', () => {
 
   describe('descriptors', () => {
     it('provides exactly 2 descriptors', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
 
       expect(pack.descriptors).toHaveLength(2);
     });
 
     it('has a guardrail descriptor with id "topicality-guardrail"', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const guardrailDescriptor = pack.descriptors.find(
         (d) => d.id === 'topicality-guardrail',
       );
@@ -90,7 +90,7 @@ describe('createTopicalityPack', () => {
     });
 
     it('guardrail descriptor has kind "guardrail"', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const guardrailDescriptor = pack.descriptors.find(
         (d) => d.id === 'topicality-guardrail',
       );
@@ -99,7 +99,7 @@ describe('createTopicalityPack', () => {
     });
 
     it('guardrail descriptor has priority 3', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const guardrailDescriptor = pack.descriptors.find(
         (d) => d.id === 'topicality-guardrail',
       );
@@ -108,7 +108,7 @@ describe('createTopicalityPack', () => {
     });
 
     it('guardrail descriptor has a non-null payload', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const guardrailDescriptor = pack.descriptors.find(
         (d) => d.id === 'topicality-guardrail',
       );
@@ -118,28 +118,28 @@ describe('createTopicalityPack', () => {
     });
 
     it('has a tool descriptor with id "check_topic"', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'check_topic');
 
       expect(toolDescriptor).toBeDefined();
     });
 
     it('tool descriptor has kind "tool"', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'check_topic');
 
       expect(toolDescriptor?.kind).toBe(EXTENSION_KIND_TOOL);
     });
 
     it('tool descriptor has priority 0', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'check_topic');
 
       expect(toolDescriptor?.priority).toBe(0);
     });
 
     it('tool descriptor has a non-null payload', () => {
-      const pack = createTopicalityPack();
+      const pack = createTopicalityGuardrail();
       const toolDescriptor = pack.descriptors.find((d) => d.id === 'check_topic');
 
       expect(toolDescriptor?.payload).toBeDefined();
@@ -154,7 +154,7 @@ describe('createTopicalityPack', () => {
   describe('options passthrough', () => {
     it('accepts allowed and forbidden topics without throwing', () => {
       expect(() =>
-        createTopicalityPack({
+        createTopicalityGuardrail({
           allowedTopics: [BILLING_TOPIC],
           forbiddenTopics: [],
           embeddingFn: mockEmbeddingFn,
@@ -164,7 +164,7 @@ describe('createTopicalityPack', () => {
 
     it('accepts custom thresholds and drift config', () => {
       expect(() =>
-        createTopicalityPack({
+        createTopicalityGuardrail({
           allowedThreshold: 0.5,
           forbiddenThreshold: 0.8,
           enableDriftDetection: true,
@@ -176,7 +176,7 @@ describe('createTopicalityPack', () => {
 
     it('accepts guardrailScope option', () => {
       expect(() =>
-        createTopicalityPack({
+        createTopicalityGuardrail({
           guardrailScope: 'both',
           embeddingFn: mockEmbeddingFn,
         }),
@@ -190,14 +190,14 @@ describe('createTopicalityPack', () => {
 
   describe('onActivate lifecycle hook', () => {
     it('does not throw when called with a shared registry', () => {
-      const pack = createTopicalityPack({ embeddingFn: mockEmbeddingFn });
+      const pack = createTopicalityGuardrail({ embeddingFn: mockEmbeddingFn });
       const sharedRegistry = new SharedServiceRegistry();
 
       expect(() => pack.onActivate!({ services: sharedRegistry })).not.toThrow();
     });
 
     it('descriptors still reflect rebuilt components after onActivate', () => {
-      const pack = createTopicalityPack({ embeddingFn: mockEmbeddingFn });
+      const pack = createTopicalityGuardrail({ embeddingFn: mockEmbeddingFn });
       const sharedRegistry = new SharedServiceRegistry();
       pack.onActivate!({ services: sharedRegistry });
 
@@ -206,7 +206,7 @@ describe('createTopicalityPack', () => {
     });
 
     it('does not throw when onActivate is called without services', () => {
-      const pack = createTopicalityPack({ embeddingFn: mockEmbeddingFn });
+      const pack = createTopicalityGuardrail({ embeddingFn: mockEmbeddingFn });
 
       // Context without a services field should be handled gracefully.
       expect(() => pack.onActivate!({})).not.toThrow();
@@ -219,13 +219,13 @@ describe('createTopicalityPack', () => {
 
   describe('onDeactivate lifecycle hook', () => {
     it('resolves without throwing', async () => {
-      const pack = createTopicalityPack({ embeddingFn: mockEmbeddingFn });
+      const pack = createTopicalityGuardrail({ embeddingFn: mockEmbeddingFn });
 
       await expect(pack.onDeactivate!()).resolves.toBeUndefined();
     });
 
     it('clears the guardrail drift tracker sessions on deactivate', async () => {
-      const pack = createTopicalityPack({
+      const pack = createTopicalityGuardrail({
         allowedTopics: [BILLING_TOPIC],
         enableDriftDetection: true,
         embeddingFn: mockEmbeddingFn,
@@ -247,7 +247,7 @@ describe('createTopicalityPack', () => {
     });
 
     it('handles deactivation when drift detection is disabled', async () => {
-      const pack = createTopicalityPack({
+      const pack = createTopicalityGuardrail({
         enableDriftDetection: false,
         embeddingFn: mockEmbeddingFn,
       });
@@ -287,7 +287,7 @@ describe('createExtensionPack', () => {
     expect(pack.descriptors).toHaveLength(2);
   });
 
-  it('bridges context.options to createTopicalityPack', () => {
+  it('bridges context.options to createTopicalityGuardrail', () => {
     const context: ExtensionPackContext = {
       options: {
         allowedTopics: [BILLING_TOPIC],

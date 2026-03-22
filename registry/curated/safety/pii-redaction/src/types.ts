@@ -280,7 +280,7 @@ export interface LlmJudgeConfig {
 // ---------------------------------------------------------------------------
 
 /**
- * Top-level configuration object passed to `createPiiRedactionPack()`.
+ * Top-level configuration object passed to `createPiiRedactionGuardrail()`.
  *
  * All properties are optional; sensible defaults are applied by the pack
  * factory so that a zero-config setup works out of the box.
