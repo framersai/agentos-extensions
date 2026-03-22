@@ -8,7 +8,7 @@
 
 # AgentOS Extensions
 
-Official extension registry for the AgentOS ecosystem.
+Extension source code for AgentOS — tools, channel adapters, integrations, and starter templates.
 
 [![CI Status](https://github.com/framersai/agentos-extensions/workflows/CI/badge.svg)](https://github.com/framersai/agentos-extensions/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -16,16 +16,28 @@ Official extension registry for the AgentOS ecosystem.
 [![npm: registry](https://img.shields.io/npm/v/@framers/agentos-extensions-registry?label=registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry)
 [![npm: catalog](https://img.shields.io/npm/v/@framers/agentos-extensions?label=catalog)](https://www.npmjs.com/package/@framers/agentos-extensions)
 
+## What This Package Is
+
+This package contains the **actual implementation source code** for AgentOS extensions:
+the Telegram adapter, web-search tool, voice providers, browser automation, channel adapters
+for 37 platforms, and more. It also ships **starter templates** (`templates/`) for creating
+new extensions from scratch.
+
+**This is NOT a registry.** It is the source code that registries catalog. The relationship
+between the two sibling packages is:
+
+| Package | Role |
+|---------|------|
+| **`@framers/agentos-extensions`** (this package) | Implementation source code, manifests, and templates |
+| **`@framers/agentos-extensions-registry`** | Catalog/SDK that references this package's metadata and exposes `createCuratedManifest()` |
+
+**Dependency direction:** `agentos-extensions-registry` depends on metadata from this package,
+not the other way around. Extensions here are self-contained and can be installed individually
+without the registry.
+
 ## Published Extensions
 
 All extensions are published to npm under the `@framers` scope.
-
-### Registry Packages
-
-| Package | Description | npm |
-|---------|-------------|-----|
-| [`@framers/agentos-extensions-registry`](https://www.npmjs.com/package/@framers/agentos-extensions-registry) | Curated registry bundle — single import with `createCuratedManifest()` | [![npm](https://img.shields.io/npm/v/@framers/agentos-extensions-registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry) |
-| [`@framers/agentos-extensions`](https://www.npmjs.com/package/@framers/agentos-extensions) | Static catalog (`registry.json`) of all extensions | [![npm](https://img.shields.io/npm/v/@framers/agentos-extensions)](https://www.npmjs.com/package/@framers/agentos-extensions) |
 
 ### Extensions
 

@@ -6,7 +6,7 @@
     "types.d.ts",
     "README.md"
   ],
-  "description": "Community registry of tools, workflows, and integrations for AgentOS",
+  "description": "Extension source for AgentOS — implementations, templates, and manifests for tools, channel adapters, and integrations",
   "type": "module",
   "sideEffects": false,
   "exports": {
