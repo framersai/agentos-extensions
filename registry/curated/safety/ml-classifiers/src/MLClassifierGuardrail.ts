@@ -1,419 +1,382 @@
 /**
- * @fileoverview IGuardrailService implementation backed by ML classifiers.
+ * @file MLClassifierGuardrail.ts
+ * @description IGuardrailService implementation that classifies text for toxicity,
+ * prompt injection, NSFW content, and threats using a three-tier strategy:
  *
- * `MLClassifierGuardrail` bridges the AgentOS guardrail pipeline to the ML
- * classifier subsystem.  It implements both `evaluateInput` (full-text
- * classification of user messages) and `evaluateOutput` (sliding-window
- * classification of streamed agent responses).
+ * 1. **ONNX inference** — attempts to load `@huggingface/transformers` at runtime
+ *    and run a lightweight ONNX classification model.
+ * 2. **LLM-as-judge** — falls back to an LLM invoker callback that prompts a
+ *    language model for structured JSON safety classification.
+ * 3. **Keyword matching** — last-resort regex/keyword-based detection when neither
+ *    ONNX nor LLM are available.
  *
- * Three streaming evaluation modes are supported:
+ * The guardrail is configured as Phase 2 (parallel, non-sanitizing) so it runs
+ * alongside other read-only guardrails without blocking the streaming pipeline.
  *
- * | Mode          | Behaviour                                                      |
- * |---------------|----------------------------------------------------------------|
- * | `blocking`    | Every chunk that fills the sliding window is classified         |
- * |               | **synchronously** — the stream waits for the result.           |
- * | `non-blocking`| Classification fires in the background; violations are surfaced |
- * |               | on the **next** `evaluateOutput` call for the same stream.     |
- * | `hybrid`      | The first chunk for each stream is blocking; subsequent chunks  |
- * |               | switch to non-blocking for lower latency.                      |
+ * ### Action thresholds
  *
- * The default mode is `blocking` when `streamingMode` is enabled.
+ * - **FLAG** when any category confidence exceeds `flagThreshold` (default 0.5).
+ * - **BLOCK** when any category confidence exceeds `blockThreshold` (default 0.8).
  *
- * @module agentos/extensions/packs/ml-classifiers/MLClassifierGuardrail
+ * @module ml-classifiers/MLClassifierGuardrail
  */
 
 import type {
+  IGuardrailService,
   GuardrailConfig,
-  GuardrailEvaluationResult,
   GuardrailInputPayload,
   GuardrailOutputPayload,
-  IGuardrailService,
+  GuardrailEvaluationResult,
 } from '@framers/agentos';
 import { GuardrailAction } from '@framers/agentos';
 import { AgentOSResponseChunkType } from '@framers/agentos';
-import type { ISharedServiceRegistry } from '@framers/agentos';
-import type { MLClassifierPackOptions, ChunkEvaluation } from './types';
-import { DEFAULT_THRESHOLDS } from './types';
-import { SlidingWindowBuffer } from './SlidingWindowBuffer';
-import { ClassifierOrchestrator } from './ClassifierOrchestrator';
-import type { IContentClassifier } from './IContentClassifier';
-
-// ---------------------------------------------------------------------------
-// Streaming mode union
-// ---------------------------------------------------------------------------
-
-/**
- * The evaluation strategy used for output (streaming) chunks.
- *
- * - `blocking`     — await classification on every filled window.
- * - `non-blocking` — fire classification in the background; surface result later.
- * - `hybrid`       — first chunk per stream is blocking, rest non-blocking.
- */
-type StreamingMode = 'blocking' | 'non-blocking' | 'hybrid';
+import type {
+  MLClassifierOptions,
+  ClassifierCategory,
+  ClassifierResult,
+  CategoryScore,
+} from './types';
+import { ALL_CATEGORIES } from './types';
+import { classifyByKeywords } from './keyword-classifier';
+import { classifyByLlm } from './llm-classifier';
 
 // ---------------------------------------------------------------------------
 // MLClassifierGuardrail
 // ---------------------------------------------------------------------------
 
 /**
- * Guardrail implementation that runs ML classifiers against both user input
- * and streamed agent output.
+ * AgentOS guardrail that classifies text for safety using ML models, LLM
+ * inference, or keyword fallback.
  *
  * @implements {IGuardrailService}
- *
- * @example
- * ```typescript
- * const guardrail = new MLClassifierGuardrail(serviceRegistry, {
- *   classifiers: ['toxicity'],
- *   streamingMode: true,
- *   chunkSize: 150,
- *   guardrailScope: 'both',
- * });
- *
- * // Input evaluation — runs classifier on the full user message.
- * const inputResult = await guardrail.evaluateInput({ context, input });
- *
- * // Output evaluation — accumulates tokens, classifies at window boundary.
- * const outputResult = await guardrail.evaluateOutput({ context, chunk });
- * ```
  */
 export class MLClassifierGuardrail implements IGuardrailService {
-  // -------------------------------------------------------------------------
-  // IGuardrailService config
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // IGuardrailService.config
+  // -----------------------------------------------------------------------
 
   /**
-   * Guardrail configuration exposed to the AgentOS pipeline.
+   * Guardrail configuration.
    *
-   * `evaluateStreamingChunks` is always `true` because this guardrail uses
-   * the sliding window to evaluate output tokens incrementally.
+   * - `canSanitize: false` — this guardrail does not modify content; it only
+   *   BLOCKs or FLAGs.  This places it in Phase 2 (parallel) of the guardrail
+   *   dispatcher for better performance.
+   * - `evaluateStreamingChunks: false` — only evaluates complete messages, not
+   *   individual streaming deltas.  ML classification on partial text produces
+   *   unreliable results.
    */
-  readonly config: GuardrailConfig;
+  readonly config: GuardrailConfig = {
+    canSanitize: false,
+    evaluateStreamingChunks: false,
+  };
 
-  // -------------------------------------------------------------------------
-  // Internal state
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // Private state
+  // -----------------------------------------------------------------------
 
-  /** The classifier orchestrator that runs all classifiers in parallel. */
-  private readonly orchestrator: ClassifierOrchestrator;
+  /** Categories to evaluate. */
+  private readonly categories: ClassifierCategory[];
 
-  /** Sliding window buffer for accumulating streaming tokens. */
-  private readonly buffer: SlidingWindowBuffer;
+  /** Per-category flag thresholds. */
+  private readonly flagThresholds: Record<ClassifierCategory, number>;
 
-  /** Guardrail scope — which direction(s) this guardrail evaluates. */
-  private readonly scope: 'input' | 'output' | 'both';
+  /** Per-category block thresholds. */
+  private readonly blockThresholds: Record<ClassifierCategory, number>;
 
-  /** Streaming evaluation strategy for output chunks. */
-  private readonly streamingMode: StreamingMode;
+  /** Optional LLM invoker callback for tier-2 classification. */
+  private readonly llmInvoker: MLClassifierOptions['llmInvoker'];
 
   /**
-   * Map of stream IDs to pending (background) classification promises.
-   * Used in `non-blocking` and `hybrid` modes to defer result checking
-   * to the next `evaluateOutput` call.
+   * Cached reference to the `@huggingface/transformers` pipeline function.
+   * `null` means we already tried and failed to load the module.
+   * `undefined` means we have not tried yet.
    */
-  private readonly pendingResults: Map<string, Promise<ChunkEvaluation>> = new Map();
+  private onnxPipeline: any | null | undefined = undefined;
 
-  /**
-   * Tracks whether the first chunk for a given stream has been processed.
-   * Used by `hybrid` mode to apply blocking evaluation on the first chunk
-   * and non-blocking for subsequent chunks.
-   */
-  private readonly isFirstChunk: Map<string, boolean> = new Map();
-
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // Constructor
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
 
   /**
-   * Create a new ML classifier guardrail.
+   * Create a new MLClassifierGuardrail.
    *
-   * @param _services - Shared service registry (reserved for future use by
-   *                    classifier factories that need lazy model loading).
-   * @param options   - Pack-level options controlling classifier selection,
-   *                    thresholds, sliding window size, and streaming mode.
-   * @param classifiers - Pre-built classifier instances.  When provided,
-   *                      these are used directly instead of constructing
-   *                      classifiers from `options.classifiers`.
+   * @param options - Pack-level configuration.  All properties have sensible
+   *                  defaults for zero-config operation.
    */
-  constructor(
-    _services: ISharedServiceRegistry,
-    options: MLClassifierPackOptions,
-    classifiers: IContentClassifier[] = [],
-  ) {
-    // Resolve thresholds: merge caller overrides on top of defaults.
-    const thresholds = {
-      ...DEFAULT_THRESHOLDS,
-      ...options.thresholds,
-    };
+  constructor(options?: MLClassifierOptions) {
+    const opts = options ?? {};
 
-    // Build the orchestrator from the supplied classifiers.
-    this.orchestrator = new ClassifierOrchestrator(classifiers, thresholds);
+    this.categories = opts.categories ?? [...ALL_CATEGORIES];
+    this.llmInvoker = opts.llmInvoker;
 
-    // Initialise the sliding window buffer for streaming evaluation.
-    this.buffer = new SlidingWindowBuffer({
-      chunkSize: options.chunkSize,
-      contextSize: options.contextSize,
-      maxEvaluations: options.maxEvaluations,
-    });
+    // Resolve per-category thresholds.
+    const globalFlag = opts.flagThreshold ?? 0.5;
+    const globalBlock = opts.blockThreshold ?? 0.8;
 
-    // Store the guardrail scope (defaults to 'both').
-    this.scope = options.guardrailScope ?? 'both';
+    this.flagThresholds = {} as Record<ClassifierCategory, number>;
+    this.blockThresholds = {} as Record<ClassifierCategory, number>;
 
-    // Determine streaming mode.  When `streamingMode` is enabled the default
-    // is 'blocking'; callers can override via the `streamingMode` option
-    // (which we reinterpret as a boolean gate here — advanced callers pass
-    // a StreamingMode string via `options` when they need finer control).
-    this.streamingMode = options.streamingMode ? 'blocking' : 'blocking';
-
-    // Expose guardrail config to the pipeline.
-    this.config = {
-      evaluateStreamingChunks: true,
-      maxStreamingEvaluations: options.maxEvaluations ?? 100,
-    };
+    for (const cat of ALL_CATEGORIES) {
+      this.flagThresholds[cat] = opts.thresholds?.[cat]?.flag ?? globalFlag;
+      this.blockThresholds[cat] = opts.thresholds?.[cat]?.block ?? globalBlock;
+    }
   }
 
-  // -------------------------------------------------------------------------
-  // evaluateInput
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // IGuardrailService — evaluateInput
+  // -----------------------------------------------------------------------
 
   /**
-   * Evaluate a user's input message before it enters the orchestration pipeline.
+   * Evaluate user input for safety before orchestration begins.
    *
-   * Runs the full text through all registered classifiers and returns a
-   * {@link GuardrailEvaluationResult} when a violation is detected, or
-   * `null` when the content is clean.
-   *
-   * Skipped entirely when `scope === 'output'`.
-   *
-   * @param payload - The input payload containing user text and context.
-   * @returns Evaluation result or `null` if no action is needed.
+   * @param payload - Input evaluation payload containing the user's message.
+   * @returns Guardrail result or `null` if no action is required.
    */
   async evaluateInput(payload: GuardrailInputPayload): Promise<GuardrailEvaluationResult | null> {
-    // Skip input evaluation when scope is output-only.
-    if (this.scope === 'output') {
-      return null;
-    }
-
-    // Extract the text from the input.  If there is no text, nothing to classify.
     const text = payload.input.textInput;
-    if (!text) {
-      return null;
-    }
+    if (!text || text.length === 0) return null;
 
-    // Run all classifiers against the full user message.
-    const evaluation = await this.orchestrator.classifyAll(text);
-
-    // Map the evaluation to a guardrail result (null for ALLOW).
-    return this.evaluationToResult(evaluation);
+    const result = await this.classify(text);
+    return this.buildResult(result);
   }
 
-  // -------------------------------------------------------------------------
-  // evaluateOutput
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // IGuardrailService — evaluateOutput
+  // -----------------------------------------------------------------------
 
   /**
-   * Evaluate a streamed output chunk from the agent before it is delivered
-   * to the client.
+   * Evaluate agent output for safety.  Only processes FINAL_RESPONSE chunks
+   * since `evaluateStreamingChunks` is disabled.
    *
-   * The method accumulates text tokens in the sliding window buffer and
-   * triggers classifier evaluation when a full window is available.  The
-   * evaluation strategy depends on the configured streaming mode.
-   *
-   * Skipped entirely when `scope === 'input'`.
-   *
-   * @param payload - The output payload containing the response chunk and context.
-   * @returns Evaluation result or `null` if no action is needed yet.
+   * @param payload - Output evaluation payload from the AgentOS dispatcher.
+   * @returns Guardrail result or `null` if no action is required.
    */
   async evaluateOutput(payload: GuardrailOutputPayload): Promise<GuardrailEvaluationResult | null> {
-    // Skip output evaluation when scope is input-only.
-    if (this.scope === 'input') {
+    const { chunk } = payload;
+
+    // Only evaluate final text responses.
+    if (chunk.type !== AgentOSResponseChunkType.FINAL_RESPONSE) {
       return null;
     }
 
-    const chunk = payload.chunk;
+    const text = (chunk as any).text ?? (chunk as any).content ?? '';
+    if (typeof text !== 'string' || text.length === 0) return null;
 
-    // Handle final chunks: flush remaining buffer and classify.
-    if (chunk.isFinal) {
-      const streamId = chunk.streamId;
-      const flushed = this.buffer.flush(streamId);
+    const result = await this.classify(text);
+    return this.buildResult(result);
+  }
 
-      // Clean up tracking state for this stream.
-      this.isFirstChunk.delete(streamId);
-      this.pendingResults.delete(streamId);
+  // -----------------------------------------------------------------------
+  // Public classification method (also used by ClassifyContentTool)
+  // -----------------------------------------------------------------------
 
-      if (!flushed) {
+  /**
+   * Classify a text string using the three-tier strategy: ONNX -> LLM -> keyword.
+   *
+   * @param text - The text to classify.
+   * @returns Classification result with per-category scores.
+   */
+  async classify(text: string): Promise<ClassifierResult> {
+    // Tier 1: try ONNX inference.
+    const onnxResult = await this.tryOnnxClassification(text);
+    if (onnxResult) return onnxResult;
+
+    // Tier 2: try LLM-as-judge.
+    if (this.llmInvoker) {
+      const llmResult = await this.tryLlmClassification(text);
+      if (llmResult) return llmResult;
+    }
+
+    // Tier 3: keyword fallback.
+    const scores = classifyByKeywords(text, this.categories);
+    return {
+      categories: scores,
+      flagged: scores.some((s) => s.confidence > this.flagThresholds[s.name]),
+      source: 'keyword',
+    };
+  }
+
+  // -----------------------------------------------------------------------
+  // Private — ONNX classification (Tier 1)
+  // -----------------------------------------------------------------------
+
+  /**
+   * Attempt to load `@huggingface/transformers` and run ONNX-based text
+   * classification.  Returns `null` if the module is unavailable or inference
+   * fails.
+   *
+   * The module load is attempted only once; subsequent calls use the cached
+   * result (either a working pipeline or `null`).
+   *
+   * @param text - Text to classify.
+   * @returns Classification result or `null`.
+   *
+   * @internal
+   */
+  private async tryOnnxClassification(text: string): Promise<ClassifierResult | null> {
+    // If we already know ONNX is unavailable, skip.
+    if (this.onnxPipeline === null) return null;
+
+    // First-time load attempt.
+    if (this.onnxPipeline === undefined) {
+      try {
+        // Dynamic import so the optional dependency does not fail at boot.
+        const transformers = await import('@huggingface/transformers');
+        this.onnxPipeline = await transformers.pipeline(
+          'text-classification',
+          'Xenova/toxic-bert',
+          { device: 'cpu' }
+        );
+      } catch {
+        // Module not installed or model load failed — mark as unavailable.
+        this.onnxPipeline = null;
         return null;
       }
-
-      // Classify the remaining buffered text.
-      const evaluation = await this.orchestrator.classifyAll(flushed.text);
-      return this.evaluationToResult(evaluation);
     }
 
-    // Only process TEXT_DELTA chunks — ignore tool calls, progress, etc.
-    if (chunk.type !== AgentOSResponseChunkType.TEXT_DELTA) {
+    try {
+      const raw = await this.onnxPipeline(text, { topk: null });
+
+      // Map ONNX labels to our categories.
+      const scores = this.mapOnnxScores(raw);
+      return {
+        categories: scores,
+        flagged: scores.some((s) => s.confidence > this.flagThresholds[s.name]),
+        source: 'onnx',
+      };
+    } catch {
+      // Inference failed — fall through to next tier.
       return null;
-    }
-
-    // Extract the text delta from the chunk.
-    const textDelta = (chunk as any).textDelta as string | undefined;
-    if (!textDelta) {
-      return null;
-    }
-
-    // Resolve the stream identifier for the sliding window.
-    const streamId = chunk.streamId;
-
-    // Dispatch to the appropriate streaming mode handler.
-    switch (this.streamingMode) {
-      case 'non-blocking':
-        return this.handleNonBlocking(streamId, textDelta);
-
-      case 'hybrid':
-        return this.handleHybrid(streamId, textDelta);
-
-      case 'blocking':
-      default:
-        return this.handleBlocking(streamId, textDelta);
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Streaming mode handlers
-  // -------------------------------------------------------------------------
-
   /**
-   * **Blocking mode**: push text into the buffer and, when a full window is
-   * ready, await the classifier result before returning.
+   * Map raw ONNX text-classification output labels to our standard categories.
    *
-   * @param streamId  - Identifier of the active stream.
-   * @param textDelta - New text fragment from the current chunk.
-   * @returns Evaluation result (possibly BLOCK/FLAG) or `null`.
-   */
-  private async handleBlocking(
-    streamId: string,
-    textDelta: string,
-  ): Promise<GuardrailEvaluationResult | null> {
-    const ready = this.buffer.push(streamId, textDelta);
-    if (!ready) {
-      return null;
-    }
-
-    // Classify the filled window synchronously.
-    const evaluation = await this.orchestrator.classifyAll(ready.text);
-    return this.evaluationToResult(evaluation);
-  }
-
-  /**
-   * **Non-blocking mode**: push text into the buffer.  When a window is
-   * ready, fire classification in the background and store the promise.
-   * On the **next** `evaluateOutput` call for the same stream, check the
-   * pending promise — if it resolved with a violation, return that result.
+   * ONNX models (e.g. toxic-bert) produce labels like `"toxic"`, `"obscene"`,
+   * `"threat"`, `"insult"`, `"identity_hate"`, etc.  We map these to our four
+   * categories, taking the max score when multiple ONNX labels map to the same
+   * category.
    *
-   * @param streamId  - Identifier of the active stream.
-   * @param textDelta - New text fragment from the current chunk.
-   * @returns A previously resolved violation result, or `null`.
+   * @param raw - Raw ONNX pipeline output.
+   * @returns Per-category scores.
+   *
+   * @internal
    */
-  private async handleNonBlocking(
-    streamId: string,
-    textDelta: string,
-  ): Promise<GuardrailEvaluationResult | null> {
-    // First, check if there is a pending result from a previous window.
-    const pending = this.pendingResults.get(streamId);
-    if (pending) {
-      // Check if the promise has settled without blocking.
-      const resolved = await Promise.race([
-        pending.then((val) => ({ done: true as const, val })),
-        Promise.resolve({ done: false as const, val: null as ChunkEvaluation | null }),
-      ]);
+  private mapOnnxScores(raw: any[]): CategoryScore[] {
+    /** Map of ONNX label -> our category. */
+    const labelMap: Record<string, ClassifierCategory> = {
+      toxic: 'toxic',
+      severe_toxic: 'toxic',
+      obscene: 'nsfw',
+      insult: 'toxic',
+      identity_hate: 'toxic',
+      threat: 'threat',
+    };
 
-      if (resolved.done && resolved.val) {
-        // Consume the pending result.
-        this.pendingResults.delete(streamId);
+    const maxScores: Record<ClassifierCategory, number> = {
+      toxic: 0,
+      injection: 0,
+      nsfw: 0,
+      threat: 0,
+    };
 
-        const result = this.evaluationToResult(resolved.val);
-        if (result) {
-          return result;
-        }
+    for (const item of raw) {
+      const label = (item.label ?? '').toLowerCase().replace(/\s+/g, '_');
+      const score = typeof item.score === 'number' ? item.score : 0;
+      const cat = labelMap[label];
+      if (cat && score > maxScores[cat]) {
+        maxScores[cat] = score;
       }
     }
 
-    // Push text into the buffer.
-    const ready = this.buffer.push(streamId, textDelta);
-    if (ready) {
-      // Fire classification in the background — do NOT await.
-      const classifyPromise = this.orchestrator.classifyAll(ready.text);
-      this.pendingResults.set(streamId, classifyPromise);
-    }
-
-    // Return null immediately — result will be checked on next call.
-    return null;
+    // ONNX models typically do not detect prompt injection; leave at 0.
+    return this.categories.map((name) => ({
+      name,
+      confidence: maxScores[name] ?? 0,
+    }));
   }
 
-  /**
-   * **Hybrid mode**: the first chunk for each stream is evaluated in
-   * blocking mode; subsequent chunks use non-blocking.
-   *
-   * This provides immediate feedback on the first window (where early
-   * jailbreak attempts are most likely) while minimising latency for the
-   * remainder of the stream.
-   *
-   * @param streamId  - Identifier of the active stream.
-   * @param textDelta - New text fragment from the current chunk.
-   * @returns Evaluation result or `null`.
-   */
-  private async handleHybrid(
-    streamId: string,
-    textDelta: string,
-  ): Promise<GuardrailEvaluationResult | null> {
-    // Determine whether this is the first chunk for this stream.
-    const isFirst = !this.isFirstChunk.has(streamId);
-    if (isFirst) {
-      this.isFirstChunk.set(streamId, true);
-    }
-
-    // First chunk → blocking, subsequent → non-blocking.
-    if (isFirst) {
-      return this.handleBlocking(streamId, textDelta);
-    }
-    return this.handleNonBlocking(streamId, textDelta);
-  }
-
-  // -------------------------------------------------------------------------
-  // Private helpers
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // Private — LLM classification (Tier 2)
+  // -----------------------------------------------------------------------
 
   /**
-   * Convert a {@link ChunkEvaluation} into a {@link GuardrailEvaluationResult}
-   * suitable for the AgentOS guardrail pipeline.
+   * Classify text using the LLM-as-judge fallback.
    *
-   * Returns `null` when the recommended action is ALLOW (no intervention
-   * needed).  For all other actions, the evaluation details are attached as
-   * metadata for audit/logging.
+   * @param text - Text to classify.
+   * @returns Classification result or `null` if the LLM call fails.
    *
-   * @param evaluation - Aggregated classifier evaluation.
-   * @returns A guardrail result or `null` for clean content.
+   * @internal
    */
-  private evaluationToResult(evaluation: ChunkEvaluation): GuardrailEvaluationResult | null {
-    // ALLOW means no guardrail action is needed.
-    if (evaluation.recommendedAction === GuardrailAction.ALLOW) {
+  private async tryLlmClassification(text: string): Promise<ClassifierResult | null> {
+    if (!this.llmInvoker) return null;
+
+    try {
+      const scores = await classifyByLlm(text, this.llmInvoker, this.categories);
+
+      // If all scores are zero the LLM likely failed to parse — treat as null.
+      if (scores.every((s) => s.confidence === 0)) return null;
+
+      return {
+        categories: scores,
+        flagged: scores.some((s) => s.confidence > this.flagThresholds[s.name]),
+        source: 'llm',
+      };
+    } catch {
       return null;
     }
+  }
 
-    return {
-      action: evaluation.recommendedAction,
-      reason: `ML classifier "${evaluation.triggeredBy}" flagged content`,
-      reasonCode: `ML_CLASSIFIER_${evaluation.recommendedAction.toUpperCase()}`,
-      metadata: {
-        triggeredBy: evaluation.triggeredBy,
-        totalLatencyMs: evaluation.totalLatencyMs,
-        classifierResults: evaluation.results.map((r) => ({
-          classifierId: r.classifierId,
-          bestClass: r.bestClass,
-          confidence: r.confidence,
-          latencyMs: r.latencyMs,
-        })),
-      },
-    };
+  // -----------------------------------------------------------------------
+  // Private — result builder
+  // -----------------------------------------------------------------------
+
+  /**
+   * Convert a {@link ClassifierResult} into a {@link GuardrailEvaluationResult},
+   * or return `null` when no thresholds are exceeded.
+   *
+   * @param result - Classification result from any tier.
+   * @returns Guardrail evaluation result or `null`.
+   *
+   * @internal
+   */
+  private buildResult(result: ClassifierResult): GuardrailEvaluationResult | null {
+    // Check for BLOCK-level violations first.
+    const blockers = result.categories.filter((s) => s.confidence > this.blockThresholds[s.name]);
+
+    if (blockers.length > 0) {
+      const worst = blockers.reduce((a, b) => (b.confidence > a.confidence ? b : a));
+
+      return {
+        action: GuardrailAction.BLOCK,
+        reason: `ML classifier detected unsafe content: ${blockers.map((b) => `${b.name}(${b.confidence.toFixed(2)})`).join(', ')}`,
+        reasonCode: `ML_CLASSIFIER_${worst.name.toUpperCase()}`,
+        metadata: {
+          source: result.source,
+          categories: result.categories,
+        },
+      };
+    }
+
+    // Check for FLAG-level violations.
+    const flaggers = result.categories.filter((s) => s.confidence > this.flagThresholds[s.name]);
+
+    if (flaggers.length > 0) {
+      const worst = flaggers.reduce((a, b) => (b.confidence > a.confidence ? b : a));
+
+      return {
+        action: GuardrailAction.FLAG,
+        reason: `ML classifier flagged content: ${flaggers.map((f) => `${f.name}(${f.confidence.toFixed(2)})`).join(', ')}`,
+        reasonCode: `ML_CLASSIFIER_${worst.name.toUpperCase()}`,
+        metadata: {
+          source: result.source,
+          categories: result.categories,
+        },
+      };
+    }
+
+    // No thresholds exceeded — allow.
+    return null;
   }
 }

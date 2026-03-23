@@ -1,521 +1,384 @@
 /**
- * @fileoverview IGuardrailService implementation for topicality enforcement.
+ * @file TopicalityGuardrail.ts
+ * @description Guardrail service that enforces on/off-topic boundaries for
+ * agent conversations using a three-tier evaluation strategy:
  *
- * `TopicalityGuardrail` evaluates user input (and optionally agent output)
- * against configured allowed and forbidden topic sets using semantic
- * embedding similarity.  It enforces three independent policy checks:
+ * 1. **Embedding similarity** (primary) — cosine similarity between input
+ *    and topic embeddings via `@huggingface/transformers`.
+ * 2. **LLM-as-judge** (fallback) — structured JSON classification prompt
+ *    sent to the configured LLM invoker.
+ * 3. **Keyword matching** (last resort) — simple substring search against
+ *    topic strings when neither embeddings nor LLM are available.
  *
- *  1. **Forbidden topics** — Messages that score above `forbiddenThreshold`
- *     against any forbidden topic are blocked (or flagged).
- *  2. **Off-topic detection** — Messages that score below `allowedThreshold`
- *     against *all* allowed topics are flagged (or blocked/redirected).
- *  3. **Session drift** — An EMA-based tracker flags sustained drift away
- *     from allowed topics across consecutive messages.
+ * The guardrail only evaluates input (user messages).  Output evaluation
+ * returns `null` (pass-through) because topic drift in agent responses is
+ * best handled at the input gate.
  *
- * ### Lazy initialisation
- * Embedding indices are built on the **first evaluation call**, not at
- * construction time.  This keeps instantiation cheap and defers the
- * potentially expensive batch embedding call until the agent actually
- * receives its first message.
+ * ### Guardrail pipeline phase
  *
- * ### Fail-open semantics
- * All evaluation methods wrap their logic in try/catch.  If the embedding
- * function throws, or any other unexpected error occurs, the guardrail
- * logs a warning and returns `null` (pass) to avoid blocking legitimate
- * traffic due to infrastructure failures.
+ * This guardrail sets `canSanitize: false` and `evaluateStreamingChunks: false`,
+ * placing it in Phase 2 (parallel) of the guardrail dispatcher.  It never
+ * modifies content — it only FLAGs or BLOCKs.
  *
- * @module topicality/TopicalityGuardrail
+ * @module agentos/extensions/packs/topicality/TopicalityGuardrail
  */
 
 import type {
+  IGuardrailService,
   GuardrailConfig,
-  GuardrailEvaluationResult,
   GuardrailInputPayload,
   GuardrailOutputPayload,
-  IGuardrailService,
+  GuardrailEvaluationResult,
 } from '@framers/agentos';
 import { GuardrailAction } from '@framers/agentos';
-import type { ISharedServiceRegistry } from '@framers/agentos';
-import type { TopicalityPackOptions } from './types';
-import { DEFAULT_DRIFT_CONFIG } from './types';
-import { TopicEmbeddingIndex } from './TopicEmbeddingIndex';
-import { TopicDriftTracker } from './TopicDriftTracker';
+
+import type { TopicalityOptions, TopicMatchResult } from './types';
+import { cosineSimilarity, topicEmbeddingCache, clearEmbeddingCache } from './embeddings';
 
 // ---------------------------------------------------------------------------
-// Reason codes emitted by this guardrail
+// Embedding helper — lazy-loaded from optional @huggingface/transformers
 // ---------------------------------------------------------------------------
 
-/**
- * Machine-readable reason code for messages matching a forbidden topic.
- * @internal
- */
-const REASON_FORBIDDEN = 'TOPICALITY_FORBIDDEN';
+/** Cached pipeline function (or null if the package is unavailable). */
+let _pipelineFn: ((task: string, model?: string) => Promise<unknown>) | null | undefined;
+
+/** Cached extractor instance. */
+let _extractor: {
+  (
+    texts: string[],
+    opts: { pooling: string; normalize: boolean }
+  ): Promise<{ tolist: () => number[][] }>;
+} | null = null;
 
 /**
- * Machine-readable reason code for messages that do not match any allowed topic.
- * @internal
+ * Attempt to load the feature-extraction pipeline from `@huggingface/transformers`.
+ * Returns `null` if the package is not installed.
  */
-const REASON_OFF_TOPIC = 'TOPICALITY_OFF_TOPIC';
+async function getExtractor(): Promise<typeof _extractor> {
+  if (_extractor) return _extractor;
+  if (_pipelineFn === null) return null; // already tried and failed
+
+  try {
+    // Dynamic import — package is an optionalDependency
+    const hf = await import('@huggingface/transformers');
+    _pipelineFn = hf.pipeline as typeof _pipelineFn;
+    _extractor = (await _pipelineFn!(
+      'feature-extraction',
+      'Xenova/all-MiniLM-L6-v2'
+    )) as typeof _extractor;
+    return _extractor;
+  } catch {
+    _pipelineFn = null;
+    return null;
+  }
+}
 
 /**
- * Machine-readable reason code for sustained session-level topic drift.
- * @internal
+ * Embed a single text string, returning a numeric vector.
+ * Uses the cached extractor pipeline or returns `null` if unavailable.
  */
-const REASON_DRIFT = 'TOPICALITY_DRIFT';
+async function embed(text: string): Promise<number[] | null> {
+  const extractor = await getExtractor();
+  if (!extractor) return null;
+
+  // Check cache first
+  const cached = topicEmbeddingCache.get(text);
+  if (cached) return cached;
+
+  const output = await extractor([text], { pooling: 'mean', normalize: true });
+  const vec = output.tolist()[0];
+  topicEmbeddingCache.set(text, vec);
+  return vec;
+}
 
 // ---------------------------------------------------------------------------
 // TopicalityGuardrail
 // ---------------------------------------------------------------------------
 
 /**
- * Guardrail that enforces topicality constraints via semantic embeddings.
+ * Guardrail that enforces topic boundaries on user input.
  *
- * Implements {@link IGuardrailService} with Phase 2 (parallel) semantics:
- * `evaluateStreamingChunks: false` and `canSanitize: false`.  The guardrail
- * never modifies content — it only blocks or flags.
- *
- * @example
- * ```ts
- * const guardrail = new TopicalityGuardrail(registry, {
- *   allowedTopics: TOPIC_PRESETS.customerSupport,
- *   forbiddenTopics: TOPIC_PRESETS.commonUnsafe,
- *   forbiddenAction: 'block',
- *   offTopicAction: 'flag',
- * }, embeddingFn);
- *
- * const result = await guardrail.evaluateInput(payload);
- * if (result?.action === GuardrailAction.BLOCK) {
- *   // Reject the message
- * }
- * ```
+ * Implements {@link IGuardrailService} with input-only evaluation.
+ * Runs in Phase 2 (parallel, non-sanitizing) of the guardrail dispatcher.
  */
 export class TopicalityGuardrail implements IGuardrailService {
-  // -------------------------------------------------------------------------
-  // IGuardrailService config
-  // -------------------------------------------------------------------------
-
   /**
-   * Guardrail pipeline configuration.
-   *
-   * - `evaluateStreamingChunks: false` — topicality evaluation requires
-   *   complete text, not partial deltas.
-   * - `canSanitize: false` — this guardrail only blocks or flags; it never
-   *   modifies content, so it runs in Phase 2 (parallel) of the pipeline.
+   * Guardrail configuration — Phase 2 parallel (no sanitization, no streaming).
    */
-  public readonly config: GuardrailConfig = {
-    evaluateStreamingChunks: false,
+  readonly config: GuardrailConfig = {
     canSanitize: false,
+    evaluateStreamingChunks: false,
   };
 
-  // -------------------------------------------------------------------------
-  // Private state
-  // -------------------------------------------------------------------------
-
-  /** Shared service registry provided by the extension manager. */
-  private readonly services: ISharedServiceRegistry;
-
-  /** Resolved pack options with caller overrides. */
-  private readonly options: TopicalityPackOptions;
-
-  /** Caller-supplied or registry-backed embedding function. */
-  private readonly embeddingFn: (texts: string[]) => Promise<number[][]>;
+  /** Resolved options with defaults applied. */
+  private readonly opts: Required<
+    Pick<
+      TopicalityOptions,
+      'minSimilarity' | 'maxBlockedSimilarity' | 'allowedTopics' | 'blockedTopics'
+    >
+  > &
+    Pick<TopicalityOptions, 'llmInvoker'>;
 
   /**
-   * Embedding index for allowed topics.  Lazily built on the first
-   * evaluation call.  `null` until built or if no allowed topics are
-   * configured.
+   * @param options - Topicality configuration provided by the pack factory.
    */
-  private allowedIndex: TopicEmbeddingIndex | null = null;
-
-  /**
-   * Embedding index for forbidden topics.  Lazily built on the first
-   * evaluation call.  `null` until built or if no forbidden topics are
-   * configured.
-   */
-  private forbiddenIndex: TopicEmbeddingIndex | null = null;
-
-  /**
-   * Session-level EMA drift tracker.  Only instantiated when
-   * `enableDriftDetection` is `true` (default).  `null` otherwise.
-   */
-  private driftTracker: TopicDriftTracker | null = null;
-
-  /**
-   * Which side of the conversation to evaluate.
-   * - `'input'`  — only user messages
-   * - `'output'` — only agent responses
-   * - `'both'`   — both directions
-   */
-  private readonly scope: 'input' | 'output' | 'both';
-
-  /**
-   * Minimum similarity to any allowed topic for the message to be
-   * considered on-topic.
-   */
-  private readonly allowedThreshold: number;
-
-  /**
-   * Similarity above which a forbidden topic match triggers action.
-   */
-  private readonly forbiddenThreshold: number;
-
-  /**
-   * Whether the lazy initialisation of embedding indices has been
-   * performed.  Prevents redundant build calls.
-   */
-  private indicesBuilt = false;
-
-  // -------------------------------------------------------------------------
-  // Constructor
-  // -------------------------------------------------------------------------
-
-  /**
-   * Creates a new `TopicalityGuardrail`.
-   *
-   * @param services    - Shared service registry for heavyweight resource sharing.
-   * @param options     - Pack-level configuration (topics, thresholds, actions).
-   * @param embeddingFn - Optional explicit embedding function.  When omitted,
-   *   the guardrail falls back to requesting an EmbeddingManager from the
-   *   shared service registry at evaluation time.
-   */
-  constructor(
-    services: ISharedServiceRegistry,
-    options: TopicalityPackOptions,
-    embeddingFn?: (texts: string[]) => Promise<number[][]>,
-  ) {
-    this.services = services;
-    this.options = options;
-
-    // Resolve embedding function: prefer explicit argument, then fall back
-    // to the shared service registry.
-    this.embeddingFn = embeddingFn ?? this.createRegistryEmbeddingFn();
-
-    // Resolve scope and thresholds from options with sensible defaults.
-    this.scope = options.guardrailScope ?? 'input';
-    this.allowedThreshold = options.allowedThreshold ?? 0.35;
-    this.forbiddenThreshold = options.forbiddenThreshold ?? 0.65;
-
-    // Instantiate drift tracker if enabled (default: true).
-    const driftEnabled = options.enableDriftDetection !== false;
-    if (driftEnabled) {
-      const driftConfig = { ...DEFAULT_DRIFT_CONFIG, ...(options.drift ?? {}) };
-      this.driftTracker = new TopicDriftTracker(driftConfig);
-    }
-  }
-
-  /**
-   * Clears any session-level drift-tracking state held by this guardrail.
-   *
-   * Called by the topicality pack's `onDeactivate` hook so long-lived agents
-   * do not retain per-session EMA state after the pack is removed or the
-   * agent shuts down.
-   */
-  clearSessionState(): void {
-    this.driftTracker?.clear();
+  constructor(options: TopicalityOptions) {
+    this.opts = {
+      allowedTopics: options.allowedTopics,
+      blockedTopics: options.blockedTopics,
+      minSimilarity: options.minSimilarity ?? 0.3,
+      maxBlockedSimilarity: options.maxBlockedSimilarity ?? 0.5,
+      llmInvoker: options.llmInvoker,
+    };
   }
 
   // -------------------------------------------------------------------------
-  // IGuardrailService — evaluateInput
+  // IGuardrailService — input evaluation
   // -------------------------------------------------------------------------
 
   /**
-   * Evaluates a user input message against configured topic constraints.
+   * Evaluate user input for topic relevance.
    *
-   * When `scope` is `'output'`, this method immediately returns `null`
-   * because input evaluation is disabled.
+   * Runs the three-tier evaluation strategy:
+   * 1. Embedding similarity (if `@huggingface/transformers` available)
+   * 2. LLM-as-judge (if `llmInvoker` configured)
+   * 3. Keyword matching (always available)
    *
-   * @param payload - The input payload containing the user message text and
-   *   session context.
-   * @returns A guardrail evaluation result (BLOCK or FLAG), or `null` if
-   *   the message passes all topic checks.  Returns `null` on any error
-   *   (fail-open).
+   * @param payload - The input payload containing user text and context.
+   * @returns A guardrail result (FLAG/BLOCK) or `null` to allow.
    */
-  async evaluateInput(
-    payload: GuardrailInputPayload,
-  ): Promise<GuardrailEvaluationResult | null> {
-    // If scope is output-only, skip input evaluation entirely.
-    if (this.scope === 'output') {
+  async evaluateInput(payload: GuardrailInputPayload): Promise<GuardrailEvaluationResult | null> {
+    const text = payload.input.textInput;
+    if (!text || text.trim().length === 0) return null;
+
+    // If no topics configured at all, allow everything
+    if (this.opts.allowedTopics.length === 0 && this.opts.blockedTopics.length === 0) {
       return null;
     }
 
-    try {
-      // Extract the text content from the input payload.
-      const text = payload.input.textInput;
-      if (!text || text.trim().length === 0) {
-        // No text to evaluate — pass through.
-        return null;
-      }
+    // Try the three methods in order
+    const result =
+      (await this.evaluateViaEmbeddings(text)) ??
+      (await this.evaluateViaLlm(text)) ??
+      this.evaluateViaKeywords(text);
 
-      // Lazy-build embedding indices on the first call.
-      await this.ensureIndicesBuilt();
+    if (!result) return null;
 
-      // Embed the user's text once — reuse the vector for all checks.
-      const [embedding] = await this.embeddingFn([text]);
-
-      // Run the core evaluation pipeline on the embedded vector.
-      return this.evaluateEmbedding(embedding, payload.context.sessionId);
-    } catch (error) {
-      // Fail-open: log the error but let the message through.
-      console.warn(
-        '[TopicalityGuardrail] evaluateInput failed (fail-open):',
-        error instanceof Error ? error.message : error,
-      );
-      return null;
-    }
+    return this.toGuardrailResult(result);
   }
 
   // -------------------------------------------------------------------------
-  // IGuardrailService — evaluateOutput
+  // IGuardrailService — output evaluation (pass-through)
   // -------------------------------------------------------------------------
 
   /**
-   * Evaluates an agent output chunk against configured topic constraints.
+   * Output evaluation — returns `null` (pass-through).
    *
-   * When `scope` is `'input'`, this method immediately returns `null`
-   * because output evaluation is disabled.
-   *
-   * For output evaluation, the guardrail extracts text from the response
-   * chunk's `finalResponseText` field (since `evaluateStreamingChunks` is
-   * `false`, only FINAL_RESPONSE chunks are seen).
-   *
-   * @param payload - The output payload containing the response chunk and
-   *   session context.
-   * @returns A guardrail evaluation result (BLOCK or FLAG), or `null` if
-   *   the output passes all topic checks.  Returns `null` on any error
-   *   (fail-open).
+   * Topic enforcement is applied at the input gate only.  Agent responses
+   * are not evaluated for topicality.
    */
   async evaluateOutput(
-    payload: GuardrailOutputPayload,
+    _payload: GuardrailOutputPayload
   ): Promise<GuardrailEvaluationResult | null> {
-    // If scope is input-only, skip output evaluation entirely.
-    if (this.scope === 'input') {
-      return null;
-    }
-
-    try {
-      // Extract text from the chunk.  Since evaluateStreamingChunks is false,
-      // we receive FINAL_RESPONSE chunks with finalResponseText.
-      const chunk = payload.chunk as unknown as Record<string, unknown>;
-      const text =
-        (chunk.textDelta as string | undefined) ??
-        (chunk.finalResponseText as string | undefined) ??
-        '';
-
-      if (!text || text.trim().length === 0) {
-        return null;
-      }
-
-      // Lazy-build embedding indices on the first call.
-      await this.ensureIndicesBuilt();
-
-      // Embed the output text once.
-      const [embedding] = await this.embeddingFn([text]);
-
-      // Run the core evaluation pipeline.
-      return this.evaluateEmbedding(embedding, payload.context.sessionId);
-    } catch (error) {
-      // Fail-open: log and pass through.
-      console.warn(
-        '[TopicalityGuardrail] evaluateOutput failed (fail-open):',
-        error instanceof Error ? error.message : error,
-      );
-      return null;
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  // Core evaluation pipeline
-  // -------------------------------------------------------------------------
-
-  /**
-   * Runs the three-stage topicality evaluation pipeline on a pre-computed
-   * embedding vector.
-   *
-   * Evaluation order:
-   *  1. Forbidden topic check (highest priority — immediate block/flag)
-   *  2. Off-topic check against allowed topics
-   *  3. Session drift check (only if drift detection is enabled and allowed
-   *     topics are configured)
-   *
-   * @param embedding - Pre-computed embedding vector for the text.
-   * @param sessionId - Session identifier for drift tracking.
-   * @returns A {@link GuardrailEvaluationResult} if any check triggers, or
-   *   `null` if all checks pass.
-   *
-   * @internal
-   */
-  private evaluateEmbedding(
-    embedding: number[],
-    sessionId: string,
-  ): GuardrailEvaluationResult | null {
-    // ------------------------------------------------------------------
-    // Step 1: Check forbidden topics
-    // ------------------------------------------------------------------
-    if (this.forbiddenIndex) {
-      const forbiddenMatches = this.forbiddenIndex.matchByVector(embedding);
-
-      // Check if any forbidden topic exceeds the threshold.
-      for (const match of forbiddenMatches) {
-        if (match.similarity > this.forbiddenThreshold) {
-          // Determine action: 'block' (default) or 'flag'.
-          const action =
-            this.options.forbiddenAction === 'flag'
-              ? GuardrailAction.FLAG
-              : GuardrailAction.BLOCK;
-
-          return {
-            action,
-            reason: `Message matches forbidden topic: ${match.topicName}`,
-            reasonCode: REASON_FORBIDDEN,
-            metadata: {
-              matchedTopic: match.topicId,
-              matchedTopicName: match.topicName,
-              similarity: match.similarity,
-            },
-          };
-        }
-      }
-    }
-
-    // ------------------------------------------------------------------
-    // Step 2: Check allowed topics (off-topic detection)
-    // ------------------------------------------------------------------
-    if (this.allowedIndex) {
-      const isOnTopic = this.allowedIndex.isOnTopicByVector(
-        embedding,
-        this.allowedThreshold,
-      );
-
-      if (!isOnTopic) {
-        // Get the nearest topic for metadata, even though it's below threshold.
-        const allMatches = this.allowedIndex.matchByVector(embedding);
-        const nearestTopic = allMatches.length > 0 ? allMatches[0] : null;
-
-        // Determine action based on offTopicAction option.
-        let action: GuardrailAction;
-        switch (this.options.offTopicAction) {
-          case 'block':
-            action = GuardrailAction.BLOCK;
-            break;
-          case 'redirect':
-            // Redirect maps to FLAG with metadata indicating redirection intent.
-            action = GuardrailAction.FLAG;
-            break;
-          default:
-            // Default: 'flag'
-            action = GuardrailAction.FLAG;
-            break;
-        }
-
-        return {
-          action,
-          reason: nearestTopic
-            ? `Message is off-topic. Nearest topic: ${nearestTopic.topicName} (similarity: ${nearestTopic.similarity.toFixed(3)})`
-            : 'Message is off-topic. No matching topics found.',
-          reasonCode: REASON_OFF_TOPIC,
-          metadata: {
-            nearestTopic: nearestTopic?.topicId ?? null,
-            nearestTopicName: nearestTopic?.topicName ?? null,
-            nearestSimilarity: nearestTopic?.similarity ?? 0,
-          },
-        };
-      }
-    }
-
-    // ------------------------------------------------------------------
-    // Step 3: Check session drift (only when drift detection is enabled
-    //         and we have allowed topics to compare against)
-    // ------------------------------------------------------------------
-    if (this.driftTracker && this.allowedIndex) {
-      const driftResult = this.driftTracker.update(
-        sessionId,
-        embedding,
-        this.allowedIndex,
-      );
-
-      if (driftResult.driftLimitExceeded) {
-        return {
-          // Drift is always a FLAG — it represents a gradual trend, not
-          // an immediate policy violation.
-          action: GuardrailAction.FLAG,
-          reason: `Session has drifted off-topic for ${driftResult.driftStreak} consecutive messages.`,
-          reasonCode: REASON_DRIFT,
-          metadata: {
-            driftStreak: driftResult.driftStreak,
-            currentSimilarity: driftResult.currentSimilarity,
-            nearestTopic: driftResult.nearestTopic?.topicId ?? null,
-            nearestTopicName: driftResult.nearestTopic?.topicName ?? null,
-          },
-        };
-      }
-    }
-
-    // All checks passed — no action needed.
     return null;
   }
 
   // -------------------------------------------------------------------------
-  // Lazy index building
+  // Method 1: Embedding-based evaluation
   // -------------------------------------------------------------------------
 
   /**
-   * Ensures that the allowed and forbidden embedding indices have been built.
+   * Evaluate input via cosine similarity between embeddings.
    *
-   * Called once before the first evaluation.  Subsequent calls are no-ops
-   * (guarded by the `indicesBuilt` flag).
+   * Embeds the input text and each topic string, then compares similarities
+   * against the configured thresholds.
    *
-   * @internal
+   * @param text - The user input text.
+   * @returns A {@link TopicMatchResult} or `null` if embeddings are unavailable.
    */
-  private async ensureIndicesBuilt(): Promise<void> {
-    if (this.indicesBuilt) {
-      return;
+  private async evaluateViaEmbeddings(text: string): Promise<TopicMatchResult | null> {
+    const inputVec = await embed(text);
+    if (!inputVec) return null;
+
+    // --- Check blocked topics first ---
+    for (const blockedTopic of this.opts.blockedTopics) {
+      const topicVec = await embed(blockedTopic);
+      if (!topicVec) continue;
+
+      const sim = cosineSimilarity(inputVec, topicVec);
+      if (sim >= this.opts.maxBlockedSimilarity) {
+        return { onTopic: false, confidence: sim, detectedTopic: blockedTopic };
+      }
     }
 
-    // Build the forbidden-topic index if any forbidden topics are configured.
-    if (this.options.forbiddenTopics && this.options.forbiddenTopics.length > 0) {
-      this.forbiddenIndex = new TopicEmbeddingIndex(this.embeddingFn);
-      await this.forbiddenIndex.build(this.options.forbiddenTopics);
+    // --- Check allowed topics ---
+    if (this.opts.allowedTopics.length === 0) {
+      // No allowed topics configured — everything not blocked is on-topic
+      return { onTopic: true, confidence: 1.0, detectedTopic: 'unfiltered' };
     }
 
-    // Build the allowed-topic index if any allowed topics are configured.
-    if (this.options.allowedTopics && this.options.allowedTopics.length > 0) {
-      this.allowedIndex = new TopicEmbeddingIndex(this.embeddingFn);
-      await this.allowedIndex.build(this.options.allowedTopics);
+    let bestSim = -Infinity;
+    let bestTopic = 'unknown';
+
+    for (const allowedTopic of this.opts.allowedTopics) {
+      const topicVec = await embed(allowedTopic);
+      if (!topicVec) continue;
+
+      const sim = cosineSimilarity(inputVec, topicVec);
+      if (sim > bestSim) {
+        bestSim = sim;
+        bestTopic = allowedTopic;
+      }
     }
 
-    this.indicesBuilt = true;
+    if (bestSim >= this.opts.minSimilarity) {
+      return { onTopic: true, confidence: bestSim, detectedTopic: bestTopic };
+    }
+
+    // Below threshold — off-topic
+    return { onTopic: false, confidence: bestSim, detectedTopic: bestTopic };
   }
 
   // -------------------------------------------------------------------------
-  // Registry-based embedding fallback
+  // Method 2: LLM-as-judge evaluation
   // -------------------------------------------------------------------------
 
   /**
-   * Creates an embedding function that retrieves an EmbeddingManager from
-   * the shared service registry at call time.
+   * Evaluate input via LLM classification prompt.
    *
-   * This fallback is used when no explicit `embeddingFn` is provided to
-   * the constructor.  It throws if the EmbeddingManager service is not
-   * available in the registry.
+   * Sends a structured prompt to the configured LLM invoker asking it to
+   * classify the input as on-topic or off-topic and return JSON.
    *
-   * @returns An async embedding function.
-   * @internal
+   * @param text - The user input text.
+   * @returns A {@link TopicMatchResult} or `null` if no LLM invoker is configured.
    */
-  private createRegistryEmbeddingFn(): (texts: string[]) => Promise<number[][]> {
-    return async (texts: string[]): Promise<number[][]> => {
-      // Attempt to retrieve the EmbeddingManager from the shared registry.
-      const em = await this.services.getOrCreate<{
-        generateEmbeddings: (texts: string[]) => Promise<number[][]>;
-      }>(
-        'agentos:topicality:embedding-manager',
-        async () => {
-          throw new Error(
-            'EmbeddingManager not available in shared service registry. ' +
-              'Provide an explicit embeddingFn or register an EmbeddingManager.',
-          );
-        },
-      );
-      return em.generateEmbeddings(texts);
+  private async evaluateViaLlm(text: string): Promise<TopicMatchResult | null> {
+    if (!this.opts.llmInvoker) return null;
+
+    const allowedStr =
+      this.opts.allowedTopics.length > 0 ? this.opts.allowedTopics.join(', ') : '(any topic)';
+    const blockedStr =
+      this.opts.blockedTopics.length > 0 ? this.opts.blockedTopics.join(', ') : '(none)';
+
+    const prompt = [
+      'You are a topic classification judge.',
+      `Allowed topics: ${allowedStr}`,
+      `Blocked topics: ${blockedStr}`,
+      '',
+      `User message: "${text}"`,
+      '',
+      'Is this message about one of the allowed topics and NOT about a blocked topic?',
+      'Return ONLY valid JSON (no markdown, no explanation):',
+      '{ "onTopic": <boolean>, "confidence": <float 0-1>, "detectedTopic": "<string>" }',
+    ].join('\n');
+
+    try {
+      const raw = await this.opts.llmInvoker(prompt);
+      // Extract JSON from the response (handle possible markdown fences)
+      const jsonMatch = raw.match(/\{[\s\S]*?\}/);
+      if (!jsonMatch) return null;
+
+      const parsed = JSON.parse(jsonMatch[0]) as TopicMatchResult;
+      return {
+        onTopic: Boolean(parsed.onTopic),
+        confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.5,
+        detectedTopic: typeof parsed.detectedTopic === 'string' ? parsed.detectedTopic : 'unknown',
+      };
+    } catch {
+      // LLM failed — fall through to keyword matching
+      return null;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Method 3: Keyword matching (last resort)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Evaluate input via simple case-insensitive substring matching against
+   * topic strings.
+   *
+   * This is the fallback of last resort when neither embeddings nor LLM
+   * are available.  It checks whether any topic string appears as a
+   * substring of the input (or vice versa).
+   *
+   * @param text - The user input text.
+   * @returns A {@link TopicMatchResult}.
+   */
+  private evaluateViaKeywords(text: string): TopicMatchResult {
+    const lower = text.toLowerCase();
+
+    // --- Check blocked topics first ---
+    for (const blockedTopic of this.opts.blockedTopics) {
+      const topicLower = blockedTopic.toLowerCase();
+      if (lower.includes(topicLower) || topicLower.includes(lower)) {
+        return { onTopic: false, confidence: 0.8, detectedTopic: blockedTopic };
+      }
+    }
+
+    // --- Check allowed topics ---
+    if (this.opts.allowedTopics.length === 0) {
+      return { onTopic: true, confidence: 0.5, detectedTopic: 'unfiltered' };
+    }
+
+    for (const allowedTopic of this.opts.allowedTopics) {
+      const topicLower = allowedTopic.toLowerCase();
+      if (lower.includes(topicLower) || topicLower.includes(lower)) {
+        return { onTopic: true, confidence: 0.7, detectedTopic: allowedTopic };
+      }
+    }
+
+    // No keyword match — off-topic
+    return { onTopic: false, confidence: 0.5, detectedTopic: 'unknown' };
+  }
+
+  // -------------------------------------------------------------------------
+  // Result mapping
+  // -------------------------------------------------------------------------
+
+  /**
+   * Convert a {@link TopicMatchResult} into a {@link GuardrailEvaluationResult}.
+   *
+   * - On-topic results return `null` (allow).
+   * - Blocked-topic matches return `BLOCK`.
+   * - Off-topic (below allowed threshold) returns `FLAG`.
+   *
+   * @param result - The topic match result to convert.
+   * @returns A guardrail evaluation result, or `null` to allow.
+   */
+  private toGuardrailResult(result: TopicMatchResult): GuardrailEvaluationResult | null {
+    if (result.onTopic) return null;
+
+    // Determine if this is a blocked-topic hit or just off-topic
+    const isBlockedHit = this.opts.blockedTopics.some(
+      (t) => t.toLowerCase() === result.detectedTopic.toLowerCase()
+    );
+
+    const action = isBlockedHit ? GuardrailAction.BLOCK : GuardrailAction.FLAG;
+    const reason = isBlockedHit
+      ? `Message matches blocked topic: "${result.detectedTopic}"`
+      : `Message is off-topic (best match: "${result.detectedTopic}", confidence: ${result.confidence.toFixed(2)})`;
+
+    return {
+      action,
+      reason,
+      reasonCode: isBlockedHit ? 'BLOCKED_TOPIC' : 'OFF_TOPIC',
+      metadata: {
+        detectedTopic: result.detectedTopic,
+        confidence: result.confidence,
+        onTopic: result.onTopic,
+      },
     };
+  }
+
+  // -------------------------------------------------------------------------
+  // Cleanup
+  // -------------------------------------------------------------------------
+
+  /**
+   * Clear cached embeddings.  Called during pack deactivation.
+   */
+  clearCache(): void {
+    clearEmbeddingCache();
   }
 }

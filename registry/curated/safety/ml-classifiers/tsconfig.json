@@ -13,11 +13,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "paths": {
-      "@framers/agentos": ["../../../../../agentos/dist/index.d.ts"],
-      "@framers/agentos/*": ["../../../../../agentos/dist/*"]
-    }
+    "isolatedModules": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "test"]

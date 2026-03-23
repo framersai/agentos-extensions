@@ -1,61 +1,53 @@
 /**
- * @fileoverview Pack factory for the Topicality Guardrail Extension Pack.
+ * @file index.ts
+ * @description Pack factory for the Topicality guardrail extension pack.
  *
- * Exports the main `createTopicalityGuardrail()` factory that assembles the
- * {@link TopicalityGuardrail} and the {@link CheckTopicTool} into a single
- * {@link ExtensionPack} ready for registration with the AgentOS extension
- * manager.
+ * Exports the main `createTopicalityGuardrail()` factory function that
+ * assembles the {@link TopicalityGuardrail} guardrail and the
+ * {@link CheckTopicTool} tool into a single {@link ExtensionPack}
+ * ready for registration with the AgentOS extension manager.
  *
  * Also exports a `createExtensionPack()` bridge function that conforms to
  * the AgentOS manifest factory convention, delegating to
  * `createTopicalityGuardrail()` with options extracted from the
  * {@link ExtensionPackContext}.
  *
+ * ### Lifecycle
+ *
+ * On deactivation, `onDeactivate` clears the topic embedding cache to
+ * release memory.
+ *
  * ### Default behaviour (zero-config)
- * When called without arguments, no topics are configured so the guardrail
- * and tool are effectively no-ops.  Callers should provide at least
- * `allowedTopics` or `forbiddenTopics` for meaningful enforcement.
  *
- * ### Activation lifecycle
- * Components are built eagerly at pack creation time for direct programmatic
- * use.  When the extension manager activates the pack, `onActivate` rebuilds
- * all components with the manager's shared service registry so heavyweight
- * resources (embedding models) are shared across the agent.
- *
- * @example
- * ```typescript
- * import { createTopicalityGuardrail, TOPIC_PRESETS } from './topicality';
- *
- * const pack = createTopicalityGuardrail({
- *   allowedTopics: TOPIC_PRESETS.customerSupport,
- *   forbiddenTopics: TOPIC_PRESETS.commonUnsafe,
- * });
- * ```
+ * When called with only `allowedTopics` and `blockedTopics`, the pack uses
+ * `Xenova/all-MiniLM-L6-v2` for local embeddings with `minSimilarity: 0.3`
+ * and `maxBlockedSimilarity: 0.5`.
  *
  * @module agentos/extensions/packs/topicality
  */
 
-import type { ISharedServiceRegistry } from '@framers/agentos';
-import { SharedServiceRegistry } from '@framers/agentos';
 import type { ExtensionPack, ExtensionPackContext } from '@framers/agentos';
 import type { ExtensionDescriptor, ExtensionLifecycleContext } from '@framers/agentos';
 import { EXTENSION_KIND_GUARDRAIL, EXTENSION_KIND_TOOL } from '@framers/agentos';
-import type { TopicalityPackOptions } from './types';
+import type { TopicalityOptions } from './types';
 import { TopicalityGuardrail } from './TopicalityGuardrail';
 import { CheckTopicTool } from './tools/CheckTopicTool';
 
 // ---------------------------------------------------------------------------
-// Re-exports — allow single-import for consumers
+// Re-exports
 // ---------------------------------------------------------------------------
 
 /**
- * Re-export all types from the topicality type definitions so consumers
- * can import everything from a single entry point:
+ * Re-export all types so consumers can import everything from a single
+ * entry point:
  * ```ts
- * import { createTopicalityGuardrail, TOPIC_PRESETS } from './topicality';
+ * import { createTopicalityGuardrail, TopicalityOptions } from '@framers/agentos-ext-topicality';
  * ```
  */
 export * from './types';
+export { TopicalityGuardrail } from './TopicalityGuardrail';
+export { CheckTopicTool } from './tools/CheckTopicTool';
+export { cosineSimilarity, clearEmbeddingCache } from './embeddings';
 
 // ---------------------------------------------------------------------------
 // Pack factory
@@ -63,147 +55,48 @@ export * from './types';
 
 /**
  * Create an {@link ExtensionPack} that bundles:
- *  - The {@link TopicalityGuardrail} guardrail (evaluates input & output
- *    against allowed/forbidden topics and drift detection).
- *  - The {@link CheckTopicTool} `check_topic` tool (on-demand topic analysis).
+ *  - The {@link TopicalityGuardrail} (input-only topic enforcement).
+ *  - The {@link CheckTopicTool} `check_topic` tool (on-demand classification).
  *
- * @param options - Optional pack-level configuration.  All properties have
- *                  sensible defaults; see {@link TopicalityPackOptions}.
- * @returns A fully-configured {@link ExtensionPack} with one guardrail
- *          descriptor and one tool descriptor.
+ * @param options - Pack-level configuration with allowed/blocked topics.
+ * @returns A fully-configured {@link ExtensionPack} with one guardrail and
+ *          one tool.
+ *
+ * @example
+ * ```typescript
+ * import { createTopicalityGuardrail } from '@framers/agentos-ext-topicality';
+ *
+ * const pack = createTopicalityGuardrail({
+ *   allowedTopics: ['customer support', 'billing', 'product features'],
+ *   blockedTopics: ['politics', 'violence'],
+ * });
+ * ```
  */
-export function createTopicalityGuardrail(options?: TopicalityPackOptions): ExtensionPack {
-  /**
-   * Resolved options — default to empty object so every sub-check can
-   * safely use `opts.foo` without null-guarding the whole `options` reference.
-   */
-  const opts: TopicalityPackOptions = options ?? {};
+export function createTopicalityGuardrail(options: TopicalityOptions): ExtensionPack {
+  /** The topicality guardrail service instance. */
+  let guardrail = new TopicalityGuardrail(options);
 
-  // -------------------------------------------------------------------------
-  // Mutable state — upgraded by onActivate with the extension manager's
-  // shared service registry.
-  // -------------------------------------------------------------------------
-
-  const state = {
-    /**
-     * Service registry — starts as a standalone instance so the pack can be
-     * used directly (without activation) in unit tests and scripts.
-     * Replaced with the shared registry when `onActivate` is called by the
-     * extension manager.
-     */
-    services: new SharedServiceRegistry() as ISharedServiceRegistry,
-  };
-
-  // -------------------------------------------------------------------------
-  // Component instances — rebuilt by buildComponents()
-  // -------------------------------------------------------------------------
+  /** The on-demand topic check tool instance. */
+  let tool = new CheckTopicTool(guardrail);
 
   /**
-   * The guardrail that evaluates user input and/or agent output against
-   * configured allowed and forbidden topic sets.
-   */
-  let guardrail: TopicalityGuardrail;
-
-  /**
-   * The on-demand topic checking tool exposed to agents and workflows.
-   */
-  let tool: CheckTopicTool;
-
-  // -------------------------------------------------------------------------
-  // Embedding function resolution
-  // -------------------------------------------------------------------------
-
-  /**
-   * Resolves the embedding function to use for topic matching.
-   *
-   * Priority:
-   * 1. Explicit `opts.embeddingFn` provided by the caller.
-   * 2. Fallback to the shared service registry's EmbeddingManager.
-   *
-   * @returns An async embedding function.
-   */
-  function resolveEmbeddingFn(): (texts: string[]) => Promise<number[][]> {
-    if (opts.embeddingFn) {
-      return opts.embeddingFn;
-    }
-
-    // Fallback: request an EmbeddingManager from the shared service registry
-    // at call time (lazy resolution).
-    return async (texts: string[]): Promise<number[][]> => {
-      const em = await state.services.getOrCreate<{
-        generateEmbeddings: (texts: string[]) => Promise<number[][]>;
-      }>(
-        'agentos:topicality:embedding-manager',
-        async () => {
-          throw new Error(
-            'EmbeddingManager not available in shared service registry. ' +
-              'Provide an explicit embeddingFn in TopicalityPackOptions or ' +
-              'register an EmbeddingManager before activating the topicality pack.',
-          );
-        },
-      );
-      return em.generateEmbeddings(texts);
-    };
-  }
-
-  // -------------------------------------------------------------------------
-  // buildComponents
-  // -------------------------------------------------------------------------
-
-  /**
-   * (Re)construct all pack components using the current `state.services`.
-   *
-   * Called once at pack creation for direct programmatic use, and again
-   * during `onActivate` to upgrade to the extension manager's shared
-   * service registry.
+   * Rebuild components (called on activation to pick up any option changes).
    */
   function buildComponents(): void {
-    const embeddingFn = resolveEmbeddingFn();
-
-    // Resolve thresholds with defaults.
-    const allowedThreshold = opts.allowedThreshold ?? 0.35;
-    const forbiddenThreshold = opts.forbiddenThreshold ?? 0.65;
-
-    // ------------------------------------------------------------------
-    // 1. Build the guardrail.
-    // ------------------------------------------------------------------
-    guardrail = new TopicalityGuardrail(state.services, opts, embeddingFn);
-
-    // ------------------------------------------------------------------
-    // 2. Build the on-demand topic checking tool.
-    //    The tool starts with null indices — the guardrail builds them
-    //    lazily, and the tool shares the same embeddingFn so it can
-    //    operate independently.
-    // ------------------------------------------------------------------
-    tool = new CheckTopicTool(
-      null, // allowedIndex — will be null until lazy build
-      null, // forbiddenIndex — will be null until lazy build
-      embeddingFn,
-      allowedThreshold,
-      forbiddenThreshold,
-    );
-
+    guardrail = new TopicalityGuardrail(options);
+    tool = new CheckTopicTool(guardrail);
   }
-
-  // Initial build — makes the pack usable immediately without activation.
-  buildComponents();
-
-  // -------------------------------------------------------------------------
-  // ExtensionPack shape
-  // -------------------------------------------------------------------------
 
   return {
     /** Canonical pack name used in manifests and logs. */
     name: 'topicality',
 
-    /** Semantic version of this pack implementation. */
-    version: '1.0.0',
+    /** Semantic version of the pack. */
+    version: '0.1.0',
 
     /**
-     * Descriptor getter — always returns the latest (possibly rebuilt)
-     * component instances.  Using a getter ensures that after `onActivate`
-     * rebuilds the components, the descriptors array reflects the new
-     * references rather than stale closures from the initial build.
+     * Descriptors getter — returns the current component instances wrapped
+     * in the ExtensionDescriptor shape.
      */
     get descriptors(): ExtensionDescriptor[] {
       return [
@@ -211,20 +104,17 @@ export function createTopicalityGuardrail(options?: TopicalityPackOptions): Exte
           /**
            * Guardrail descriptor.
            *
-           * Priority 3 places this guardrail early in the pipeline so
-           * topic enforcement happens before most other guardrails.
+           * Priority 6 places this guardrail after PII redaction (10) and
+           * grounding guard (8) but before lower-priority classifiers.
            */
           id: 'topicality-guardrail',
           kind: EXTENSION_KIND_GUARDRAIL,
-          priority: 3,
+          priority: 6,
           payload: guardrail,
         },
         {
           /**
-           * On-demand topic checking tool descriptor.
-           *
-           * Priority 0 uses the default ordering — tools are typically
-           * ordered by name rather than priority.
+           * On-demand topic check tool descriptor.
            */
           id: 'check_topic',
           kind: EXTENSION_KIND_TOOL,
@@ -236,32 +126,22 @@ export function createTopicalityGuardrail(options?: TopicalityPackOptions): Exte
 
     /**
      * Lifecycle hook called by the extension manager when the pack is
-     * activated.
+     * activated.  Rebuilds components to ensure fresh state.
      *
-     * Upgrades the internal service registry to the extension manager's
-     * shared instance (so embedding models are shared across all
-     * extensions) then rebuilds all components to use the new registry.
-     *
-     * @param context - Activation context provided by the extension manager.
+     * @param _context - Activation context provided by the extension manager.
      */
-    onActivate: (context: ExtensionLifecycleContext): void => {
-      // Upgrade to the shared registry when the manager provides one.
-      if (context.services) {
-        state.services = context.services;
-      }
-
-      // Rebuild all components with the upgraded registry.
+    onActivate: (_context: ExtensionLifecycleContext): void => {
       buildComponents();
     },
 
     /**
      * Lifecycle hook called when the pack is deactivated or the agent shuts
-     * down.
-     *
-     * Clears drift tracker session state to release memory.
+     * down.  Clears the topic embedding cache to release memory.
      */
     onDeactivate: async (): Promise<void> => {
-      guardrail.clearSessionState();
+      if (guardrail) {
+        guardrail.clearCache();
+      }
     },
   };
 }
@@ -277,8 +157,7 @@ export function createTopicalityGuardrail(options?: TopicalityPackOptions): Exte
  * packs from manifests.  Extracts `options` from the {@link ExtensionPackContext}
  * and delegates to {@link createTopicalityGuardrail}.
  *
- * @param context - Manifest context containing optional pack options, secret
- *                  resolver, and shared service registry.
+ * @param context - Manifest context containing pack options.
  * @returns A fully-configured {@link ExtensionPack}.
  *
  * @example Manifest entry:
@@ -286,11 +165,10 @@ export function createTopicalityGuardrail(options?: TopicalityPackOptions): Exte
  * {
  *   "packs": [
  *     {
- *       "module": "./topicality",
+ *       "module": "@framers/agentos-ext-topicality",
  *       "options": {
- *         "allowedTopics": [...],
- *         "forbiddenTopics": [...],
- *         "allowedThreshold": 0.4
+ *         "allowedTopics": ["support", "billing"],
+ *         "blockedTopics": ["politics"]
  *       }
  *     }
  *   ]
@@ -298,8 +176,5 @@ export function createTopicalityGuardrail(options?: TopicalityPackOptions): Exte
  * ```
  */
 export function createExtensionPack(context: ExtensionPackContext): ExtensionPack {
-  return createTopicalityGuardrail(context.options as TopicalityPackOptions);
+  return createTopicalityGuardrail(context.options as TopicalityOptions);
 }
-
-/** @deprecated Use createTopicalityGuardrail instead */
-export const createTopicalityPack = createTopicalityGuardrail;

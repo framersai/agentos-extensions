@@ -1,52 +1,36 @@
 /**
- * @fileoverview On-demand content classification tool for AgentOS.
+ * @file ClassifyContentTool.ts
+ * @description An AgentOS tool that exposes the ML classifier as a callable tool,
+ * enabling agents to perform on-demand safety classification of arbitrary text.
  *
- * `ClassifyContentTool` exposes the ML classifier pipeline as an invocable
- * {@link ITool}, enabling agents and workflows to explicitly classify text
- * for safety signals (toxicity, prompt injection, jailbreak) on demand,
- * rather than relying solely on the implicit guardrail pipeline.
- *
- * Use cases:
- * - An agent that needs to evaluate user-generated content before storing
- *   it in a knowledge base.
- * - A moderation workflow that classifies a batch of flagged messages.
- * - A debugging tool for inspecting classifier behaviour on specific inputs.
- *
- * The tool delegates to a {@link ClassifierOrchestrator} instance and returns
- * the full {@link ChunkEvaluation} (including per-classifier scores and the
- * aggregated recommended action).
- *
- * @module agentos/extensions/packs/ml-classifiers/tools/ClassifyContentTool
+ * @module ml-classifiers/tools/ClassifyContentTool
  */
 
-import type {
-  ITool,
-  JSONSchemaObject,
-  ToolExecutionContext,
-  ToolExecutionResult,
-} from '@framers/agentos';
-import type { ChunkEvaluation } from '../types';
-import type { ClassifierOrchestrator } from '../ClassifierOrchestrator';
+import type { ITool, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
+import type { MLClassifierGuardrail } from '../MLClassifierGuardrail';
+import type { CategoryScore } from '../types';
 
 // ---------------------------------------------------------------------------
-// Input shape
+// Input / Output types
 // ---------------------------------------------------------------------------
 
 /**
- * Input arguments for the `classify_content` tool.
+ * Input arguments accepted by {@link ClassifyContentTool}.
  */
-export interface ClassifyInput {
-  /**
-   * The text to classify for safety signals.
-   * Must not be empty.
-   */
+export interface ClassifyContentInput {
+  /** The text to classify for safety. */
   text: string;
+}
 
-  /**
-   * Optional subset of classifier IDs to run.
-   * When omitted, all registered classifiers are invoked.
-   */
-  classifiers?: string[];
+/**
+ * Output shape returned by {@link ClassifyContentTool}.
+ */
+export interface ClassifyContentOutput {
+  /** Per-category confidence scores. */
+  categories: CategoryScore[];
+
+  /** `true` when at least one category exceeds the flag threshold. */
+  flagged: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -54,147 +38,106 @@ export interface ClassifyInput {
 // ---------------------------------------------------------------------------
 
 /**
- * ITool implementation that runs ML content classifiers on demand.
+ * AgentOS tool that classifies text for toxicity, injection, NSFW, and threat
+ * content using the same three-tier strategy as the guardrail.
  *
- * The tool is read-only (`hasSideEffects: false`) — it inspects text and
- * returns structured classification results without modifying any state.
- *
- * @implements {ITool<ClassifyInput, ChunkEvaluation>}
- *
- * @example
- * ```typescript
- * const tool = new ClassifyContentTool(orchestrator);
- * const result = await tool.execute(
- *   { text: 'some potentially harmful text' },
- *   executionContext,
- * );
- *
- * if (result.success) {
- *   console.log(result.output.recommendedAction); // 'allow' | 'flag' | 'block' | …
- * }
- * ```
+ * @implements {ITool<ClassifyContentInput, ClassifyContentOutput>}
  */
-export class ClassifyContentTool implements ITool<ClassifyInput, ChunkEvaluation> {
-  // -------------------------------------------------------------------------
-  // ITool identity & metadata
-  // -------------------------------------------------------------------------
+export class ClassifyContentTool implements ITool<ClassifyContentInput, ClassifyContentOutput> {
+  // -----------------------------------------------------------------------
+  // ITool metadata
+  // -----------------------------------------------------------------------
 
-  /** Unique tool identifier used for registration and lookup. */
+  /** Stable tool identifier. */
   readonly id = 'classify_content';
 
-  /** Functional name exposed to LLMs for tool-call invocation. */
+  /** Tool name presented to the LLM. */
   readonly name = 'classify_content';
 
-  /** Human-readable display name for dashboards and UI. */
-  readonly displayName = 'Content Safety Classifier';
+  /** Human-readable display name. */
+  readonly displayName = 'ML Content Classifier';
 
-  /** Natural-language description of the tool's purpose and behaviour. */
+  /** Description used by the LLM to decide when to invoke the tool. */
   readonly description =
-    'Classify text for toxicity, prompt injection, and jailbreak attempts ' +
-    'using ML models. Returns per-classifier scores and an aggregated ' +
-    'recommended guardrail action.';
+    'Classify text for safety across four categories: toxic, injection, nsfw, and threat. ' +
+    'Returns per-category confidence scores and a flagged boolean. Use this tool to ' +
+    'pre-screen user-generated content or agent output before further processing.';
 
-  /** Logical grouping for tool discovery and filtering. */
+  /** Tool category for capability discovery grouping. */
   readonly category = 'security';
 
-  /** SemVer version of this tool implementation. */
+  /** Semantic version. */
   readonly version = '1.0.0';
 
-  /** This tool only reads text — it performs no mutations. */
+  /** Read-only analysis — no side effects. */
   readonly hasSideEffects = false;
 
-  // -------------------------------------------------------------------------
-  // JSON Schema for input validation
-  // -------------------------------------------------------------------------
-
-  /**
-   * JSON Schema describing the expected input arguments.
-   *
-   * - `text` (required): The string to classify.
-   * - `classifiers` (optional): Array of classifier IDs to restrict evaluation.
-   */
-  readonly inputSchema: JSONSchemaObject = {
-    type: 'object',
+  /** JSON Schema for tool input validation. */
+  readonly inputSchema = {
+    type: 'object' as const,
     properties: {
       text: {
-        type: 'string',
-        description: 'Text to classify for safety signals.',
-      },
-      classifiers: {
-        type: 'array',
-        items: { type: 'string' },
-        description:
-          'Optional: only run these classifier IDs. When omitted all registered classifiers are used.',
+        type: 'string' as const,
+        description: 'The text to classify for safety.',
       },
     },
     required: ['text'],
   };
 
-  // -------------------------------------------------------------------------
-  // Internal state
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // Private fields
+  // -----------------------------------------------------------------------
 
-  /** The orchestrator that drives the underlying ML classifiers. */
-  private readonly orchestrator: ClassifierOrchestrator;
+  /** The guardrail instance used for classification. */
+  private readonly guardrail: MLClassifierGuardrail;
 
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // Constructor
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
 
   /**
    * Create a new ClassifyContentTool.
    *
-   * @param orchestrator - The classifier orchestrator that will handle
-   *                       parallel classification and result aggregation.
+   * @param guardrail - The {@link MLClassifierGuardrail} instance to delegate
+   *                    classification to.  Shared and stateless (except for the
+   *                    cached ONNX pipeline).
    */
-  constructor(orchestrator: ClassifierOrchestrator) {
-    this.orchestrator = orchestrator;
+  constructor(guardrail: MLClassifierGuardrail) {
+    this.guardrail = guardrail;
   }
 
-  // -------------------------------------------------------------------------
-  // execute
-  // -------------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // ITool.execute
+  // -----------------------------------------------------------------------
 
   /**
-   * Run all (or a subset of) ML classifiers against the provided text and
-   * return the aggregated evaluation.
+   * Execute the classification against the provided text.
    *
-   * @param args    - Tool input containing the text to classify and an
-   *                  optional list of classifier IDs to restrict execution.
-   * @param _context - Execution context (unused — classification is
-   *                   stateless and user-agnostic).
-   * @returns A successful result containing the {@link ChunkEvaluation},
-   *          or a failure result if the text is missing or classification
-   *          throws an unexpected error.
+   * @param args    - Validated input arguments containing `text`.
+   * @param context - Tool execution context (unused by this read-only tool).
+   * @returns Tool execution result wrapping the classification output.
    */
   async execute(
-    args: ClassifyInput,
-    _context: ToolExecutionContext,
-  ): Promise<ToolExecutionResult<ChunkEvaluation>> {
-    // Validate that text is provided and non-empty.
-    if (!args.text || args.text.trim().length === 0) {
-      return {
-        success: false,
-        error: 'The "text" argument is required and must not be empty.',
-      };
-    }
-
+    args: ClassifyContentInput,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    context: ToolExecutionContext
+  ): Promise<ToolExecutionResult<ClassifyContentOutput>> {
     try {
-      // Delegate to the orchestrator for parallel classification.
-      // NOTE: The `args.classifiers` filter is not yet implemented in the
-      // orchestrator — it would require a filtering layer.  For now, all
-      // registered classifiers are invoked regardless.
-      const evaluation = await this.orchestrator.classifyAll(args.text);
+      const result = await this.guardrail.classify(args.text);
 
       return {
         success: true,
-        output: evaluation,
+        output: {
+          categories: result.categories,
+          flagged: result.flagged,
+        },
       };
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
+      const message = err instanceof Error ? err.message : 'Unknown error during classification';
+
       return {
         success: false,
-        error: `Classification failed: ${message}`,
+        error: `Content classification failed: ${message}`,
       };
     }
   }

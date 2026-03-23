@@ -1,391 +1,144 @@
 /**
- * @fileoverview Core type definitions for the ML Classifier Guardrail Extension Pack.
+ * @file types.ts
+ * @description Core type definitions for the ML Classifiers extension pack.
  *
- * This file defines all configuration shapes, runtime result types, and
- * service-identifier constants used by the ML classifier pipeline. All
- * classifiers in this pack evaluate text content against learned models
- * (toxicity, prompt-injection, jailbreak) and emit structured results that
- * feed into the AgentOS guardrail decision tree.
+ * Defines the shared interfaces used across the ML classification system:
+ * classifier categories, confidence results, option shapes, and the LLM
+ * invoker callback signature.
  *
- * Import hierarchy
- * ----------------
- * ```
- * IUtilityAI  ──── ClassificationResult, ClassificationScore
- * IGuardrailService ── GuardrailAction
- *                   │
- *                   ▼
- *              types.ts  (this file)
- *                   │
- *                   ▼
- *           IContentClassifier.ts  /  SlidingWindowBuffer.ts  /  …
- * ```
- *
- * @module agentos/extensions/packs/ml-classifiers/types
+ * @module ml-classifiers/types
  */
 
-import type { ClassificationResult, ClassificationScore } from '@framers/agentos';
-import type { GuardrailAction } from '@framers/agentos';
-
-// Re-export types used by dependents so they can import from a single source.
-export type { ClassificationResult, ClassificationScore };
-
 // ---------------------------------------------------------------------------
-// Threshold configuration
+// Category type
 // ---------------------------------------------------------------------------
 
 /**
- * Numeric thresholds that map raw classifier confidence scores (0–1) to
- * guardrail actions.
+ * Safety categories evaluated by the ML classifier.
  *
- * The thresholds are applied in descending priority:
- *  1. `score >= blockThreshold` → {@link GuardrailAction.BLOCK}
- *  2. `score >= flagThreshold`  → {@link GuardrailAction.FLAG}
- *  3. `score >= warnThreshold`  → {@link GuardrailAction.SANITIZE}
- *  4. otherwise                 → {@link GuardrailAction.ALLOW}
+ * - `'toxic'`     — Hateful, abusive, or threatening language.
+ * - `'injection'` — Prompt injection or jailbreak attempts.
+ * - `'nsfw'`      — Sexually explicit or adult content.
+ * - `'threat'`    — Direct threats of violence or self-harm.
  */
-export interface ClassifierThresholds {
-  /**
-   * Minimum score at which content is **blocked** (interaction terminated).
-   * Must be in the range [0, 1].  Typical default: `0.9`.
-   */
-  blockThreshold: number;
+export type ClassifierCategory = 'toxic' | 'injection' | 'nsfw' | 'threat';
 
-  /**
-   * Minimum score at which content is **flagged** for review while still
-   * being allowed through.  Must be in the range [0, 1].  Typical default: `0.7`.
-   */
-  flagThreshold: number;
+/**
+ * All supported classifier categories as a constant array, used for
+ * iteration and default configuration.
+ */
+export const ALL_CATEGORIES: ClassifierCategory[] = ['toxic', 'injection', 'nsfw', 'threat'];
 
-  /**
-   * Minimum score at which a **warn** action is taken (e.g. the chunk is
-   * sanitised or a warning is appended to the response).  Must be in the range
-   * [0, 1].  Typical default: `0.4`.
-   */
-  warnThreshold: number;
+// ---------------------------------------------------------------------------
+// Result interfaces
+// ---------------------------------------------------------------------------
+
+/**
+ * Confidence score for a single safety category.
+ *
+ * Scores are normalised to the range `[0, 1]`, where `0` means "no signal"
+ * and `1` means "extremely confident match".
+ */
+export interface CategoryScore {
+  /** The safety category this score applies to. */
+  name: ClassifierCategory;
+
+  /** Normalised confidence score in the range [0, 1]. */
+  confidence: number;
 }
 
 /**
- * Sensible defaults for {@link ClassifierThresholds}.
+ * Complete result from a classification pass over a text input.
  *
- * These values reflect a conservative-but-pragmatic policy:
- * - block at 90 % confidence → very high bar, minimises false positives
- * - flag at 70 % → surfaced for human review, not blocked
- * - warn at 40 % → low-confidence signal, handled with a light touch
+ * Includes per-category scores and an overall `flagged` boolean that is
+ * `true` when any category exceeds the configured flag threshold (default 0.5).
  */
-export const DEFAULT_THRESHOLDS: ClassifierThresholds = {
-  blockThreshold: 0.9,
-  flagThreshold: 0.7,
-  warnThreshold: 0.4,
-} as const;
+export interface ClassifierResult {
+  /**
+   * Per-category confidence scores, one entry for each category that was
+   * evaluated.
+   */
+  categories: CategoryScore[];
+
+  /**
+   * `true` when at least one category score exceeds the flag threshold.
+   * Convenience field — equivalent to `categories.some(c => c.confidence > flagThreshold)`.
+   */
+  flagged: boolean;
+
+  /**
+   * Which classification backend produced this result.
+   * Useful for logging and debugging which tier was active.
+   */
+  source: 'onnx' | 'llm' | 'keyword';
+}
 
 // ---------------------------------------------------------------------------
-// Per-classifier configuration
+// LLM invoker callback
 // ---------------------------------------------------------------------------
 
 /**
- * Configuration for a single ML classifier pipeline.
+ * Callback signature for invoking an LLM to perform classification when
+ * ONNX models are unavailable.
  *
- * Allows individual classifiers to override the pack-level defaults for the
- * model variant and decision thresholds, and to customise which guardrail
- * action is taken for each classification label.
+ * The callback receives a system prompt and a user message and returns
+ * the raw LLM text response.  The caller is responsible for parsing the
+ * JSON output.
+ *
+ * @param systemPrompt - Instruction prompt describing the classification task.
+ * @param userMessage  - The text to classify.
+ * @returns The raw string response from the LLM.
  */
-export interface ClassifierConfig {
+export type LlmInvoker = (systemPrompt: string, userMessage: string) => Promise<string>;
+
+// ---------------------------------------------------------------------------
+// Pack options
+// ---------------------------------------------------------------------------
+
+/**
+ * Configuration options for the ML Classifiers extension pack.
+ *
+ * All properties are optional.  Sensible defaults allow zero-config operation
+ * using the keyword fallback classifier.
+ */
+export interface MLClassifierOptions {
   /**
-   * Hugging Face model identifier (e.g. `"Xenova/toxic-bert"`) or a local
-   * model path to load instead of the pack default.
-   * @optional Falls back to the pack-level `MLClassifierPackOptions.modelCacheDir` default.
+   * Which safety categories to evaluate.
+   * @default ALL_CATEGORIES
    */
-  modelId?: string;
+  categories?: ClassifierCategory[];
 
   /**
-   * Per-classifier threshold overrides.
-   * @optional Falls back to {@link DEFAULT_THRESHOLDS}.
-   */
-  thresholds?: Partial<ClassifierThresholds>;
-
-  /**
-   * Maps classification labels to the guardrail action that should be taken
-   * when that label is the winning class.
+   * Per-category confidence thresholds that override the global defaults.
    *
-   * @example
-   * ```typescript
-   * // Always block on TOXIC label regardless of threshold.
-   * labelActions: { TOXIC: GuardrailAction.BLOCK }
-   * ```
-   */
-  labelActions?: Record<string, GuardrailAction>;
-}
-
-// ---------------------------------------------------------------------------
-// Browser / web-worker options
-// ---------------------------------------------------------------------------
-
-/**
- * Configuration for browser-side model execution.
- *
- * When the ML classifier pack is loaded in a browser context (e.g. a chat
- * widget), models run inside a Web Worker to avoid blocking the main thread.
- * This interface controls worker lifecycle and cache management.
- */
-export interface BrowserConfig {
-  /**
-   * Run model inference in a Web Worker.
-   * @default true
-   */
-  useWebWorker?: boolean;
-
-  /**
-   * Caching strategy for downloaded model weights.
-   * - `'memory'`  — keep weights in memory only (lost on page unload)
-   * - `'indexeddb'` — persist weights to IndexedDB (survives reloads)
-   * - `'none'` — no caching; re-download on every page load
-   * @default 'indexeddb'
-   */
-  cacheStrategy?: 'memory' | 'indexeddb' | 'none';
-
-  /**
-   * Maximum number of model shards to keep in the in-memory cache when
-   * `cacheStrategy === 'memory'`.  Oldest entries are evicted LRU-style.
-   * @default 3
-   */
-  maxCacheSize?: number;
-
-  /**
-   * Callback invoked with download progress as model weights are fetched.
-   * Useful for showing a progress bar in the UI.
+   * Keys are category names; values are threshold overrides with optional
+   * `flag` and `block` levels.
    *
-   * @param progress - Current progress state.
+   * @example `{ toxic: { flag: 0.4, block: 0.7 } }`
    */
-  onProgress?: (progress: ModelDownloadProgress) => void;
-}
+  thresholds?: Partial<Record<ClassifierCategory, { flag?: number; block?: number }>>;
 
-// ---------------------------------------------------------------------------
-// Model download progress
-// ---------------------------------------------------------------------------
-
-/**
- * Progress report emitted during model weight downloads.
- *
- * @example
- * ```typescript
- * onProgress({ modelId: 'Xenova/toxic-bert', loaded: 50_000, total: 200_000, percent: 25 })
- * ```
- */
-export interface ModelDownloadProgress {
-  /** Identifier of the model being downloaded (Hugging Face ID or path). */
-  modelId: string;
-
-  /** Number of bytes downloaded so far. */
-  loaded: number;
-
-  /** Total number of bytes to download (`0` if unknown). */
-  total: number;
-
-  /** Download progress as a percentage in the range [0, 100]. */
-  percent: number;
-}
-
-// ---------------------------------------------------------------------------
-// Pack-level options
-// ---------------------------------------------------------------------------
-
-/**
- * Top-level configuration for the ML Classifier Extension Pack.
- *
- * Passed to `createMLClassifierGuardrail()` (or the NestJS module factory) to
- * control which classifiers are active, how models are loaded, and how the
- * sliding-window streaming evaluation behaves.
- *
- * @example
- * ```typescript
- * const packOptions: MLClassifierPackOptions = {
- *   classifiers: ['toxicity', 'jailbreak'],
- *   quantized: true,
- *   runtime: 'node',
- *   thresholds: { blockThreshold: 0.95, flagThreshold: 0.75, warnThreshold: 0.5 },
- *   streamingMode: true,
- *   chunkSize: 150,
- *   contextSize: 50,
- * };
- * ```
- */
-export interface MLClassifierPackOptions {
   /**
-   * Subset of built-in classifiers to activate.
-   * Omit or pass an empty array to activate all built-in classifiers.
+   * Global flag threshold applied to all categories that do not have a
+   * per-category override.
+   * @default 0.5
+   */
+  flagThreshold?: number;
+
+  /**
+   * Global block threshold applied to all categories that do not have a
+   * per-category override.
+   * @default 0.8
+   */
+  blockThreshold?: number;
+
+  /**
+   * Optional LLM invoker callback.  When provided and ONNX models are
+   * unavailable, the classifier will fall back to LLM-as-judge classification
+   * using this callback.
    *
-   * @example `['toxicity', 'injection']`
+   * When omitted AND ONNX models are unavailable, the classifier falls back
+   * to keyword-based detection.
    */
-  classifiers?: Array<'toxicity' | 'injection' | 'jailbreak'>;
-
-  /**
-   * Fully-qualified `IContentClassifier` instances to add alongside the
-   * built-in classifiers (e.g. domain-specific harm classifiers).
-   */
-  customClassifiers?: import('./IContentClassifier').IContentClassifier[];
-
-  /**
-   * Local filesystem path where downloaded model weights are cached.
-   * Defaults to `~/.cache/agentos/ml-classifiers`.
-   */
-  modelCacheDir?: string;
-
-  /**
-   * Use 8-bit quantised model variants when available.
-   * Reduces VRAM/RAM footprint and increases inference speed at a small
-   * accuracy cost.
-   * @default false
-   */
-  quantized?: boolean;
-
-  /**
-   * Execution runtime for model inference.
-   * - `'node'`    — Runs via `@xenova/transformers` in the Node.js process.
-   * - `'browser'` — Runs via `@xenova/transformers` in a Web Worker.
-   * - `'wasm'`    — Explicit WebAssembly fallback (Node.js or browser).
-   * @default 'node'
-   */
-  runtime?: 'node' | 'browser' | 'wasm';
-
-  /**
-   * Browser-specific options.  Only applicable when `runtime === 'browser'`.
-   */
-  browser?: BrowserConfig;
-
-  /**
-   * Number of tokens per evaluation window when streaming mode is enabled.
-   * Smaller values detect issues earlier but increase evaluation frequency.
-   * @default 200
-   */
-  chunkSize?: number;
-
-  /**
-   * Number of tokens from the previous chunk to carry forward as context into
-   * the next window, preventing boundary effects.
-   * @default 50
-   */
-  contextSize?: number;
-
-  /**
-   * Maximum number of classifier evaluations per stream.  The sliding window
-   * stops advancing after this many evaluations, allowing the stream to
-   * complete without further overhead.
-   * @default 100
-   */
-  maxEvaluations?: number;
-
-  /**
-   * Enable sliding-window evaluation for streamed (token-by-token) output.
-   * When `false`, classifiers only run on the completed final response.
-   * @default false
-   */
-  streamingMode?: boolean;
-
-  /**
-   * Pack-level threshold defaults applied to every classifier unless
-   * overridden by a per-classifier {@link ClassifierConfig}.
-   */
-  thresholds?: Partial<ClassifierThresholds>;
-
-  /**
-   * Scope of guardrail enforcement.
-   * - `'input'`  — Evaluate user messages before orchestration.
-   * - `'output'` — Evaluate agent responses before delivery.
-   * - `'both'`   — Evaluate at both stages.
-   * @default 'both'
-   */
-  guardrailScope?: 'input' | 'output' | 'both';
-}
-
-// ---------------------------------------------------------------------------
-// Service identifiers
-// ---------------------------------------------------------------------------
-
-/**
- * Well-known service identifier strings for the three built-in ML classifier
- * pipelines.
- *
- * These IDs follow the `agentos:<domain>:<name>` naming convention used
- * throughout the AgentOS extension ecosystem.  Use them to retrieve specific
- * classifier services from the shared service registry.
- *
- * @example
- * ```typescript
- * const toxicity = serviceRegistry.get(ML_CLASSIFIER_SERVICE_IDS.TOXICITY_PIPELINE);
- * ```
- */
-export const ML_CLASSIFIER_SERVICE_IDS = {
-  /** Classifier that detects toxic, hateful, or abusive language. */
-  TOXICITY_PIPELINE: 'agentos:ml-classifiers:toxicity-pipeline',
-
-  /** Classifier that detects prompt-injection attempts. */
-  INJECTION_PIPELINE: 'agentos:ml-classifiers:injection-pipeline',
-
-  /** Classifier that detects jailbreak / system-override attempts. */
-  JAILBREAK_PIPELINE: 'agentos:ml-classifiers:jailbreak-pipeline',
-} as const;
-
-/** Union type of all ML classifier service ID strings. */
-export type MLClassifierServiceId =
-  (typeof ML_CLASSIFIER_SERVICE_IDS)[keyof typeof ML_CLASSIFIER_SERVICE_IDS];
-
-// ---------------------------------------------------------------------------
-// Annotated & aggregated result types
-// ---------------------------------------------------------------------------
-
-/**
- * A {@link ClassificationResult} augmented with provenance metadata.
- *
- * Produced when a classifier evaluates a chunk of text.  Carries the
- * classifier's identity and the wall-clock latency so callers can build
- * audit trails and SLO dashboards.
- */
-export interface AnnotatedClassificationResult extends ClassificationResult {
-  /**
-   * The {@link IContentClassifier.id} of the classifier that produced this
-   * result (e.g. `ML_CLASSIFIER_SERVICE_IDS.TOXICITY_PIPELINE`).
-   */
-  classifierId: string;
-
-  /**
-   * Wall-clock time in milliseconds from when `classify()` was called to when
-   * it resolved.
-   */
-  latencyMs: number;
-}
-
-/**
- * Aggregated evaluation outcome for a single sliding-window chunk.
- *
- * Produced by running all active classifiers against one text window and
- * collating their results into a single action recommendation.
- *
- * The `recommendedAction` is the most restrictive action across all
- * classifiers (BLOCK > FLAG > SANITIZE > ALLOW).
- */
-export interface ChunkEvaluation {
-  /**
-   * Individual results from every classifier that evaluated this chunk,
-   * in the order the classifiers were invoked.
-   */
-  results: AnnotatedClassificationResult[];
-
-  /**
-   * The most restrictive guardrail action recommended across all results.
-   * The pipeline should act on this value rather than iterating `results`
-   * manually.
-   */
-  recommendedAction: GuardrailAction;
-
-  /**
-   * ID of the classifier that triggered the `recommendedAction`, or `null`
-   * if the action is {@link GuardrailAction.ALLOW} (no classifier triggered).
-   */
-  triggeredBy: string | null;
-
-  /**
-   * Sum of all classifier `latencyMs` values — useful for profiling the
-   * total evaluation overhead per chunk.
-   */
-  totalLatencyMs: number;
+  llmInvoker?: LlmInvoker;
 }
