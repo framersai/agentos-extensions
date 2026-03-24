@@ -1,0 +1,8 @@
+{
+  "name": "@framers/agentos-ext-piper",
+  "version": "0.1.0",
+  "description": "Offline text-to-speech via Piper binary",
+  "kind": "tts-provider",
+  "extensionId": "piper",
+  "entryPoint": "./dist/index.js"
+}
