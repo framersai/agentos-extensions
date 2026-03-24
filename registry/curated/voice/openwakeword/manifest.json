@@ -1,0 +1,8 @@
+{
+  "name": "@framers/agentos-ext-openwakeword",
+  "version": "0.1.0",
+  "description": "Wake-word detection via OpenWakeWord ONNX models",
+  "kind": "wake-word-provider",
+  "extensionId": "openwakeword",
+  "entryPoint": "./dist/index.js"
+}
