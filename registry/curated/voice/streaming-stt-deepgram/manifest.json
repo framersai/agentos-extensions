@@ -1,0 +1,8 @@
+{
+  "name": "@framers/agentos-ext-streaming-stt-deepgram",
+  "version": "0.1.0",
+  "description": "Real-time streaming STT via Deepgram WebSocket API",
+  "kind": "streaming-stt-provider",
+  "extensionId": "streaming-stt-deepgram",
+  "entryPoint": "./dist/index.js"
+}

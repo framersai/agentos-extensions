@@ -1,0 +1,18 @@
+{
+  "name": "@framers/agentos-ext-streaming-stt-deepgram",
+  "version": "0.1.0",
+  "description": "Real-time streaming STT via Deepgram WebSocket API for AgentOS voice pipeline",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
+  "files": ["dist", "src", "SKILL.md", "manifest.json"],
+  "scripts": { "build": "tsc -p tsconfig.json", "test": "vitest run" },
+  "peerDependencies": { "@framers/agentos": "^0.1.0" },
+  "dependencies": { "ws": "^8.17.0" },
+  "devDependencies": { "@framers/agentos": "workspace:*", "typescript": "^5.5.0", "vitest": "^1.6.0", "@types/ws": "^8.5.0" },
+  "license": "MIT",
+  "author": "Frame.dev",
+  "repository": { "type": "git", "url": "https://github.com/framersai/agentos-extensions.git", "directory": "registry/curated/voice/streaming-stt-deepgram" },
+  "publishConfig": { "access": "public" }
+}
