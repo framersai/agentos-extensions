@@ -1,14 +1,30 @@
 {
   "name": "@framers/agentos-ext-google-cloud-tts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Text-to-speech via Google Cloud Text-to-Speech API for AgentOS voice pipeline",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
-  "files": ["dist", "src", "SKILL.md", "manifest.json"],
-  "scripts": { "build": "tsc -p tsconfig.json", "test": "vitest run" },
-  "peerDependencies": { "@framers/agentos": "^0.1.0", "@google-cloud/text-to-speech": "^5.0.0" },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "SKILL.md",
+    "manifest.json"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0",
+    "@google-cloud/text-to-speech": "^5.0.0"
+  },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
     "@google-cloud/text-to-speech": "^5.0.0",
@@ -22,5 +38,7 @@
     "url": "https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/google-cloud-tts"
   },
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }

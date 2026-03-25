@@ -1,14 +1,30 @@
 {
   "name": "@framers/agentos-ext-openwakeword",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Wake-word detection via OpenWakeWord ONNX models for AgentOS voice pipeline",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
-  "files": ["dist", "src", "SKILL.md", "manifest.json"],
-  "scripts": { "build": "tsc -p tsconfig.json", "test": "vitest run" },
-  "peerDependencies": { "@framers/agentos": "^0.1.0", "onnxruntime-node": "^1.17.0" },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "SKILL.md",
+    "manifest.json"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0",
+    "onnxruntime-node": "^1.17.0"
+  },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
     "typescript": "^5.5.0",
@@ -21,5 +37,7 @@
     "url": "https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/openwakeword"
   },
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }

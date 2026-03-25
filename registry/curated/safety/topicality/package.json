@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-ext-topicality",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Topic enforcement guardrail for AgentOS — embedding-based on/off-topic detection with LLM fallback",
   "type": "module",
   "main": "./dist/index.js",

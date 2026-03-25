@@ -1,14 +1,30 @@
 {
   "name": "@framers/agentos-ext-vosk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Offline speech-to-text via Vosk for AgentOS voice pipeline",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
-  "files": ["dist", "src", "SKILL.md", "manifest.json"],
-  "scripts": { "build": "tsc -p tsconfig.json", "test": "vitest run" },
-  "peerDependencies": { "@framers/agentos": "^0.1.0", "vosk": "^0.3.0" },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "SKILL.md",
+    "manifest.json"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0",
+    "vosk": "^0.3.0"
+  },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
     "typescript": "^5.5.0",
@@ -21,5 +37,7 @@
     "url": "https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/vosk"
   },
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }
