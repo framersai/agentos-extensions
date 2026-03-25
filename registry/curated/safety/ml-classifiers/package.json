@@ -1,6 +1,6 @@
 {
   "name": "@framers/agentos-ext-ml-classifiers",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "ML-based content classifiers for AgentOS — toxicity, prompt injection, and NSFW detection via ONNX models or LLM fallback",
   "type": "module",
   "main": "./dist/index.js",

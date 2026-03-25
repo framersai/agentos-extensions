@@ -1,5 +1,11 @@
 # @framers/agentos-ext-topicality
 
+## 0.2.1
+
+### Patch Changes
+
+- [`15065c9`](https://github.com/framersai/agentos-extensions/commit/15065c949ea5d25f4408ffab2079ad3e600ddded) Thanks [@jddunn](https://github.com/jddunn)! - Fix npm publish: add missing repository.url field for sigstore provenance verification
+
 ## 0.2.0
 
 ### Minor Changes
