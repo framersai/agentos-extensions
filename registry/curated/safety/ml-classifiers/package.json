@@ -23,6 +23,15 @@
     "@huggingface/transformers": "^3.0.0"
   },
   "license": "MIT",
+  "author": "Frame.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/safety/ml-classifiers"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "semantic-release": "^24.0.0",
     "@semantic-release/github": "^11.0.0"
