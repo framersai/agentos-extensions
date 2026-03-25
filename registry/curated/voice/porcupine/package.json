@@ -1,14 +1,30 @@
 {
   "name": "@framers/agentos-ext-porcupine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Wake-word detection via Picovoice Porcupine for AgentOS voice pipeline",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
-  "files": ["dist", "src", "SKILL.md", "manifest.json"],
-  "scripts": { "build": "tsc -p tsconfig.json", "test": "vitest run" },
-  "peerDependencies": { "@framers/agentos": "^0.1.0", "@picovoice/porcupine-node": "^3.0.0" },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "SKILL.md",
+    "manifest.json"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@framers/agentos": "^0.1.0",
+    "@picovoice/porcupine-node": "^3.0.0"
+  },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
     "typescript": "^5.5.0",
@@ -21,5 +37,7 @@
     "url": "https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/porcupine"
   },
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }
