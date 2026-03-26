@@ -1,0 +1,71 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.image-editing",
+  "name": "Image Editing",
+  "version": "0.1.0",
+  "description": "Edit images with img2img transformation, inpainting, outpainting, upscaling, and variations using OpenAI, Stability AI, or Replicate.",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["image", "editing", "img2img", "inpainting", "upscaling", "variation"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "media"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "editImage",
+      "displayName": "Edit Image",
+      "description": "Transform an image using img2img, inpainting, or style transfer",
+      "entry": "./dist/index.js"
+    },
+    {
+      "kind": "tool",
+      "id": "upscaleImage",
+      "displayName": "Upscale Image",
+      "description": "Super-resolution upscaling (2x/4x) for images",
+      "entry": "./dist/index.js"
+    },
+    {
+      "kind": "tool",
+      "id": "variateImage",
+      "displayName": "Image Variations",
+      "description": "Generate variations of an existing image",
+      "entry": "./dist/index.js"
+    }
+  ],
+  "requiredSecrets": [
+    {
+      "id": "openai.apiKey",
+      "envVar": "OPENAI_API_KEY",
+      "description": "OpenAI API key for image editing",
+      "optional": true,
+      "docsUrl": "https://platform.openai.com/api-keys"
+    },
+    {
+      "id": "stability.apiKey",
+      "envVar": "STABILITY_API_KEY",
+      "description": "Stability AI API key for img2img, inpainting, and upscaling",
+      "optional": true,
+      "docsUrl": "https://platform.stability.ai/account/keys"
+    },
+    {
+      "id": "replicate.apiToken",
+      "envVar": "REPLICATE_API_TOKEN",
+      "description": "Replicate API token for community image editing models",
+      "optional": true,
+      "docsUrl": "https://replicate.com/account/api-tokens"
+    }
+  ],
+  "features": [
+    "img2img transformation via text prompt",
+    "Inpainting — fill masked regions",
+    "Outpainting — extend image beyond borders",
+    "Super-resolution upscaling (2x/4x)",
+    "Generate image variations"
+  ]
+}

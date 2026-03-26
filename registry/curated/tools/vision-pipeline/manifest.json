@@ -1,0 +1,43 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.vision-pipeline",
+  "name": "Vision & OCR Pipeline",
+  "version": "0.1.0",
+  "description": "Progressive vision pipeline with PaddleOCR, TrOCR, Florence-2, CLIP, and cloud vision (GPT-4o, Claude).",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["vision", "ocr", "paddle", "trocr", "florence", "clip", "document-ai"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "media"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "vision-pipeline",
+      "displayName": "Vision & OCR Pipeline",
+      "description": "Extract text and understand images using a progressive multi-tier vision pipeline",
+      "entry": "./dist/index.js"
+    }
+  ],
+  "requiredSecrets": [
+    {
+      "id": "openai.apiKey",
+      "envVar": "OPENAI_API_KEY",
+      "description": "OpenAI API key for GPT-4o vision fallback",
+      "optional": true,
+      "docsUrl": "https://platform.openai.com/api-keys"
+    }
+  ],
+  "features": [
+    "Printed text OCR via PaddleOCR (local, offline)",
+    "Handwriting recognition via TrOCR",
+    "Document layout understanding via Florence-2",
+    "CLIP embeddings for semantic image search",
+    "Cloud vision fallback (GPT-4o, Claude)"
+  ]
+}
