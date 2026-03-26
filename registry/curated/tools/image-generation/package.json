@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-image-generation",
   "version": "1.0.1",
-  "description": "Image generation extension for AgentOS — DALL-E 3 and Stability AI",
+  "description": "Image generation extension for AgentOS — OpenAI, OpenRouter, Stability AI, and Replicate",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -20,7 +20,9 @@
     "extension",
     "image-generation",
     "openai",
-    "stability"
+    "openrouter",
+    "stability",
+    "replicate"
   ],
   "author": {
     "name": "Framers AI",

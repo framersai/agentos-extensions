@@ -3,7 +3,7 @@
   "name": "@framers/agentos-ext-image-generation",
   "displayName": "Image Generation",
   "version": "1.0.0",
-  "description": "Generate images from text prompts using DALL-E 3 or Stability AI.",
+  "description": "Generate images from text prompts using OpenAI, OpenRouter, Stability AI, or Replicate.",
   "category": "tool",
   "author": "Framers AI",
   "license": "MIT",
@@ -13,17 +13,31 @@
     {
       "id": "openai.apiKey",
       "envVar": "OPENAI_API_KEY",
-      "description": "OpenAI API key for DALL-E 3 image generation",
+      "description": "OpenAI API key for image generation",
       "optional": true,
       "docsUrl": "https://platform.openai.com/api-keys"
     },
     {
+      "id": "openrouter.apiKey",
+      "envVar": "OPENROUTER_API_KEY",
+      "description": "OpenRouter API key for routed image generation models",
+      "optional": true,
+      "docsUrl": "https://openrouter.ai/settings/keys"
+    },
+    {
       "id": "stability.apiKey",
       "envVar": "STABILITY_API_KEY",
-      "description": "Stability AI API key for Stable Diffusion image generation",
+      "description": "Stability AI API key for Stable Image and Stable Diffusion generation",
       "optional": true,
       "docsUrl": "https://platform.stability.ai/account/keys"
+    },
+    {
+      "id": "replicate.apiToken",
+      "envVar": "REPLICATE_API_TOKEN",
+      "description": "Replicate API token for Flux and community image models",
+      "optional": true,
+      "docsUrl": "https://replicate.com/account/api-tokens"
     }
   ],
-  "keywords": ["image", "generation", "dall-e", "stable-diffusion", "ai-art", "text-to-image"]
+  "keywords": ["image", "generation", "openai", "openrouter", "stable-diffusion", "replicate", "ai-art", "text-to-image"]
 }

@@ -1,11 +1,19 @@
 /**
- * @fileoverview Image generation service supporting DALL-E 3 and Stability AI.
+ * @fileoverview Image generation service backed by AgentOS's shared
+ * provider-agnostic image API.
  */
+
+import { generateImage, type ImageProviderOptionBag } from '@framers/agentos';
+
+export type ImageGenerationProvider = 'openai' | 'openrouter' | 'stability' | 'replicate';
 
 export interface ImageGenerationConfig {
   openaiApiKey?: string;
+  openrouterApiKey?: string;
   stabilityApiKey?: string;
-  defaultProvider?: 'openai' | 'stability';
+  replicateApiToken?: string;
+  defaultProvider?: ImageGenerationProvider;
+  defaultModel?: string;
   defaultSize?: string;
   defaultQuality?: 'standard' | 'hd';
 }
@@ -13,10 +21,15 @@ export interface ImageGenerationConfig {
 export interface GenerateImageOptions {
   prompt: string;
   size?: '1024x1024' | '1792x1024' | '1024x1792' | '512x512' | '256x256';
+  aspectRatio?: string;
   quality?: 'standard' | 'hd';
   style?: 'vivid' | 'natural';
   n?: number;
-  provider?: 'openai' | 'stability';
+  provider?: ImageGenerationProvider;
+  model?: string;
+  seed?: number;
+  negativePrompt?: string;
+  providerOptions?: ImageProviderOptionBag | Record<string, unknown>;
 }
 
 export interface GeneratedImage {
@@ -27,8 +40,15 @@ export interface GeneratedImage {
   size: string;
 }
 
+const PROVIDER_DOCS_URL: Record<ImageGenerationProvider, string> = {
+  openai: 'https://platform.openai.com/api-keys',
+  openrouter: 'https://openrouter.ai/settings/keys',
+  stability: 'https://platform.stability.ai/account/keys',
+  replicate: 'https://replicate.com/account/api-tokens',
+};
+
 export class ImageGenerationService {
-  private config: ImageGenerationConfig;
+  private readonly config: ImageGenerationConfig;
   private initialized = false;
 
   constructor(config: ImageGenerationConfig) {
@@ -39,12 +59,20 @@ export class ImageGenerationService {
     return !!this.config.openaiApiKey;
   }
 
+  get hasOpenRouter(): boolean {
+    return !!this.config.openrouterApiKey;
+  }
+
   get hasStability(): boolean {
     return !!this.config.stabilityApiKey;
   }
 
+  get hasReplicate(): boolean {
+    return !!this.config.replicateApiToken;
+  }
+
   get hasAnyProvider(): boolean {
-    return this.hasOpenAI || this.hasStability;
+    return this.hasOpenAI || this.hasOpenRouter || this.hasStability || this.hasReplicate;
   }
 
   async initialize(): Promise<void> {
@@ -52,118 +80,149 @@ export class ImageGenerationService {
   }
 
   async generateImage(options: GenerateImageOptions): Promise<GeneratedImage> {
-    const provider = options.provider || this.config.defaultProvider || (this.hasOpenAI ? 'openai' : 'stability');
-
-    if (provider === 'openai') {
-      return this.generateWithDallE(options);
-    } else if (provider === 'stability') {
-      return this.generateWithStability(options);
-    }
-
-    throw new Error(`Unknown provider: ${provider}. Supported: openai, stability`);
-  }
-
-  private async generateWithDallE(options: GenerateImageOptions): Promise<GeneratedImage> {
-    if (!this.config.openaiApiKey) {
+    const provider = this.resolveProvider(options.provider);
+    const apiKey = this.getApiKey(provider);
+    if (!apiKey) {
+      const envVar = provider === 'replicate' ? 'REPLICATE_API_TOKEN' : `${provider.toUpperCase()}_API_KEY`;
       throw new Error(
-        'OPENAI_API_KEY is required for DALL-E image generation. ' +
-        'Set it in your environment or .env file. Get one at https://platform.openai.com/api-keys'
+        `${envVar} is required for ${this.displayNameForProvider(provider)} image generation. `
+        + `Set it in your environment or .env file. Get one at ${PROVIDER_DOCS_URL[provider]}`,
       );
     }
 
-    const size = options.size || this.config.defaultSize || '1024x1024';
-    const quality = options.quality || this.config.defaultQuality || 'standard';
-
-    const response = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.config.openaiApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt: options.prompt,
-        n: 1,
-        size,
-        quality,
-        style: options.style || 'vivid',
-        response_format: 'url',
-      }),
+    const providerOptions = this.normalizeProviderOptions(provider, options);
+    const model = options.model || this.config.defaultModel || this.defaultModelForProvider(provider);
+    const result = await generateImage({
+      model: `${provider}:${model}`,
+      prompt: options.prompt,
+      apiKey,
+      size: options.size || this.config.defaultSize || '1024x1024',
+      aspectRatio: options.aspectRatio,
+      quality: options.quality || this.config.defaultQuality || 'standard',
+      n: options.n,
+      seed: options.seed,
+      negativePrompt: options.negativePrompt,
+      providerOptions,
     });
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      const msg = (error as any)?.error?.message || response.statusText;
-      throw new Error(`DALL-E API error (${response.status}): ${msg}`);
+    const first = result.images[0];
+    if (!first) {
+      throw new Error('Image generation returned no images.');
     }
 
-    const data = await response.json() as {
-      data: Array<{ url: string; revised_prompt?: string }>;
-    };
-
-    const image = data.data[0];
-    if (!image?.url) {
-      throw new Error('DALL-E returned no image data');
+    const url = first.url || first.dataUrl || (first.base64
+      ? `data:${first.mimeType || 'image/png'};base64,${first.base64}`
+      : undefined);
+    if (!url) {
+      throw new Error('Image generation returned no image URL or image data.');
     }
 
     return {
-      url: image.url,
-      revisedPrompt: image.revised_prompt,
-      provider: 'openai',
-      model: 'dall-e-3',
-      size,
-    };
-  }
-
-  private async generateWithStability(options: GenerateImageOptions): Promise<GeneratedImage> {
-    if (!this.config.stabilityApiKey) {
-      throw new Error(
-        'STABILITY_API_KEY is required for Stability AI image generation. ' +
-        'Set it in your environment or .env file. Get one at https://platform.stability.ai/account/keys'
-      );
-    }
-
-    const response = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.config.stabilityApiKey}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        text_prompts: [{ text: options.prompt, weight: 1 }],
-        cfg_scale: 7,
-        height: 1024,
-        width: 1024,
-        steps: 30,
-        samples: 1,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      const msg = (error as any)?.message || response.statusText;
-      throw new Error(`Stability AI error (${response.status}): ${msg}`);
-    }
-
-    const data = await response.json() as {
-      artifacts: Array<{ base64: string; finishReason: string }>;
-    };
-
-    const artifact = data.artifacts[0];
-    if (!artifact?.base64) {
-      throw new Error('Stability AI returned no image data');
-    }
-
-    return {
-      url: `data:image/png;base64,${artifact.base64}`,
-      provider: 'stability',
-      model: 'sdxl-1.0',
-      size: '1024x1024',
+      url,
+      revisedPrompt: first.revisedPrompt,
+      provider: result.provider,
+      model: result.model,
+      size: options.size || this.config.defaultSize || '1024x1024',
     };
   }
 
   async shutdown(): Promise<void> {
     this.initialized = false;
+  }
+
+  private resolveProvider(provider?: ImageGenerationProvider): ImageGenerationProvider {
+    if (provider) {
+      return provider;
+    }
+    if (this.config.defaultProvider) {
+      return this.config.defaultProvider;
+    }
+    if (this.hasOpenAI) return 'openai';
+    if (this.hasOpenRouter) return 'openrouter';
+    if (this.hasStability) return 'stability';
+    if (this.hasReplicate) return 'replicate';
+    return 'openai';
+  }
+
+  private getApiKey(provider: ImageGenerationProvider): string | undefined {
+    switch (provider) {
+      case 'openai':
+        return this.config.openaiApiKey;
+      case 'openrouter':
+        return this.config.openrouterApiKey;
+      case 'stability':
+        return this.config.stabilityApiKey;
+      case 'replicate':
+        return this.config.replicateApiToken;
+      default:
+        return undefined;
+    }
+  }
+
+  private defaultModelForProvider(provider: ImageGenerationProvider): string {
+    switch (provider) {
+      case 'openai':
+        return 'dall-e-3';
+      case 'openrouter':
+        return 'google/gemini-2.5-flash-image';
+      case 'stability':
+        return 'stable-image-core';
+      case 'replicate':
+        return 'black-forest-labs/flux-schnell';
+      default:
+        return 'gpt-image-1';
+    }
+  }
+
+  private displayNameForProvider(provider: ImageGenerationProvider): string {
+    switch (provider) {
+      case 'openai':
+        return 'OpenAI';
+      case 'openrouter':
+        return 'OpenRouter';
+      case 'stability':
+        return 'Stability AI';
+      case 'replicate':
+        return 'Replicate';
+      default:
+        return provider;
+    }
+  }
+
+  private normalizeProviderOptions(
+    provider: ImageGenerationProvider,
+    options: GenerateImageOptions,
+  ): ImageProviderOptionBag | Record<string, unknown> | undefined {
+    if (!options.providerOptions && !options.style && provider !== 'openai') {
+      return undefined;
+    }
+
+    const providerOptions =
+      options.providerOptions && typeof options.providerOptions === 'object' && !Array.isArray(options.providerOptions)
+        ? { ...options.providerOptions }
+        : undefined;
+
+    if (provider === 'openai' && options.style) {
+      const openAIOptions = {
+        ...(providerOptions?.openai ?? {}),
+        style: options.style,
+      };
+      return {
+        ...(providerOptions ?? {}),
+        openai: openAIOptions,
+      };
+    }
+
+    if (provider === 'openai') {
+      return {
+        ...(providerOptions ?? {}),
+        openai: {
+          ...(providerOptions?.openai ?? {}),
+          style: options.style ?? providerOptions?.openai?.style ?? 'vivid',
+        },
+      };
+    }
+
+    return providerOptions;
   }
 }

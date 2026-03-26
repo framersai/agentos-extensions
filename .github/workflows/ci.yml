@@ -36,5 +36,5 @@ jobs:
       - name: Build extensions
         run: pnpm run build
 
-      - name: Test
-        run: pnpm -r --if-present run test
+      - name: Test extensions (skip agentos core tests — tested upstream)
+        run: pnpm -r --filter '!@framers/agentos' --if-present run test
