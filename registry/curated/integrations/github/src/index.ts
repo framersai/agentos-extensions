@@ -27,6 +27,14 @@ import { GitHubRepoListTool } from './tools/repoList.js';
 import { GitHubRepoInfoTool } from './tools/repoInfo.js';
 import { GitHubRepoCreateTool } from './tools/repoCreate.js';
 import { GitHubRepoIndexTool } from './tools/repoIndex.js';
+import { GitHubReleaseListTool } from './tools/releaseList.js';
+import { GitHubReleaseCreateTool } from './tools/releaseCreate.js';
+import { GitHubActionsListTool } from './tools/actionsList.js';
+import { GitHubActionsTriggerTool } from './tools/actionsTrigger.js';
+import { GitHubFileWriteTool } from './tools/fileWrite.js';
+import { GitHubBranchListTool } from './tools/branchList.js';
+import { GitHubBranchCreateTool } from './tools/branchCreate.js';
+import { GitHubCommitListTool } from './tools/commitList.js';
 
 export interface GitHubExtensionOptions {
   token?: string;
@@ -77,14 +85,29 @@ export function createExtensionPack(context: {
     new GitHubSearchTool(service),
     new GitHubIssueListTool(service),
     new GitHubIssueCreateTool(service),
+    new GitHubIssueUpdateTool(service),
+    new GitHubCommentListTool(service),
     new GitHubPrListTool(service),
     new GitHubPrCreateTool(service),
+    new GitHubPrDiffTool(service),
+    new GitHubPrReviewTool(service),
+    new GitHubPrMergeTool(service),
+    new GitHubPrCommentListTool(service),
+    new GitHubPrCommentCreateTool(service),
     new GitHubFileReadTool(service),
     new GitHubGistCreateTool(service),
     new GitHubRepoListTool(service),
     new GitHubRepoInfoTool(service),
     new GitHubRepoCreateTool(service),
     new GitHubRepoIndexTool(service),
+    new GitHubReleaseListTool(service),
+    new GitHubReleaseCreateTool(service),
+    new GitHubActionsListTool(service),
+    new GitHubActionsTriggerTool(service),
+    new GitHubFileWriteTool(service),
+    new GitHubBranchListTool(service),
+    new GitHubBranchCreateTool(service),
+    new GitHubCommitListTool(service),
   ];
 
   return {
@@ -112,12 +135,27 @@ export { GitHubService } from './GitHubService.js';
 export { GitHubSearchTool } from './tools/search.js';
 export { GitHubIssueListTool } from './tools/issueList.js';
 export { GitHubIssueCreateTool } from './tools/issueCreate.js';
+export { GitHubIssueUpdateTool } from './tools/issueUpdate.js';
+export { GitHubCommentListTool } from './tools/commentList.js';
 export { GitHubPrListTool } from './tools/prList.js';
 export { GitHubPrCreateTool } from './tools/prCreate.js';
+export { GitHubPrDiffTool } from './tools/prDiff.js';
+export { GitHubPrReviewTool } from './tools/prReview.js';
+export { GitHubPrMergeTool } from './tools/prMerge.js';
+export { GitHubPrCommentListTool } from './tools/prCommentList.js';
+export { GitHubPrCommentCreateTool } from './tools/prCommentCreate.js';
 export { GitHubFileReadTool } from './tools/fileRead.js';
 export { GitHubGistCreateTool } from './tools/gistCreate.js';
 export { GitHubRepoListTool } from './tools/repoList.js';
 export { GitHubRepoInfoTool } from './tools/repoInfo.js';
 export { GitHubRepoCreateTool } from './tools/repoCreate.js';
 export { GitHubRepoIndexTool } from './tools/repoIndex.js';
+export { GitHubReleaseListTool } from './tools/releaseList.js';
+export { GitHubReleaseCreateTool } from './tools/releaseCreate.js';
+export { GitHubActionsListTool } from './tools/actionsList.js';
+export { GitHubActionsTriggerTool } from './tools/actionsTrigger.js';
+export { GitHubFileWriteTool } from './tools/fileWrite.js';
+export { GitHubBranchListTool } from './tools/branchList.js';
+export { GitHubBranchCreateTool } from './tools/branchCreate.js';
+export { GitHubCommitListTool } from './tools/commitList.js';
 export default createExtensionPack;
