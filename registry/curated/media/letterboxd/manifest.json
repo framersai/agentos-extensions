@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.media.letterboxd",
+  "name": "Letterboxd Movie Lookup Extension",
+  "version": "1.0.0",
+  "description": "Look up movie metadata, ratings, and reviews from Letterboxd via scraping — no API key required",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["letterboxd", "movie", "film", "review", "media", "scraper"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["media", "research"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "letterboxd_movie",
+      "displayName": "Letterboxd Movie Lookup",
+      "description": "Look up movie metadata, ratings, and reviews from Letterboxd",
+      "entry": "./dist/tools/letterboxdMovie.js"
+    }
+  ],
+  "configuration": {}
+}
