@@ -1,0 +1,41 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.integrations.clearbit",
+  "name": "Clearbit Enrichment Extension",
+  "version": "1.0.0",
+  "description": "Enrich company and person data via the Clearbit API for lead qualification and contact research",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["clearbit", "enrichment", "company", "person", "data", "lead"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["integrations", "data-enrichment"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "clearbit_company",
+      "displayName": "Clearbit Company Enrichment",
+      "description": "Look up company information by domain via Clearbit",
+      "entry": "./dist/tools/clearbitCompany.js"
+    },
+    {
+      "kind": "tool",
+      "id": "clearbit_person",
+      "displayName": "Clearbit Person Enrichment",
+      "description": "Look up person information by email via Clearbit",
+      "entry": "./dist/tools/clearbitPerson.js"
+    }
+  ],
+  "configuration": {
+    "properties": {
+      "clearbit.apiKey": {
+        "type": "string",
+        "description": "Clearbit API key for authentication",
+        "secret": true
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.media.omdb",
+  "name": "OMDB Movie & TV Search Extension",
+  "version": "1.0.0",
+  "description": "Search for movies, TV shows, and episodes via the OMDB API with detailed metadata including ratings from IMDB, Rotten Tomatoes, and Metacritic",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["omdb", "movie", "tv", "imdb", "media", "ratings"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["media", "research"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "omdb_search",
+      "displayName": "OMDB Search",
+      "description": "Search for movies, TV shows, and episodes by title",
+      "entry": "./dist/tools/omdbSearch.js"
+    },
+    {
+      "kind": "tool",
+      "id": "omdb_details",
+      "displayName": "OMDB Details",
+      "description": "Get full details for a movie or TV show by IMDB ID or title",
+      "entry": "./dist/tools/omdbDetails.js"
+    }
+  ],
+  "configuration": {
+    "properties": {
+      "omdb.apiKey": {
+        "type": "string",
+        "description": "OMDB API key (obtain from https://www.omdbapi.com/apikey.aspx)",
+        "secret": true
+      }
+    }
+  }
+}
