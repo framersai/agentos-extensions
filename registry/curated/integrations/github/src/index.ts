@@ -2,7 +2,7 @@
  * @fileoverview GitHub Extension for AgentOS.
  *
  * Provides GitHub API tools for searching, managing issues/PRs,
- * reading files, and creating gists.
+ * reading files, creating gists, managing releases, and triggering CI.
  *
  * @module @framers/agentos-ext-github
  */
@@ -12,10 +12,21 @@ import { GitHubService } from './GitHubService.js';
 import { GitHubSearchTool } from './tools/search.js';
 import { GitHubIssueListTool } from './tools/issueList.js';
 import { GitHubIssueCreateTool } from './tools/issueCreate.js';
+import { GitHubIssueUpdateTool } from './tools/issueUpdate.js';
+import { GitHubCommentListTool } from './tools/commentList.js';
 import { GitHubPrListTool } from './tools/prList.js';
 import { GitHubPrCreateTool } from './tools/prCreate.js';
+import { GitHubPrDiffTool } from './tools/prDiff.js';
+import { GitHubPrReviewTool } from './tools/prReview.js';
+import { GitHubPrMergeTool } from './tools/prMerge.js';
+import { GitHubPrCommentListTool } from './tools/prCommentList.js';
+import { GitHubPrCommentCreateTool } from './tools/prCommentCreate.js';
 import { GitHubFileReadTool } from './tools/fileRead.js';
 import { GitHubGistCreateTool } from './tools/gistCreate.js';
+import { GitHubRepoListTool } from './tools/repoList.js';
+import { GitHubRepoInfoTool } from './tools/repoInfo.js';
+import { GitHubRepoCreateTool } from './tools/repoCreate.js';
+import { GitHubRepoIndexTool } from './tools/repoIndex.js';
 
 export interface GitHubExtensionOptions {
   token?: string;
@@ -70,6 +81,10 @@ export function createExtensionPack(context: {
     new GitHubPrCreateTool(service),
     new GitHubFileReadTool(service),
     new GitHubGistCreateTool(service),
+    new GitHubRepoListTool(service),
+    new GitHubRepoInfoTool(service),
+    new GitHubRepoCreateTool(service),
+    new GitHubRepoIndexTool(service),
   ];
 
   return {
@@ -101,4 +116,8 @@ export { GitHubPrListTool } from './tools/prList.js';
 export { GitHubPrCreateTool } from './tools/prCreate.js';
 export { GitHubFileReadTool } from './tools/fileRead.js';
 export { GitHubGistCreateTool } from './tools/gistCreate.js';
+export { GitHubRepoListTool } from './tools/repoList.js';
+export { GitHubRepoInfoTool } from './tools/repoInfo.js';
+export { GitHubRepoCreateTool } from './tools/repoCreate.js';
+export { GitHubRepoIndexTool } from './tools/repoIndex.js';
 export default createExtensionPack;
