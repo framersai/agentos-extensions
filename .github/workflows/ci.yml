@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: Install native deps needed by agentos memory subsystem
+        run: pnpm add -Dw better-sqlite3
+
       - name: Build agentos core
         run: cd packages/agentos && pnpm install --no-frozen-lockfile && pnpm run build
 
