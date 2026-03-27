@@ -1,0 +1,40 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.research.web-scraper",
+  "name": "Intelligent Web Scraper",
+  "version": "0.1.0",
+  "description": "Progressive web scraping with fetch, Playwright, stealth, and LLM fallbacks",
+  "author": { "name": "Frame.dev", "url": "https://github.com/framersai" },
+  "license": "MIT",
+  "keywords": ["scraper", "web", "extraction", "research"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["research", "extraction"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "web_scrape",
+      "displayName": "Web Scrape",
+      "description": "Scrape and extract structured data from web pages",
+      "entry": "./dist/tools/webScrape.js"
+    },
+    {
+      "kind": "tool",
+      "id": "web_scrape_recipe",
+      "displayName": "Web Scrape Recipe",
+      "description": "Execute named scraping recipes for structured data extraction",
+      "entry": "./dist/tools/webScrapeRecipe.js"
+    }
+  ],
+  "configuration": {
+    "properties": {
+      "scraper.proxyUrl": {
+        "type": "string",
+        "description": "HTTP/SOCKS5 proxy URL (optional)"
+      },
+      "scraper.proxyList": {
+        "type": "string",
+        "description": "Comma-separated proxy URLs for rotation (optional)"
+      }
+    }
+  }
+}
