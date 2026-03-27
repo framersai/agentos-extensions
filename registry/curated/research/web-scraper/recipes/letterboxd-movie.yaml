@@ -1,0 +1,59 @@
+# Letterboxd Movie Recipe
+#
+# Multi-step recipe that searches Letterboxd for a film, navigates to the
+# film's detail page, and then fetches the top reviews.
+#
+# Steps:
+#   1. search   — Search Letterboxd for the film by query string.
+#   2. filmPage — Scrape the film's detail page for metadata.
+#   3. reviews  — Scrape the reviews page for the top 5 user reviews.
+
+name: letterboxd-movie
+description: Search Letterboxd for a film and extract title, year, rating, directors, genres, synopsis, and top 5 reviews.
+version: "1.0.0"
+
+params:
+  query: "Film title to search for"
+
+steps:
+  - name: search
+    url: "https://letterboxd.com/search/films/{{query}}/"
+    extract:
+      list: ".results .film-detail"
+      listFields:
+        title: "h2.headline a"
+        year: ".metadata"
+        url: "h2.headline a @href"
+    options:
+      maxItems: 1
+
+  - name: filmPage
+    url: "https://letterboxd.com{{steps.search.items[0].url}}"
+    extract:
+      fields:
+        title: "h1.headline-1"
+        year: ".releaseyear a"
+        rating: ".average-rating .display-rating"
+        director: ".directorlist a"
+        genres: ".text-sluglist a"
+        synopsis: ".review p"
+        tagline: ".tagline"
+        runtime: ".text-footer"
+
+  - name: reviews
+    url: "https://letterboxd.com{{steps.search.items[0].url}}reviews/by/activity/"
+    extract:
+      list: ".film-detail-content"
+      listFields:
+        author: ".attribution .name"
+        rating: ".rating"
+        body: ".body-text p"
+        date: ".date"
+    options:
+      maxItems: 5
+
+output: |
+  Aggregated object with three keys:
+    - search: array of search results (typically 1 item)
+    - filmPage: { title, year, rating, director, genres, synopsis, tagline, runtime }
+    - reviews: array of { author, rating, body, date }

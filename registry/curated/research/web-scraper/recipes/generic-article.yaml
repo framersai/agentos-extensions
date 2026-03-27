@@ -1,0 +1,31 @@
+# Generic Article Recipe
+#
+# Single-step recipe that extracts common article metadata and body text
+# from any web page.  Works best on blog posts, news articles, and
+# documentation pages that follow standard semantic HTML conventions.
+#
+# Uses broad selectors that match most publishing platforms (WordPress,
+# Medium, Ghost, Hugo, Substack, dev.to, etc.).
+
+name: generic-article
+description: Extract title, author, publication date, and body text from any article URL.
+version: "1.0.0"
+
+params:
+  url: "Full URL of the article to extract"
+
+steps:
+  - name: article
+    url: "{{url}}"
+    extract:
+      fields:
+        title: "h1"
+        author: ".author"
+        date: "time"
+        body: "article"
+        description: "meta @content"
+        siteName: ".site-name"
+
+output: |
+  Single-key object:
+    - article: { title, author, date, body, description, siteName }
