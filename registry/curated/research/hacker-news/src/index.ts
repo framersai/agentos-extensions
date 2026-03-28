@@ -1,8 +1,8 @@
 /**
- * Hacker News Extension Pack — HN story search and filtering for agents.
+ * Hacker News Extension Pack — HN story fetching for agents.
  *
- * No API key required. Uses the public Algolia HN Search API.
- * Categories are inferred from content keywords (16 categories + 'general').
+ * General-purpose tool: returns raw stories without opinionated categorization.
+ * Consumers decide how to classify content. No API key required.
  */
 
 import { HackerNewsTool } from './tools/hackerNews.js';
