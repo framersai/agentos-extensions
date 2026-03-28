@@ -235,11 +235,19 @@ describe('LetterboxdMovieTool — built-in fallback scraper', () => {
 describe('LetterboxdMovieTool — no results', () => {
   const tool = new LetterboxdMovieTool();
 
-  it('should return found: false when no search results match', async () => {
+  it('should return found: false when no search results match and direct URL also fails', async () => {
+    // Search returns empty results
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
       text: async () => EMPTY_SEARCH_HTML,
+    });
+
+    // Direct URL attempt also fails (404)
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+      text: async () => 'Not Found',
     });
 
     const result = await tool.execute({ title: 'xyznonexistent123' }, stubContext);
@@ -255,17 +263,50 @@ describe('LetterboxdMovieTool — no results', () => {
     expect(result.error).toContain('title');
   });
 
-  it('should return found: false when search page fetch fails', async () => {
+  it('should return found: false with error message when search is blocked by Cloudflare', async () => {
+    // Search returns 403 (Cloudflare blocks)
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      status: 500,
-      text: async () => 'Server Error',
+      status: 403,
+      text: async () => 'Forbidden',
+    });
+
+    // Direct URL attempt also fails
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+      text: async () => 'Not Found',
     });
 
     const result = await tool.execute({ title: 'Arrival' }, stubContext);
 
     expect(result.success).toBe(true);
     expect(result.output!.found).toBe(false);
+    expect(result.error).toContain('Cloudflare');
+  });
+
+  it('should fall back to direct URL when search fails and return film data', async () => {
+    // Search returns 403 (Cloudflare)
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 403,
+      text: async () => 'Forbidden',
+    });
+
+    // Direct URL attempt succeeds (film detail pages bypass Cloudflare)
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      text: async () => FILM_PAGE_HTML,
+    });
+
+    const result = await tool.execute({ title: 'Arrival' }, stubContext);
+
+    expect(result.success).toBe(true);
+    expect(result.output).toBeDefined();
+    expect(result.output!.found).toBe(true);
+    expect(result.output!.title).toBe('Arrival');
+    expect(result.output!.rating).toBe('4.0');
   });
 });
 

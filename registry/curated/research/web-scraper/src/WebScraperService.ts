@@ -436,6 +436,12 @@ export class WebScraperService {
       const statusCode = response?.status() ?? 0;
       const html = await page.content();
 
+      // Cloudflare serves challenge pages with HTTP 200 inside browsers —
+      // detect and treat as failure so the scraper escalates to a higher tier.
+      if (this.isCloudflareChallenge(html)) {
+        return { success: false, url, tier: 2, statusCode: 200, error: 'Cloudflare challenge detected — escalating' };
+      }
+
       return this.buildResult(url, 2, statusCode, html, extract);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -541,6 +547,12 @@ export class WebScraperService {
       const statusCode = response?.status() ?? 0;
       const html = await page.content();
 
+      // Even with stealth measures, Cloudflare may still serve a challenge.
+      // Detect and fail so the scraper can escalate to Tier 4.
+      if (this.isCloudflareChallenge(html)) {
+        return { success: false, url, tier: 3, statusCode: 200, error: 'Cloudflare challenge detected — escalating' };
+      }
+
       return this.buildResult(url, 3, statusCode, html, extract);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -582,6 +594,12 @@ export class WebScraperService {
       const statusCode = response.status;
       const rawHtml = await response.text();
       const text = this.htmlToText(rawHtml);
+
+      // Guard against Cloudflare challenge pages or trivially small content
+      // that an LLM cannot meaningfully extract from.
+      if (!text || text.length < 200 || this.isCloudflareChallenge(rawHtml)) {
+        return { success: false, url, tier: 4, statusCode, error: 'Insufficient content for LLM extraction' };
+      }
 
       // If there is an extraction config, signal that LLM extraction is needed
       if (extract) {
@@ -914,5 +932,30 @@ export class WebScraperService {
    */
   private escapeRegex(str: string): string {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  /**
+   * Detect whether HTML content is a Cloudflare challenge page rather
+   * than genuine site content.
+   *
+   * Cloudflare serves challenge/interstitial pages with HTTP 200 inside
+   * browsers, which causes headless tiers to return `success: true` with
+   * useless content.  This method checks for known Cloudflare signatures
+   * in the HTML to prevent false-positive results.
+   *
+   * @param html - Raw HTML string to inspect.
+   * @returns `true` if the HTML matches one or more Cloudflare challenge signatures.
+   */
+  private isCloudflareChallenge(html: string): boolean {
+    const signatures = [
+      'Just a moment...',
+      'cf-browser-verification',
+      'cf_chl_opt',
+      'challenge-platform',
+      '_cf_chl_',
+      'Checking if the site connection is secure',
+      'Enable JavaScript and cookies to continue',
+    ];
+    return signatures.some((sig) => html.includes(sig));
   }
 }

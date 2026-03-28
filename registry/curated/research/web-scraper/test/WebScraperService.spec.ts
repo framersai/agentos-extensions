@@ -269,12 +269,22 @@ describe('WebScraperService.scrape() — fallback escalation', () => {
   it('should reach Tier 4 successfully when starting directly at Tier 4', async () => {
     const scraper = new WebScraperService({ minDelayMs: 0, maxDelayMs: 0 });
 
+    // Tier 4 requires at least 200 chars of visible text to succeed.
+    // Provide a realistic page body that clears the minimum threshold.
+    const longBody =
+      '<html><body>' +
+      '<h1>Fallback content</h1>' +
+      '<p>This is a sufficiently long article body that contains more than two hundred characters ' +
+      'of visible text after HTML tags are stripped, ensuring the Tier 4 content-length guard does ' +
+      'not reject it as insufficient for LLM extraction purposes.</p>' +
+      '</body></html>';
+
     // Tier 4 fetch returns success
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
       statusText: 'OK',
-      text: async () => '<html><body><p>Fallback content</p></body></html>',
+      text: async () => longBody,
     });
 
     const result = await scraper.scrape({
@@ -290,11 +300,20 @@ describe('WebScraperService.scrape() — fallback escalation', () => {
   it('should set _llmExtractionRequired when Tier 4 has an extract config', async () => {
     const scraper = new WebScraperService({ minDelayMs: 0, maxDelayMs: 0 });
 
+    // Tier 4 requires at least 200 chars of visible text to succeed.
+    const longBody =
+      '<html><body>' +
+      '<h1>Title</h1>' +
+      '<p>Body text with enough content to exceed the two hundred character minimum threshold ' +
+      'that Tier 4 enforces before it will accept the response as valid. This prevents ' +
+      'Cloudflare challenge pages from being falsely reported as successful scrapes.</p>' +
+      '</body></html>';
+
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
       statusText: 'OK',
-      text: async () => '<html><body><h1>Title</h1><p>Body text</p></body></html>',
+      text: async () => longBody,
     });
 
     const result = await scraper.scrape({
@@ -307,6 +326,49 @@ describe('WebScraperService.scrape() — fallback escalation', () => {
     expect(result.tier).toBe(4);
     expect(result._llmExtractionRequired).toBe(true);
     expect(result.text).toContain('Title');
+  });
+
+  it('should fail Tier 4 when content is too short (< 200 chars)', async () => {
+    const scraper = new WebScraperService({ minDelayMs: 0, maxDelayMs: 0 });
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      text: async () => '<html><body><p>Tiny</p></body></html>',
+    });
+
+    const result = await scraper.scrape({
+      url: 'https://example.com/tiny',
+      options: { tier: 4, maxTier: 4 },
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toContain('Insufficient content');
+  });
+
+  it('should fail Tier 4 when response is a Cloudflare challenge', async () => {
+    const scraper = new WebScraperService({ minDelayMs: 0, maxDelayMs: 0 });
+
+    const cfChallenge =
+      '<html><head><title>Just a moment...</title></head>' +
+      '<body><div class="challenge-platform">Please wait while we verify your browser</div>' +
+      '<script>cf_chl_opt={}</script></body></html>';
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      text: async () => cfChallenge,
+    });
+
+    const result = await scraper.scrape({
+      url: 'https://example.com/cf-challenge',
+      options: { tier: 4, maxTier: 4 },
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toContain('Insufficient content');
   });
 
   it('should fail gracefully when the only available tier fails', async () => {

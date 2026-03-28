@@ -372,9 +372,12 @@ export class LetterboxdMovieTool implements ITool<LetterboxdMovieInput, Letterbo
   /**
    * Look up the film using the built-in `fetch()` + regex scraper.
    *
-   * Performs two HTTP requests:
+   * Performs up to three HTTP requests:
    * 1. **Search** — `GET /search/films/{encodedTitle}/` to find the film slug.
-   * 2. **Film page** — `GET /film/{slug}/` to extract metadata and reviews.
+   * 2. **Direct URL** — if search fails (e.g. Cloudflare 403), tries
+   *    `GET /film/{slug}/` where the slug is derived from the title.
+   *    Film detail pages are typically not behind Cloudflare challenges.
+   * 3. **Film page** — `GET /film/{slug}/` to extract metadata and reviews.
    *
    * @param title - Film title to search for.
    * @param year  - Optional release year for disambiguation.
@@ -385,15 +388,27 @@ export class LetterboxdMovieTool implements ITool<LetterboxdMovieInput, Letterbo
     year?: number,
   ): Promise<ToolExecutionResult<LetterboxdMovieOutput>> {
     // Step 1: Search for the film slug
-    const slug = await this.searchFilmSlug(title, year);
+    let slug = await this.searchFilmSlug(title, year);
+
+    // Step 2: If search failed (e.g. Cloudflare 403), try the direct film
+    // URL pattern — detail pages are typically not behind Cloudflare.
     if (!slug) {
+      const directSlug = this.titleToSlug(title);
+      const directUrl = `${FILM_BASE_URL}/${directSlug}/`;
+      const directHtml = await this.fetchPage(directUrl);
+      if (directHtml) {
+        const output = this.parseFilmPage(directHtml, directUrl);
+        return { success: true, output };
+      }
+
       return {
         success: true,
         output: { found: false },
+        error: 'Search blocked by Cloudflare — tried direct URL lookup',
       };
     }
 
-    // Step 2: Fetch and parse the film page
+    // Step 3: Fetch and parse the film page
     const filmUrl = `${FILM_BASE_URL}/${slug}/`;
     const filmHtml = await this.fetchPage(filmUrl);
     if (!filmHtml) {
@@ -405,6 +420,28 @@ export class LetterboxdMovieTool implements ITool<LetterboxdMovieInput, Letterbo
 
     const output = this.parseFilmPage(filmHtml, filmUrl);
     return { success: true, output };
+  }
+
+  /**
+   * Derive a URL slug from a film title.
+   *
+   * Lowercases the title, replaces non-alphanumeric runs with hyphens,
+   * and strips leading/trailing hyphens.
+   *
+   * @example
+   * ```
+   * titleToSlug('The Dark Knight') // => 'the-dark-knight'
+   * titleToSlug('Parasite')        // => 'parasite'
+   * ```
+   *
+   * @param title - Film title to slugify.
+   * @returns A URL-safe slug string.
+   */
+  private titleToSlug(title: string): string {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
   }
 
   /**
