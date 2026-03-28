@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.productivity.widget-generator",
+  "name": "Interactive Widget Generator Extension",
+  "version": "1.0.0",
+  "description": "Generate self-contained interactive HTML/CSS/JS widgets with safety wrapping and file management",
+  "author": {
+    "name": "Frame.dev",
+    "email": "support@frame.dev",
+    "url": "https://github.com/framersai"
+  },
+  "license": "MIT",
+  "keywords": ["widget", "html", "interactive", "visualization", "productivity"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["productivity", "visualization"],
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "generate_widget",
+      "displayName": "Generate Interactive Widget",
+      "description": "Generate a self-contained interactive HTML/CSS/JS widget",
+      "entry": "./dist/tools/generateWidget.js"
+    }
+  ],
+  "configuration": {}
+}
