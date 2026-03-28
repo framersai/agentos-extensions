@@ -3651,6 +3651,25 @@
         "verifiedAt": "2026-03-28T06:16:33.931Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
+      },
+      {
+        "id": "com.framers.productivity.document-export",
+        "name": "Document Export",
+        "package": "@framers/agentos-ext-document-export",
+        "version": "0.1.0",
+        "category": "productivity",
+        "path": "registry/curated/productivity/document-export",
+        "description": "Generate PDF, DOCX, PPTX, CSV, and XLSX from structured content with charts and themes",
+        "author": { "name": "Frame.dev", "email": "support@frame.dev", "url": "https://github.com/framersai" },
+        "features": [],
+        "tools": ["document_export", "document_suggest"],
+        "keywords": ["document", "export", "pdf", "docx", "pptx", "csv", "xlsx"],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-document-export",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/document-export",
+        "verified": true,
+        "verifiedAt": "2026-03-28T00:00:00.000Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
       }
     ],
     "community": [],
@@ -3685,8 +3704,8 @@
     ]
   },
   "stats": {
-    "totalExtensions": 103,
-    "curatedCount": 100,
+    "totalExtensions": 104,
+    "curatedCount": 101,
     "communityCount": 0,
     "templateCount": 3,
     "totalDownloads": 0
