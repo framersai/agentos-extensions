@@ -1,0 +1,13 @@
+{
+  "name": "@framers/agentos-ext-hacker-news",
+  "version": "1.0.0",
+  "displayName": "Hacker News",
+  "description": "Fetch and search Hacker News stories with category inference, filtering, and sorting. No API key required.",
+  "category": "research",
+  "author": "framers",
+  "license": "MIT",
+  "tools": ["hacker_news"],
+  "requiredSecrets": [],
+  "entryPoint": "src/index.ts",
+  "tags": ["news", "hacker-news", "hn", "research", "tech-news", "programming"]
+}

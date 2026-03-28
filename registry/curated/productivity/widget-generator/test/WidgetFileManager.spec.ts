@@ -84,6 +84,11 @@ describe('WidgetFileManager', () => {
     expect(resolved).toBeNull();
   });
 
+  it('rejects traversal attempts for resolve() and remove()', async () => {
+    expect(manager.resolve('../secret.html')).toBeNull();
+    await expect(manager.remove('../secret.html')).resolves.toBe(false);
+  });
+
   it('getWidgetUrl() returns correct URL format', async () => {
     const url = manager.getWidgetUrl('my-widget.html');
     expect(url).toBe('http://localhost:3777/widgets/my-widget.html');

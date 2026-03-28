@@ -35,6 +35,7 @@ import { GitHubFileWriteTool } from './tools/fileWrite.js';
 import { GitHubBranchListTool } from './tools/branchList.js';
 import { GitHubBranchCreateTool } from './tools/branchCreate.js';
 import { GitHubCommitListTool } from './tools/commitList.js';
+import { GitHubRepoIndexer } from './GitHubRepoIndexer.js';
 
 export interface GitHubExtensionOptions {
   token?: string;
@@ -158,4 +159,5 @@ export { GitHubFileWriteTool } from './tools/fileWrite.js';
 export { GitHubBranchListTool } from './tools/branchList.js';
 export { GitHubBranchCreateTool } from './tools/branchCreate.js';
 export { GitHubCommitListTool } from './tools/commitList.js';
+export { GitHubRepoIndexer } from './GitHubRepoIndexer.js';
 export default createExtensionPack;

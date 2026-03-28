@@ -11,7 +11,7 @@
 
 import { mkdir, writeFile, readdir, stat, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { basename, join, extname } from 'node:path';
 
 /**
  * Metadata returned when listing files in the exports directory.
@@ -153,9 +153,9 @@ export class ExportFileManager {
    *   did not exist or could not be removed.
    */
   async remove(filename: string): Promise<boolean> {
-    const fullPath = join(this.exportsDir, filename);
+    const fullPath = this.resolveManagedPath(filename);
 
-    if (!existsSync(fullPath)) {
+    if (!fullPath || !existsSync(fullPath)) {
       return false;
     }
 
@@ -174,7 +174,8 @@ export class ExportFileManager {
    * @returns The absolute file path if the file exists, or `null` if not found.
    */
   resolve(filename: string): string | null {
-    const fullPath = join(this.exportsDir, filename);
+    const fullPath = this.resolveManagedPath(filename);
+    if (!fullPath) return null;
     return existsSync(fullPath) ? fullPath : null;
   }
 
@@ -189,7 +190,7 @@ export class ExportFileManager {
    * @returns A fully-qualified HTTP URL pointing to the file.
    */
   getDownloadUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/exports/${filename}`;
+    return `http://localhost:${this.serverPort}/exports/${encodeURIComponent(filename)}`;
   }
 
   /**
@@ -202,7 +203,22 @@ export class ExportFileManager {
    * @returns A fully-qualified HTTP URL pointing to the preview endpoint.
    */
   getPreviewUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/exports/${filename}/preview`;
+    return `http://localhost:${this.serverPort}/exports/${encodeURIComponent(filename)}/preview`;
+  }
+
+  private resolveManagedPath(filename: string): string | null {
+    const normalized = filename.trim();
+    if (
+      !normalized ||
+      normalized === '.' ||
+      normalized === '..' ||
+      basename(normalized) !== normalized ||
+      normalized.includes('/') ||
+      normalized.includes('\\')
+    ) {
+      return null;
+    }
+    return join(this.exportsDir, normalized);
   }
 
   /**

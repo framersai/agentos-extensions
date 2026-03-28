@@ -11,7 +11,7 @@
 
 import { mkdir, writeFile, readdir, stat, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 
 /**
  * Metadata returned when listing files in the widgets directory.
@@ -145,9 +145,9 @@ export class WidgetFileManager {
    *   did not exist or could not be removed.
    */
   async remove(filename: string): Promise<boolean> {
-    const fullPath = join(this.widgetsDir, filename);
+    const fullPath = this.resolveManagedPath(filename);
 
-    if (!existsSync(fullPath)) {
+    if (!fullPath || !existsSync(fullPath)) {
       return false;
     }
 
@@ -166,7 +166,8 @@ export class WidgetFileManager {
    * @returns The absolute file path if the file exists, or `null` if not found.
    */
   resolve(filename: string): string | null {
-    const fullPath = join(this.widgetsDir, filename);
+    const fullPath = this.resolveManagedPath(filename);
+    if (!fullPath) return null;
     return existsSync(fullPath) ? fullPath : null;
   }
 
@@ -181,7 +182,7 @@ export class WidgetFileManager {
    * @returns A fully-qualified HTTP URL pointing to the widget.
    */
   getWidgetUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/widgets/${filename}`;
+    return `http://localhost:${this.serverPort}/widgets/${encodeURIComponent(filename)}`;
   }
 
   /**
@@ -194,7 +195,22 @@ export class WidgetFileManager {
    * @returns A fully-qualified HTTP URL pointing to the file.
    */
   getDownloadUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/widgets/${filename}`;
+    return `http://localhost:${this.serverPort}/widgets/${encodeURIComponent(filename)}`;
+  }
+
+  private resolveManagedPath(filename: string): string | null {
+    const normalized = filename.trim();
+    if (
+      !normalized ||
+      normalized === '.' ||
+      normalized === '..' ||
+      basename(normalized) !== normalized ||
+      normalized.includes('/') ||
+      normalized.includes('\\')
+    ) {
+      return null;
+    }
+    return join(this.widgetsDir, normalized);
   }
 
   /**
