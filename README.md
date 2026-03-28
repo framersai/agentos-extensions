@@ -88,6 +88,56 @@ All extensions are published to npm under the `@framers` scope.
 | [`@framers/agentos-ext-channel-tiktok`](./registry/curated/channels/tiktok) | TikTok social channel (API for Business) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-tiktok)](https://www.npmjs.com/package/@framers/agentos-ext-channel-tiktok) |
 | [`@framers/agentos-ext-channel-email`](./registry/curated/channels/email) | Email messaging channel (nodemailer/imapflow) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-channel-email)](https://www.npmjs.com/package/@framers/agentos-ext-channel-email) |
 
+## Two-Tier Extension Pattern
+
+AgentOS extensions are organized into two tiers with different versioning and
+release strategies:
+
+### Core Extensions (monorepo root)
+
+Seven foundational packages live at the monorepo root under `packages/agentos-ext-*`.
+These are **independently versioned** with semantic-release CI/CD and have their own
+GitHub Actions workflows:
+
+| Package | Description |
+|---------|-------------|
+| `agentos-ext-code-safety` | Static code analysis guardrail (injection, XSS, secrets) |
+| `agentos-ext-pii-redaction` | PII detection & redaction pipeline |
+| `agentos-ext-grounding-guard` | Claim extraction & source verification |
+| `agentos-ext-ml-classifiers` | ML-based content classification (toxicity, jailbreak, injection) |
+| `agentos-ext-topicality` | Topic drift detection & off-topic filtering |
+| `agentos-ext-http-api` | HTTP API server for AgentOS |
+| `agentos-ext-skills` | Skill loading & execution tooling |
+
+Each has its own `.github/` CI workflow, `.releaserc.json`, and publishes to npm
+independently. Version bumps here do **not** affect curated extension versions.
+
+### Curated Extensions (this submodule)
+
+~107 packages inside `registry/curated/` use coordinated versioning via
+[Changesets](https://github.com/changesets/changesets). These are the full
+extension catalog: channel adapters, integrations, research tools, media tools,
+and more.
+
+Version bumps here are batched into "Version Packages" PRs and published together.
+
+### Why two tiers?
+
+- **Core extensions** are safety-critical guardrails and foundational infrastructure.
+  They need independent semver to signal breaking changes without forcing a catalog-wide
+  release. Their CI runs on every PR to the monorepo root.
+- **Curated extensions** are the broader catalog. Coordinated changesets keep their
+  interdependencies aligned and simplify bulk releases.
+
+### Where do safety guardrails live?
+
+The `registry/curated/safety/` directory contains **stub READMEs** pointing to the
+canonical core packages at the monorepo root. The actual source code for code-safety,
+pii-redaction, and grounding-guard lives exclusively in `packages/agentos-ext-*` at
+the monorepo root. The ml-classifiers and topicality packages still have curated
+copies with additional modules (ClassifierOrchestrator, TopicDriftTracker, etc.) that
+have not yet been merged upstream to the root packages.
+
 ## Repository Structure
 
 ```
@@ -109,6 +159,7 @@ agentos-extensions/
 │   │   ├── media/         # Giphy, image search, voice synthesis
 │   │   ├── provenance/    # On-chain anchoring & tip ingestion
 │   │   ├── research/      # Web search, deep research, content extraction
+│   │   ├── safety/        # Stub READMEs -> core packages (see above)
 │   │   ├── system/        # CLI executor, browser automation, credential vault
 │   │   ├── voice/         # Twilio, Telnyx, Plivo voice providers
 │   │   └── productivity/  # Google Calendar, Gmail

@@ -41,11 +41,11 @@ packages:
   - "registry/curated/research/stealth-browser"
   - "registry/curated/productivity/google-calendar"
   - "registry/curated/productivity/gmail"
-  - "registry/curated/safety/pii-redaction"
+  # code-safety, pii-redaction, grounding-guard promoted to core packages
+  # at monorepo root (packages/agentos-ext-*) with independent semantic-release.
+  # ml-classifiers and topicality still have curated source here:
   - "registry/curated/safety/ml-classifiers"
   - "registry/curated/safety/topicality"
-  - "registry/curated/safety/code-safety"
-  - "registry/curated/safety/grounding-guard"
   - "registry/curated/voice/streaming-stt-deepgram"
   - "registry/curated/voice/streaming-stt-whisper"
   - "registry/curated/voice/streaming-tts-openai"

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-03-25T06:07:19.103Z",
+  "updated": "2026-03-28T06:16:33.931Z",
   "categories": {
     "templates": [
       "basic-tool",
@@ -2636,14 +2636,14 @@
         "package": "@framers/agentos-ext-code-safety",
         "version": "0.2.0",
         "category": "safety",
-        "path": "registry/curated/safety/code-safety",
-        "description": "Static analysis guardrail for detecting dangerous code patterns in AgentOS",
+        "path": "core:packages/agentos-ext-code-safety",
+        "description": "Static analysis guardrail for detecting dangerous code patterns in AgentOS (core extension — source at monorepo root)",
         "author": "Frame.dev",
         "features": [],
         "tools": [],
         "keywords": [],
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-code-safety",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/code-safety",
+        "repository": "https://github.com/framersai/voice-chat-assistant/tree/master/packages/agentos-ext-code-safety",
         "verified": true,
         "verifiedAt": "2026-03-25T06:07:19.103Z",
         "verificationChecklistVersion": "1.0.0",
@@ -2655,14 +2655,14 @@
         "package": "@framers/agentos-ext-grounding-guard",
         "version": "0.2.0",
         "category": "safety",
-        "path": "registry/curated/safety/grounding-guard",
-        "description": "NLI-based factual grounding verification guardrail for AgentOS",
+        "path": "core:packages/agentos-ext-grounding-guard",
+        "description": "NLI-based factual grounding verification guardrail for AgentOS (core extension — source at monorepo root)",
         "author": "Frame.dev",
         "features": [],
         "tools": [],
         "keywords": [],
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-grounding-guard",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/grounding-guard",
+        "repository": "https://github.com/framersai/voice-chat-assistant/tree/master/packages/agentos-ext-grounding-guard",
         "verified": true,
         "verifiedAt": "2026-03-25T06:07:19.103Z",
         "verificationChecklistVersion": "1.0.0",
@@ -2693,14 +2693,14 @@
         "package": "@framers/agentos-ext-pii-redaction",
         "version": "0.2.0",
         "category": "safety",
-        "path": "registry/curated/safety/pii-redaction",
-        "description": "Four-tier PII detection and redaction guardrail for AgentOS",
+        "path": "core:packages/agentos-ext-pii-redaction",
+        "description": "Four-tier PII detection and redaction guardrail for AgentOS (core extension — source at monorepo root)",
         "author": "Frame.dev",
         "features": [],
         "tools": [],
         "keywords": [],
         "npm": "https://www.npmjs.com/package/@framers/agentos-ext-pii-redaction",
-        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/pii-redaction",
+        "repository": "https://github.com/framersai/voice-chat-assistant/tree/master/packages/agentos-ext-pii-redaction",
         "verified": true,
         "verifiedAt": "2026-03-25T06:07:19.103Z",
         "verificationChecklistVersion": "1.0.0",
@@ -3520,6 +3520,135 @@
         "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/vosk",
         "verified": true,
         "verifiedAt": "2026-03-25T06:07:19.103Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.research.web-scraper",
+        "name": "Intelligent Web Scraper",
+        "package": "@framers/agentos-ext-web-scraper",
+        "version": "0.1.0",
+        "category": "research",
+        "path": "registry/curated/research/web-scraper",
+        "description": "Progressive web scraping with fetch, Playwright, stealth, and LLM fallbacks",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "web_scrape",
+          "web_scrape_recipe"
+        ],
+        "keywords": [
+          "scraper",
+          "web",
+          "extraction",
+          "research",
+          "playwright"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-web-scraper",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/web-scraper",
+        "verified": true,
+        "verifiedAt": "2026-03-28T06:16:33.914Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.media.omdb",
+        "name": "OMDB Movie Database",
+        "package": "@framers/agentos-ext-omdb",
+        "version": "0.1.0",
+        "category": "media",
+        "path": "registry/curated/media/omdb",
+        "description": "Movie and TV data with IMDB, Rotten Tomatoes, and Metacritic scores via OMDB API",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "omdb_search",
+          "omdb_details"
+        ],
+        "keywords": [
+          "omdb",
+          "imdb",
+          "movies",
+          "tv",
+          "ratings",
+          "rotten-tomatoes",
+          "metacritic"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-omdb",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/omdb",
+        "verified": true,
+        "verifiedAt": "2026-03-28T06:16:33.931Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.media.letterboxd",
+        "name": "Letterboxd Film Lookup",
+        "package": "@framers/agentos-ext-letterboxd",
+        "version": "0.1.0",
+        "category": "media",
+        "path": "registry/curated/media/letterboxd",
+        "description": "Film ratings, reviews, and community data from Letterboxd",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "letterboxd_movie"
+        ],
+        "keywords": [
+          "letterboxd",
+          "movies",
+          "film",
+          "ratings",
+          "reviews"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-letterboxd",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/letterboxd",
+        "verified": true,
+        "verifiedAt": "2026-03-28T06:16:33.931Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
+        "id": "com.framers.integrations.clearbit",
+        "name": "Clearbit Enrichment",
+        "package": "@framers/agentos-ext-clearbit",
+        "version": "0.1.0",
+        "category": "integrations",
+        "path": "registry/curated/integrations/clearbit",
+        "description": "Company and contact enrichment by domain or email via Clearbit API",
+        "author": {
+          "name": "Frame.dev",
+          "email": "support@frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "clearbit_company",
+          "clearbit_person"
+        ],
+        "keywords": [
+          "clearbit",
+          "company",
+          "enrichment",
+          "contacts",
+          "b2b"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-clearbit",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/integrations/clearbit",
+        "verified": true,
+        "verifiedAt": "2026-03-28T06:16:33.931Z",
         "verificationChecklistVersion": "1.0.0",
         "downloads": 0
       }
