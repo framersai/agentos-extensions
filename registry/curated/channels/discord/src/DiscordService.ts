@@ -397,7 +397,7 @@ export class DiscordService {
     const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [
       {
         name: 'ask',
-        description: 'Ask Rabbit Hole AI in this channel',
+        description: 'Ask Wunderland AI in this channel',
         options: [
           {
             name: 'question',
@@ -800,7 +800,7 @@ export class DiscordService {
   }
 
   // ---------------------------------------------------------------------------
-  // Rabbit Hole community helpers (rate limits, notes, faq, trivia stats)
+  // Wunderland community helpers (rate limits, notes, faq, trivia stats)
   // ---------------------------------------------------------------------------
 
   getStateStorePath(): string {
@@ -839,7 +839,7 @@ export class DiscordService {
   }
 
   quotaDayKey(): string {
-    const tz = String(process.env['RABBITHOLE_TZ'] || 'America/Los_Angeles').trim() || 'UTC';
+    const tz = String(process.env['WUNDERLAND_TZ'] || 'America/Los_Angeles').trim() || 'UTC';
     return dayKeyForTz(tz);
   }
 
@@ -945,12 +945,12 @@ export class DiscordService {
 
 function resolveStatePath(): string {
   const explicit = String(process.env['DISCORD_STATE_DIR'] || '').trim();
-  if (explicit) return join(explicit, 'rabbithole_discord_state.json');
+  if (explicit) return join(explicit, 'wunderland_discord_state.json');
 
   const ws = String(process.env['WUNDERLAND_WORKSPACE_DIR'] || '').trim();
-  if (ws) return join(ws, 'discord', 'rabbithole_discord_state.json');
+  if (ws) return join(ws, 'discord', 'wunderland_discord_state.json');
 
-  return join(homedir(), '.wunderland', 'discord', 'rabbithole_discord_state.json');
+  return join(homedir(), '.wunderland', 'discord', 'wunderland_discord_state.json');
 }
 
 function resolveBrandColor(): number {
@@ -965,7 +965,7 @@ function resolveBrandColor(): number {
 }
 
 function resolveFooterText(): string {
-  return String(process.env['DISCORD_BRAND_FOOTER'] || 'Powered by Rabbit Hole | rabbithole.inc').trim();
+  return String(process.env['DISCORD_BRAND_FOOTER'] || 'Powered by Wunderland | wunderland.sh').trim();
 }
 
 function shouldUseEmbedReplies(): boolean {

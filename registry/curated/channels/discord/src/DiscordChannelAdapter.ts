@@ -477,7 +477,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       const tier = this.service.getTierFromInteraction(interaction);
 
       const lines = [
-        '**Rabbit Hole AI — Help**',
+        '**Wunderland AI — Help**',
         '',
         '__AI Commands__',
         '`/ask question:<text>` — ask the AI (daily quota)',
@@ -703,7 +703,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       const deepdive = this.service.checkQuota(interaction.user.id, tier, 'deepdive');
 
       const lines = [
-        '**Rabbit Hole AI — Quotas**',
+        '**Wunderland AI — Quotas**',
         `Tier: **${tier.toUpperCase()}**`,
         `Reset: daily (${this.quotaTzLabel()}) — key: \`${ask.dayKey}\``,
         '',
@@ -722,7 +722,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       const statePath = this.service.getStateStorePath();
 
       const text = [
-        '**Rabbit Hole AI — Status**',
+        '**Wunderland AI — Status**',
         `Bot: ${bot ? `**${bot.tag}** (\`${bot.id}\`)` : 'unknown'}`,
         `Tier: **${tier.toUpperCase()}**`,
         `State: \`${statePath}\``,
@@ -851,7 +851,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
       }
 
       const browseEmbed: APIEmbed = {
-        title: `Rabbit Hole AI — FAQ (${list.length} entries)`,
+        title: `Wunderland AI — FAQ (${list.length} entries)`,
         description,
         color: this.brandColor(),
         footer: { text: 'Use /faq key:<question> to search · e.g. /faq key:how do I deploy?' },
@@ -1851,7 +1851,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
   }
 
   private quotaTzLabel(): string {
-    return String(process.env['RABBITHOLE_TZ'] || 'America/Los_Angeles').trim() || 'UTC';
+    return String(process.env['WUNDERLAND_TZ'] || 'America/Los_Angeles').trim() || 'UTC';
   }
 
   private brandColor(): number {
@@ -1866,7 +1866,7 @@ export class DiscordChannelAdapter implements IChannelAdapter {
   }
 
   private brandFooter(): string {
-    return String(process.env['DISCORD_BRAND_FOOTER'] || 'Powered by Rabbit Hole | rabbithole.inc').trim();
+    return String(process.env['DISCORD_BRAND_FOOTER'] || 'Powered by Wunderland | wunderland.sh').trim();
   }
 
   private async safeEphemeralReply(
