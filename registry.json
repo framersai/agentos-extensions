@@ -2376,6 +2376,40 @@
         "downloads": 0
       },
       {
+        "id": "com.framers.productivity.widget-generator",
+        "name": "Interactive Widgets",
+        "package": "@framers/agentos-ext-widget-generator",
+        "version": "0.1.0",
+        "category": "productivity",
+        "path": "registry/curated/productivity/widget-generator",
+        "description": "Generate interactive HTML/CSS/JS widgets with Three.js, D3.js, Chart.js, and more.",
+        "author": {
+          "name": "Frame.dev",
+          "url": "https://github.com/framersai"
+        },
+        "features": [],
+        "tools": [
+          "generate_widget"
+        ],
+        "keywords": [
+          "widget",
+          "interactive",
+          "html",
+          "visualization",
+          "d3",
+          "threejs",
+          "charts",
+          "maps",
+          "dashboard"
+        ],
+        "npm": "https://www.npmjs.com/package/@framers/agentos-ext-widget-generator",
+        "repository": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/widget-generator",
+        "verified": true,
+        "verifiedAt": "2026-03-28T13:30:22.226Z",
+        "verificationChecklistVersion": "1.0.0",
+        "downloads": 0
+      },
+      {
         "id": "com.framers.productivity.email-intelligence",
         "name": "Email Intelligence Extension",
         "package": "@framers/agentos-ext-email-intelligence",
