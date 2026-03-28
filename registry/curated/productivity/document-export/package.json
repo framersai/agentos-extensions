@@ -1,0 +1,45 @@
+{
+  "name": "@framers/agentos-ext-document-export",
+  "version": "0.1.0",
+  "description": "Generate PDF, DOCX, PPTX, CSV, and XLSX documents with charts, tables, and themes",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
+    "./manifest.json": "./manifest.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "keywords": ["agentos", "extension", "document", "pdf", "docx", "pptx", "csv", "xlsx", "export"],
+  "author": { "name": "Framers AI", "url": "https://frame.dev" },
+  "contributors": [{ "name": "Johnny Dunn", "email": "johnnyfived@protonmail.com", "url": "https://github.com/jddunn" }],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/framersai/agentos-extensions.git", "directory": "registry/curated/productivity/document-export" },
+  "publishConfig": { "access": "public" },
+  "files": ["dist", "manifest.json"],
+  "peerDependencies": { "@framers/agentos": "^0.1.0" },
+  "dependencies": {
+    "pdfkit": "^0.18.0",
+    "docx": "^9.6.0",
+    "pptxgenjs": "^4.0.0",
+    "csv-stringify": "^6.7.0",
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "@framers/agentos": "workspace:*",
+    "@types/pdfkit": "^0.17.5",
+    "@types/node": "^20.12.12",
+    "rimraf": "^5.0.7",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
