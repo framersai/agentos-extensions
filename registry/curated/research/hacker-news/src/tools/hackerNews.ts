@@ -30,6 +30,13 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
   business: ['revenue', 'profit', 'market', 'growth', 'enterprise', 'saas', 'pricing', 'customer', 'churn', 'b2b', 'b2c', 'monetize'],
   gaming: ['game', 'gaming', 'unity', 'unreal', 'godot', 'steam', 'console', 'vr', 'ar', 'metaverse', '3d'],
   mathematics: ['math', 'proof', 'theorem', 'algebra', 'geometry', 'topology', 'statistics', 'probability', 'optimization', 'graph theory'],
+  health: ['health', 'medical', 'clinical', 'fda', 'drug', 'therapy', 'mental health', 'biotech', 'pharma', 'diagnosis', 'patient'],
+  education: ['education', 'learning', 'course', 'university', 'student', 'mooc', 'tutorial', 'teaching', 'curriculum'],
+  energy: ['energy', 'solar', 'wind', 'nuclear', 'battery', 'ev', 'electric vehicle', 'grid', 'renewable', 'climate', 'carbon'],
+  media: ['media', 'journalism', 'news', 'podcast', 'video', 'streaming', 'content', 'creator', 'youtube', 'tiktok', 'social media'],
+  finance: ['finance', 'bank', 'trading', 'stock', 'investment', 'fintech', 'payment', 'stripe', 'paypal', 'credit', 'loan', 'mortgage'],
+  robotics: ['robot', 'robotics', 'drone', 'autonomous', 'self-driving', 'lidar', 'slam', 'actuator', 'humanoid'],
+  legal: ['legal', 'law', 'attorney', 'contract', 'compliance', 'lawsuit', 'tort', 'liability', 'intellectual property'],
 };
 
 /**
@@ -112,7 +119,7 @@ export class HackerNewsTool implements ITool<HackerNewsInput, HackerNewsOutput> 
       categories: {
         type: 'array',
         items: { type: 'string' },
-        description: 'Filter by inferred categories: ai, programming, security, startups, infrastructure, web, hardware, science, crypto, policy, career, open_source, design, business, gaming, mathematics, general.',
+        description: 'Filter by inferred categories: ai, programming, security, startups, infrastructure, web, hardware, science, crypto, policy, career, open_source, design, business, gaming, mathematics, health, education, energy, media, finance, robotics, legal, general.',
       },
       sortBy: { type: 'string', enum: ['relevance', 'date', 'points'], default: 'points' },
       minPoints: { type: 'integer', minimum: 0, default: 0, description: 'Minimum upvote threshold.' },
