@@ -660,19 +660,24 @@ export class WebScraperService {
     const baseSelector = attrMatch ? attrMatch[1]! : selector;
     const attrName = attrMatch ? attrMatch[2] : null;
 
-    // Build a regex that matches the element described by baseSelector
+    // When extracting an attribute, use a simpler regex that matches just
+    // the opening tag (handles self-closing elements like <img>, <input>).
+    if (attrName) {
+      const tagRegex = this.selectorToOpeningTagRegex(baseSelector);
+      if (!tagRegex) return '';
+      const tagMatch = html.match(tagRegex);
+      if (!tagMatch) return '';
+      const attrRegex = new RegExp(`${this.escapeRegex(attrName)}\\s*=\\s*["']([^"']*)["']`, 'i');
+      const attrVal = tagMatch[0].match(attrRegex);
+      return attrVal ? attrVal[1]!.trim() : '';
+    }
+
+    // Build a regex that matches the full element (opening + content + closing)
     const elementRegex = this.selectorToRegex(baseSelector);
     if (!elementRegex) return '';
 
     const match = html.match(elementRegex);
     if (!match) return '';
-
-    // If an attribute was requested, extract it from the opening tag
-    if (attrName && match[0]) {
-      const attrRegex = new RegExp(`${attrName}\\s*=\\s*["']([^"']*)["']`, 'i');
-      const attrVal = match[0].match(attrRegex);
-      return attrVal ? attrVal[1]!.trim() : '';
-    }
 
     // Return the inner text content (tag-stripped).
     // For #id and .class selectors the regex has two capture groups
@@ -723,6 +728,35 @@ export class WebScraperService {
       return new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i');
     }
 
+    return null;
+  }
+
+  /**
+   * Convert a micro-selector into a regex that matches just the opening tag
+   * (including attributes). Handles self-closing elements like `<img>`, `<input>`.
+   *
+   * @param selector - Base selector (without `@attr` suffix).
+   * @returns A RegExp matching the opening tag, or `null` if unrecognised.
+   */
+  private selectorToOpeningTagRegex(selector: string): RegExp | null {
+    if (selector.startsWith('#')) {
+      const id = this.escapeRegex(selector.slice(1));
+      return new RegExp(`<\\w+[^>]*\\bid\\s*=\\s*["']${id}["'][^>]*/?>`, 'i');
+    }
+    if (selector.startsWith('.')) {
+      const cls = this.escapeRegex(selector.slice(1));
+      return new RegExp(`<\\w+[^>]*\\bclass\\s*=\\s*["'][^"']*\\b${cls}\\b[^"']*["'][^>]*/?>`, 'i');
+    }
+    const tagClassMatch = selector.match(/^(\w+)\.(.+)$/);
+    if (tagClassMatch) {
+      const tag = this.escapeRegex(tagClassMatch[1]!);
+      const cls = this.escapeRegex(tagClassMatch[2]!);
+      return new RegExp(`<${tag}[^>]*\\bclass\\s*=\\s*["'][^"']*\\b${cls}\\b[^"']*["'][^>]*/?>`, 'i');
+    }
+    if (/^\w+$/.test(selector)) {
+      const tag = this.escapeRegex(selector);
+      return new RegExp(`<${tag}\\b[^>]*/?>`, 'i');
+    }
     return null;
   }
 
