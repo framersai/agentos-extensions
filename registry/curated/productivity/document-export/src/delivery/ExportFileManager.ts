@@ -59,17 +59,23 @@ export class ExportFileManager {
   /** Port used for constructing download and preview URLs. */
   private readonly serverPort: number;
 
+  /** Optional externally reachable base URL used for generated links. */
+  private readonly publicBaseUrl?: string;
+
   /**
    * Create a new ExportFileManager instance.
    *
    * @param agentWorkspaceDir - Root workspace directory for the agent. The
    *   exports directory will be created as a subdirectory named `exports`.
-   * @param serverPort - Optional port number for constructing localhost
+   * @param serverPort - Optional port number for constructing local
    *   download and preview URLs. Defaults to `3777`.
+   * @param publicBaseUrl - Optional externally reachable base URL used
+   *   instead of `localhost`, for example `https://agent.example.com`.
    */
-  constructor(agentWorkspaceDir: string, serverPort?: number) {
+  constructor(agentWorkspaceDir: string, serverPort?: number, publicBaseUrl?: string) {
     this.exportsDir = join(agentWorkspaceDir, 'exports');
     this.serverPort = serverPort ?? 3777;
+    this.publicBaseUrl = this.normalizeBaseUrl(publicBaseUrl);
   }
 
   /**
@@ -92,7 +98,8 @@ export class ExportFileManager {
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const slug = this.slugify(title);
-    const filename = `${timestamp}-${slug}.${format}`;
+    const normalizedFormat = this.normalizeFormat(format);
+    const filename = `${timestamp}-${slug}.${normalizedFormat}`;
     const filePath = join(this.exportsDir, filename);
 
     await writeFile(filePath, buffer);
@@ -190,7 +197,7 @@ export class ExportFileManager {
    * @returns A fully-qualified HTTP URL pointing to the file.
    */
   getDownloadUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/exports/${encodeURIComponent(filename)}`;
+    return this.buildManagedUrl(`/exports/${encodeURIComponent(filename)}`);
   }
 
   /**
@@ -203,7 +210,7 @@ export class ExportFileManager {
    * @returns A fully-qualified HTTP URL pointing to the preview endpoint.
    */
   getPreviewUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/exports/${encodeURIComponent(filename)}/preview`;
+    return this.buildManagedUrl(`/exports/${encodeURIComponent(filename)}/preview`);
   }
 
   private resolveManagedPath(filename: string): string | null {
@@ -219,6 +226,25 @@ export class ExportFileManager {
       return null;
     }
     return join(this.exportsDir, normalized);
+  }
+
+  private normalizeBaseUrl(value: string | undefined): string | undefined {
+    const normalized = value?.trim();
+    if (!normalized) return undefined;
+    return normalized.replace(/\/+$/, '');
+  }
+
+  private buildManagedUrl(pathname: string): string {
+    const baseUrl = this.publicBaseUrl ?? `http://localhost:${this.serverPort}`;
+    return `${baseUrl}${pathname}`;
+  }
+
+  private normalizeFormat(format: string): string {
+    const normalized = format.trim().replace(/^\.+/, '').toLowerCase();
+    if (!/^[a-z0-9]+$/.test(normalized)) {
+      throw new Error(`Invalid export format: ${format}`);
+    }
+    return normalized;
   }
 
   /**

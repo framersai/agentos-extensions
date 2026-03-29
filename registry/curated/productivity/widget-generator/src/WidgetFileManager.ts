@@ -56,17 +56,23 @@ export class WidgetFileManager {
   /** Port used for constructing view and download URLs. */
   private readonly serverPort: number;
 
+  /** Optional externally reachable base URL used for generated links. */
+  private readonly publicBaseUrl?: string;
+
   /**
    * Create a new WidgetFileManager instance.
    *
    * @param workspaceDir - Root workspace directory for the agent. The
    *   widgets directory will be created as a subdirectory named `widgets`.
-   * @param serverPort - Optional port number for constructing localhost
+   * @param serverPort - Optional port number for constructing local
    *   view and download URLs. Defaults to `3777`.
+   * @param publicBaseUrl - Optional externally reachable base URL used
+   *   instead of `localhost`, for example `https://agent.example.com`.
    */
-  constructor(workspaceDir: string, serverPort?: number) {
+  constructor(workspaceDir: string, serverPort?: number, publicBaseUrl?: string) {
     this.widgetsDir = join(workspaceDir, 'widgets');
     this.serverPort = serverPort ?? 3777;
+    this.publicBaseUrl = this.normalizeBaseUrl(publicBaseUrl);
   }
 
   /**
@@ -182,7 +188,7 @@ export class WidgetFileManager {
    * @returns A fully-qualified HTTP URL pointing to the widget.
    */
   getWidgetUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/widgets/${encodeURIComponent(filename)}`;
+    return this.buildManagedUrl(`/widgets/${encodeURIComponent(filename)}`);
   }
 
   /**
@@ -195,7 +201,7 @@ export class WidgetFileManager {
    * @returns A fully-qualified HTTP URL pointing to the file.
    */
   getDownloadUrl(filename: string): string {
-    return `http://localhost:${this.serverPort}/widgets/${encodeURIComponent(filename)}`;
+    return this.buildManagedUrl(`/widgets/${encodeURIComponent(filename)}`);
   }
 
   private resolveManagedPath(filename: string): string | null {
@@ -211,6 +217,17 @@ export class WidgetFileManager {
       return null;
     }
     return join(this.widgetsDir, normalized);
+  }
+
+  private normalizeBaseUrl(value: string | undefined): string | undefined {
+    const normalized = value?.trim();
+    if (!normalized) return undefined;
+    return normalized.replace(/\/+$/, '');
+  }
+
+  private buildManagedUrl(pathname: string): string {
+    const baseUrl = this.publicBaseUrl ?? `http://localhost:${this.serverPort}`;
+    return `${baseUrl}${pathname}`;
   }
 
   /**

@@ -5,7 +5,7 @@
  * missing wallet handling, and spending policy violation surfacing.
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createCheckBalanceTool } from '../src/tools/CheckBalanceTool.js';
 import { createSendCryptoTool } from '../src/tools/SendCryptoTool.js';
 import { createWalletHistoryTool } from '../src/tools/WalletHistoryTool.js';
@@ -137,6 +137,10 @@ describe('SendCryptoTool', () => {
     await manager.createWallet(CTX.gmiId, 'solana');
   });
 
+  afterEach(() => {
+    delete process.env.WALLET_PRICE_SOL_USD;
+  });
+
   it('should have correct metadata', () => {
     const tool = createSendCryptoTool(manager);
     expect(tool.id).toBe('wallet-send-crypto-v1');
@@ -202,6 +206,19 @@ describe('SendCryptoTool', () => {
 
     expect(result.success).toBe(false);
     expect(result.error).toContain('not yet supported');
+  });
+
+  it('should honor configurable reference USD prices for policy checks', async () => {
+    process.env.WALLET_PRICE_SOL_USD = '100';
+    const tool = createSendCryptoTool(manager);
+    const result = await tool.execute({
+      to: 'dest',
+      amount: '0.5',
+      chain: 'solana',
+    }, CTX);
+
+    expect(result.success).toBe(false);
+    expect(result.details?.policyViolation).toBe(true);
   });
 });
 

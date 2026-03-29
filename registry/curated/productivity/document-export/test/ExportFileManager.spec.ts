@@ -32,4 +32,21 @@ describe('ExportFileManager', () => {
       'http://localhost:3777/exports/Quarterly%20Report.pdf/preview',
     );
   });
+
+  it('uses the configured public base URL for generated export links', () => {
+    const remoteManager = new ExportFileManager(tempDir, 3777, 'https://agent.example.com/base/');
+
+    expect(remoteManager.getDownloadUrl('Quarterly Report.pdf')).toBe(
+      'https://agent.example.com/base/exports/Quarterly%20Report.pdf',
+    );
+    expect(remoteManager.getPreviewUrl('Quarterly Report.pdf')).toBe(
+      'https://agent.example.com/base/exports/Quarterly%20Report.pdf/preview',
+    );
+  });
+
+  it('rejects invalid export formats when saving files', async () => {
+    await expect(
+      manager.save(Buffer.from('test'), 'Quarterly Report', '../pdf'),
+    ).rejects.toThrow('Invalid export format');
+  });
 });

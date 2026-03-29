@@ -94,6 +94,13 @@ describe('WidgetFileManager', () => {
     expect(url).toBe('http://localhost:3777/widgets/my-widget.html');
   });
 
+  it('uses the configured public base URL for generated widget links', () => {
+    const remoteManager = new WidgetFileManager(tempDir, 3777, 'https://agent.example.com/base/');
+    expect(remoteManager.getWidgetUrl('my-widget.html')).toBe(
+      'https://agent.example.com/base/widgets/my-widget.html',
+    );
+  });
+
   it('slugify handles special characters, spaces, and uppercase', async () => {
     const { filename } = await manager.save('<div>test</div>', '3D Solar System!');
     // The slug portion should be "3d-solar-system"

@@ -32,6 +32,9 @@ export interface DocumentExportExtensionOptions {
 
   /** Override the server port used for download/preview URLs (defaults to `3777`). */
   serverPort?: number;
+
+  /** Override the externally reachable base URL used in export links. */
+  publicBaseUrl?: string;
 }
 
 /**
@@ -57,9 +60,10 @@ export function createExtensionPack(context: any) {
   const workspaceDir = options.workspaceDir ?? process.cwd();
   const serverPort = options.serverPort ?? 3777;
   const priority = options.priority ?? 50;
+  const publicBaseUrl = options.publicBaseUrl;
 
   // Create the file manager
-  const fileManager = new ExportFileManager(workspaceDir, serverPort);
+  const fileManager = new ExportFileManager(workspaceDir, serverPort, publicBaseUrl);
 
   // Create all format generators
   const csvGenerator = new CsvGenerator();

@@ -27,6 +27,9 @@ export interface WidgetGeneratorExtensionOptions {
 
   /** Override the server port used for widget URLs (defaults to `3777`). */
   serverPort?: number;
+
+  /** Override the externally reachable base URL used in widget links. */
+  publicBaseUrl?: string;
 }
 
 /**
@@ -51,10 +54,11 @@ export function createExtensionPack(context: any) {
   const workspaceDir = options.workspaceDir ?? process.cwd();
   const serverPort = options.serverPort ?? 3777;
   const priority = options.priority ?? 50;
+  const publicBaseUrl = options.publicBaseUrl;
 
   // Create dependencies
   const wrapper = new WidgetWrapper();
-  const fileManager = new WidgetFileManager(workspaceDir, serverPort);
+  const fileManager = new WidgetFileManager(workspaceDir, serverPort, publicBaseUrl);
 
   // Create the tool with all dependencies injected
   const tool = new GenerateWidgetTool(wrapper, fileManager);

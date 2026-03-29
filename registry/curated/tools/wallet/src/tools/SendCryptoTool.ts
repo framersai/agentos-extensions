@@ -39,6 +39,22 @@ const DECIMALS: Record<string, number> = {
   USDT: 6,
 };
 
+const DEFAULT_REFERENCE_USD_PRICES: Record<TokenSymbol, number> = {
+  SOL: 1,
+  ETH: 1,
+  USDC: 1,
+  USDT: 1,
+};
+
+function getReferenceUsdPrice(token: TokenSymbol): number {
+  const envKey = `WALLET_PRICE_${token}_USD`;
+  const override = Number.parseFloat(process.env[envKey] || '');
+  if (Number.isFinite(override) && override > 0) {
+    return override;
+  }
+  return DEFAULT_REFERENCE_USD_PRICES[token] ?? 1;
+}
+
 function parseAmountToRaw(amount: string, decimals: number): bigint {
   const parts = amount.split('.');
   const intPart = parts[0] || '0';
@@ -116,9 +132,8 @@ export function createSendCryptoTool(walletManager: AgentWalletManager): ITool<S
 
         const amountRaw = parseAmountToRaw(args.amount, decimals);
 
-        // TODO: Get real-time USD price. For now, use rough estimates.
-        // In production, this would call a price oracle tool.
-        const estimatedUsd = amountNum; // Placeholder — overridden by price feed
+        // Use configurable reference prices until a live oracle/provider is wired.
+        const estimatedUsd = amountNum * getReferenceUsdPrice(token);
 
         // Only native sends are implemented in Phase 1
         if (token !== nativeToken) {
