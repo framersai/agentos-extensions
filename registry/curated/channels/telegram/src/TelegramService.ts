@@ -56,6 +56,17 @@ export class TelegramService {
 
     this.bot = new Bot(this.config.botToken);
 
+    // Handle runtime errors gracefully (especially 409 Conflict during polling).
+    this.bot.catch((err: any) => {
+      const msg = err?.message ?? err?.description ?? String(err);
+      if (msg.includes('409') || msg.includes('Conflict')) {
+        // 409 is transient — Telegram thinks another session exists. grammY auto-reconnects.
+        console.warn('[Telegram] 409 Conflict (transient) — bot will auto-reconnect.');
+      } else {
+        console.error('[Telegram] Bot error:', msg);
+      }
+    });
+
     // Wire up inbound message handler
     this.bot.on('message', (ctx) => {
       for (const handler of this.messageHandlers) {
@@ -77,8 +88,15 @@ export class TelegramService {
       await this.bot.api.setWebhook(this.config.webhookUrl);
       this.running = true;
     } else {
+      // Delete any stale webhook before starting long-poll.
+      // Prevents "409 Conflict: terminated by other getUpdates request" when
+      // a previous process didn't shut down cleanly or a webhook was set.
+      try {
+        await this.bot.api.deleteWebhook({ drop_pending_updates: true });
+      } catch { /* ignore — may fail if no webhook was set */ }
+
       // Start polling with a readiness promise so callers know when the bot is live.
-      await new Promise<void>((resolve, reject) => {
+      const startPolling = () => new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error('Telegram bot polling start timeout after 15s'));
         }, 15_000);
@@ -91,6 +109,21 @@ export class TelegramService {
           },
         });
       });
+
+      try {
+        await startPolling();
+      } catch (err: any) {
+        // Retry once on 409 — the previous session may still be closing.
+        if (err?.message?.includes('409') || err?.message?.includes('Conflict')) {
+          await new Promise((r) => setTimeout(r, 5000));
+          try {
+            await this.bot!.api.deleteWebhook({ drop_pending_updates: true });
+          } catch { /* ignore */ }
+          await startPolling();
+        } else {
+          throw err;
+        }
+      }
     }
 
     // NOTE: Do NOT call setMyCommands here — the agent may be using a
