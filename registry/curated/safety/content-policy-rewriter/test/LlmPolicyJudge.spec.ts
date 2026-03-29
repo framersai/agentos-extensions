@@ -1,9 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LlmPolicyJudge } from '../src/LlmPolicyJudge.js';
 import type { LlmInvoker } from '../src/types.js';
 
 describe('LlmPolicyJudge', () => {
-  const mockLlm: LlmInvoker = vi.fn();
+  let mockLlm: LlmInvoker;
+
+  beforeEach(() => {
+    mockLlm = vi.fn();
+  });
 
   it('returns empty violations for clean content', async () => {
     (mockLlm as any).mockResolvedValueOnce('{ "violations": [] }');

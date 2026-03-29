@@ -47,6 +47,7 @@ packages:
   # ml-classifiers and topicality still have curated source here:
   - "registry/curated/safety/ml-classifiers"
   - "registry/curated/safety/topicality"
+  - "registry/curated/safety/content-policy-rewriter"
   - "registry/curated/voice/streaming-stt-deepgram"
   - "registry/curated/voice/streaming-stt-whisper"
   - "registry/curated/voice/streaming-tts-openai"
