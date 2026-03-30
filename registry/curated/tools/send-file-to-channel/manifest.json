@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.send-file-to-channel",
+  "name": "Send File to Channel",
+  "version": "0.1.0",
+  "description": "Send a local file to the user via the current chat channel with platform-aware size limit enforcement.",
+  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "license": "MIT",
+  "keywords": ["file", "send", "channel", "telegram", "whatsapp", "discord"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "productivity"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [{ "kind": "tool", "id": "send_file_to_channel", "displayName": "Send File to Channel", "description": "Send a file to the user via the current chat", "entry": "./dist/SendFileToChannelTool.js" }],
+  "requiredSecrets": [],
+  "features": ["file-transfer", "channel-integration"]
+}

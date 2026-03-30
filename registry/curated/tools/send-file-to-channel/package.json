@@ -1,0 +1,25 @@
+{
+  "name": "@framers/agentos-ext-send-file-to-channel",
+  "version": "0.1.0",
+  "description": "Send a local file to the user via the current chat channel (Telegram, WhatsApp, etc)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./manifest.json": "./manifest.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "clean": "rimraf dist"
+  },
+  "peerDependencies": {
+    "@framers/agentos": ">=0.1.146"
+  },
+  "keywords": ["agentos", "extension", "tool", "file", "send", "channel", "telegram", "whatsapp"],
+  "license": "MIT",
+  "publishConfig": { "access": "public" }
+}
