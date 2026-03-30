@@ -1,0 +1,25 @@
+{
+  "name": "@framers/agentos-ext-local-file-search",
+  "version": "0.1.0",
+  "description": "Search for files on the local filesystem by fuzzy name matching",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./manifest.json": "./manifest.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "clean": "rimraf dist"
+  },
+  "peerDependencies": {
+    "@framers/agentos": ">=0.1.146"
+  },
+  "keywords": ["agentos", "extension", "tool", "file-search", "filesystem"],
+  "license": "MIT",
+  "publishConfig": { "access": "public" }
+}

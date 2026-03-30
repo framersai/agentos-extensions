@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.local-file-search",
+  "name": "Local File Search",
+  "version": "0.1.0",
+  "description": "Search for files on the local filesystem by fuzzy name matching. Supports denylist filtering and relevance-ranked results.",
+  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "license": "MIT",
+  "keywords": ["file", "search", "filesystem", "local", "find"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "productivity"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [
+    {
+      "kind": "tool",
+      "id": "local_file_search",
+      "displayName": "Local File Search",
+      "description": "Find files on the host filesystem by name",
+      "entry": "./dist/LocalFileSearchTool.js"
+    }
+  ],
+  "requiredSecrets": [],
+  "features": ["file-search", "fuzzy-matching"]
+}
