@@ -6,6 +6,8 @@ export interface SearchProviderConfig {
   serpApiKey?: string;
   braveApiKey?: string;
   searxngUrl?: string;
+  tavilyApiKey?: string;
+  firecrawlApiKey?: string;
   maxRetries?: number;
   rateLimit?: {
     maxRequests: number;
@@ -181,6 +183,12 @@ export class SearchProviderService {
       case 'brave':
         results = await this.searchBrave(query, maxResults);
         break;
+      case 'tavily':
+        results = await this.searchTavily(query, maxResults);
+        break;
+      case 'firecrawl':
+        results = await this.searchFirecrawl(query, maxResults);
+        break;
       case 'searxng':
         results = await this.searchSearXNG(query, maxResults, { categories: category });
         break;
@@ -210,8 +218,10 @@ export class SearchProviderService {
     const providers: string[] = [];
     
     if (this.config.serperApiKey) providers.push('serper');
-    if (this.config.serpApiKey) providers.push('serpapi');
+    if (this.config.tavilyApiKey) providers.push('tavily');
     if (this.config.braveApiKey) providers.push('brave');
+    if (this.config.serpApiKey) providers.push('serpapi');
+    if (this.config.firecrawlApiKey) providers.push('firecrawl');
     if (this.config.searxngUrl) providers.push('searxng');
 
     return providers;
@@ -553,6 +563,92 @@ export class SearchProviderService {
       return url.toString();
     } catch {
       return rawUrl.toLowerCase().trim();
+    }
+  }
+
+  /**
+   * Search using the Tavily API (AI-optimized search).
+   * @see https://docs.tavily.com/docs/tavily-api/rest-api
+   */
+  private async searchTavily(query: string, maxResults: number): Promise<SearchResult[]> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15_000);
+
+    try {
+      const res = await fetch('https://api.tavily.com/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: this.config.tavilyApiKey,
+          query,
+          search_depth: 'advanced',
+          include_answer: false,
+          include_raw_content: false,
+          max_results: Math.min(maxResults, 20),
+        }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) throw new Error(`Tavily API error: ${res.status} ${res.statusText}`);
+
+      const data = (await res.json()) as {
+        results?: Array<{ title: string; url: string; content: string; score: number }>;
+      };
+
+      return (data.results ?? []).map((r, i) => ({
+        title: r.title ?? '',
+        url: r.url ?? '',
+        snippet: r.content ?? '',
+        position: i + 1,
+      }));
+    } catch (err) {
+      if ((err as Error).name === 'AbortError') return [];
+      throw err;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  /**
+   * Search using the Firecrawl /search endpoint.
+   * @see https://docs.firecrawl.dev/api-reference/endpoint/search
+   */
+  private async searchFirecrawl(query: string, maxResults: number): Promise<SearchResult[]> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15_000);
+
+    try {
+      const res = await fetch('https://api.firecrawl.dev/v1/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.config.firecrawlApiKey}`,
+        },
+        body: JSON.stringify({
+          query,
+          limit: Math.min(maxResults, 20),
+        }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) throw new Error(`Firecrawl API error: ${res.status} ${res.statusText}`);
+
+      const data = (await res.json()) as {
+        success: boolean;
+        data?: Array<{ url: string; title?: string; description?: string; markdown?: string }>;
+      };
+
+      return (data.data ?? []).map((r, i) => ({
+        title: r.title ?? r.url,
+        url: r.url,
+        snippet: r.description ?? (r.markdown ?? '').slice(0, 300),
+        position: i + 1,
+      }));
+    } catch (err) {
+      if ((err as Error).name === 'AbortError') return [];
+      throw err;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
