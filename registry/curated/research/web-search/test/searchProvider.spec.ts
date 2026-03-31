@@ -35,19 +35,21 @@ describe('SearchProviderService', () => {
       // First provider fails
       mockFetch.mockRejectedValueOnce(new Error('Serper API error'));
       
-      // Second provider succeeds
+      // Second provider (brave) succeeds
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
-          organic_results: [
-            { title: 'Test', link: 'https://example.com', snippet: 'Test snippet' }
-          ]
+          web: {
+            results: [
+              { title: 'Test', url: 'https://example.com', description: 'Test snippet' }
+            ]
+          }
         })
       });
-      
+
       const result = await service.search('test query');
-      
-      expect(result.provider).toBe('serpapi');
+
+      expect(result.provider).toBe('brave');
       expect(result.results).toHaveLength(1);
       expect(result.results[0].title).toBe('Test');
     });
@@ -138,7 +140,7 @@ describe('SearchProviderService', () => {
   describe('getAvailableProviders', () => {
     it('should return providers with configured API keys', () => {
       const providers = service.getAvailableProviders();
-      expect(providers).toEqual(['serper', 'serpapi', 'brave', 'searxng']);
+      expect(providers).toEqual(['serper', 'brave', 'serpapi', 'searxng']);
     });
 
     it('should include searxng when URL is configured', () => {
@@ -381,6 +383,75 @@ describe('SearchProviderService', () => {
 
       expect(result.results).toHaveLength(0);
       expect(result.metadata.providersFailed.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('searchTavily', () => {
+    it('should search via Tavily API and return formatted results', async () => {
+      const tavilyService = new SearchProviderService({ tavilyApiKey: 'test-tavily-key' });
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({
+          results: [
+            { title: 'Tavily Result 1', url: 'https://example.com/tavily1', content: 'AI search snippet', score: 0.95 },
+            { title: 'Tavily Result 2', url: 'https://example.com/tavily2', content: 'Another snippet', score: 0.8 },
+          ],
+        }),
+      });
+
+      const result = await tavilyService.search('AI agents', { provider: 'tavily' });
+      expect(result.results.length).toBe(2);
+      expect(result.results[0].title).toBe('Tavily Result 1');
+      expect(result.provider).toBe('tavily');
+      expect(mockFetch).toHaveBeenCalledWith('https://api.tavily.com/search', expect.objectContaining({ method: 'POST' }));
+    });
+
+    it('should include tavily in available providers when API key is set', () => {
+      const tavilyService = new SearchProviderService({ tavilyApiKey: 'test-key' });
+      expect(tavilyService.getAvailableProviders()).toContain('tavily');
+    });
+
+    it('should not include tavily when no API key', () => {
+      const noKeyService = new SearchProviderService({});
+      expect(noKeyService.getAvailableProviders()).not.toContain('tavily');
+    });
+  });
+
+  describe('searchFirecrawl', () => {
+    it('should search via Firecrawl API and return formatted results', async () => {
+      const fcService = new SearchProviderService({ firecrawlApiKey: 'test-fc-key' });
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({
+          success: true,
+          data: [
+            { url: 'https://example.com/fc1', title: 'Firecrawl Result', description: 'Crawled content' },
+            { url: 'https://example.com/fc2', title: 'Another Page', markdown: 'Full markdown content here' },
+          ],
+        }),
+      });
+
+      const result = await fcService.search('web scraping', { provider: 'firecrawl' });
+      expect(result.results.length).toBe(2);
+      expect(result.results[0].title).toBe('Firecrawl Result');
+      expect(result.results[0].snippet).toBe('Crawled content');
+      expect(result.results[1].snippet).toBe('Full markdown content here');
+      expect(result.provider).toBe('firecrawl');
+    });
+
+    it('should include firecrawl in available providers when API key is set', () => {
+      const fcService = new SearchProviderService({ firecrawlApiKey: 'test-key' });
+      expect(fcService.getAvailableProviders()).toContain('firecrawl');
+    });
+
+    it('should handle Firecrawl API errors gracefully', async () => {
+      const fcService = new SearchProviderService({ firecrawlApiKey: 'bad-key' });
+      const mockFetch = global.fetch as any;
+      mockFetch.mockResolvedValueOnce({ ok: false, status: 401, statusText: 'Unauthorized' });
+
+      await expect(fcService.search('test', { provider: 'firecrawl' })).rejects.toThrow('Firecrawl API error');
     });
   });
 

@@ -100,6 +100,8 @@ export class SearchProviderService {
       serpApiKey: config.serpApiKey,
       braveApiKey: config.braveApiKey,
       searxngUrl: config.searxngUrl,
+      tavilyApiKey: config.tavilyApiKey,
+      firecrawlApiKey: config.firecrawlApiKey,
       maxRetries: config.maxRetries ?? 3,
       rateLimit: config.rateLimit ?? {
         maxRequests: 10,
