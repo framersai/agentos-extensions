@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.trulia-search",
+  "name": "Trulia Property Search",
+  "version": "0.1.0",
+  "description": "Search real estate properties on Trulia with RapidAPI or Firecrawl scrape fallback.",
+  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "license": "MIT",
+  "keywords": ["trulia", "real-estate", "property", "search", "housing"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "research"],
+  "platforms": [],
+  "sdk": "none",
+  "extensions": [{ "kind": "tool", "id": "trulia_search", "displayName": "Trulia Property Search", "description": "Search properties by location, price, bedrooms", "entry": "./dist/TruliaSearchTool.js" }],
+  "requiredSecrets": [],
+  "features": ["property-search", "real-estate"]
+}

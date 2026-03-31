@@ -1,0 +1,24 @@
+{
+  "name": "@framers/agentos-ext-trulia-search",
+  "version": "0.1.0",
+  "description": "Search real estate properties on Trulia by location, price, bedrooms, and property type",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./manifest.json": "./manifest.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "clean": "rimraf dist"
+  },
+  "peerDependencies": {
+    "@framers/agentos": ">=0.1.146"
+  },
+  "keywords": ["agentos", "extension", "tool", "trulia", "real-estate", "property-search"],
+  "license": "MIT",
+  "publishConfig": { "access": "public" }
+}
