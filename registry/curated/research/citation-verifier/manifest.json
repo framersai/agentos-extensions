@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
+  "id": "com.framers.tools.citation-verifier",
+  "name": "Citation Verifier",
+  "version": "0.1.0",
+  "description": "Verify claims in text against sources using semantic similarity. Supports web search fallback for unverifiable claims.",
+  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "license": "MIT",
+  "keywords": ["citation", "verification", "claims", "grounding", "fact-check"],
+  "agentosVersion": "^2.0.0",
+  "categories": ["tool", "research"],
+  "extensions": [{ "kind": "tool", "id": "verify_citations", "displayName": "Verify Citations", "description": "Verify claims against sources with cosine similarity", "entry": "./dist/VerifyCitationsTool.js" }],
+  "requiredSecrets": [],
+  "features": ["citation-verification", "semantic-similarity"]
+}
