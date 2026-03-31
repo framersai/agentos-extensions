@@ -78,9 +78,21 @@ export class DeepResearchEngine {
   private readonly config: DeepResearchEngineConfig;
   /** Per-call progress override set by {@link research}. */
   private activeProgressOverride: ((event: ResearchProgressEvent) => void) | null = null;
+  /** Optional Firecrawl client for enhanced content extraction. */
+  private readonly firecrawlClient?: import('./FirecrawlClient.js').FirecrawlClient;
 
   constructor(config: DeepResearchEngineConfig) {
     this.config = config;
+    if (config.firecrawlApiKey) {
+      // Lazy import to avoid hard dependency
+      try {
+        const { FirecrawlClient } = require('./FirecrawlClient.js');
+        this.firecrawlClient = new FirecrawlClient({
+          apiKey: config.firecrawlApiKey,
+          maxCrawlPages: config.firecrawl?.maxCrawlPages ?? 10,
+        });
+      } catch { /* FirecrawlClient not available */ }
+    }
   }
 
   /**
@@ -252,6 +264,61 @@ export class DeepResearchEngine {
       }
     }
 
+    // ── Phase 2b: Firecrawl deep crawl (deep depth only) ──
+    if (
+      input.depth === 'deep' &&
+      this.firecrawlClient &&
+      this.config.firecrawl?.enableCrawl
+    ) {
+      this.emitProgress('extracting', tree.iterations, maxIterations, budget, tree);
+
+      const domainCounts = new Map<string, number>();
+      for (const node of Object.values(tree.nodes)) {
+        for (const result of node.searchResults) {
+          try {
+            const domain = new URL(result.url).hostname;
+            domainCounts.set(domain, (domainCounts.get(domain) ?? 0) + 1);
+          } catch { /* skip invalid URLs */ }
+        }
+      }
+
+      const topDomains = [...domainCounts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([domain]) => domain);
+
+      for (const domain of topDomains) {
+        if (budget.isExhausted()) break;
+        try {
+          const crawlResult = await this.firecrawlClient.crawl(`https://${domain}`);
+          const rootNode = tree.nodes[tree.rootId];
+          for (const page of crawlResult.pages) {
+            if (budget.isExhausted()) break;
+            rootNode.extractedContent.push({
+              url: page.url,
+              title: page.title,
+              content: page.content.slice(0, 5000),
+              wordCount: page.wordCount,
+              type: 'web',
+              extractedAt: new Date().toISOString(),
+            });
+            budget.recordExtraction();
+          }
+        } catch { /* crawl failed for this domain — continue */ }
+      }
+    }
+
+    // ── Phase 2c: Rerank findings before synthesis ──
+    if (this.config.rerankFindingsFn) {
+      const preRankFindings = this.collectAllFindings(tree);
+      if (preRankFindings.length > 0) {
+        try {
+          const reranked = await this.config.rerankFindingsFn(input.query, preRankFindings);
+          tree.nodes[tree.rootId].findings = reranked;
+        } catch { /* reranking failed — proceed with unranked */ }
+      }
+    }
+
     // ── Phase 3: Synthesize ──
     this.emitProgress('synthesizing', maxIterations, maxIterations, budget, tree);
 
@@ -389,11 +456,20 @@ export class DeepResearchEngine {
   // ── Private: Extraction ──
 
   private async extractUrl(url: string): Promise<{ title: string; content: string; wordCount: number }> {
+    // Priority 1: Firecrawl scrape (JS-rendered, anti-bot, clean markdown)
+    if (this.firecrawlClient && this.config.firecrawl?.scrapeForIterate !== false) {
+      try {
+        const scraped = await this.firecrawlClient.scrape(url);
+        return { title: scraped.title, content: scraped.content, wordCount: scraped.wordCount };
+      } catch { /* fall through to other methods */ }
+    }
+
+    // Priority 2: Custom extraction function
     if (this.config.extractFn) {
       return this.config.extractFn(url);
     }
 
-    // Fallback: basic fetch + HTML strip
+    // Priority 3: Basic fetch + HTML strip
     const resp = await fetch(url, {
       headers: { 'User-Agent': 'AgentOS-DeepResearch/1.0', 'Accept': 'text/html' },
       signal: AbortSignal.timeout(15000),

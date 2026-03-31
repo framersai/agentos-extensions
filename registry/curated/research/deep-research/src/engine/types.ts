@@ -157,4 +157,17 @@ export interface DeepResearchEngineConfig {
   extractFn?: (url: string) => Promise<{ title: string; content: string; wordCount: number }>;
   /** Optional progress callback. */
   onProgress?: (event: ResearchProgressEvent) => void;
+  /** Firecrawl API key for enhanced content extraction. */
+  firecrawlApiKey?: string;
+  /** Firecrawl configuration. */
+  firecrawl?: {
+    /** Use Firecrawl /scrape instead of raw fetch in iterate phase. Default: true when API key present. */
+    scrapeForIterate?: boolean;
+    /** Enable /crawl for deep research depth. Default: false. */
+    enableCrawl?: boolean;
+    /** Max pages per crawl job. Default: 10. */
+    maxCrawlPages?: number;
+  };
+  /** Optional reranker function — runs on findings before synthesis. */
+  rerankFindingsFn?: (query: string, findings: Finding[]) => Promise<Finding[]>;
 }
