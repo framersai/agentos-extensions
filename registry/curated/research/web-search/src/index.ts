@@ -24,6 +24,10 @@ export interface WebSearchExtensionOptions {
   serpApiKey?: string;
   /** Brave Search API key */
   braveApiKey?: string;
+  /** Tavily API key — AI-optimized search for RAG, research, citations */
+  tavilyApiKey?: string;
+  /** Firecrawl API key — web scraping + search */
+  firecrawlApiKey?: string;
   /** SearXNG instance URL (e.g. http://searxng:8080 or http://localhost:8888) */
   searxngUrl?: string;
   /** Default maximum results for searches */
@@ -66,6 +70,10 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     options.serpApiKey || process.env.SERPAPI_API_KEY;
   const braveApiKey =
     options.braveApiKey || process.env.BRAVE_API_KEY;
+  const tavilyApiKey =
+    options.tavilyApiKey || process.env.TAVILY_API_KEY;
+  const firecrawlApiKey =
+    options.firecrawlApiKey || process.env.FIRECRAWL_API_KEY;
   const searxngUrl =
     options.searxngUrl || process.env.SEARXNG_URL;
 
@@ -74,6 +82,8 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
     serperApiKey,
     serpApiKey,
     braveApiKey,
+    tavilyApiKey,
+    firecrawlApiKey,
     searxngUrl,
     rateLimit: options.rateLimit
   });
