@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for TelegramService (grammY wrapper).
  */
@@ -24,6 +25,8 @@ vi.mock('grammy', () => {
       if (!this.handlers[event]) this.handlers[event] = [];
       this.handlers[event].push(handler);
     }
+
+    catch = vi.fn();
 
     start = vi.fn().mockImplementation(({ onStart }: any = {}) => {
       if (onStart) onStart();

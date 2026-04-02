@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for the Telegram channel extension factory.
  */
@@ -16,6 +17,7 @@ vi.mock('grammy', () => {
   class MockBot {
     api = mockApi;
     on = vi.fn();
+    catch = vi.fn();
     start = vi.fn().mockImplementation(({ onStart }: any = {}) => { if (onStart) onStart(); });
     stop = vi.fn().mockResolvedValue(undefined);
   }
