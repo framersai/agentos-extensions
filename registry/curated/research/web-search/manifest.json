@@ -2,15 +2,15 @@
   "$schema": "https://agentos.sh/schemas/extension-manifest-v1.json",
   "id": "com.framers.research.web-search",
   "name": "Web Search Extension",
-  "version": "1.1.0",
-  "description": "Professional web search, research aggregation, and fact-checking capabilities for AgentOS",
+  "version": "1.2.0",
+  "description": "Multi-provider web search with Firecrawl, Tavily, Serper, Brave — RRF fusion, semantic dedup, Cohere/LLM neural reranking, research aggregation, and fact-checking for AgentOS",
   "author": {
     "name": "Frame.dev",
     "email": "support@frame.dev",
     "url": "https://github.com/framersai"
   },
   "license": "MIT",
-  "keywords": ["search", "web", "research", "fact-check", "serper", "serpapi", "brave", "searxng"],
+  "keywords": ["search", "web", "research", "fact-check", "firecrawl", "tavily", "serper", "serpapi", "brave", "searxng", "cohere", "reranking", "rrf"],
   "agentosVersion": "^2.0.0",
   "categories": ["productivity", "research"],
   "repository": {
