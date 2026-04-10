@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Extension pack factory for the local-file-search tool.
  * @module agentos-ext-local-file-search

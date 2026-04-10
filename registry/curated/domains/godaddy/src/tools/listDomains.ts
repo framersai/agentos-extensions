@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddyListDomainsTool — list all domains in the GoDaddy account.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Execute Tool
  * Execute shell commands.

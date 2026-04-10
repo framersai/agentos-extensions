@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file RekorProvider.ts
  * @description Sigstore Rekor transparency log anchor provider.

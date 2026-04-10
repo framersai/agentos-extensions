@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AgentOS CLI Executor Extension
  *

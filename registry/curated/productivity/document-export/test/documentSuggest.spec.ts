@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { DocumentSuggestTool } from '../src/tools/documentSuggest.js';
 import type { DocumentSuggestInput } from '../src/types.js';

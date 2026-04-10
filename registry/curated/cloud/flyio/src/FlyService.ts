@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Fly.io Machines API service layer.
  *

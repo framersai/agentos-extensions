@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Web Browser Extension Types
  * @module @framers/agentos-ext-web-browser

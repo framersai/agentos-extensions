@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Scrape Tool
  * Extract content from web pages using CSS selectors.

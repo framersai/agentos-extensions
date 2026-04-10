@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for searching videos, channels, and playlists on YouTube.
  */

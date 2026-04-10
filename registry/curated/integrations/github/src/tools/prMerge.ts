@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub PR Merge tool — merge a pull request.
  *

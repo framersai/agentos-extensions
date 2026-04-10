@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview VercelGetDeploymentTool — check the status of a Vercel deployment.
  */

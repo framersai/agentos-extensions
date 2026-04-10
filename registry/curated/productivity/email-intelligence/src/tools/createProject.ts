@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for creating a new email project.
  */

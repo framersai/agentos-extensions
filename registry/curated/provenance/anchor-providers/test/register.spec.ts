@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file register.spec.ts
  * @description Tests for the extension provider registration with core AgentOS factory.

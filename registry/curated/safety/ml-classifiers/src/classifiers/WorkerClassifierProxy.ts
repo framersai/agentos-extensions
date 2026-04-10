@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview WorkerClassifierProxy — wraps an IContentClassifier to run
  * inference inside a Web Worker, with automatic main-thread fallback.

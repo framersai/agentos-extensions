@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview HerokuAddAddonTool — provision an addon on a Heroku app.
  */

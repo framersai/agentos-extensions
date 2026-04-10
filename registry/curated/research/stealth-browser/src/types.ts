@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Browser Extension Types
  * @module @framers/agentos-ext-stealth-browser

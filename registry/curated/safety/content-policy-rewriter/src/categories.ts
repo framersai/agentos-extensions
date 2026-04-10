@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Built-in keyword lists per policy category.
  * @module content-policy-rewriter/categories

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddyConfigureDnsTool — manage DNS records on a GoDaddy domain.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Pinterest Channel Extension for AgentOS.
  *

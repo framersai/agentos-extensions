@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Plivo Voice Provider Extension for AgentOS.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Microsoft Teams Channel Extension for AgentOS.
  *

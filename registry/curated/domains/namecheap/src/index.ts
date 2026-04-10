@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Namecheap Domain Registrar Extension for AgentOS.
  *

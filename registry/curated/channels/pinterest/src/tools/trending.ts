@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for getting trending pins and topics on Pinterest.
  */

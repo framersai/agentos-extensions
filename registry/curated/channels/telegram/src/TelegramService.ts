@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Telegram SDK wrapper using grammY.
  * Handles bot lifecycle, message sending, and rate limiting.

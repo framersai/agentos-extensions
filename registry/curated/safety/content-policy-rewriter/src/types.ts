@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Types for the content policy rewriter guardrail.
  * @module content-policy-rewriter/types

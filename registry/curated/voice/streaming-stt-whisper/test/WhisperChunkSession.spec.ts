@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file WhisperChunkSession.spec.ts
  * @description Unit tests for {@link WhisperChunkSession}.

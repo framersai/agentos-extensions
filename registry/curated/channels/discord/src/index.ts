@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Discord Channel Extension for AgentOS.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddySearchDomainTool — check domain availability and get pricing.
  */

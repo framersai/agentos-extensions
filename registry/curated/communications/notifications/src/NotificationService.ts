@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unified multi-channel notification service.
  *

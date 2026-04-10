@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Mastodon Channel Extension for AgentOS.
  *

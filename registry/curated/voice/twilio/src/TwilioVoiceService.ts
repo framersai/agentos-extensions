@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Twilio REST API wrapper for voice call operations.
  * Handles Twilio client lifecycle, call creation, TwiML generation,

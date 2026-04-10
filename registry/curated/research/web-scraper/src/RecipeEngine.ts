@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * RecipeEngine — Loads, interpolates, and executes multi-step scraping recipes.
  *

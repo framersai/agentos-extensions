@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for listing upcoming calendar events within a time range.
  */

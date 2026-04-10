@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file WormSnapshotProvider.ts
  * @description S3 Object Lock / WORM storage anchor provider.

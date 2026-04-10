@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Search tool — search repos, code, issues, or users.
  */

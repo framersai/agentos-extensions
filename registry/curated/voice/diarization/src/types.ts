@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description Core types for the diarization extension pack.

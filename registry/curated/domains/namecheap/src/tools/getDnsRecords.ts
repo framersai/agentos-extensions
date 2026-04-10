@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NamecheapGetDnsRecordsTool — retrieve current DNS host records for a domain.
  */

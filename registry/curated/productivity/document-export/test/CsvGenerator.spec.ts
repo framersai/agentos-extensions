@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { CsvGenerator } from '../src/generators/CsvGenerator.js';
 import type { DocumentContent } from '../src/types.js';

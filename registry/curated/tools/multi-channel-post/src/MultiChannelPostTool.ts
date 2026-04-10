@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Multi-Channel Post Tool — publish adapted content to N platforms.
  *

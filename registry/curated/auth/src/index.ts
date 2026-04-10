@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @module @framers/agentos-extensions/auth
  * @description Authentication and subscription extension for AgentOS

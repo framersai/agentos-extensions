@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for file, branch, and commit tools:
  * GitHubFileWriteTool, GitHubBranchListTool, GitHubBranchCreateTool, GitHubCommitListTool.

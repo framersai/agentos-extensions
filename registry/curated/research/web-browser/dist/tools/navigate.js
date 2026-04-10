@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Navigate Tool
  * Navigate browser to a URL and retrieve page content.

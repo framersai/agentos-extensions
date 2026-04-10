@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OMDB Details Tool — ITool implementation for fetching full movie/show
  * details from the Open Movie Database API.

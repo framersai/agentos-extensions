@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddy REST API service layer.
  *

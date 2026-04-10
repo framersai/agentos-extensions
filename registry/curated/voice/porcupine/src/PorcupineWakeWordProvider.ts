@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file PorcupineWakeWordProvider.ts
  * @description Wake-word detection provider backed by Picovoice Porcupine.

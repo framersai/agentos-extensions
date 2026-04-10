@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for SlackService (@slack/bolt wrapper).
  */

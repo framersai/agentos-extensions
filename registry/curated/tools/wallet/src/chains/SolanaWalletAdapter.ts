@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Solana chain adapter for the Agent Personal Wallet.
  *

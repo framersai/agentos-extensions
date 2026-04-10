@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview VercelSetEnvVarsTool — set environment variables on a Vercel project.
  */

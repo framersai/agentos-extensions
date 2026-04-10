@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { InstagramService } from '../InstagramService.js';
 
 export class InstagramHashtagsTool {

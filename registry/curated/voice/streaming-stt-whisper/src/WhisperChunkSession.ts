@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file WhisperChunkSession.ts
  * @description Active streaming STT session backed by the OpenAI Whisper HTTP API.

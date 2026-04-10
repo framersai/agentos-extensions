@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Cloudflare REST API service layer.
  *

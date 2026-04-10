@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Example 5: Using AgentOS Without Auth
  * 

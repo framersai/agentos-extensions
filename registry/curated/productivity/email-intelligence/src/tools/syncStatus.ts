@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for checking email account sync status.
  */

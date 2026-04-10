@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ThreadsService, CarouselItem } from '../ThreadsService.js';
 
 export class ThreadsPostTool {

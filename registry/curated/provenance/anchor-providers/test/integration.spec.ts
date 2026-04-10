@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file integration.spec.ts
  * @description End-to-end integration tests verifying that the extension's

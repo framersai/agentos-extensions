@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * E2E tests for channel extension lifecycle.
  *

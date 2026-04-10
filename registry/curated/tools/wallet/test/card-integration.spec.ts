@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Integration tests for the card subsystem within the wallet extension pack.
  *

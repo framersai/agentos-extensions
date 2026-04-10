@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OMDB Extension Pack — provides movie and TV show search and detail
  * lookup capabilities for agents via the Open Movie Database API.

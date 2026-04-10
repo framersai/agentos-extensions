@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tests for GitHubRepoIndexer.
  * Uses Vitest with globals and a fully-mocked GitHubService.

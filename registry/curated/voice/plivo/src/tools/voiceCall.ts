@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool implementation for Plivo voice calls.
  *

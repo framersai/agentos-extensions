@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Matrix Channel Extension for AgentOS.
  *

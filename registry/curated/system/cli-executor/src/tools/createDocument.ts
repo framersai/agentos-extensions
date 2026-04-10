@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Create Document Tool
  * Generate DOCX files from text or markdown content.

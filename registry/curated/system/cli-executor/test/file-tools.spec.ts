@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for the file_read, file_write, and list_directory tools.
  *

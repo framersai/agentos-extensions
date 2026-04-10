@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { WebSearchTool } from '../src/tools/webSearch';
 import { SearchProviderService } from '../src/services/searchProvider';

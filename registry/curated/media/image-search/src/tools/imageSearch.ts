@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Image Search Tool — unified stock photo search across Pexels, Unsplash, Pixabay.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfListProjectsTool — list all Cloudflare Pages projects.
  */

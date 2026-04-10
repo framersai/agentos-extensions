@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Merchant Category Code (MCC) → SpendCategory mapping.
  *

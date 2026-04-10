@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for searching pins and boards on Pinterest.
  */

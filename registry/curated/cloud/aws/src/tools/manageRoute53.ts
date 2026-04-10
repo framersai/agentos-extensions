@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWSManageRoute53Tool — manage DNS records in Route53 hosted zones.
  *

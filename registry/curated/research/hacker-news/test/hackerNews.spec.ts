@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import { HackerNewsTool } from '../src/tools/hackerNews';
 

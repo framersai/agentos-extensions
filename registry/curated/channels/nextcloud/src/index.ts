@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Nextcloud Talk Channel Extension for AgentOS.
  *

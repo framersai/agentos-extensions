@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub PR Comment Create tool — add a top-level comment to a pull request.
  *

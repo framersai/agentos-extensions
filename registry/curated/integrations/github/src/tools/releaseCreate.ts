@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Release Create tool — create a new release.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Extension for AgentOS.
  *

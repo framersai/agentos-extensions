@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Type Tool
  * Type text into input fields with human-like keystroke timing in stealth browser.

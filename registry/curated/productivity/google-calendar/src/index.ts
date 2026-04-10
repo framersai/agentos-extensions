@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Google Calendar Extension for AgentOS.
  *

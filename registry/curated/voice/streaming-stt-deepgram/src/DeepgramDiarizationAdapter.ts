@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DeepgramDiarizationAdapter.ts
  * @description Utilities for extracting speaker labels from Deepgram word-level

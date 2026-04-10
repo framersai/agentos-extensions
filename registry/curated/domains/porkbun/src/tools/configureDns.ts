@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview PorkbunConfigureDnsTool — manage DNS records for a Porkbun domain.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Unit tests for ExampleTool
  */

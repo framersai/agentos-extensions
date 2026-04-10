@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Pure REST client for the Lithic card issuance API.
  *

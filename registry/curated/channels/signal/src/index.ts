@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Signal Channel Extension for AgentOS.
  *

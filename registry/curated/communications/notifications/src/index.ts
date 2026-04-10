@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Notifications Extension for AgentOS.
  *

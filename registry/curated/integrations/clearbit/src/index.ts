@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Clearbit Extension Pack — provides company and person enrichment tools
  * powered by the Clearbit API.

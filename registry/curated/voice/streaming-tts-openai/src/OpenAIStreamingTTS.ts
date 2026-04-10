@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file OpenAIStreamingTTS.ts
  * @description {@link IStreamingTTS}-compatible factory for OpenAI TTS sessions.

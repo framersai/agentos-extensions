@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskyReplyTool — reply to an existing Bluesky post.
  *

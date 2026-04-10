@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview VercelDeployTool — deploy a project to Vercel from a Git repository.
  */

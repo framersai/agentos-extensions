@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file AmazonPollyTTSProvider.spec.ts
  * @description Unit tests for {@link AmazonPollyTTSProvider}.

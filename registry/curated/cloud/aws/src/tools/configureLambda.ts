@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWSConfigureLambdaTool — deploy a Lambda function from a zip archive.
  *

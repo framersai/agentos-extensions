@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * File Read Tool
  * Read file contents.

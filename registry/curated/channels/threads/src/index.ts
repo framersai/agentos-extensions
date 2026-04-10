@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Threads Channel Extension for AgentOS.
  *

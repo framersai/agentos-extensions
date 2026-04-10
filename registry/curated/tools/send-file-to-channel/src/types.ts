@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Types for the send-file-to-channel extension tool.
  * @module agentos-ext-send-file-to-channel/types

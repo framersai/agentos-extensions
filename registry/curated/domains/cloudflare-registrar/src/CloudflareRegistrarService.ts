@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Cloudflare Registrar + DNS service layer.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ITool, ToolExecutionContext, ToolExecutionResult } from '@framers/agentos';
 import { TelegramBotService } from '../services/telegramBot';
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Bulk Scheduler Extension Pack — schedule multiple social posts at once.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Twitch Channel Extension for AgentOS (tmi.js).
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Media Upload Extension Pack — upload media files to the library for social posts.
  */

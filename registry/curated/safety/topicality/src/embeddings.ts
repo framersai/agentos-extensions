@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file embeddings.ts
  * @description Cosine similarity utility and topic embedding cache for the

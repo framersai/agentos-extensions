@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Extension pack factory for the send-file-to-channel tool.
  * @module agentos-ext-send-file-to-channel

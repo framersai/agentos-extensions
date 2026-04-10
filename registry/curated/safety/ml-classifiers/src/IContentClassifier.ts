@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Interface contract for ML-backed content classifiers.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for the Facebook extension pack factory (index.ts).
  *

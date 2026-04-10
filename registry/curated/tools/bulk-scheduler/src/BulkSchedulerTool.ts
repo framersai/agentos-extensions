@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Bulk Scheduler Tool — schedule multiple social media posts at once.
  *

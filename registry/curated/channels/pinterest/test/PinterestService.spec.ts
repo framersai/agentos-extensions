@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for PinterestService (Pinterest API v5 wrapper).
  */

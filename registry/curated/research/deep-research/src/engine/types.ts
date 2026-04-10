@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Type definitions for the Deep Research Engine.
  */

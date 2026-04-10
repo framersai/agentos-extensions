@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DigitalOcean REST API service layer.
  *

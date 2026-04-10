@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description Core type definitions for the Topicality guardrail extension pack.

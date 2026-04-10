@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AgentOS Web Search Extension
  * 

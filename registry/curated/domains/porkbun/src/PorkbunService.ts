@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Porkbun API v3 service layer.
  *

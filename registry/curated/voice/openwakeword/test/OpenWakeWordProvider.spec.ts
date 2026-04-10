@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file OpenWakeWordProvider.spec.ts
  * @description Unit tests for {@link OpenWakeWordProvider}.

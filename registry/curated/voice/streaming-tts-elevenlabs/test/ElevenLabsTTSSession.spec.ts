@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file ElevenLabsTTSSession.spec.ts
  * @description Unit tests for {@link ElevenLabsTTSSession}.

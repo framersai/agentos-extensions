@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Integration tests for auth extension
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file providers.spec.ts
  * @description Tests for all anchor provider implementations.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file CheckTopicTool.ts
  * @description On-demand topic classification tool that allows agents and

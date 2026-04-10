@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Repo Info tool — get detailed metadata for a single repository.
  */

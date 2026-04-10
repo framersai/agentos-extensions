@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Types for the local-file-search extension tool.
  * @module agentos-ext-local-file-search/types

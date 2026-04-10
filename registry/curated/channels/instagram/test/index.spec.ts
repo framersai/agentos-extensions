@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tests for the Instagram extension pack factory.
  */

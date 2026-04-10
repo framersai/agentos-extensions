@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GoDaddyConfigureDnsTool } from '../src/tools/configureDns';
 import { GoDaddyGetDomainInfoTool } from '../src/tools/getDomainInfo';

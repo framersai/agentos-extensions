@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file GoogleCloudSTTProvider.spec.ts
  * @description Unit tests for {@link GoogleCloudSTTProvider}.

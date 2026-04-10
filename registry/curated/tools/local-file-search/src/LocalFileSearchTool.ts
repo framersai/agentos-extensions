@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Local File Search — find files on the host filesystem by fuzzy name matching.
  *

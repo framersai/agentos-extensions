@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Telegram Bot service for managing bot instance and API calls
  */

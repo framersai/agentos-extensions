@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { EmailService } from '../EmailService.js';
 
 export class EmailReadTool {

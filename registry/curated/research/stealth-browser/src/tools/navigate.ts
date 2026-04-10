@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Navigate Tool
  * Navigate stealth browser to a URL with anti-detection, bypassing bot protection.

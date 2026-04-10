@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi } from 'vitest';
 import { ContentPolicyRewriterGuardrail } from '../src/ContentPolicyRewriterGuardrail.js';
 

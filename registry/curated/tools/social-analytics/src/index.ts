@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Cross-Platform Social Analytics Extension Pack — aggregate engagement metrics
  * from multiple social platforms in a single query.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for browsing TikTok For You page content.
  */

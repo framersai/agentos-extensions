@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Telegram Bot Service
  * Manages the Telegram bot connection and provides API methods

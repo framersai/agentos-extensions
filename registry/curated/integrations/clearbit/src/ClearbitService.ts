@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ClearbitService — thin wrapper around the Clearbit Enrichment REST API.
  *

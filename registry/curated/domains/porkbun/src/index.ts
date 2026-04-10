@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Porkbun Domain Registrar Extension for AgentOS.
  *

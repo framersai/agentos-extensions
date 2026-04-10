@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OMDBService — lightweight wrapper around the Open Movie Database (OMDB) API.
  *

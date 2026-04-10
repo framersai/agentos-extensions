@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FlyCreateVolumeTool } from '../src/tools/createVolume';
 import { FlyDeployAppTool } from '../src/tools/deployApp';

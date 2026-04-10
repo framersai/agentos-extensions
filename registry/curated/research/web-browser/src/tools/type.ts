@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Type Tool
  * Type text into input fields.

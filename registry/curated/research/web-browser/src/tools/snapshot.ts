@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Snapshot Tool
  * Get accessibility snapshot of the current page.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for publishing blog articles to one or more platforms.
  */

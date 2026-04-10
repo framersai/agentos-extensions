@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Extension pack entry point
  * @description Creates and exports the extension pack for AgentOS

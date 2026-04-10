@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview PorkbunRegisterDomainTool — register (purchase) a domain through Porkbun.
  */

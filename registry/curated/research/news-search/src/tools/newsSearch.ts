@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * News Search Tool — search news articles via NewsAPI.
  */

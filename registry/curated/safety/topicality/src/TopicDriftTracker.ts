@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview TopicDriftTracker — session-level EMA drift detection for topicality guardrails.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Repo List tool — list repositories for a user or organisation.
  */

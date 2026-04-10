@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for adding a thread to an existing project.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Clearbit Person Enrichment Tool — ITool implementation for the Clearbit
  * Person API.

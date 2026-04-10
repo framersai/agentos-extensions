@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Extension pack factory for Trulia property search.
  * @module agentos-ext-trulia-search

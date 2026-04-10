@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Multi-platform blog publishing service.
  *

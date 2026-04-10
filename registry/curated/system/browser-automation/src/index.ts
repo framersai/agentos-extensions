@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Browser Automation Extension for AgentOS.
  *

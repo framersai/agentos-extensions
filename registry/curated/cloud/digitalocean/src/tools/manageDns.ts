@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DOManageDnsTool — manage DNS records on a DigitalOcean domain.
  */

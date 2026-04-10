@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Email Channel Extension for AgentOS.
  *

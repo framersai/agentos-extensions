@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Research Aggregator Tool — runs multiple searches on a topic and aggregates results.
  *

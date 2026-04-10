@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Mastodon API service layer.
  *

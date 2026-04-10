@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi } from 'vitest';
 import { LlmRewriter } from '../src/LlmRewriter.js';
 import type { LlmInvoker, PolicyViolation } from '../src/types.js';

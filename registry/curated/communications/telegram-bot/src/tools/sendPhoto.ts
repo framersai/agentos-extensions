@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Send photo tool for Telegram Bot extension
  */

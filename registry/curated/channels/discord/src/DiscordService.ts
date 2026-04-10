@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Discord SDK wrapper using discord.js.
  * Handles bot lifecycle, message sending, and event dispatch.

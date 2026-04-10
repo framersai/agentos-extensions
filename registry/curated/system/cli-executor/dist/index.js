@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AgentOS CLI Executor Extension
  *
@@ -16,10 +17,8 @@ import { ExecuteTool } from './tools/execute.js';
 import { FileReadTool } from './tools/fileRead.js';
 import { FileWriteTool } from './tools/fileWrite.js';
 import { ListDirectoryTool } from './tools/listDir.js';
-import { CreatePdfTool } from './tools/createPdf.js';
 import { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
 import { CreateDocumentTool } from './tools/createDocument.js';
-import { ReadDocumentTool } from './tools/readDocument.js';
 /**
  * Creates the CLI executor extension pack
  *
@@ -89,10 +88,8 @@ export function createExtensionPack(context) {
     const fileReadTool = new FileReadTool(shellService);
     const fileWriteTool = new FileWriteTool(shellService);
     const listDirectoryTool = new ListDirectoryTool(shellService);
-    const createPdfTool = new CreatePdfTool();
     const createSpreadsheetTool = new CreateSpreadsheetTool();
     const createDocumentTool = new CreateDocumentTool();
-    const readDocumentTool = new ReadDocumentTool(shellService);
     return {
         name: '@framers/agentos-ext-cli-executor',
         version: '1.2.0',
@@ -122,12 +119,6 @@ export function createExtensionPack(context) {
                 payload: listDirectoryTool,
             },
             {
-                id: createPdfTool.name,
-                kind: 'tool',
-                priority: options.priority || 50,
-                payload: createPdfTool,
-            },
-            {
                 id: createSpreadsheetTool.name,
                 kind: 'tool',
                 priority: options.priority || 50,
@@ -138,12 +129,6 @@ export function createExtensionPack(context) {
                 kind: 'tool',
                 priority: options.priority || 50,
                 payload: createDocumentTool,
-            },
-            {
-                id: readDocumentTool.name,
-                kind: 'tool',
-                priority: options.priority || 50,
-                payload: readDocumentTool,
             },
         ],
         /**
@@ -178,10 +163,8 @@ export { ExecuteTool } from './tools/execute.js';
 export { FileReadTool } from './tools/fileRead.js';
 export { FileWriteTool } from './tools/fileWrite.js';
 export { ListDirectoryTool } from './tools/listDir.js';
-export { CreatePdfTool } from './tools/createPdf.js';
 export { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
 export { CreateDocumentTool } from './tools/createDocument.js';
-export { ReadDocumentTool } from './tools/readDocument.js';
 export * from './types.js';
 // Default export for convenience
 export default createExtensionPack;

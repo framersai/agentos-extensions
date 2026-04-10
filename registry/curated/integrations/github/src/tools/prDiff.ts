@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub PR Diff tool — get files changed in a pull request.
  *

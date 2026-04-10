@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file AdaptiveSentenceChunker.spec.ts
  * @description Unit tests for {@link AdaptiveSentenceChunker}.

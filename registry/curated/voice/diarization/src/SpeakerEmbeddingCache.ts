@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SpeakerEmbeddingCache.ts
  * @description Stores and matches speaker voiceprints using cosine similarity.

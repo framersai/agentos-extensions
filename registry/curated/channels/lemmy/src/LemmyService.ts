@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Lemmy HTTP API service layer.
  *

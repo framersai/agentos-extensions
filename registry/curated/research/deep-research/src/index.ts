@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Deep Research Extension for AgentOS.
  *

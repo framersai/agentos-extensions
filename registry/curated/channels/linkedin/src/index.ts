@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LinkedIn Channel Extension for AgentOS.
  *

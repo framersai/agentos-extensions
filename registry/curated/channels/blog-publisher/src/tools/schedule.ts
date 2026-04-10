@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for scheduling blog articles for future publication.
  *

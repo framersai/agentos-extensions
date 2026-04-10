@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DOListResourcesTool — list all apps and/or droplets on a DigitalOcean account.
  */

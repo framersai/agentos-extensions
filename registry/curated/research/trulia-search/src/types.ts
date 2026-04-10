@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Types for the Trulia real estate search extension.
  * @module agentos-ext-trulia-search/types

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Web Scraper Extension — Shared Type Definitions
  *

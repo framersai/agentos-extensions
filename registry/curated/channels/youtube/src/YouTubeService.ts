@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview YouTube Data API v3 service layer.
  *

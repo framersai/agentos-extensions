@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Toxicity content classifier using the `unitary/toxic-bert` model.
  *

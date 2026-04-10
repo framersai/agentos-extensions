@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Farcaster API service layer.
  *

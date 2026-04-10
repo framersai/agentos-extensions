@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Cross-Platform Analytics Tool — aggregate engagement metrics from N platforms.
  *

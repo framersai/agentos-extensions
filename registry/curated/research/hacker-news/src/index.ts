@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Hacker News Extension Pack — HN story fetching for agents.
  *

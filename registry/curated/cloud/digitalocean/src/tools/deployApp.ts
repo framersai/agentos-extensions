@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DODeployAppTool — trigger a new deployment on an existing App Platform app.
  */

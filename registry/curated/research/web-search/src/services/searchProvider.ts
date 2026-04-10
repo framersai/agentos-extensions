@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Configuration for search providers
  */

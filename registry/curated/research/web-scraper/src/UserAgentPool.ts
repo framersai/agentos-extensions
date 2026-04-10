@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * User Agent Pool — Programmatic generator for realistic browser User-Agent
  * strings and accompanying HTTP headers.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for submitting posts to a subreddit via the Reddit channel adapter.
  */

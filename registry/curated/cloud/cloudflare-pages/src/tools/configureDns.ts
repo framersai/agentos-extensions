@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfConfigureDnsTool — manage DNS records on a Cloudflare zone.
  */

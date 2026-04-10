@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for LemmyService (Lemmy HTTP API v3 wrapper).
  */

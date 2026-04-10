@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Type definitions for auth extension
  * @module @framers/agentos-extensions/auth

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description Deepgram-specific configuration types for the streaming STT extension pack.

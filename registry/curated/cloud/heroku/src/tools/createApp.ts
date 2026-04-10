@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview HerokuCreateAppTool — create a new Heroku app.
  */

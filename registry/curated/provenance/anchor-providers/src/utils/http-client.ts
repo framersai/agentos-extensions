@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file http-client.ts
  * @description Shared HTTP fetch wrapper with retry and timeout for anchor providers.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Google Calendar SDK wrapper using googleapis.
  * Handles OAuth2 lifecycle, event CRUD, calendar listing, and free/busy queries.

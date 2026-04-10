@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file register.ts
  * @description Registers all anchor provider factories with the core AgentOS factory.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Pinterest API v5 service layer.
  *

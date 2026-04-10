@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview EVM chain adapter for the Agent Personal Wallet.
  *

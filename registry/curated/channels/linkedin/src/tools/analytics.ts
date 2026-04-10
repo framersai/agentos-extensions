@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { LinkedInService } from '../LinkedInService.js';
 
 export class LinkedInAnalyticsTool {

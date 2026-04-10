@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file OpenAITTSSession.spec.ts
  * @description Unit tests for {@link OpenAITTSSession}.

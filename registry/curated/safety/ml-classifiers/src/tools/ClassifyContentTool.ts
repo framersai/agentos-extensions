@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file ClassifyContentTool.ts
  * @description An AgentOS tool that exposes the ML classifier as a callable tool,

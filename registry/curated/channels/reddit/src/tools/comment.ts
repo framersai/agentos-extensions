@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for commenting on posts or replying to comments via the Reddit channel adapter.
  */

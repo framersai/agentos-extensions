@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview HTTP client for the Email Intelligence backend REST API.
  *

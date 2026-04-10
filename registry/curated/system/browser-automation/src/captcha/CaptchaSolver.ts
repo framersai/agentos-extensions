@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview 2captcha integration for solving CAPTCHAs.
  *

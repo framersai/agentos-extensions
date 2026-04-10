@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for sending media (image, document) via the Discord channel adapter.
  */

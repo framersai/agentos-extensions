@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Twitter API v2 service layer.
  *

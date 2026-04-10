@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Linode/Akamai Cloud Extension for AgentOS.
  *

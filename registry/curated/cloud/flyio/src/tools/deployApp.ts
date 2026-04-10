@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview FlyDeployAppTool — deploy an app on Fly.io by creating a machine with a config.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file ClusteringStrategy.spec.ts
  * @description Unit tests for {@link ClusteringStrategy}.

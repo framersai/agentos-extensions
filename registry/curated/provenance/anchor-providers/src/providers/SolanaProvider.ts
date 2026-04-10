@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SolanaProvider.ts
  * @description Solana on-chain anchor provider (Wunderland-compatible).

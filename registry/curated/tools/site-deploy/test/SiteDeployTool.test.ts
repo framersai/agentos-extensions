@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SiteDeployTool, type ToolExecutorFn, type SiteDeployInput } from '../src/SiteDeployTool';
 

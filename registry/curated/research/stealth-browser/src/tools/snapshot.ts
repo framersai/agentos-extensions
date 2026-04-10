@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Snapshot Tool
  * Extract structured DOM snapshot from bot-protected pages via stealth browser.

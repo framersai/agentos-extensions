@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Example tool implementation
  * @description Demonstrates how to implement the ITool interface

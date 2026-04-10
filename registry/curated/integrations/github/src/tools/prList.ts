@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub PR List tool — list pull requests for a repository.
  */

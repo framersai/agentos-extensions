@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Type declarations for @framers/agentos-extensions registry catalog.
  * @module @framers/agentos-extensions

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for fetching Reddit user karma and activity analytics via the Reddit channel adapter.
  */

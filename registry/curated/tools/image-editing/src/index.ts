@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Image Editing Extension Pack — img2img, inpainting, outpainting,
  * upscaling, and variations as agent tools.

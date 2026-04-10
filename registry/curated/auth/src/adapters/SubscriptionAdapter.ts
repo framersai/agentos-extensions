@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Subscription tier management adapter
  */

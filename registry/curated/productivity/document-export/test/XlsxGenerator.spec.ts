@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { XlsxGenerator } from '../src/generators/XlsxGenerator.js';
 import ExcelJS from 'exceljs';

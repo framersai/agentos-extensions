@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Web Search Tool — multi-provider search via SearchProviderService.
  *

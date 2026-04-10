@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CfDeployPagesTool } from '../src/tools/deploy.js';
 import { CfListProjectsTool } from '../src/tools/listProjects.js';

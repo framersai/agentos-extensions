@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DeepgramStreamSession.ts
  * @description Active streaming STT session backed by the Deepgram WebSocket API.

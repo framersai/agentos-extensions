@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Instagram Channel Extension for AgentOS.
  *

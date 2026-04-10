@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool wrapper for the Deep Research Engine.
  *

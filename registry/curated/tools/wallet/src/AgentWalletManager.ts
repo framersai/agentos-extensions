@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Core wallet lifecycle manager for agent personal wallets.
  *

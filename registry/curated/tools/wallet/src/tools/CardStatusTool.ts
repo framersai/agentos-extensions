@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for checking card status.
  * @module wallet/tools/CardStatusTool

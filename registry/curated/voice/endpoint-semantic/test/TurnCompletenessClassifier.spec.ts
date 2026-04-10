@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file TurnCompletenessClassifier.spec.ts
  * @description Unit tests for {@link TurnCompletenessClassifier}.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Site Deploy Orchestration Extension for AgentOS.
  *

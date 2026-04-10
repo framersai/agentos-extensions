@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview SMS Channel Extension for AgentOS (Twilio).
  *

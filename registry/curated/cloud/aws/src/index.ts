@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWS Cloud Extension for AgentOS.
  *

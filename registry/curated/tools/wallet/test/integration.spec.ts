@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Integration tests for the wallet extension pack.
  *

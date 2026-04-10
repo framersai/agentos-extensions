@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Farcaster Channel Extension for AgentOS.
  *

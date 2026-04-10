@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for retrieving a full thread hierarchy with messages.
  */

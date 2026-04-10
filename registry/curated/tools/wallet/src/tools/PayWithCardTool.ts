@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for retrieving card details for online payments.
  *

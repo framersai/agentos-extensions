@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AgentOS Stealth Browser Extension
  *

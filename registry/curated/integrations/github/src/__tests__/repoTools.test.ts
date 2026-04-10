@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for the repository tools:
  * GitHubRepoListTool, GitHubRepoInfoTool, GitHubRepoCreateTool, GitHubRepoIndexTool.

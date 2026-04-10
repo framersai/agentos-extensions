@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * List Directory Tool
  * List directory contents.

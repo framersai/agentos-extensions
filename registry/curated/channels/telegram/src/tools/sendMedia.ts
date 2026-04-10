@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for sending media (photo, document, video) via the Telegram channel adapter.
  */

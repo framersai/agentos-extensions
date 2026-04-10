@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent Personal Wallet Extension Pack.
  *

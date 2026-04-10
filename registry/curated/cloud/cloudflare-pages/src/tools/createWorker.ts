@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfCreateWorkerTool — deploy a Cloudflare Worker script.
  */

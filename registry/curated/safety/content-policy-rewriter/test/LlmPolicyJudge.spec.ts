@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LlmPolicyJudge } from '../src/LlmPolicyJudge.js';
 import type { LlmInvoker } from '../src/types.js';

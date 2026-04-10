@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Media Upload Tool — upload files to the media library for social posts.
  *

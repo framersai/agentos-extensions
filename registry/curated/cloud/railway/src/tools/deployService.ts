@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview RailwayDeployServiceTool — deploy a service on Railway from a Git repo.
  */

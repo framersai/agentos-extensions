@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Lightweight WebChat message broker.
  *

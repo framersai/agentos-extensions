@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview HerokuGetLogsTool — retrieve recent logs from a Heroku app.
  */

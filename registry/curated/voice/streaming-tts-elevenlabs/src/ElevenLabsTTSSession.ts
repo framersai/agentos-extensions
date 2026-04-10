@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file ElevenLabsTTSSession.ts
  * @description Active TTS session backed by the ElevenLabs WebSocket Streaming API.

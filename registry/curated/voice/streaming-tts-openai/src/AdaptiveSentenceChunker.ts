@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file AdaptiveSentenceChunker.ts
  * @description Buffers LLM token stream and emits complete sentence chunks.

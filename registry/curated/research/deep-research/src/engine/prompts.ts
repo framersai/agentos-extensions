@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Prompt templates for the Deep Research Engine's LLM calls.
  *

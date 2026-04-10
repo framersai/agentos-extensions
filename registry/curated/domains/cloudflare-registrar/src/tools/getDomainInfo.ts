@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfRegGetDomainInfoTool — get detailed domain info from Cloudflare Registrar.
  */

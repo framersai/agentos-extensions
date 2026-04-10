@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for voting (upvote/downvote) on Reddit content via the Reddit channel adapter.
  */

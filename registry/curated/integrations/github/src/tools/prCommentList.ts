@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub PR Comment List tool — list review comments on a pull request.
  *

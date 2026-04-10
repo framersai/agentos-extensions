@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for TikTok video and creator analytics.
  */

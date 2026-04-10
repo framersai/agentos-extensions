@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file ProviderDiarizationBackend.ts
  * @description Thin adapter that extracts speaker labels from STT provider

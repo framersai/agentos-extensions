@@ -8,6 +8,12 @@
  * @version 1.1.0
  * @license MIT
  */
+import { ExecuteTool } from './tools/execute.js';
+import { FileReadTool } from './tools/fileRead.js';
+import { FileWriteTool } from './tools/fileWrite.js';
+import { ListDirectoryTool } from './tools/listDir.js';
+import { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
+import { CreateDocumentTool } from './tools/createDocument.js';
 import type { ShellConfig } from './types.js';
 /**
  * Extension configuration options
@@ -48,12 +54,37 @@ export declare function createExtensionPack(context: {
 }): {
     name: string;
     version: string;
-    descriptors: {
-        id: any;
+    descriptors: ({
+        id: string;
         kind: string;
         priority: number;
-        payload: any;
-    }[];
+        payload: ExecuteTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: FileReadTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: FileWriteTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: ListDirectoryTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: CreateSpreadsheetTool;
+    } | {
+        id: string;
+        kind: string;
+        priority: number;
+        payload: CreateDocumentTool;
+    })[];
     /**
      * Called when extension is activated
      */
@@ -68,10 +99,8 @@ export { ExecuteTool } from './tools/execute.js';
 export { FileReadTool } from './tools/fileRead.js';
 export { FileWriteTool } from './tools/fileWrite.js';
 export { ListDirectoryTool } from './tools/listDir.js';
-export { CreatePdfTool } from './tools/createPdf.js';
 export { CreateSpreadsheetTool } from './tools/createSpreadsheet.js';
 export { CreateDocumentTool } from './tools/createDocument.js';
-export { ReadDocumentTool } from './tools/readDocument.js';
 export * from './types.js';
 export default createExtensionPack;
 //# sourceMappingURL=index.d.ts.map

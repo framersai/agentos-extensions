@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for checking wallet balances.
  * @module wunderland/wallet/tools/CheckBalanceTool

@@ -1,0 +1,11 @@
+{
+  "name": "@framers/agentos-ext-postgres-memory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Postgres + pgvector memory provider extension for AgentOS",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@framers/agentos": "workspace:*",
+    "@framers/sql-storage-adapter": "workspace:*"
+  }
+}

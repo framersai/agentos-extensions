@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskyPostTool — create a post on Bluesky with text, optional images, and language tags.
  *

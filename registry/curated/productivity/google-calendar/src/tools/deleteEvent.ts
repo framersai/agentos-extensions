@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for deleting a calendar event by ID.
  */

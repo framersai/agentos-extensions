@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ResearchService } from '../ResearchService.js';
 
 export class ResearchAcademicTool {

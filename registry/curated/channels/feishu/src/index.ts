@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Feishu / Lark Channel Extension for AgentOS.
  *

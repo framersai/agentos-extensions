@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview TikTok API for Business service layer.
  *

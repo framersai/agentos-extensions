@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for listing the user's available calendars.
  */

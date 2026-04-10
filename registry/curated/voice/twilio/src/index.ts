@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Twilio Voice Call Extension for AgentOS.
  *

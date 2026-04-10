@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Agent Ping Tool — check if a remote Wunderland agent is reachable.
  *

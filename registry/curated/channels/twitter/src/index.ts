@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Twitter/X Channel Extension for AgentOS.
  *

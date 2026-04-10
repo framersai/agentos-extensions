@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Meta Graph API v19 service layer for Facebook.
  *

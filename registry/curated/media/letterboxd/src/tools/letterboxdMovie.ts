@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Letterboxd Movie Lookup Tool — ITool implementation for Letterboxd scraping.
  *

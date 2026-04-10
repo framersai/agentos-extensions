@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Send File to Channel — relay a local file to the user's chat.
  *

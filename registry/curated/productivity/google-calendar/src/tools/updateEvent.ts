@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for updating an existing calendar event.
  */

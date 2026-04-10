@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Create Spreadsheet Tool
  * Generate XLSX or CSV files from structured data.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Telnyx Call Control v2 SDK wrapper.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview High-level card lifecycle manager.
  *

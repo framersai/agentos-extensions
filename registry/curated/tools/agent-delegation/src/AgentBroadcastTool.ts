@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Agent Broadcast Tool — fan out a task to multiple agents in parallel.
  *

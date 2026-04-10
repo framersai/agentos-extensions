@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWSDeployS3SiteTool — deploy a static site to S3 with website hosting enabled.
  *

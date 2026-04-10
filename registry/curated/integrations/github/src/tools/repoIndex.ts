@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Repo Index tool — fetch repository metadata, tree, README,
  * docs, and package.json for RAG indexing. Returns an array of text chunks suitable

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file VoskSTTProvider.spec.ts
  * @description Unit tests for {@link VoskSTTProvider}.

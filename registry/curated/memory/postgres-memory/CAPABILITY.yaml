@@ -1,0 +1,8 @@
+name: postgres-memory
+version: 0.1.0
+description: Postgres + pgvector memory provider for server-grade AgentOS memory
+category: memory
+kind: memory-provider
+requiredSecrets:
+  - id: POSTGRES_CONNECTION_STRING
+    description: PostgreSQL connection string with pgvector extension enabled

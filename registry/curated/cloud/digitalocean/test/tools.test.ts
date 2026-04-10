@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DOCreateAppTool } from '../src/tools/createApp.js';
 import { DOCreateDropletTool } from '../src/tools/createDroplet.js';

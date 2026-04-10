@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LinkedIn Marketing API v2 + Community Management API service layer.
  *

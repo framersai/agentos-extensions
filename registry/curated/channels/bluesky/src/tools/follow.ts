@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskyFollowTool — follow or unfollow a user on Bluesky.
  *

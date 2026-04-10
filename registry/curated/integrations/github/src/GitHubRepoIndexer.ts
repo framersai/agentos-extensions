@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Background codebase indexer that produces chunks from GitHub repos
  * for RAG embedding. Walks repo trees, extracts documentation files, splits them

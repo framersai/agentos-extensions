@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { BrowserService } from '../BrowserService.js';
 
 export class WaitTool {

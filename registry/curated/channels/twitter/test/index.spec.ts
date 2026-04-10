@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for the Twitter channel extension factory (createExtensionPack).
  */

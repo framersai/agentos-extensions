@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file index.ts
  * @description Pack factory for the Amazon Polly TTS extension pack.

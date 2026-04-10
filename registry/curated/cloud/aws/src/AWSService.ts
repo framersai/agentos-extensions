@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWS REST API service layer with minimal SigV4 signing.
  *

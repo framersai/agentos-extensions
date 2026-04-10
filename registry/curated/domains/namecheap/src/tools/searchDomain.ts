@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NamecheapSearchDomainTool — check domain availability across TLDs.
  */

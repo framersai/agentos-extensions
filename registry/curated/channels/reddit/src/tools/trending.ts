@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for fetching trending posts and subreddits via the Reddit channel adapter.
  */

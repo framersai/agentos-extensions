@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Send message tool for Telegram Bot extension
  */

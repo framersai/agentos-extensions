@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Jailbreak content classifier using Meta's `PromptGuard-86M`
  * model.

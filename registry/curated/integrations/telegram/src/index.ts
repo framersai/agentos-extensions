@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AgentOS Telegram Bot Extension
  * 

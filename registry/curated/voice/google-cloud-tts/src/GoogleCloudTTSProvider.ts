@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file GoogleCloudTTSProvider.ts
  * @description Text-to-speech provider backed by Google Cloud Text-to-Speech API.

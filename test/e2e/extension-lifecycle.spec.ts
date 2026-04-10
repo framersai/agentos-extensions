@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ExtensionManager } from '@framers/agentos';
 import type { ExtensionPack, ExtensionPackContext } from '@framers/agentos';

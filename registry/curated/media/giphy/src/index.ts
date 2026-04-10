@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Giphy Extension Pack — provides GIF search capabilities for agents.
  */

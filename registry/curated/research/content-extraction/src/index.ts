@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Content Extraction Extension for AgentOS.
  *

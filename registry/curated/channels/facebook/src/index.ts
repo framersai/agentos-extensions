@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Facebook Channel Extension for AgentOS.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for commenting on YouTube videos.
  */

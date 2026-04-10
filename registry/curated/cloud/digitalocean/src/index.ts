@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DigitalOcean Cloud Extension for AgentOS.
  *

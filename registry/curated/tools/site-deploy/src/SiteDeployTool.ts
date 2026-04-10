@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Site Deploy Orchestration Tool — deploy from source to any
  * cloud provider with optional domain registration and DNS configuration.

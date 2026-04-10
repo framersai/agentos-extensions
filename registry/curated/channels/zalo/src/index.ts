@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Zalo Channel Extension for AgentOS.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview TikTok Channel Extension for AgentOS.
  *

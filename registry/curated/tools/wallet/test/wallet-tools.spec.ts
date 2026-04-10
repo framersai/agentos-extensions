@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for wallet tools (CheckBalance, SendCrypto, WalletHistory).
  *

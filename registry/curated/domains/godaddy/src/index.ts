@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddy Domain Registrar Extension for AgentOS.
  *

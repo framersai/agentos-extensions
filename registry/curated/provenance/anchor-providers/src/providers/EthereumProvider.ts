@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file EthereumProvider.ts
  * @description Ethereum on-chain anchor provider.

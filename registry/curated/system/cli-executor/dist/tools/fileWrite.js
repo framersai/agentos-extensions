@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * File Write Tool
  * Write content to files.

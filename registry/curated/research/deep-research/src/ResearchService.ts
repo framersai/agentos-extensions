@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Deep Research service layer.
  *

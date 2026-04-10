@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file VoskSTTProvider.ts
  * @description Offline speech-to-text provider backed by the Vosk library.

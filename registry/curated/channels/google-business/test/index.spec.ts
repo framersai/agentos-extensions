@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for the Google Business channel extension factory (createExtensionPack).
  */

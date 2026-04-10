@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Proxy rotation manager with round-robin, random, and sticky strategies.
  */

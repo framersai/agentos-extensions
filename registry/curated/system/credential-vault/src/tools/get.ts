@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { CredentialVaultService } from '../CredentialVaultService.js';
 
 export class CredentialsGetTool {

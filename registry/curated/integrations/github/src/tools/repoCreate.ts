@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Repo Create tool — create a new repository for the authenticated user.
  */

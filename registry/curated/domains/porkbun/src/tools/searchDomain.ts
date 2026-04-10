@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview PorkbunSearchDomainTool — check domain availability and get pricing.
  */

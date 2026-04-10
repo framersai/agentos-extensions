@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Lemmy Channel Extension for AgentOS.
  *

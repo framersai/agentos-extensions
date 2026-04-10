@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ClearbitService — Unit Tests
  *

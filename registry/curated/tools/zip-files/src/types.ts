@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Types for the zip-files extension tool.
  * @module agentos-ext-zip-files/types

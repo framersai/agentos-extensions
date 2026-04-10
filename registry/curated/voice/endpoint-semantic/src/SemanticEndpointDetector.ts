@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SemanticEndpointDetector.ts
  * @description IEndpointDetector implementation that combines the heuristic

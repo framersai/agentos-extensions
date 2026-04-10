@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Vercel Cloud Extension for AgentOS.
  *

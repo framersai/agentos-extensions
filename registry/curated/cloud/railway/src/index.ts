@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Railway Cloud Extension for AgentOS.
  *

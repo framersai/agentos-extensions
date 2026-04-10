@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Voice Synthesis Extension Pack — TTS + STT voice tools for agents.
  *

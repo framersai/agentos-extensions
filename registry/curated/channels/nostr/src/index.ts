@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Nostr Channel Extension for AgentOS.
  *

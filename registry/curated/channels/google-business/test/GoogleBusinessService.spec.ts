@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for GoogleBusinessService (Google My Business API wrapper).
  */

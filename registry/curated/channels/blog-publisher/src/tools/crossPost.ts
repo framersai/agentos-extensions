@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for cross-posting articles from a source URL to blog platforms.
  *

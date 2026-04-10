@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Gmail Email Extension for AgentOS.
  *

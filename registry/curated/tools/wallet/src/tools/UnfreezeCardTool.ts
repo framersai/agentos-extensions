@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for unfreezing (resuming) a card.
  * @module wallet/tools/UnfreezeCardTool

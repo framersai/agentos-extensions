@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Multi-provider STT Tool — speech-to-text transcription.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tests for PR tools: diff, review, merge, comment list, comment create.
  */

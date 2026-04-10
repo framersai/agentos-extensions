@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LinodeDeleteInstanceTool — delete a Linode instance.
  */

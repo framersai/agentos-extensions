@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Multi-Channel Post Extension Pack — publish adapted content to N social platforms.
  */

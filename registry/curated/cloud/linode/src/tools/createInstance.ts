@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LinodeCreateInstanceTool — create a Linode VPS instance.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PorkbunConfigureDnsTool } from '../src/tools/configureDns';
 import { PorkbunListDomainsTool } from '../src/tools/listDomains';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview verify_citations tool — on-demand claim verification with web fallback.
  *

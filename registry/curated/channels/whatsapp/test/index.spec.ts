@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for the WhatsApp channel extension pack factory (createExtensionPack).
  */

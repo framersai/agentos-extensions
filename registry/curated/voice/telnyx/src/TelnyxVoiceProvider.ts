@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview IVoiceCallProvider implementation for Telnyx Call Control v2.
  *

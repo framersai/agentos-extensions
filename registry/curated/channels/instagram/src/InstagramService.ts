@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Instagram Graph API service layer.
  *

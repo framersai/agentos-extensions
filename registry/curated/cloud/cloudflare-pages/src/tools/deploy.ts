@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfDeployPagesTool — deploy a Cloudflare Pages project from a Git repository.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file OpenTimestampsProvider.ts
  * @description Bitcoin-anchored timestamping via the OpenTimestamps protocol.

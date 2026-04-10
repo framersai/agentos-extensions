@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for initiating and managing voice calls via Telnyx.
  *

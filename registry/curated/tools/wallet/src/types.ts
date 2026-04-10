@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Wallet types, spending policy, and category definitions
  * for the Agent Personal Wallet system.

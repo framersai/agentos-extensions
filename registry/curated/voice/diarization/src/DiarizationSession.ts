@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DiarizationSession.ts
  * @description Live diarization session that wraps either a

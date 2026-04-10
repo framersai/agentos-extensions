@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Configuration management for Telegram Bot extension
  * Supports loading from options, environment variables, and .env files

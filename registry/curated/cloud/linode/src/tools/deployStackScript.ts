@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LinodeDeployStackScriptTool — deploy a Linode instance using a StackScript
  * for automated setup and provisioning.

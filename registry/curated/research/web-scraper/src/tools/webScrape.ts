@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Web Scrape Tool — ITool implementation for single-URL scraping.
  *

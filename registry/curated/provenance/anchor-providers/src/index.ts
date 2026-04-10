@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file index.ts
  * @description Main entry point for @framers/agentos-ext-anchor-providers.

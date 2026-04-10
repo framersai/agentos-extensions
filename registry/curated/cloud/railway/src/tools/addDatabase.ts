@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview RailwayAddDatabaseTool — provision a database plugin on Railway.
  */

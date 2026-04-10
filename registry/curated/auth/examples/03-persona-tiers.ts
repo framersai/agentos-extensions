@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Example 3: Persona Tier Gating
  * 

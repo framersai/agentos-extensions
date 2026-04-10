@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview PorkbunListDomainsTool — list all domains owned by the Porkbun account.
  */

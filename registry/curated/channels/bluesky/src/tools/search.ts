@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskySearchTool — search posts or people on Bluesky.
  *

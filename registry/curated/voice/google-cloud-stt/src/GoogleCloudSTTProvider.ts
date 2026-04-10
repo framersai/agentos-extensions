@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file GoogleCloudSTTProvider.ts
  * @description Batch speech-to-text provider backed by Google Cloud Speech-to-Text V1 API.

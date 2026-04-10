@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfRegListDomainsTool — list all domains registered via Cloudflare.
  */

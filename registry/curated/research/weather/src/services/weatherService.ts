@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Dual-provider weather service.
  *

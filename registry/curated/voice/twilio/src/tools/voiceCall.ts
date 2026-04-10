@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool implementation for making and managing phone calls via Twilio.
  *

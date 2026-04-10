@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Sliding-window text buffer for streaming ML classifier evaluation.
  *

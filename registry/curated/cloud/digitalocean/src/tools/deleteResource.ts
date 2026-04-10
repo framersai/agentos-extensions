@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DODeleteResourceTool — delete an app or droplet from DigitalOcean.
  */

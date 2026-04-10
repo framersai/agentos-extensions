@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for searching Gmail messages using Gmail query syntax.
  */

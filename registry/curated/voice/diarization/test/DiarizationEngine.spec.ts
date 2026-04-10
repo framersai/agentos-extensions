@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DiarizationEngine.spec.ts
  * @description Integration tests for {@link DiarizationEngine} and

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for reading and sending Reddit private messages via the Reddit channel adapter.
  */

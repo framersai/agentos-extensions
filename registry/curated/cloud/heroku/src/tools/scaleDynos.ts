@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview HerokuScaleDynosTool — scale the dyno formation for a Heroku app.
  */

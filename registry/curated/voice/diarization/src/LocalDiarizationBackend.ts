@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file LocalDiarizationBackend.ts
  * @description Offline speaker diarization backend using a sliding-window

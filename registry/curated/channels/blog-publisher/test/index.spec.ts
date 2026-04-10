@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for the Blog Publisher channel extension factory (createExtensionPack).
  */

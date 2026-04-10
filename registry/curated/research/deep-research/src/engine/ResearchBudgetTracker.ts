@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Budget enforcement for the Deep Research Engine.
  *

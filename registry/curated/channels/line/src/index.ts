@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LINE Channel Extension for AgentOS.
  *

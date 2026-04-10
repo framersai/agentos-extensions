@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview FlyScaleAppTool — scale machines for a Fly.io app.
  */

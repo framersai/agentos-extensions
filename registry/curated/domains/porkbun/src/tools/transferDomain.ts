@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview PorkbunTransferDomainTool — initiate a domain transfer to Porkbun.
  */

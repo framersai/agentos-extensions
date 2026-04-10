@@ -1,0 +1,10 @@
+name: relationship-memory
+version: 0.1.0
+description: Trust ledger, boundary tracking, and anchor moment tools for companion relationships
+category: memory
+kind: tool
+tools:
+  - trust_ledger_query
+  - record_boundary
+  - anchor_moment_recall
+  - intimacy_score

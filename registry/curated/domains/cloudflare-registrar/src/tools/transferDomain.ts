@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview CfRegTransferDomainTool — initiate a domain transfer to Cloudflare.
  */

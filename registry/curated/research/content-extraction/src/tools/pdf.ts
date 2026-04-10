@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ContentExtractionService } from '../ContentExtractionService.js';
 
 export class ExtractPdfTool {

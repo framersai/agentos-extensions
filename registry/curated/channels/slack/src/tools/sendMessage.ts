@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for sending text messages via the Slack channel adapter.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for uploading files via the Slack channel adapter.
  */

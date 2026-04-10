@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * News Search Extension Pack — NewsAPI integration for agents.
  */

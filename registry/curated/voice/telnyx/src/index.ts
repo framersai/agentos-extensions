@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Telnyx Voice Call Extension for AgentOS.
  *

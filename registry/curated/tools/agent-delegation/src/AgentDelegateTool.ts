@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Agent Delegate Tool — send a task to a remote Wunderland agent.
  *

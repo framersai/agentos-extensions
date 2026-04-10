@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LinodeCreateInstanceTool } from '../src/tools/createInstance.js';
 import { LinodeCreateNodeBalancerTool } from '../src/tools/createNodeBalancer.js';

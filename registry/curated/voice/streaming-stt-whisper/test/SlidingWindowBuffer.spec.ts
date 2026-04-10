@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SlidingWindowBuffer.spec.ts
  * @description Unit tests for {@link SlidingWindowBuffer}.

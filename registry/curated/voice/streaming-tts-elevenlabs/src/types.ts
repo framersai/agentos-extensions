@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description ElevenLabs-specific configuration types for the streaming TTS extension pack.

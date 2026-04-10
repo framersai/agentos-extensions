@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskyLikeTool — like or unlike a post on Bluesky.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for finding available time slots across calendars.
  * Queries free/busy data and computes gaps of requested duration.

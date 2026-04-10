@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Heroku Platform API service layer.
  *

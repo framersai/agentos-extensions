@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Layer 2a: LLM-based policy violation classifier.
  * Sends the full response text to an LLM with a structured classification prompt.

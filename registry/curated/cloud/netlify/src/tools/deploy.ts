@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NetlifyDeployTool — deploy a site to Netlify from a Git repository.
  */

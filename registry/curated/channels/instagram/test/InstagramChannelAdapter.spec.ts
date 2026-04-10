@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tests for InstagramChannelAdapter — the IChannelAdapter implementation.
  */

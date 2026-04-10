@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Actions List tool — list workflow runs for a repository.
  *

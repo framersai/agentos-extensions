@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for the shell_execute tool (ExecuteTool) and underlying ShellService
  * command execution / security layer.

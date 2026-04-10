@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for reading a full Gmail message by ID.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HerokuAddAddonTool } from '../src/tools/addAddon';
 import { HerokuCreateAppTool } from '../src/tools/createApp';

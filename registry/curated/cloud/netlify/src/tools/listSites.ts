@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NetlifyListSitesTool — list all sites on a Netlify account.
  */

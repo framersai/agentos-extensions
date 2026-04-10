@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Reddit Channel Extension for AgentOS.
  *

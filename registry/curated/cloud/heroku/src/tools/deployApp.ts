@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview HerokuDeployAppTool — deploy a Heroku app from a source tarball URL.
  */

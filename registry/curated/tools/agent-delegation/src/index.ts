@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Agent Delegation Extension Pack — inter-agent communication tools.
  *

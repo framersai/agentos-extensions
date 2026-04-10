@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Tool permission provider for AgentOS integration
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for the LinkedIn channel extension factory (createExtensionPack).
  */

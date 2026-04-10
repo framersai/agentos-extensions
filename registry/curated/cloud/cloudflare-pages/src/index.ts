@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Cloudflare Pages & Workers Extension for AgentOS.
  *

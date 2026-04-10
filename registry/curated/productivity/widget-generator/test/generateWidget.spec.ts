@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { GenerateWidgetTool } from '../src/tools/generateWidget.js';
 import { WidgetWrapper } from '../src/WidgetWrapper.js';

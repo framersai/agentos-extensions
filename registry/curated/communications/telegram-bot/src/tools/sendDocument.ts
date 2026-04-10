@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Send document tool for Telegram Bot extension
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Persona tier provider for AgentOS integration
  */

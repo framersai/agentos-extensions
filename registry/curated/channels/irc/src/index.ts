@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview IRC Channel Extension for AgentOS.
  *

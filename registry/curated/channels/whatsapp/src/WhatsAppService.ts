@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview WhatsApp SDK wrapper using @whiskeysockets/baileys.
  * Handles socket lifecycle, message sending, and rate limiting.

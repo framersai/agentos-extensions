@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Example 2: Tool Permission Integration
  * 

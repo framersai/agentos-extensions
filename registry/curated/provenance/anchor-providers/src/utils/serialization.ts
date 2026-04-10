@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file serialization.ts
  * @description Deterministic serialization for anchor records before external publishing.

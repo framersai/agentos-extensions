@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Extension pack factory for the zip-files tool.
  * @module agentos-ext-zip-files

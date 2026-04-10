@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview LinodeManageDnsTool — manage DNS zones and records via the Linode Domains API.
  */

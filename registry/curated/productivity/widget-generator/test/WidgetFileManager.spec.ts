@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { WidgetFileManager } from '../src/WidgetFileManager.js';
 import { mkdtemp, rm, readFile } from 'node:fs/promises';

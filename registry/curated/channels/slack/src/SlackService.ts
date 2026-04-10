@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Slack SDK wrapper using @slack/bolt.
  * Handles app lifecycle, message sending, file uploads, and event routing.

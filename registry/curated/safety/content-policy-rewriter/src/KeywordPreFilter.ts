@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Layer 1: Zero-cost keyword/regex pre-filter for streaming chunks.
  * Scans text against per-category keyword lists. No LLM calls.

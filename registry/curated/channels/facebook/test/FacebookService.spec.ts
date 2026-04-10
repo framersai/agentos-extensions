@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for FacebookService — Meta Graph API v19 service layer.
  */

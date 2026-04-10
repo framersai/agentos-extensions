@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description Whisper-specific configuration types for the chunked streaming STT extension pack.

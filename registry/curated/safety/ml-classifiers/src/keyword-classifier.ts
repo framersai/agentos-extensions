@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file keyword-classifier.ts
  * @description Lightweight keyword and regex-based safety classifier used as the

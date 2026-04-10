@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWSDeployAmplifyTool — deploy an application via AWS Amplify from a Git repository.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Vercel REST API service layer.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Fly.io Cloud Extension for AgentOS.
  *

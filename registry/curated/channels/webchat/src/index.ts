@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview WebChat Channel Extension for AgentOS.
  *

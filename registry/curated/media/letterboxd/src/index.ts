@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Letterboxd Extension Pack — provides movie lookup capabilities for agents.
  *

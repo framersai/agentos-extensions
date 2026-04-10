@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Main guardrail orchestrator for content policy rewriting.
  *

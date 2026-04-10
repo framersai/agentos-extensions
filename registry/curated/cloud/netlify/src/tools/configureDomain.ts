@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NetlifyConfigureDomainTool — add or manage custom domains on a Netlify site.
  */

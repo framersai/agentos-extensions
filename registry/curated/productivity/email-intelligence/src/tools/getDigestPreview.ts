@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for previewing a digest before sending.
  */

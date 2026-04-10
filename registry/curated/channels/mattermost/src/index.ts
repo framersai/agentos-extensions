@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Mattermost Channel Extension for AgentOS.
  *

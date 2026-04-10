@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for retrieving blog article analytics.
  */

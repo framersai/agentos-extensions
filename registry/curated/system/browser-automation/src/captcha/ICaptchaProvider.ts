@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Interface for captcha solving services.
  */

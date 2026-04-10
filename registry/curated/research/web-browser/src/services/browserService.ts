@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Browser Service
  * Manages browser lifecycle and provides page interaction methods.

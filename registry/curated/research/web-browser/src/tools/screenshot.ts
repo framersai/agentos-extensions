@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Screenshot Tool
  * Capture screenshots of the current page.

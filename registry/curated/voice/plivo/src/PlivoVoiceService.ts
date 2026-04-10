@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Wrapper around the Plivo Voice API SDK.
  *

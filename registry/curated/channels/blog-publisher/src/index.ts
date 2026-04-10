@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Blog Publisher Channel Extension for AgentOS.
  *

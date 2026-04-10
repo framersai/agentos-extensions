@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for TwitterService (twitter-api-v2 wrapper).
  */

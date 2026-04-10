@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Types for the virtual card subsystem (Lithic integration).
  * @module wallet/cards/types

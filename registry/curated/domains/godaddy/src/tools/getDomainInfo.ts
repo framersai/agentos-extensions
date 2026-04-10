@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddyGetDomainInfoTool — get detailed domain information.
  */

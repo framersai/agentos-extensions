@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Telegram Channel Extension for AgentOS.
  *

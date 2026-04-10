@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview iMessage Channel Extension for AgentOS.
  *

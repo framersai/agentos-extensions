@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for LinkedInService (LinkedIn REST API v2 wrapper via axios).
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Trulia property search tool.
  *

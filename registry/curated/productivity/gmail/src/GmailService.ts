@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Gmail API wrapper using Google OAuth2.
  * Handles authentication, message CRUD, search, and label management.

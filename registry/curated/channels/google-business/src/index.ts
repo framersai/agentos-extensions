@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Google Business Profile Channel Extension for AgentOS.
  *

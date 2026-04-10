@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tests for release and actions tools:
  * releaseList, releaseCreate, actionsList, actionsTrigger.

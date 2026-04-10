@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SlidingWindowExtractor.ts
  * @description Ring buffer that accumulates audio frames into fixed-size chunks

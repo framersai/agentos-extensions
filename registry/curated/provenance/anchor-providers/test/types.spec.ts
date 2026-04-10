@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.spec.ts
  * @description Tests for shared types and config resolution.

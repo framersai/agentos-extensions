@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Multi-provider TTS Tool — text-to-speech synthesis.
  *

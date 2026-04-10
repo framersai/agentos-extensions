@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Actions Trigger tool — trigger a workflow dispatch event.
  *

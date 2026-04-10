@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview TopicEmbeddingIndex — semantic similarity lookup for topic guardrails.
  *

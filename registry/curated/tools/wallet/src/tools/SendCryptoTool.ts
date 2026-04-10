@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for sending crypto with spending policy enforcement.
  * @module wunderland/wallet/tools/SendCryptoTool

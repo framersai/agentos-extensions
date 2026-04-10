@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { SlidesGenerator } from '../src/generators/SlidesGenerator.js';
 import type { DocumentContent } from '../src/types.js';

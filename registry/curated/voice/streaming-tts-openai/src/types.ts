@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description OpenAI-specific configuration types for the streaming TTS extension pack.

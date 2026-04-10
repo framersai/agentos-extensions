@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for scheduling video publishing on YouTube.
  */

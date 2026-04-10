@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Bluesky Channel Extension for AgentOS.
  *

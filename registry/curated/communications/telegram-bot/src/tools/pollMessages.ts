@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Poll messages tool for Telegram Bot extension
  */

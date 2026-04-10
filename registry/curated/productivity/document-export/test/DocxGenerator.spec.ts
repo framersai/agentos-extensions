@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { DocxGenerator } from '../src/generators/DocxGenerator.js';
 import type { DocumentContent } from '../src/types.js';

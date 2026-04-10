@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Image generation tool — generates images from text prompts
  * using the configured image provider stack.

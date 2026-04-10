@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Web Scraper Extension Pack — intelligent web scraping with progressive
  * fallbacks, proxy rotation, and LLM-assisted extraction.

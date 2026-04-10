@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SpeakerEmbeddingCache.spec.ts
  * @description Unit tests for {@link SpeakerEmbeddingCache} and

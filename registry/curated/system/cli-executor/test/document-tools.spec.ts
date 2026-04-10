@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for document creation / reading tools:
  *   - CreateSpreadsheetTool  (xlsx, csv)

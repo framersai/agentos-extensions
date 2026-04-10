@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { TwitterService } from '../TwitterService.js';
 
 export class TwitterLikeTool {

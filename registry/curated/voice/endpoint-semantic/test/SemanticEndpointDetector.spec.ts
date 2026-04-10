@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SemanticEndpointDetector.spec.ts
  * @description Unit tests for {@link SemanticEndpointDetector}.

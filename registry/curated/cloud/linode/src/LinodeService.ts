@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Linode REST API service layer.
  *

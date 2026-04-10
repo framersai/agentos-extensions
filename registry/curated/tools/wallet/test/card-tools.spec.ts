@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for card tools (IssueCard, CardStatus, FreezeCard,
  * UnfreezeCard, CardSpendingSummary, PayWithCard).

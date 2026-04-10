@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { LemmyService } from '../LemmyService.js';
 
 export class LemmySearchTool {

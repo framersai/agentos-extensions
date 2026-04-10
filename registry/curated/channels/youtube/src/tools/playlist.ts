@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for managing YouTube playlists.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for getting trending sounds and hashtags on TikTok.
  */

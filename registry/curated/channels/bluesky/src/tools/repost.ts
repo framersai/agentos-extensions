@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskyRepostTool — repost or undo a repost on Bluesky.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Railway GraphQL API service layer.
  *

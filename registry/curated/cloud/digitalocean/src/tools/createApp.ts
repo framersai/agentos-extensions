@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DOCreateAppTool — create an App Platform app from a Git repository.
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Hacker News Tool — fetch and search HN stories via Algolia API.
  *

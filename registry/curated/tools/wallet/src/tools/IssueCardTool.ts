@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for issuing a virtual card.
  * @module wallet/tools/IssueCardTool

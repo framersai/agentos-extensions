@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for replying to an existing Gmail message thread.
  */

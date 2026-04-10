@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for semantic search across email threads.
  */

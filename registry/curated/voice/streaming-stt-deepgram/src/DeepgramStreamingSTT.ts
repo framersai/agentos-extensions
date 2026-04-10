@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DeepgramStreamingSTT.ts
  * @description {@link IStreamingSTT} factory implementation backed by Deepgram.

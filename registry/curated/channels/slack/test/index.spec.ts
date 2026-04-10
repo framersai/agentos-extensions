@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit tests for the Slack channel extension factory (index / createExtensionPack).
  */

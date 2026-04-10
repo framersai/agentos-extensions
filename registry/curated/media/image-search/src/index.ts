@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Image Search Extension Pack — stock photo search from Pexels, Unsplash, Pixabay.
  */

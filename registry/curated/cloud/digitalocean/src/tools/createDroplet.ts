@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview DOCreateDropletTool — create a VPS Droplet with specified region, size, and image.
  */

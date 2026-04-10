@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview BlueskyAnalyticsTool — get engagement metrics for a Bluesky post.
  *

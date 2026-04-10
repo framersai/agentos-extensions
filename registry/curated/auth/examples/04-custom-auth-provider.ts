@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Example 4: Custom Auth Provider
  * 

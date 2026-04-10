@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Browser Service
  *

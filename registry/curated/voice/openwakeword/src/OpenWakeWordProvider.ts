@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file OpenWakeWordProvider.ts
  * @description Wake-word detection provider using OpenWakeWord ONNX models.

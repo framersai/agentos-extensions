@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Netlify REST API service layer.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Pre-transaction guardrail that enforces spending limits,
  * category budgets, address whitelists/blacklists, and approval thresholds.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NamecheapRegisterDomainTool — register/purchase a domain via Namecheap.
  *

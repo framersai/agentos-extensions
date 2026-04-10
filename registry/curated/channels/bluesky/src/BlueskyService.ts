@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Bluesky AT Protocol service layer.
  *

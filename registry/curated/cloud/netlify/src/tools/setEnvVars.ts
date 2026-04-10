@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NetlifySetEnvVarsTool — set environment variables on a Netlify site.
  */

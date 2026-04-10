@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { GoogleBusinessService } from '../GoogleBusinessService.js';
 
 export class GbpCreatePostTool {

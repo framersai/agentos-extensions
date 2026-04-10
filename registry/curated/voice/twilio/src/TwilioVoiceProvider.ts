@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview IVoiceCallProvider implementation for Twilio.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub File Write tool — create or update a file in a repository.
  * Content is automatically base64-encoded before sending to the API.

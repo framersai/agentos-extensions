@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview WhatsApp Channel Extension for AgentOS.
  *

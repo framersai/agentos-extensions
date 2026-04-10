@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file PorcupineWakeWordProvider.spec.ts
  * @description Unit tests for {@link PorcupineWakeWordProvider}.

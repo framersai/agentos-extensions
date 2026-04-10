@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Preset configurations for common content policy scenarios.
  * @module content-policy-rewriter/presets

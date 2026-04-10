@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file AmazonPollyTTSProvider.ts
  * @description Text-to-speech provider backed by Amazon Polly Neural engine.

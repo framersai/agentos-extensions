@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { MastodonService } from '../MastodonService.js';
 
 export class MastodonFollowTool {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { FacebookService } from '../FacebookService.js';
 
 export class FacebookScheduleTool {

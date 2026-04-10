@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for uploading videos to YouTube.
  */

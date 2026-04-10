@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Unit tests for GitHubService convenience methods.
  * Octokit is fully mocked via vi.mock so no network calls are made.

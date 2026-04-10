@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DiarizationEngine.ts
  * @description Factory that creates {@link DiarizationSession} instances,

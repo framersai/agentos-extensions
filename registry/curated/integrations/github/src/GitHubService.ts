@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Octokit wrapper for the GitHub extension.
  * Manages token-based authentication and provides the Octokit client

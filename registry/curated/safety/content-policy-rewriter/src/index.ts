@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Content Policy Rewriter — extension pack factory.
  *

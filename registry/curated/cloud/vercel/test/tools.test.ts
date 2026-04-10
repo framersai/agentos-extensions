@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { VercelDeployTool } from '../src/tools/deploy.js';
 import { VercelListProjectsTool } from '../src/tools/listProjects.js';

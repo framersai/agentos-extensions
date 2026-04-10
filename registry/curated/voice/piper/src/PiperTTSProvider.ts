@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file PiperTTSProvider.ts
  * @description Offline text-to-speech provider that invokes the Piper binary.

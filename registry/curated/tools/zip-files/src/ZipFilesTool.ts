@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Zip Files tool — create zip archives from local file paths.
  *

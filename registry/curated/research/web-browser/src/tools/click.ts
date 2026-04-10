@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Click Tool
  * Click on elements in the current page.

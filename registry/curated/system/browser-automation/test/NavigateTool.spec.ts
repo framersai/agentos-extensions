@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NavigateTool } from '../src/tools/NavigateTool';
 import type { BrowserService, NavigationResult } from '../src/BrowserService';

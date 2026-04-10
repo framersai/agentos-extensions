@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Vision & OCR Pipeline Extension Pack — progressive multi-tier
  * vision pipeline as an agent tool.

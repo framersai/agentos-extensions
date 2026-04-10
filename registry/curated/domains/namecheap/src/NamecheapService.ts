@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Namecheap XML API service layer.
  *

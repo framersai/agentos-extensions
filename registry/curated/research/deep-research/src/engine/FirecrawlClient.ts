@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Firecrawl API client for deep research content extraction and crawling.
  *

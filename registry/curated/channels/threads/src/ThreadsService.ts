@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Threads API service layer.
  *

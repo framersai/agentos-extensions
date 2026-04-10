@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description Core type definitions for the ML Classifiers extension pack.

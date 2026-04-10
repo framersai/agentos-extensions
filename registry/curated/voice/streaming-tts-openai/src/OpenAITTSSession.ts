@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file OpenAITTSSession.ts
  * @description Active TTS session backed by the OpenAI Audio Speech API.

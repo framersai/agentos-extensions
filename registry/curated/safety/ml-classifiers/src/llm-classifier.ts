@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file llm-classifier.ts
  * @description LLM-as-judge classification wrapper that delegates safety

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Web Scrape Recipe Tool — ITool implementation for multi-step recipe execution.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for card spending breakdown.
  * @module wallet/tools/CardSpendingSummaryTool

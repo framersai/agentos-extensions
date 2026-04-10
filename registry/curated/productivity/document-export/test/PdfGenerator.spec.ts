@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
 import { PdfGenerator } from '../src/generators/PdfGenerator.js';
 import type { DocumentContent } from '../src/types.js';

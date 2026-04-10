@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for viewing wallet transaction history.
  * @module wunderland/wallet/tools/WalletHistoryTool

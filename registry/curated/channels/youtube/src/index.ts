@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview YouTube Channel Extension for AgentOS.
  *

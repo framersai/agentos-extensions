@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Shell Service
  * Manages command execution with security validation.

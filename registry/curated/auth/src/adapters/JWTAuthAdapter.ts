@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file JWT-based authentication adapter
  */

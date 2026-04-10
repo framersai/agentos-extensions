@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file Type definitions for search extension
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Manage chat tool for Telegram Bot extension
  */

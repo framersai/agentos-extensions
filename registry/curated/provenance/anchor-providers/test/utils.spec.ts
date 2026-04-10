@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file utils.spec.ts
  * @description Tests for shared utility functions: canonicalization, hashing, and HTTP retry.

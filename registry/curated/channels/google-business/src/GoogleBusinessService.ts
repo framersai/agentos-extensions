@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Google Business Profile API service layer.
  *

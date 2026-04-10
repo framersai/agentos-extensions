@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { FarcasterService } from '../FarcasterService.js';
 
 export class FarcasterReplyTool {

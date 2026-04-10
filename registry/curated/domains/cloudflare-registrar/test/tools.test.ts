@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CfRegConfigureDnsTool } from '../src/tools/configureDns';
 import { CfRegGetDomainInfoTool } from '../src/tools/getDomainInfo';

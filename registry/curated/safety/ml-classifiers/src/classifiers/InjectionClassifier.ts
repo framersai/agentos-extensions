@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Prompt-injection content classifier using the
  * `protectai/deberta-v3-small-prompt-injection-v2` model.

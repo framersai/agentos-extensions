@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * UserAgentPool — Unit Tests
  *

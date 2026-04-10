@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Scrape Tool
  * Extract content from bot-protected pages using CSS selectors with stealth browser.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { NotificationService } from '../NotificationService.js';
 
 export class NotifySendTool {

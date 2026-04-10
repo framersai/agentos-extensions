@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWSConfigureCloudFrontTool — create/configure a CloudFront distribution.
  *

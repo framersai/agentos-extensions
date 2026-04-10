@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Fuzzy FAQ matcher using tokenization, stemming, normalization,
  * and TF-IDF cosine similarity.

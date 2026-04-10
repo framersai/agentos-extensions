@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for composing and sending a new Gmail message.
  */

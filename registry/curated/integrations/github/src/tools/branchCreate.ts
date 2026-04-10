@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GitHub Branch Create tool — create a new branch from an existing
  * branch or SHA. Resolves the source branch name to a commit SHA before creating

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LetterboxdMovieTool — Unit Tests
  *

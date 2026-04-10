@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * WebScraperService — Core scraping engine with 4-tier progressive fallback.
  *

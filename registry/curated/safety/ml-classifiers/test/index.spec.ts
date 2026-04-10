@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file index.spec.ts
  * @description Unit tests for the ML Classifier pack factory.

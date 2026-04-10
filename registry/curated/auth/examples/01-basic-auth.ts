@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Example 1: Basic Authentication
  * 

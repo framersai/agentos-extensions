@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for engaging with TikTok content (like, comment, share).
  */

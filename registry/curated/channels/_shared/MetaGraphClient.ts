@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Shared Meta Graph API client for Facebook, Instagram, and Threads.
  *

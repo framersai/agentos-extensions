@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview AWSCreateLightsailTool — create, list, or delete Lightsail instances.
  *

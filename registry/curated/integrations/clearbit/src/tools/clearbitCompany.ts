@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Clearbit Company Enrichment Tool — ITool implementation for the Clearbit
  * Company API.

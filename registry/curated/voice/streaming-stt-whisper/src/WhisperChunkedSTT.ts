@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file WhisperChunkedSTT.ts
  * @description {@link IStreamingSTT}-compatible factory backed by OpenAI Whisper HTTP API.

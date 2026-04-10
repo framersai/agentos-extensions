@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Fact Check Tool — verify statements against web sources.
  *

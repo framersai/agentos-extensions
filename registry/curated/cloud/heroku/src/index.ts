@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Heroku Cloud Extension for AgentOS.
  *

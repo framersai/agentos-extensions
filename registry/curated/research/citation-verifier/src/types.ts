@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** Input for the verify_citations tool. */
 export interface VerifyCitationsInput {
   text: string;

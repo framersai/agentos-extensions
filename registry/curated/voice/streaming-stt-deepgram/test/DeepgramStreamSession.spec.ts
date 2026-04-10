@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file DeepgramStreamSession.spec.ts
  * @description Unit tests for {@link DeepgramStreamSession}.

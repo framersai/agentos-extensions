@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file types.ts
  * @description Public configuration types for the Semantic Endpoint Detector

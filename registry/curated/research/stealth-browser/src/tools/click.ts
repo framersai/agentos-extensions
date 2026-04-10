@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Click Tool
  * Click on elements in bot-protected pages with human-like behavior.

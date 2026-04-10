@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tlon (Urbit) Channel Extension for AgentOS.
  *

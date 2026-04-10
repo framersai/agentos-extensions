@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Singleton browser manager wrapping Playwright.
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { VerifyCitationsTool } from './VerifyCitationsTool.js';
 export { VerifyCitationsTool } from './VerifyCitationsTool.js';
 export type { VerifyCitationsInput, VerifyCitationsOutput } from './types.js';

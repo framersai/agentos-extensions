@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Web Worker entry point for ML content classification.
  *

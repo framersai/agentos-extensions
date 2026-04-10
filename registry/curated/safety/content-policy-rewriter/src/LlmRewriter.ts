@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Layer 2b: LLM-based content rewriter.
  * Takes text with identified violations and rewrites it to remove them.

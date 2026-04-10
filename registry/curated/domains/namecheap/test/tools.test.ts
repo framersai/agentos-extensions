@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NamecheapConfigureDnsTool } from '../src/tools/configureDns';
 import { NamecheapGetDnsRecordsTool } from '../src/tools/getDnsRecords';

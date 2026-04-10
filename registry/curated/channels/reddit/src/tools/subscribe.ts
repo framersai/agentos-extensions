@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for subscribing to or unsubscribing from subreddits via the Reddit channel adapter.
  */

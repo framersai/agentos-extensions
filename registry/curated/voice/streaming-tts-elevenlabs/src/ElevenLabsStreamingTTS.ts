@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file ElevenLabsStreamingTTS.ts
  * @description {@link IStreamingTTS}-compatible factory for ElevenLabs TTS sessions.

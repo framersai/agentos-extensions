@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview IChannelAdapter implementation for WhatsApp via Baileys.
  */

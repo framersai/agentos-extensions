@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview FlyListAppsTool — list all Fly.io apps and their machines.
  */

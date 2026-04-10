@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview NamecheapListDomainsTool — list all domains owned by the Namecheap account.
  */

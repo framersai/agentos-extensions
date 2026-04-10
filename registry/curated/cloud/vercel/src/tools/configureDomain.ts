@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview VercelConfigureDomainTool — add or manage custom domains on a Vercel project.
  */

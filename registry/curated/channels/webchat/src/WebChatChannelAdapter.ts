@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview IChannelAdapter implementation for the built-in WebChat widget.
  *

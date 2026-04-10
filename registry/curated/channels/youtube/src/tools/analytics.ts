@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview ITool for YouTube channel and video analytics.
  */

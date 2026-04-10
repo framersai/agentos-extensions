@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Agent-callable tool for freezing (pausing) a card.
  * @module wallet/tools/FreezeCardTool

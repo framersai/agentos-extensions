@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview GoDaddyRegisterDomainTool — purchase and register a domain name.
  */

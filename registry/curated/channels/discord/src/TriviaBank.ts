@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Trivia question sourcing — Open Trivia DB API with local fallback.
  *

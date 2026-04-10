@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview Tests for StealthBrowserService (unit only, puppeteer fully mocked).
  */

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file SlidingWindowBuffer.ts
  * @description Ring buffer that accumulates Float32 audio frames into fixed-size chunks

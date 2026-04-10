@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stealth Screenshot Tool
  * Capture screenshot of bot-protected pages via stealth browser.

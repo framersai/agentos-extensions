@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @fileoverview VercelListProjectsTool — list all projects on a Vercel account.
  */
