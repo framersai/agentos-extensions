@@ -1,9 +1,7 @@
 <p align="center">
-  <a href="https://agentos.sh"><img src="logos/agentos-primary-transparent-2x.png" alt="AgentOS" height="64" /></a>
+  <a href="https://agentos.sh"><img src="logos/agentos-primary-no-tagline-transparent-2x.png" alt="AgentOS" height="56" /></a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://frame.dev" target="_blank" rel="noopener"><img src="logos/frame-logo-green-transparent-4x.png" alt="Frame.dev" height="64" /></a>
-  <br>
-  <small>by <a href="https://frame.dev" target="_blank" rel="noopener">Frame.dev</a></small>
+  <a href="https://frame.dev"><img src="logos/frame-logo-green-transparent-4x.png" alt="Frame.dev" height="40" /></a>
 </p>
 
 # AgentOS Extensions
@@ -419,8 +417,15 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
 All extensions in this repository are MIT licensed.
 
+---
+
 <p align="center">
-  <a href="https://agentos.sh"><img src="logos/agentos-primary-transparent-2x.png" alt="AgentOS" height="48" /></a>
+  <a href="https://agentos.sh"><img src="logos/agentos-primary-no-tagline-transparent-2x.png" alt="AgentOS" height="36" /></a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://frame.dev" target="_blank" rel="noopener"><img src="logos/frame-logo-green-transparent-4x.png" alt="Frame.dev" height="48" /></a>
+  <a href="https://frame.dev"><img src="logos/frame-logo-green-transparent-4x.png" alt="Frame.dev" height="36" /></a>
+</p>
+
+<p align="center">
+  Built by <a href="https://manic.agency">Manic Agency LLC</a> / <a href="https://frame.dev">Frame.dev</a><br>
+  Contact: <a href="mailto:team@frame.dev">team@frame.dev</a>
 </p>
