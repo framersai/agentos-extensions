@@ -405,12 +405,15 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
 ## Links
 
-- **Website**: [frame.dev](https://frame.dev)
 - **AgentOS**: [agentos.sh](https://agentos.sh)
-- **Marketplace**: [vca.chat](https://vca.chat)
+- **AgentOS GitHub**: [github.com/framersai/agentos](https://github.com/framersai/agentos)
+- **Extensions GitHub**: [github.com/framersai/agentos-extensions](https://github.com/framersai/agentos-extensions)
+- **Mars Genesis Demo**: [github.com/framersai/mars-genesis-simulation](https://github.com/framersai/mars-genesis-simulation)
 - **npm**: [@framers](https://www.npmjs.com/org/framers)
 - **API Docs**: [framersai.github.io/agentos-extensions](https://framersai.github.io/agentos-extensions/)
-- **Contact**: team@frame.dev
+- **Discord**: [wilds.ai/discord](https://wilds.ai/discord)
+- **Website**: [frame.dev](https://frame.dev)
+- **Contact**: [team@frame.dev](mailto:team@frame.dev)
 
 ## License
 
