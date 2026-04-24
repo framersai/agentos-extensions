@@ -26,7 +26,7 @@
   "repository": { "type": "git", "url": "https://github.com/framersai/agentos-extensions.git", "directory": "registry/curated/productivity/document-export" },
   "publishConfig": { "access": "public" },
   "files": ["dist", "manifest.json"],
-  "peerDependencies": { "@framers/agentos": "^0.1.0" },
+  "peerDependencies": { "@framers/agentos": "^0.2.4" },
   "dependencies": {
     "pdfkit": "^0.18.0",
     "docx": "^9.6.0",

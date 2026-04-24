@@ -28,7 +28,7 @@
     "manifest.json"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^0.1.0"
+    "@framers/agentos": "^0.2.4"
   },
   "dependencies": {
     "@vector-im/matrix-bot-sdk": "0.8.0-element.3"

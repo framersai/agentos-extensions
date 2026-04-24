@@ -20,7 +20,7 @@
     "archiver": "^7.0.0"
   },
   "peerDependencies": {
-    "@framers/agentos": ">=0.1.146"
+    "@framers/agentos": "^0.2.4"
   },
   "keywords": ["agentos", "extension", "tool", "zip", "archive"],
   "license": "MIT",

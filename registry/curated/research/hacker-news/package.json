@@ -16,7 +16,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@framers/agentos": ">=0.1.0"
+    "@framers/agentos": "^0.2.4"
   },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
