@@ -22,7 +22,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.2.4",
+    "@framers/agentos": "^0.2.5",
     "@picovoice/porcupine-node": "^3.0.0"
   },
   "devDependencies": {

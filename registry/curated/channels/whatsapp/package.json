@@ -29,7 +29,7 @@
     "manifest.json"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^0.2.4",
+    "@framers/agentos": "^0.2.5",
     "@whiskeysockets/baileys": ">=6.0.0"
   },
   "devDependencies": {

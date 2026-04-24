@@ -16,7 +16,7 @@
     "clean": "rimraf dist"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.2.4"
+    "@framers/agentos": "^0.2.5"
   },
   "keywords": ["agentos", "extension", "tool", "trulia", "real-estate", "property-search"],
   "license": "MIT",
