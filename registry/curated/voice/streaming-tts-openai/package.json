@@ -22,7 +22,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.2.5"
+    "@framers/agentos": "^0.2.10"
   },
   "dependencies": {},
   "devDependencies": {

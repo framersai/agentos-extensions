@@ -24,9 +24,9 @@
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/framersai/agentos-extensions.git", "directory": "registry/curated/tools/image-editing" },
   "publishConfig": { "access": "public" },
-  "peerDependencies": { "@framers/agentos": "^0.2.5" },
+  "peerDependencies": { "@framers/agentos": "^0.2.10" },
   "devDependencies": {
-    "@framers/agentos": "^0.2.5",
+    "@framers/agentos": "^0.2.10",
     "@types/node": "^20.12.12",
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
