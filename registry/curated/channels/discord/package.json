@@ -29,7 +29,7 @@
     "manifest.json"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^0.2.10"
+    "@framers/agentos": "^0.2.11"
   },
   "dependencies": {
     "discord.js": "^14.14.0"

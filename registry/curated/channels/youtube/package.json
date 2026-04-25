@@ -16,7 +16,7 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.2.10"
+    "@framers/agentos": "^0.2.11"
   },
   "dependencies": {
     "googleapis": "^130.0.0"
