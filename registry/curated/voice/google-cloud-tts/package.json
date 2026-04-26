@@ -22,7 +22,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.5.1",
+    "@framers/agentos": "^0.5.2",
     "@google-cloud/text-to-speech": "^5.0.0"
   },
   "devDependencies": {

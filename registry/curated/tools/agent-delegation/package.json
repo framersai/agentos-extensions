@@ -25,9 +25,9 @@
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/framersai/agentos-extensions.git", "directory": "registry/curated/tools/agent-delegation" },
   "publishConfig": { "access": "public" },
-  "peerDependencies": { "@framers/agentos": "^0.5.1" },
+  "peerDependencies": { "@framers/agentos": "^0.5.2" },
   "devDependencies": {
-    "@framers/agentos": "^0.5.1",
+    "@framers/agentos": "^0.5.2",
     "@types/node": "^20.12.12",
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
