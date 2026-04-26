@@ -49,7 +49,7 @@
     "directory": "registry/curated/research/web-browser"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.2.11"
+    "@framers/agentos": "^0.5.0"
   },
   "dependencies": {
     "puppeteer-core": "^22.0.0",

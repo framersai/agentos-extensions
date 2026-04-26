@@ -22,7 +22,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.2.11"
+    "@framers/agentos": "^0.5.0"
   },
   "devDependencies": {
     "@framers/agentos": "workspace:*",
