@@ -29,7 +29,7 @@
     "manifest.json"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^0.5.0"
+    "@framers/agentos": "^0.5.1"
   },
   "dependencies": {
     "@urbit/aura": "^3.0.0"

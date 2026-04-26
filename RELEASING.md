@@ -111,7 +111,6 @@ The `pnpm-workspace.yaml` lists all publishable packages:
 packages:
   - "registry/curated/auth"
   - "registry/curated/provenance/anchor-providers"
-  - "registry/curated/provenance/wunderland-tip-ingestion"
   - "registry/curated/research/web-search"
   - "registry/curated/research/web-browser"
   - "registry/curated/integrations/telegram"

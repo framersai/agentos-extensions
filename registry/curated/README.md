@@ -32,7 +32,7 @@ Professional research and analysis tools.
 ### 🔗 Provenance
 On-chain anchoring and data integrity.
 - **[@framers/agentos-ext-anchor-providers](provenance/anchor-providers/)**: Solana, Ethereum, Rekor, OpenTimestamps anchoring
-- **[@framers/agentos-ext-tip-ingestion](provenance/wunderland-tip-ingestion/)**: IPFS pinning & tip content processing
+- **[@framers/agentos-ext-tip-ingestion](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion)**: IPFS pinning & tip content processing (published package; not vendored in this workspace)
 
 ### 💬 Communications
 Messaging platform integrations.

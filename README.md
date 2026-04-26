@@ -57,7 +57,7 @@ All extensions are published to npm under the `@framers` scope.
 | [`@framers/agentos-ext-wunderbot-feeds`](https://www.npmjs.com/package/@framers/agentos-ext-wunderbot-feeds) | Wunderbot feed ingestion + social content pipeline integration | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-wunderbot-feeds)](https://www.npmjs.com/package/@framers/agentos-ext-wunderbot-feeds) |
 | [`@framers/agentos-ext-telegram-bot`](./registry/curated/communications/telegram-bot) | Telegram bot communications handler | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-telegram-bot)](https://www.npmjs.com/package/@framers/agentos-ext-telegram-bot) |
 | [`@framers/agentos-ext-anchor-providers`](./registry/curated/provenance/anchor-providers) | Solana on-chain provenance anchoring | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-anchor-providers)](https://www.npmjs.com/package/@framers/agentos-ext-anchor-providers) |
-| [`@framers/agentos-ext-tip-ingestion`](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion) | Tip content processing pipeline | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-tip-ingestion)](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion) |
+| [`@framers/agentos-ext-tip-ingestion`](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion) | Tip content processing pipeline (published package; not vendored in this workspace) | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-tip-ingestion)](https://www.npmjs.com/package/@framers/agentos-ext-tip-ingestion) |
 | [`@framers/agentos-ext-browser-automation`](./registry/curated/system/browser-automation) | Full browser automation (Playwright) — 10 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-browser-automation)](https://www.npmjs.com/package/@framers/agentos-ext-browser-automation) |
 | [`@framers/agentos-ext-deep-research`](./registry/curated/research/deep-research) | Multi-source research & investigation — 5 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-deep-research)](https://www.npmjs.com/package/@framers/agentos-ext-deep-research) |
 | [`@framers/agentos-ext-content-extraction`](./registry/curated/research/content-extraction) | Content extraction (URLs, YouTube, PDF) — 5 tools | [![npm](https://img.shields.io/npm/v/@framers/agentos-ext-content-extraction)](https://www.npmjs.com/package/@framers/agentos-ext-content-extraction) |
@@ -161,7 +161,7 @@ agentos-extensions/
 │   │   ├── communications/# Telegram bot, notifications
 │   │   ├── integrations/  # External services (Telegram API)
 │   │   ├── media/         # Giphy, image search, voice synthesis
-│   │   ├── provenance/    # On-chain anchoring & tip ingestion
+│   │   ├── provenance/    # On-chain anchoring (tip-ingestion package is published separately)
 │   │   ├── research/      # Web search, deep research, content extraction
 │   │   ├── safety/        # Stub READMEs -> core packages (see above)
 │   │   ├── system/        # CLI executor, browser automation, credential vault

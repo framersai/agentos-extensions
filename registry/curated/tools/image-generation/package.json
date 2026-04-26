@@ -30,7 +30,7 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@framers/agentos": "^0.5.0"
+    "@framers/agentos": "^0.5.1"
   },
   "dependencies": {
     "@framers/agentos": "workspace:*"
