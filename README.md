@@ -9,7 +9,7 @@
 Extension source code for AgentOS — tools, channel adapters, integrations, and starter templates.
 
 [![CI Status](https://github.com/framersai/agentos-extensions/workflows/CI/badge.svg)](https://github.com/framersai/agentos-extensions/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![API Docs](https://img.shields.io/badge/docs-TypeDoc-blue)](https://framersai.github.io/agentos-extensions/)
 [![npm: registry](https://img.shields.io/npm/v/@framers/agentos-extensions-registry?label=registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry)
 [![npm: catalog](https://img.shields.io/npm/v/@framers/agentos-extensions?label=catalog)](https://www.npmjs.com/package/@framers/agentos-extensions)
@@ -371,7 +371,7 @@ All extensions get free CI/CD via GitHub Actions:
 
 - TypeScript with strict mode
 - >80% test coverage
-- MIT license
+- Apache 2.0 license
 - No hardcoded secrets
 
 ### Additional for Curated
@@ -415,7 +415,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
 ## License
 
-All extensions in this repository are MIT licensed.
+All extensions in this repository are Apache 2.0 licensed.
 
 ---
 

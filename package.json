@@ -6,7 +6,7 @@
     "types.d.ts",
     "README.md"
   ],
-  "description": "Extension source for AgentOS — implementations, templates, and manifests for tools, channel adapters, and integrations",
+  "description": "Extension source for AgentOS \u2014 implementations, templates, and manifests for tools, channel adapters, and integrations",
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -52,7 +52,7 @@
       "url": "https://github.com/jddunn"
     }
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
   },
