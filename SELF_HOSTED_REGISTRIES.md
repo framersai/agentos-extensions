@@ -9,8 +9,7 @@ AgentOS supports loading extensions and personas from self-hosted registries. Po
 ```typescript
 import { AgentOS } from '@framers/agentos';
 
-const agentos = new AgentOS();
-await agentos.initialize({
+const agentos = await AgentOS.create({
   registryConfig: {
     registries: {
       'my-extensions': {
@@ -32,7 +31,7 @@ await agentos.initialize({
       persona: 'my-personas',
     }
   }
-});
+}));
 ```
 
 ## Registry Sources
@@ -267,8 +266,7 @@ Use environment variables for tokens:
 import { AgentOS } from '@framers/agentos';
 import { createAuthExtension } from '@framers/agentos-extensions/auth';
 
-const agentos = new AgentOS();
-await agentos.initialize({
+const agentos = await AgentOS.create({
   // Point to your self-hosted registries
   registryConfig: {
     registries: {
@@ -303,7 +301,7 @@ await agentos.initialize({
   // Use auth from your self-hosted registry
   authService: /* loaded from corp-extensions */,
   subscriptionService: /* loaded from corp-extensions */,
-});
+}));
 ```
 
 ## Benefits
