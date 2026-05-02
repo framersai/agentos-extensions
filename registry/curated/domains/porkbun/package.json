@@ -65,5 +65,9 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/porkbun#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "dist",
+    "manifest.json"
+  ]
 }

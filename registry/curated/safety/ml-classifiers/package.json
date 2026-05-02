@@ -39,5 +39,9 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/ml-classifiers#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
 }

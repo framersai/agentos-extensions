@@ -67,5 +67,9 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/media-upload#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "dist",
+    "manifest.json"
+  ]
 }

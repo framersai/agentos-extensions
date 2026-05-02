@@ -64,5 +64,8 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/vision-pipeline#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "manifest.json"
+  ]
 }

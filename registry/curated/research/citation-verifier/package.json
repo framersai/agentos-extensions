@@ -40,5 +40,10 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/citation-verifier#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "dist",
+    "manifest.json",
+    "README.md"
+  ]
 }

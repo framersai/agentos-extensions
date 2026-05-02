@@ -34,5 +34,9 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/content-policy-rewriter#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
 }

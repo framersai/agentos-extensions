@@ -68,5 +68,9 @@
   "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/letterboxd#readme",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
-  }
+  },
+  "files": [
+    "dist",
+    "manifest.json"
+  ]
 }
