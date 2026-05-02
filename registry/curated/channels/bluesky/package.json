@@ -16,7 +16,7 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.5.2"
+    "@framers/agentos": "^0.6.6"
   },
   "dependencies": {
     "@atproto/api": "^0.13.0"

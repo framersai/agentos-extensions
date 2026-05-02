@@ -29,7 +29,7 @@
     "manifest.json"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^0.5.2"
+    "@framers/agentos": "^0.6.6"
   },
   "dependencies": {
     "googleapis": "^130.0.0"

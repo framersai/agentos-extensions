@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.5.2"
+    "@framers/agentos": "^0.6.6"
   },
   "optionalDependencies": {
     "@huggingface/transformers": "^3.0.0"

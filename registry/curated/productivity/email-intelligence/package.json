@@ -17,7 +17,7 @@
   "license": "MIT",
   "private": true,
   "peerDependencies": {
-    "@framers/agentos": "^0.5.2"
+    "@framers/agentos": "^0.6.6"
   },
   "devDependencies": {
     "@framers/agentos": "^0.6.6",
