@@ -1,5 +1,7 @@
 # Agency Collaboration Example: Research & Communication Team
 
+> **Live runs**: side-by-side code + captured output for the canonical agency() patterns (graph DAG, streaming + HITL, hierarchical with emergent spawning) are on the [agentos.sh demo gallery](https://agentos.sh/#live-demo). Source examples: [`agency-graph.mjs`](https://github.com/framersai/agentos/blob/master/examples/agency-graph.mjs), [`agency-streaming.mjs`](https://github.com/framersai/agentos/blob/master/examples/agency-streaming.mjs), [`emergent-hierarchical-spawning.mjs`](https://github.com/framersai/agentos/blob/master/examples/emergent-hierarchical-spawning.mjs).
+
 This example demonstrates how two GMIs (Generalized Mind Instances) collaborate in an AgentOS agency to research topics and communicate findings via Telegram.
 
 ## Understanding the Architecture
