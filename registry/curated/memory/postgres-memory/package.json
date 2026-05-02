@@ -5,7 +5,7 @@
   "description": "Postgres + pgvector memory provider extension for AgentOS",
   "main": "src/index.ts",
   "dependencies": {
-    "@framers/agentos": "workspace:*",
-    "@framers/sql-storage-adapter": "workspace:*"
+    "@framers/agentos": "^0.6.6",
+    "@framers/sql-storage-adapter": "^0.6.4"
   }
 }

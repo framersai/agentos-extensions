@@ -23,7 +23,7 @@
     "imapflow": "^1.0.0"
   },
   "devDependencies": {
-    "@framers/agentos": "workspace:*",
+    "@framers/agentos": "^0.6.6",
     "@types/node": "^20.0.0",
     "@types/nodemailer": "^6.4.0",
     "typescript": "^5.0.0",

@@ -58,7 +58,7 @@
     "@framers/agentos": "^0.5.2"
   },
   "devDependencies": {
-    "@framers/agentos": "workspace:^",
+    "@framers/agentos": "^0.6.6",
     "@types/node": "^20.12.12",
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",

@@ -5,6 +5,6 @@
   "description": "Relationship memory tools for companion trust, boundaries, and anchor moments",
   "main": "src/index.ts",
   "dependencies": {
-    "@framers/agentos": "workspace:*"
+    "@framers/agentos": "^0.6.6"
   }
 }

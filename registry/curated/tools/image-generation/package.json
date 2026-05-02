@@ -33,7 +33,7 @@
     "@framers/agentos": "^0.5.2"
   },
   "dependencies": {
-    "@framers/agentos": "workspace:*"
+    "@framers/agentos": "^0.6.6"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

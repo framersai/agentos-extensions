@@ -21,7 +21,7 @@
     "@framers/agentos": "^0.5.2"
   },
   "devDependencies": {
-    "@framers/agentos": "workspace:*",
+    "@framers/agentos": "^0.6.6",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   },

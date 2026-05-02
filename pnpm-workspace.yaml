@@ -1,4 +1,12 @@
 packages:
   - "."
+  # Every curated extension under registry/curated/<category>/<name>/ ships its
+  # own package.json. Without these globs, pnpm + changesets only see the root
+  # @framers/agentos-extensions package and the 113 sub-packages never get
+  # versioned or published. The two glob depths cover both flat layouts
+  # (registry/curated/auth) and category/name layouts (registry/curated/channels/discord).
+  - "registry/curated/*"
+  - "registry/curated/*/*"
+  - "templates/*"
 overrides:
-  "@framers/agentos": "^0.1.244"
+  "@framers/agentos": "^0.6.6"
