@@ -45,7 +45,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/feishu"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/feishu#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

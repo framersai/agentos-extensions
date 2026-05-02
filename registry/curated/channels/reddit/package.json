@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-reddit",
   "version": "0.1.0",
-  "description": "Reddit messaging channel adapter for AgentOS — bidirectional Reddit interaction via snoowrap",
+  "description": "Reddit messaging channel adapter for AgentOS \u2014 bidirectional Reddit interaction via snoowrap",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -45,7 +45,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/reddit"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/reddit#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

@@ -44,7 +44,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/matrix"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/matrix#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/media/omdb"
   },
   "publishConfig": {
@@ -63,5 +63,9 @@
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/media/omdb#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

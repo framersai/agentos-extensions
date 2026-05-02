@@ -39,7 +39,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/communications/telegram-bot"
   },
   "files": [
@@ -72,5 +72,9 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/telegram-bot#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

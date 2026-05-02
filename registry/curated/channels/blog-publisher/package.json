@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-blog-publisher",
   "version": "0.1.0",
-  "description": "Unified blog publishing channel adapter for AgentOS — publishes to Dev.to, Hashnode, Medium, and WordPress from a single interface",
+  "description": "Unified blog publishing channel adapter for AgentOS \u2014 publishes to Dev.to, Hashnode, Medium, and WordPress from a single interface",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -49,7 +49,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/blog-publisher"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/blog-publisher#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

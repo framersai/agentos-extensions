@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-deep-research",
   "version": "0.1.0",
-  "description": "Deep research extension for AgentOS — multi-source investigation, academic search, content scraping, aggregate search, and trend discovery.",
+  "description": "Deep research extension for AgentOS \u2014 multi-source investigation, academic search, content scraping, aggregate search, and trend discovery.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,7 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/research/deep-research"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/deep-research#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-zalo",
   "version": "0.1.0",
-  "description": "Zalo Bot API channel adapter for AgentOS — polling + webhook support",
+  "description": "Zalo Bot API channel adapter for AgentOS \u2014 polling + webhook support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -41,7 +41,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/zalo"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/zalo#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

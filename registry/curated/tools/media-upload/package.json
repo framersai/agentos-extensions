@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-tool-media-upload",
   "version": "0.1.0",
-  "description": "Media upload tool — upload images, videos, and audio to the media library for use in social posts.",
+  "description": "Media upload tool \u2014 upload images, videos, and audio to the media library for use in social posts.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/tools/media-upload"
   },
   "publishConfig": {
@@ -63,5 +63,9 @@
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/media-upload#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-lemmy",
   "version": "0.1.0",
-  "description": "Lemmy channel adapter for AgentOS — create posts, comment, vote, search, subscribe, and browse feeds via Lemmy HTTP API.",
+  "description": "Lemmy channel adapter for AgentOS \u2014 create posts, comment, vote, search, subscribe, and browse feeds via Lemmy HTTP API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,7 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/lemmy"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/lemmy#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

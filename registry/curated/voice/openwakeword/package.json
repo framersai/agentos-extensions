@@ -34,10 +34,14 @@
   "author": "Frame.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/openwakeword"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/openwakeword#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

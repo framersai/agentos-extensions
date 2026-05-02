@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-notifications",
   "version": "0.1.0",
-  "description": "Unified multi-channel notification router for AgentOS — send, broadcast, and schedule notifications across all configured channels.",
+  "description": "Unified multi-channel notification router for AgentOS \u2014 send, broadcast, and schedule notifications across all configured channels.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -25,7 +25,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/communications/notifications"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/communications/notifications#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

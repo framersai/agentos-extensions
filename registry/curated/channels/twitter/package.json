@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-twitter",
   "version": "0.1.0",
-  "description": "Twitter/X channel adapter for AgentOS — post tweets, reply, quote, thread, search trends, DMs, and engagement analytics via Twitter API v2.",
+  "description": "Twitter/X channel adapter for AgentOS \u2014 post tweets, reply, quote, thread, search trends, DMs, and engagement analytics via Twitter API v2.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,7 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/twitter"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/twitter#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

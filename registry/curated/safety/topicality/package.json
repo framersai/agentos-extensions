@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-topicality",
   "version": "0.2.1",
-  "description": "Topic enforcement guardrail for AgentOS — embedding-based on/off-topic detection with LLM fallback",
+  "description": "Topic enforcement guardrail for AgentOS \u2014 embedding-based on/off-topic detection with LLM fallback",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,7 +26,7 @@
   "author": "Frame.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/safety/topicality"
   },
   "publishConfig": {
@@ -35,5 +35,9 @@
   "devDependencies": {
     "semantic-release": "^24.0.0",
     "@semantic-release/github": "^11.0.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/topicality#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

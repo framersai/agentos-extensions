@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-cloud-vercel",
   "version": "0.1.0",
-  "description": "Vercel cloud deployment extension — deploy projects, manage domains, and configure environment variables via the Vercel REST API.",
+  "description": "Vercel cloud deployment extension \u2014 deploy projects, manage domains, and configure environment variables via the Vercel REST API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -45,7 +45,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/cloud/vercel"
   },
   "publishConfig": {
@@ -60,5 +60,9 @@
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/vercel#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

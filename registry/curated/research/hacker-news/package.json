@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-hacker-news",
   "version": "1.0.0",
-  "description": "Hacker News extension for AgentOS — story search with category inference",
+  "description": "Hacker News extension for AgentOS \u2014 story search with category inference",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,5 +23,14 @@
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/research/hacker-news"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/hacker-news#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
+  }
 }

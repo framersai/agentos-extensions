@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-credential-vault",
   "version": "0.1.0",
-  "description": "Credential vault extension for AgentOS — encrypted in-memory credential storage with AES-256-GCM, rotation support, and import/export.",
+  "description": "Credential vault extension for AgentOS \u2014 encrypted in-memory credential storage with AES-256-GCM, rotation support, and import/export.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -26,7 +26,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/system/credential-vault"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/system/credential-vault#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

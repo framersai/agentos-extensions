@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-content-policy-rewriter",
   "version": "0.1.0",
-  "description": "Opt-in content policy guardrail for AgentOS — detects violations and rewrites or blocks output via LLM judge",
+  "description": "Opt-in content policy guardrail for AgentOS \u2014 detects violations and rewrites or blocks output via LLM judge",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,5 +25,14 @@
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/safety/content-policy-rewriter"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/content-policy-rewriter#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
+  }
 }

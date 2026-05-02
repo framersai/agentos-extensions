@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-cloud-flyio",
   "version": "0.1.0",
-  "description": "Fly.io cloud deployment extension — deploy apps, manage machines, scale instances, and create persistent volumes via the Fly Machines API.",
+  "description": "Fly.io cloud deployment extension \u2014 deploy apps, manage machines, scale instances, and create persistent volumes via the Fly Machines API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/cloud/flyio"
   },
   "publishConfig": {
@@ -62,5 +62,9 @@
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/cloud/flyio#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

@@ -7,5 +7,14 @@
   "dependencies": {
     "@framers/agentos": "^0.6.6",
     "@framers/sql-storage-adapter": "^0.6.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/memory/postgres-memory"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/memory/postgres-memory#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

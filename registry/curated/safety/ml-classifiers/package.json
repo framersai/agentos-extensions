@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-ml-classifiers",
   "version": "0.2.1",
-  "description": "ML-based content classifiers for AgentOS — toxicity, prompt injection, and NSFW detection via ONNX models or LLM fallback",
+  "description": "ML-based content classifiers for AgentOS \u2014 toxicity, prompt injection, and NSFW detection via ONNX models or LLM fallback",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,7 +26,7 @@
   "author": "Frame.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/safety/ml-classifiers"
   },
   "publishConfig": {
@@ -35,5 +35,9 @@
   "devDependencies": {
     "semantic-release": "^24.0.0",
     "@semantic-release/github": "^11.0.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/safety/ml-classifiers#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

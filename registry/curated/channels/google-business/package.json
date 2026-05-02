@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-google-business",
   "version": "0.1.0",
-  "description": "Google Business Profile channel adapter for AgentOS — create posts, reply to reviews, view analytics, and update business info via Google My Business API.",
+  "description": "Google Business Profile channel adapter for AgentOS \u2014 create posts, reply to reviews, view analytics, and update business info via Google My Business API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,7 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/google-business"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/google-business#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

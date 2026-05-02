@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-domain-godaddy",
   "version": "0.1.0",
-  "description": "GoDaddy domain registrar extension — search, register, and manage domains and DNS records via the GoDaddy REST API.",
+  "description": "GoDaddy domain registrar extension \u2014 search, register, and manage domains and DNS records via the GoDaddy REST API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -45,7 +45,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/domains/godaddy"
   },
   "publishConfig": {
@@ -60,5 +60,9 @@
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/domains/godaddy#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

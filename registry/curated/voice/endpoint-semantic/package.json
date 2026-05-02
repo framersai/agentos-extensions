@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-endpoint-semantic",
   "version": "0.2.0",
-  "description": "Semantic endpoint detection extension pack for AgentOS voice pipeline — LLM-based turn-completeness classification",
+  "description": "Semantic endpoint detection extension pack for AgentOS voice pipeline \u2014 LLM-based turn-completeness classification",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,10 +33,14 @@
   "author": "Frame.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/endpoint-semantic"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/endpoint-semantic#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

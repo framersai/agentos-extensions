@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-diarization",
   "version": "0.2.0",
-  "description": "Speaker diarization extension pack for AgentOS voice pipeline — provider delegation and local clustering",
+  "description": "Speaker diarization extension pack for AgentOS voice pipeline \u2014 provider delegation and local clustering",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -39,10 +39,14 @@
   "author": "Frame.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/voice/diarization"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/diarization#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

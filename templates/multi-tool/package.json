@@ -40,5 +40,14 @@
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "directory": "templates/multi-tool"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/templates/multi-tool#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

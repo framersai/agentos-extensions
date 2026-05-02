@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-email-intelligence",
   "version": "0.1.0",
-  "description": "Email Intelligence extension for AgentOS — query threads, projects, attachments and generate reports",
+  "description": "Email Intelligence extension for AgentOS \u2014 query threads, projects, attachments and generate reports",
   "main": "src/index.ts",
   "keywords": [
     "agentos",
@@ -26,7 +26,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/productivity/email-intelligence"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/email-intelligence#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

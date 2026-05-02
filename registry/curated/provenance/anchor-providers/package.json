@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-anchor-providers",
   "version": "1.1.0",
-  "description": "External anchor providers for AgentOS provenance — blockchain, WORM storage, and transparency log integrations",
+  "description": "External anchor providers for AgentOS provenance \u2014 blockchain, WORM storage, and transparency log integrations",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -53,7 +53,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/provenance/anchor-providers"
   },
   "publishConfig": {
@@ -99,5 +99,9 @@
     "typedoc": "^0.25.13",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/provenance/anchor-providers#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

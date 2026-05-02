@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-channel-tiktok",
   "version": "0.1.0",
-  "description": "TikTok channel adapter for AgentOS — upload videos, discover trends, search content, track analytics, and engage via TikTok API for Business.",
+  "description": "TikTok channel adapter for AgentOS \u2014 upload videos, discover trends, search content, track analytics, and engage via TikTok API for Business.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -32,7 +32,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/channels/tiktok"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/channels/tiktok#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }

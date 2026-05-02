@@ -6,7 +6,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./manifest.json": "./manifest.json",
     "./package.json": "./package.json"
   },
@@ -19,7 +22,24 @@
   "peerDependencies": {
     "@framers/agentos": "^0.5.2"
   },
-  "keywords": ["agentos", "extension", "tool", "file-search", "filesystem"],
+  "keywords": [
+    "agentos",
+    "extension",
+    "tool",
+    "file-search",
+    "filesystem"
+  ],
   "license": "MIT",
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "directory": "registry/curated/tools/local-file-search"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/local-file-search#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
+  }
 }

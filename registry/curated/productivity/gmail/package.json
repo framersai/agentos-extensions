@@ -1,7 +1,7 @@
 {
   "name": "@framers/agentos-ext-email-gmail",
   "version": "0.1.0",
-  "description": "Gmail integration for AgentOS — email CRUD via Google Gmail API",
+  "description": "Gmail integration for AgentOS \u2014 email CRUD via Google Gmail API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -45,7 +45,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions",
+    "url": "git+https://github.com/framersai/agentos-extensions.git",
     "directory": "registry/curated/productivity/gmail"
+  },
+  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/gmail#readme",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
   }
 }
