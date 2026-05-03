@@ -31,7 +31,13 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build agentos core
-        run: cd packages/agentos && pnpm install --no-frozen-lockfile && pnpm run build
+        # `--ignore-workspace` is required because the agentos-extensions
+        # pnpm-workspace.yaml at the repo root does not list packages/agentos
+        # (it's a sibling clone, not a workspace member). Without the flag,
+        # pnpm walks up to the root workspace, sees agentos isn't a member,
+        # and silently no-ops — leaving packages/agentos/node_modules absent
+        # and the build's `rimraf` clean step fails with "command not found".
+        run: cd packages/agentos && pnpm install --no-frozen-lockfile --ignore-workspace && pnpm run build
 
       - name: Build extensions
         run: pnpm run build
