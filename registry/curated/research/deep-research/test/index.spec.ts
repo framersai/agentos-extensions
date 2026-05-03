@@ -41,14 +41,14 @@ describe('Deep Research – createExtensionPack', () => {
     expect(pack.name).toBe('@framers/agentos-ext-deep-research');
   });
 
-  it('should have version 0.1.0', () => {
-    expect(pack.version).toBe('0.1.0');
+  it('should have version 0.2.0', () => {
+    expect(pack.version).toBe('0.2.0');
   });
 
   // ── Descriptor count and IDs ──
 
-  it('should contain exactly 5 tool descriptors', () => {
-    expect(pack.descriptors).toHaveLength(5);
+  it('should contain exactly 6 tool descriptors', () => {
+    expect(pack.descriptors).toHaveLength(6);
   });
 
   it('should have all expected descriptor IDs', () => {
@@ -59,6 +59,7 @@ describe('Deep Research – createExtensionPack', () => {
       'researchScrape',
       'researchAggregate',
       'researchTrending',
+      'deepResearch',
     ]);
   });
 
@@ -69,10 +70,21 @@ describe('Deep Research – createExtensionPack', () => {
   });
 
   // ── Priority ──
+  // The five legacy single-step research tools share priority 50;
+  // the multi-step deepResearch engine is bumped to 90 so it wins
+  // the dispatcher tie-break for open-ended research queries.
 
-  it('should set priority 50 for all descriptors', () => {
+  it('should set priority 50 for legacy research tools and 90 for deepResearch', () => {
+    const expectedPriority: Record<string, number> = {
+      researchInvestigate: 50,
+      researchAcademic: 50,
+      researchScrape: 50,
+      researchAggregate: 50,
+      researchTrending: 50,
+      deepResearch: 90,
+    };
     for (const d of pack.descriptors) {
-      expect(d.priority).toBe(50);
+      expect(d.priority).toBe(expectedPriority[d.id]);
     }
   });
 
@@ -141,7 +153,7 @@ describe('Deep Research – createExtensionPack', () => {
       },
     };
     const p = createExtensionPack(ctx);
-    expect(p.descriptors).toHaveLength(5);
+    expect(p.descriptors).toHaveLength(6);
     p.onDeactivate?.();
   });
 });

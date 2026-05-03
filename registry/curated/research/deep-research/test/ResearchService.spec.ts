@@ -414,11 +414,14 @@ describe('ResearchService', () => {
     });
 
     it('should fetch Reddit trends', async () => {
+      // `id` is required: getRedditTrends() dedupes on p.data.id and
+      // filters out posts without one. Real Reddit responses always
+      // include an id; the fixture must mirror that shape.
       mockGet.mockResolvedValue({
         data: {
           data: {
             children: [
-              { data: { title: 'Reddit Post', selftext: 'Content', permalink: '/r/test/1', score: 500, subreddit: 'test' } },
+              { data: { id: 'abc123', title: 'Reddit Post', selftext: 'Content', permalink: '/r/test/1', score: 500, subreddit: 'test' } },
             ],
           },
         },
