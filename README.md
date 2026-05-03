@@ -223,6 +223,75 @@ await agentos.initialize({
 });
 ```
 
+## How extensions stay optional and lazy
+
+The extension surface is dependency-injected at four layers. Each layer is opt-in by default, so a host that installs five extensions does not pay the cost of the other 95, and an extension that needs a 110MB NER model does not load it until the first call.
+
+### Layer 1: package install gates everything
+
+Every extension is its own npm package. Nothing is imported until you `npm install` it. The `@framers/agentos-extensions-registry` SDK depends on the extension packages as `peerDependenciesMeta.optional`, so installing the registry alone gives you the catalog metadata without pulling any extension source. Add `@framers/agentos-ext-pii-redaction` to your `package.json` and the registry sees it; remove it and the registry drops it on the next manifest build.
+
+### Layer 2: registry resolve skips uninstalled packages
+
+`createCuratedManifest()` calls `import.meta.resolve()` on every catalog entry before adding it to the manifest. If the resolution throws, the entry is omitted. The runtime never sees it. There is no error, no warning, no missing-module crash. This is the difference between a catalog (metadata) and a registry that only emits packs you can actually run.
+
+```typescript
+// Even if you ask for `tools: 'all'`, only installed packages reach the runtime.
+const manifest = await createCuratedManifest({ tools: 'all' });
+// → manifest.packs contains only @framers/agentos-ext-* packages found on disk.
+```
+
+### Layer 3: `requiredSecrets` gates descriptor activation
+
+Inside a pack, each descriptor (a single tool, guardrail, channel, or workflow) can declare `requiredSecrets`. Before activation, `ExtensionManager` checks whether each non-optional secret is resolvable from the secret store, the pack options, or the environment. Missing a secret? The descriptor is skipped and the rest of the pack still activates. Optional secrets unlock optional features (like the PII redaction extension's LLM-judge tier) without making them required.
+
+```typescript
+// pii-redaction declares its LLM judge as an optional dependency.
+{
+  id: 'pii_judge_resolver',
+  kind: 'tool',
+  requiredSecrets: [{ id: 'anthropic.apiKey', optional: true }],
+  // ...
+}
+// No ANTHROPIC_API_KEY in env? The judge is skipped, the rest of the pack works.
+```
+
+### Layer 4: `SharedServiceRegistry.getOrCreate()` defers heavy resources
+
+ML models, embedding indexes, ONNX runtimes, NER pipelines, and database pools are not loaded at activation. They are registered as factories and only constructed on the first call that needs them. The same instance is shared across descriptors in the same pack and (with a namespaced key) across packs.
+
+```typescript
+async onActivate(ctx) {
+  // The 110MB BERT NER model. Not loaded yet.
+  const nerModel = await ctx.services.getOrCreate('pii:ner-model', async () => {
+    const { NerModel } = await import('./NerModel.js');
+    return NerModel.load();
+  });
+  this.scanTool.setNerModel(nerModel);
+  this.streamingGuardrail.setNerModel(nerModel);
+}
+```
+
+The `import('./NerModel.js')` is a dynamic import: the model file itself does not enter the module graph until something asks for the service. First call pays the load cost; subsequent calls hit the cache. Tear-down releases everything via the registry's lifecycle.
+
+### What this looks like end-to-end for a guardrail
+
+A host installing `@framers/agentos-ext-pii-redaction`:
+
+1. **Install.** `npm install @framers/agentos-ext-pii-redaction @framers/agentos-extensions-registry @framers/agentos`. Nothing else.
+2. **Manifest build.** `createCuratedManifest({ tools: 'all' })` resolves only the installed PII pack and emits a single-pack manifest.
+3. **Activation.** `ExtensionManager.loadManifest()` runs `pack.onActivate(ctx)`, which registers a `pii:ner-model` factory in `SharedServiceRegistry`. The model file is not loaded.
+4. **Descriptor registration.** Two tool descriptors (`pii_scan`, `pii_redact`) and one guardrail descriptor land in the kind-specific registries. The guardrail descriptor's `config.canSanitize = true` and `config.evaluateStreamingChunks = true` flag it for the two-phase dispatcher.
+5. **First request.** A user message hits the input pipeline. The two-phase dispatcher runs Phase 1 sequentially: the PII guardrail's `evaluateInput()` fires, calls into the NER pipeline, and the model loads on this first call. Subsequent requests hit the cached model.
+6. **Streaming output.** As the model generates a response, each `TEXT_DELTA` chunk passes through the guardrail's `evaluateOutput()`. The dispatcher returns `SANITIZE` results with redacted text deterministically (Phase 1 chains sequentially), then runs all Phase 2 classifiers in parallel for any remaining checks.
+7. **Tear-down.** `pack.onDeactivate(ctx)` runs in reverse order on shutdown. The shared service registry releases the model.
+
+Same pattern for the four other guardrail packs: `@framers/agentos-ext-ml-classifiers` lazy-loads ONNX BERT models, `@framers/agentos-ext-grounding-guard` lazy-loads the NLI pipeline, `@framers/agentos-ext-topicality` lazy-loads embeddings, `@framers/agentos-ext-code-safety` is regex-only and pays no load cost.
+
+This is the same auto-discovery surface that runtime-forged tools join: an agent that invents a function in session N can promote it via `SkillExporter` into a `SKILL.md` that the registry picks up on the next process start. Forging grows the surface mid-run; auto-discovery ships it as a first-class capability.
+
+For the dispatcher mechanics (Phase 1 sanitizers, Phase 2 parallel classifiers, worst-action aggregation, mid-stream override), see [Guardrails](https://docs.agentos.sh/features/guardrails). For lifecycle internals, see [Extension Loading](https://docs.agentos.sh/architecture/extension-loading).
+
 ### Registry options
 
 `createCuratedManifest()` accepts:
