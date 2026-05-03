@@ -6,7 +6,11 @@
     "types.d.ts",
     "README.md"
   ],
-  "description": "Extension source for AgentOS \u2014 implementations, templates, and manifests for tools, channel adapters, and integrations",
+  "description": "Extension source for AgentOS \u2014 implementations, templates, and manifests for tools, channel adapters, and integrations. Companion to the @framers/agentos TypeScript AI agent runtime.",
+  "homepage": "https://agentos.sh",
+  "bugs": {
+    "url": "https://github.com/framersai/agentos-extensions/issues"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -36,9 +40,30 @@
   },
   "keywords": [
     "agentos",
+    "framers-agentos",
+    "agentos-extensions",
+    "agentos-tools",
     "extensions",
+    "plugins",
     "tools",
-    "plugins"
+    "tool-use",
+    "tool-calling",
+    "ai-agent",
+    "ai-agents",
+    "ai-agent-tools",
+    "agent-framework",
+    "agent-tools",
+    "channel-adapters",
+    "discord-bot",
+    "telegram-bot",
+    "slack-bot",
+    "whatsapp-bot",
+    "webchat",
+    "browser-automation",
+    "web-search",
+    "voice-synthesis",
+    "framers",
+    "frame-dev"
   ],
   "author": {
     "name": "Framers AI",
