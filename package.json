@@ -22,11 +22,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "test": "node -e \"console.log('agentos-extensions: test skipped in this monorepo build')\"",
-    "test:coverage": "npm run test",
     "build": "node scripts/build-extensions.js && node scripts/update-registry.js",
-    "lint": "node -e \"console.log('agentos-extensions: lint skipped in this monorepo build')\"",
-    "clean": "node -e \"console.log('agentos-extensions: clean noop in this monorepo build')\"",
     "create-extension": "node scripts/create-extension.js",
     "update-registry": "node scripts/update-registry.js",
     "docs": "npx typedoc",
@@ -88,7 +84,6 @@
     "@changesets/cli": "^2.29.8",
     "masto": "^6.8.0",
     "typedoc": "^0.25.13",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "typescript": "^5.4.5"
   }
 }
