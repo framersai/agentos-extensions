@@ -71,7 +71,6 @@ export class VerifyCitationsTool {
       return {
         claims: [], totalClaims: 0, supportedCount: 0,
         contradictedCount: 0, unverifiableCount: 0, supportedRatio: 0,
-        summary: 'No embedding function available. Configure an embedding provider.',
       };
     }
 
@@ -80,7 +79,6 @@ export class VerifyCitationsTool {
       return {
         claims: [], totalClaims: 0, supportedCount: 0,
         contradictedCount: 0, unverifiableCount: 0, supportedRatio: 1,
-        summary: 'No verifiable claims found.',
       };
     }
 
@@ -143,7 +141,6 @@ export class VerifyCitationsTool {
       contradictedCount: contradicted,
       unverifiableCount: unverifiable,
       supportedRatio: verdicts.length > 0 ? supported / verdicts.length : 1,
-      summary: `${supported}/${verdicts.length} claims verified (${Math.round((supported / verdicts.length) * 100)}%)`,
     };
   }
 }

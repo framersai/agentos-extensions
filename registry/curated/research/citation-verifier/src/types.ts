@@ -20,5 +20,4 @@ export interface VerifyCitationsOutput {
   contradictedCount: number;
   unverifiableCount: number;
   supportedRatio: number;
-  summary: string;
 }

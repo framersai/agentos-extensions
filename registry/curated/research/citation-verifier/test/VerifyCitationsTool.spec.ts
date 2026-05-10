@@ -22,7 +22,7 @@ describe('VerifyCitationsTool', () => {
     const tool = new VerifyCitationsTool();
     const result = await tool.execute({ text: 'Some claim.' });
     expect(result.totalClaims).toBe(0);
-    expect(result.summary).toContain('No embedding');
+    expect(result.supportedRatio).toBe(0);
   });
 
   it('verifies claims against sources', async () => {
@@ -32,7 +32,7 @@ describe('VerifyCitationsTool', () => {
       sources: [{ content: 'The sky appears blue due to Rayleigh scattering of light.' }],
     });
     expect(result.totalClaims).toBeGreaterThanOrEqual(1);
-    expect(result.summary).toMatch(/claims verified/);
+    expect(result.claims[0].verdict).toMatch(/supported|weak|unverifiable/);
   });
 
   it('returns proper counts that add up', async () => {
