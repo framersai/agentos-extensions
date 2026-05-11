@@ -29,6 +29,8 @@ export interface NetlifySite {
   repo?: { provider: string; repo_path: string; branch: string };
   custom_domain: string | null;
   default_domain: string;
+  /** Owning account slug — required to hit the account-level env-vars API. */
+  account_slug?: string;
   build_settings?: {
     cmd: string;
     dir: string;
@@ -470,6 +472,7 @@ export class NetlifyService {
       } : undefined,
       custom_domain: data.custom_domain ?? null,
       default_domain: data.default_domain ?? `${data.name ?? data.subdomain}.netlify.app`,
+      account_slug: data.account_slug ?? data.account_name,
       build_settings: data.build_settings ? {
         cmd: data.build_settings.cmd ?? '',
         dir: data.build_settings.dir ?? '',

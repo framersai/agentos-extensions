@@ -14,7 +14,17 @@ function mockResponse(data: unknown, status = 200, headers?: Record<string, stri
     statusText: status === 200 ? 'OK' : 'Error',
     headers: new Headers(headers ?? {}),
     text: vi.fn().mockResolvedValue(body),
-    json: vi.fn().mockResolvedValue(typeof data === 'string' ? JSON.parse(data) : data),
+    // Lazy parse so non-JSON error bodies (XML, bare error codes like
+    // "MalformedInput") don't blow up the mock setup itself. The real
+    // Response.json() throws SyntaxError on non-JSON; mirror that.
+    json: vi.fn().mockImplementation(async () => {
+      if (typeof data !== 'string') return data;
+      try {
+        return JSON.parse(data);
+      } catch {
+        throw new SyntaxError(`Unexpected token in JSON at position 0 (body: ${data.slice(0, 40)})`);
+      }
+    }),
     clone: vi.fn(),
   } as unknown as Response;
 }

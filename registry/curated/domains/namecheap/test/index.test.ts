@@ -38,12 +38,17 @@ describe('createExtensionPack (Namecheap)', () => {
   });
 
   it('onActivate should succeed with valid credentials', async () => {
-    const pack = createExtensionPack({ secrets: { 'namecheap.apiUser': 'u', 'namecheap.apiKey': 'k' } });
+    // Namecheap requires a whitelisted clientIp in addition to user+key
+    const pack = createExtensionPack({
+      secrets: { 'namecheap.apiUser': 'u', 'namecheap.apiKey': 'k', 'namecheap.clientIp': '127.0.0.1' },
+    });
     await expect(pack.onActivate!()).resolves.toBeUndefined();
   });
 
   it('onDeactivate should complete', async () => {
-    const pack = createExtensionPack({ secrets: { 'namecheap.apiUser': 'u', 'namecheap.apiKey': 'k' } });
+    const pack = createExtensionPack({
+      secrets: { 'namecheap.apiUser': 'u', 'namecheap.apiKey': 'k', 'namecheap.clientIp': '127.0.0.1' },
+    });
     await pack.onActivate!();
     await expect(pack.onDeactivate!()).resolves.toBeUndefined();
   });

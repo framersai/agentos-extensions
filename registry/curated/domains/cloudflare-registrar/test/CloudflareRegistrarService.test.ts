@@ -90,7 +90,9 @@ describe('CloudflareRegistrarService', () => {
   it('should throw when token verification fails', async () => {
     mockFetch.mockResolvedValueOnce(mockResponse(cfError(1000, 'Invalid API Token')));
 
-    await expect(service.initialize()).rejects.toThrow('Cloudflare auth failed');
+    // handleResponse() rejects on `success: false` before initialize() gets
+    // a chance to wrap the error — the API error bubbles up directly.
+    await expect(service.initialize()).rejects.toThrow('Cloudflare API error: Invalid API Token');
     expect(service.isRunning).toBe(false);
   });
 

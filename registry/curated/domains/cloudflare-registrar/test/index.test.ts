@@ -6,7 +6,16 @@ const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
 
 function okResponse(data: any = {}) {
-  return { ok: true, status: 200, text: async () => JSON.stringify(data), json: async () => ({ success: true, result: data }) } as Response;
+  // CloudflareRegistrarService.handleResponse() uses res.text() then
+  // JSON.parses it (not res.json()), so the text body must already be
+  // the wrapped Cloudflare envelope shape { success, result }.
+  const envelope = { success: true, result: data };
+  return {
+    ok: true,
+    status: 200,
+    text: async () => JSON.stringify(envelope),
+    json: async () => envelope,
+  } as Response;
 }
 
 describe('createExtensionPack (Cloudflare Registrar)', () => {

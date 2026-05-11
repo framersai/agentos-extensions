@@ -109,8 +109,16 @@ export class PorkbunService {
   }
 
   async initialize(): Promise<void> {
-    // Validate auth by pinging the API
-    const res = await this.post('/ping', {});
+    // Validate auth by pinging the API. Wrap the inner request error so
+    // callers see a single "Porkbun auth failed: …" message regardless of
+    // whether handleResponse threw an API error or the response said
+    // status !== 'SUCCESS'.
+    let res: any;
+    try {
+      res = await this.post('/ping', {});
+    } catch (err) {
+      throw new Error(`Porkbun auth failed: ${(err as Error).message}`);
+    }
     if (res.status !== 'SUCCESS') {
       throw new Error(`Porkbun auth failed: ${res.message ?? JSON.stringify(res)}`);
     }
@@ -130,7 +138,14 @@ export class PorkbunService {
   /** Check if a domain is available for registration. */
   async checkAvailability(domain: string): Promise<DomainAvailability> {
     const res = await this.post('/domain/checkAvailability', { domain });
-    const available = res.avail === true || res.avail === 'true' || res.status === 'SUCCESS';
+    // res.status === 'SUCCESS' just means the API call succeeded; the actual
+    // availability lives in res.avail. Treat the absence of `avail` (older
+    // responses) as available when status is SUCCESS, but never override an
+    // explicit `avail: false`.
+    const available =
+      res.avail === false || res.avail === 'false'
+        ? false
+        : res.avail === true || res.avail === 'true' || res.status === 'SUCCESS';
 
     let pricing: DomainPricing | undefined;
     // Also fetch pricing if available

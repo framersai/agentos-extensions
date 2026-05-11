@@ -12,7 +12,11 @@ function okResponse(data: any = {}) {
 describe('createExtensionPack (Fly.io)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockFetch.mockResolvedValue(okResponse({ id: 'u1', name: 'test-org' }));
+    // gql() reads `json.data`, so the response body must be wrapped in { data: … }
+    // to match the real Fly.io GraphQL envelope shape.
+    mockFetch.mockResolvedValue(
+      okResponse({ data: { currentUser: { id: 'u1', email: 'test@example.com' } } }),
+    );
   });
 
   it('should return a valid ExtensionPack', () => {

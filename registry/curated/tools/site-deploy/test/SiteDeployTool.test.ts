@@ -284,8 +284,12 @@ describe('SiteDeployTool', () => {
     });
     tool.setToolExecutor(executor);
 
+    // Explicitly pick vercel — without `cloudProvider` set, a generic GitHub
+    // URL with no framework hint resolves to 'static' → 'cloudflare', not
+    // vercel, and the mock executor's vercelDeploy override never fires.
     const result = await tool.execute({
       source: 'https://github.com/user/broken-app',
+      cloudProvider: 'vercel',
     });
 
     expect(result.success).toBe(false);
