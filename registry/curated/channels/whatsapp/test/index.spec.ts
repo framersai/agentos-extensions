@@ -3,7 +3,7 @@
  * @fileoverview Unit tests for the WhatsApp channel extension pack factory (createExtensionPack).
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 vi.mock('@whiskeysockets/baileys', () => {
   const mockEv = {
