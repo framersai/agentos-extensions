@@ -18,10 +18,10 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@framers/agentos": "^0.6.6"
+    "@framers/agentos": ">=0.7.0"
   },
   "devDependencies": {
-    "@framers/agentos": "^0.6.6",
+    "@framers/agentos": ">=0.7.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   },

@@ -58,7 +58,7 @@
     "manifest.json"
   ],
   "peerDependencies": {
-    "@framers/agentos": "^0.6.6"
+    "@framers/agentos": ">=0.7.0"
   },
   "dependencies": {
     "pdfkit": "^0.18.0",
@@ -68,7 +68,7 @@
     "exceljs": "^4.4.0"
   },
   "devDependencies": {
-    "@framers/agentos": "^0.6.6",
+    "@framers/agentos": ">=0.7.0",
     "@types/pdfkit": "^0.17.5",
     "@types/node": "^20.12.12",
     "rimraf": "^5.0.7",
