@@ -6,7 +6,7 @@
   "main": "src/index.ts",
   "dependencies": {
     "@framers/agentos": ">=0.7.0",
-    "@framers/sql-storage-adapter": "^0.6.4"
+    "@framers/sql-storage-adapter": "^0.6.5"
   },
   "repository": {
     "type": "git",
