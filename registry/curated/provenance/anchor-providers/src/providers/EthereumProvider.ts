@@ -118,7 +118,7 @@ export class EthereumProvider implements AnchorProvider {
         const contract = new ethers.Contract(this.config.contractAddress, ANCHOR_CONTRACT_ABI, wallet);
         const overrides: Record<string, unknown> = {};
         if (this.config.gasLimit !== undefined) overrides.gasLimit = this.config.gasLimit;
-        txResponse = await contract.anchor(dataHex, overrides);
+        txResponse = await this.withRetry(() => contract.anchor(dataHex, overrides));
       } else {
         // Raw-calldata mode: self-transfer with the digest packed into
         // the data field. No contract required; the proof is just the
@@ -129,7 +129,7 @@ export class EthereumProvider implements AnchorProvider {
           data: dataHex,
         };
         if (this.config.gasLimit !== undefined) tx.gasLimit = this.config.gasLimit;
-        txResponse = await wallet.sendTransaction(tx);
+        txResponse = await this.withRetry(() => wallet.sendTransaction(tx));
       }
 
       const receipt = await txResponse.wait(this.config.confirmations);
@@ -190,29 +190,39 @@ export class EthereumProvider implements AnchorProvider {
 
     try {
       const provider = this.getProvider(ethers);
-      const tx = await provider.getTransaction(txHash);
+      const tx = await this.withRetry(() => provider.getTransaction(txHash));
       if (!tx) return false;
-      const receipt = await provider.getTransactionReceipt(txHash);
+      const receipt = await this.withRetry(() => provider.getTransactionReceipt(txHash));
       if (!receipt || receipt.status === 0) return false;
 
       const expectedHex = `0x${await hashCanonicalAnchor(anchor)}`;
+      const txData = (tx.data ?? '').toLowerCase();
 
-      if (this.config.contractAddress) {
-        // For contract calls, the calldata is the ABI-encoded anchor()
-        // function call. Decode and compare the bytes32 arg.
-        const iface = new ethers.Interface(ANCHOR_CONTRACT_ABI);
-        try {
-          const parsed = iface.parseTransaction({ data: tx.data, value: tx.value });
-          if (!parsed || parsed.name !== 'anchor') return false;
-          const argHex = (parsed.args[0] as string).toLowerCase();
-          return argHex === expectedHex;
-        } catch {
-          return false;
-        }
+      // Detect mode from tx.data shape rather than from current config —
+      // config.contractAddress may have been changed since publish, and the
+      // tx on chain is the authoritative source. Two recognised shapes:
+      //
+      //   * raw calldata mode: exactly `0x` + 64 hex chars (32-byte digest).
+      //   * contract-call mode: ABI-encoded `anchor(bytes32)` call, starts
+      //     with the 4-byte selector followed by a 32-byte argument.
+      //
+      // Anything else is treated as a verify failure (the recorded tx
+      // does not match any pattern this provider produces on publish).
+      if (txData.length === 66 && txData === expectedHex) {
+        return true;
       }
 
-      // Raw-calldata mode: tx.data is the digest hex directly.
-      return tx.data?.toLowerCase() === expectedHex;
+      try {
+        const iface = new ethers.Interface(ANCHOR_CONTRACT_ABI);
+        const selector = iface.getFunction('anchor')?.selector?.toLowerCase();
+        if (!selector || !txData.startsWith(selector)) return false;
+        const parsed = iface.parseTransaction({ data: tx.data, value: tx.value });
+        if (!parsed || parsed.name !== 'anchor') return false;
+        const argHex = (parsed.args[0] as string).toLowerCase();
+        return argHex === expectedHex;
+      } catch {
+        return false;
+      }
     } catch {
       return false;
     }
@@ -248,8 +258,36 @@ export class EthereumProvider implements AnchorProvider {
 
   private getProvider(ethers: any): any {
     if (this.cachedProvider) return this.cachedProvider;
-    this.cachedProvider = new ethers.JsonRpcProvider(this.config.rpcUrl, this.config.chainId);
+    // ethers v6 doesn't expose a simple retry knob, but the provider
+    // has a `pollingInterval` and internal fetch-retry. We additionally
+    // wrap the actual RPC calls (sendTransaction / getTransaction)
+    // through `withRetry` below so transient failures don't bubble up
+    // as anchor failures.
+    this.cachedProvider = new ethers.JsonRpcProvider(this.config.rpcUrl, this.config.chainId, {
+      staticNetwork: ethers.Network.from?.(this.config.chainId),
+    });
     return this.cachedProvider;
+  }
+
+  /**
+   * Retry a transient operation up to `config.retries` times with linear
+   * `config.retryDelayMs` backoff. Used to wrap RPC calls that may fail
+   * with network glitches; ethers' internal retry covers some cases but
+   * not all (e.g. socket hangups during long block waits).
+   */
+  private async withRetry<T>(op: () => Promise<T>): Promise<T> {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= this.config.retries; attempt++) {
+      try {
+        return await op();
+      } catch (e) {
+        lastError = e;
+        if (attempt < this.config.retries) {
+          await new Promise((resolve) => setTimeout(resolve, this.config.retryDelayMs));
+        }
+      }
+    }
+    throw lastError instanceof Error ? lastError : new Error(String(lastError));
   }
 
   private async getWallet(ethers: any): Promise<any> {

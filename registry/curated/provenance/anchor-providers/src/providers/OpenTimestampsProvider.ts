@@ -25,6 +25,7 @@ import { createHash } from 'node:crypto';
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';
 import type { BaseProviderConfig } from '../types.js';
 import { resolveBaseConfig } from '../types.js';
+import { fetchWithRetry } from '../utils/http-client.js';
 import { hashCanonicalAnchor } from '../utils/serialization.js';
 
 export interface OpenTimestampsProviderConfig extends BaseProviderConfig {
@@ -68,20 +69,6 @@ function hexToBuffer(hex: string): Buffer {
   return Buffer.from(hex, 'hex');
 }
 
-/**
- * Race a promise against an AbortController-based timeout. Returns the
- * promise's value or throws on timeout / underlying rejection.
- */
-async function fetchWithTimeout(input: RequestInfo | URL, ms: number, init?: RequestInit): Promise<Response> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ms);
-  try {
-    return await fetch(input, { ...(init ?? {}), signal: controller.signal });
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
 export class OpenTimestampsProvider implements AnchorProvider {
   readonly id = 'opentimestamps';
   readonly name = 'OpenTimestamps (Bitcoin)';
@@ -111,11 +98,19 @@ export class OpenTimestampsProvider implements AnchorProvider {
     for (const calendarUrl of this.config.calendarUrls) {
       const submitUrl = `${calendarUrl.replace(/\/$/, '')}/digest`;
       try {
-        const response = await fetchWithTimeout(submitUrl, this.config.timeoutMs, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: digestBuf,
-        });
+        const response = await fetchWithRetry(
+          submitUrl,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: digestBuf,
+          },
+          {
+            timeoutMs: this.config.timeoutMs,
+            retries: this.config.retries,
+            retryDelayMs: this.config.retryDelayMs,
+          },
+        );
         if (!response.ok) {
           errors.push({
             calendar: calendarUrl,
@@ -210,13 +205,17 @@ export class OpenTimestampsProvider implements AnchorProvider {
     const digestBuf = hexToBuffer(digestHex);
     for (const attestation of payload.attestations) {
       try {
-        const response = await fetchWithTimeout(
+        const response = await fetchWithRetry(
           `${attestation.calendarUrl.replace(/\/$/, '')}/digest`,
-          this.config.timeoutMs,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: digestBuf,
+          },
+          {
+            timeoutMs: this.config.timeoutMs,
+            retries: this.config.retries,
+            retryDelayMs: this.config.retryDelayMs,
           },
         );
         if (!response.ok) continue;

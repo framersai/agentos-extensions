@@ -219,7 +219,14 @@ export class WormSnapshotProvider implements AnchorProvider {
   /** Build/cache an S3Client with this provider's config. */
   private async getClient(sdk: any): Promise<any> {
     if (this.cachedClient) return this.cachedClient;
-    const clientConfig: Record<string, unknown> = { region: this.config.region };
+    const clientConfig: Record<string, unknown> = {
+      region: this.config.region,
+      // Plumb the retry config through the SDK's native retry middleware.
+      // maxAttempts is total attempts (initial + retries), so retries=3
+      // becomes maxAttempts=4. Per-attempt timeout comes from this.config.timeoutMs.
+      maxAttempts: this.config.retries + 1,
+      requestHandler: { requestTimeout: this.config.timeoutMs },
+    };
     if (this.config.credentials) clientConfig.credentials = this.config.credentials;
     if (this.config.endpoint) {
       clientConfig.endpoint = this.config.endpoint;

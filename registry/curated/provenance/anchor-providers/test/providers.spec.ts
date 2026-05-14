@@ -61,6 +61,11 @@ describe('WormSnapshotProvider', () => {
 // =============================================================================
 
 describe('RekorProvider', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
   it('should have correct id, name, and proofLevel', () => {
     const provider = new RekorProvider();
     expect(provider.id).toBe('rekor');
@@ -111,10 +116,13 @@ describe('RekorProvider', () => {
     const provider = new RekorProvider({
       publicKeyPem: '-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAEXAMPLE\n-----END PUBLIC KEY-----\n',
       signArtifact: async () => new Uint8Array(64), // mock sig
+      retries: 0,
     });
     const result = await provider.publish(createMockAnchor());
     expect(result.success).toBe(true);
-    expect(result.externalRef).toBe('rekor:42:abc123uuid');
+    // externalRef encodes the serverUrl so verify hits the right server
+    // even if config.serverUrl is later changed.
+    expect(result.externalRef).toMatch(/^rekor:[A-Za-z0-9_-]+:42:abc123uuid$/);
     expect(result.metadata?.logIndex).toBe(42);
     expect(fetchSpy).toHaveBeenCalledOnce();
   });
@@ -128,6 +136,7 @@ describe('RekorProvider', () => {
     const provider = new RekorProvider({
       publicKeyPem: '-----BEGIN PUBLIC KEY-----\nEX\n-----END PUBLIC KEY-----\n',
       signArtifact: async () => new Uint8Array(64),
+      retries: 0,
     });
     const result = await provider.publish(createMockAnchor());
     expect(result.success).toBe(false);
@@ -149,6 +158,7 @@ describe('RekorProvider', () => {
 describe('OpenTimestampsProvider', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('should have correct id, name, and proofLevel', () => {
@@ -169,6 +179,7 @@ describe('OpenTimestampsProvider', () => {
     const provider = new OpenTimestampsProvider({
       calendarUrls: ['https://cal-a.test', 'https://cal-b.test'],
       timeoutMs: 100,
+      retries: 0,
     });
     // First calendar returns a canned attestation, second one fails.
     const fetchSpy = vi.fn(async (input: any) => {
@@ -193,6 +204,7 @@ describe('OpenTimestampsProvider', () => {
     const provider = new OpenTimestampsProvider({
       calendarUrls: ['https://cal-a.test', 'https://cal-b.test'],
       timeoutMs: 100,
+      retries: 0,
     });
     const fetchSpy = vi.fn(async () => {
       throw new Error('network error');
@@ -210,6 +222,7 @@ describe('OpenTimestampsProvider', () => {
       calendarUrls: ['https://cal-a.test', 'https://cal-b.test'],
       requireAllCalendars: true,
       timeoutMs: 100,
+      retries: 0,
     });
     const fetchSpy = vi.fn(async (input: any) => {
       if (String(input).startsWith('https://cal-a.test')) {

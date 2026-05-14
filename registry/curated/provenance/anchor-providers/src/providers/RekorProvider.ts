@@ -18,10 +18,10 @@
  * @module @framers/agentos-ext-anchor-providers
  */
 
-import { createHash } from 'node:crypto';
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';
 import type { BaseProviderConfig } from '../types.js';
 import { resolveBaseConfig } from '../types.js';
+import { fetchWithRetry } from '../utils/http-client.js';
 import { hashCanonicalAnchor } from '../utils/serialization.js';
 
 export interface RekorProviderConfig extends BaseProviderConfig {
@@ -45,14 +45,42 @@ export interface RekorProviderConfig extends BaseProviderConfig {
 
 const DEFAULT_SERVER_URL = 'https://rekor.sigstore.dev';
 
-async function fetchWithTimeout(input: RequestInfo | URL, ms: number, init?: RequestInit): Promise<Response> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ms);
-  try {
-    return await fetch(input, { ...(init ?? {}), signal: controller.signal });
-  } finally {
-    clearTimeout(timer);
+/**
+ * Encode the Rekor server URL into the externalRef so verify() reaches the
+ * same server that recorded the entry, even if config.serverUrl has been
+ * changed since publish. The serverUrl is base64-encoded so a `:` character
+ * in the URL doesn't collide with the externalRef field separator.
+ */
+function encodeExternalRef(serverUrl: string, logIndex: number, uuid: string): string {
+  const encodedServer = Buffer.from(serverUrl, 'utf-8').toString('base64url');
+  return `rekor:${encodedServer}:${logIndex}:${uuid}`;
+}
+
+/** Decode an externalRef back to { serverUrl, uuid }. Tolerates the old
+ *  two-field `rekor:${logIndex}:${uuid}` shape by falling back to
+ *  `fallbackServerUrl` (typically `this.config.serverUrl`).
+ */
+function decodeExternalRef(
+  externalRef: string,
+  fallbackServerUrl: string,
+): { serverUrl: string; uuid: string } | null {
+  if (!externalRef.startsWith('rekor:')) return null;
+  const parts = externalRef.split(':');
+  // New format: rekor:<base64url(serverUrl)>:<logIndex>:<uuid>  (>= 4 parts)
+  if (parts.length >= 4) {
+    try {
+      const serverUrl = Buffer.from(parts[1] ?? '', 'base64url').toString('utf-8');
+      const uuid = parts.slice(3).join(':');
+      if (serverUrl && uuid) return { serverUrl, uuid };
+    } catch {
+      // Falls through to legacy format check.
+    }
   }
+  // Legacy format: rekor:<logIndex>:<uuid> (exactly 3 parts)
+  if (parts.length === 3) {
+    return { serverUrl: fallbackServerUrl, uuid: parts[2] ?? '' };
+  }
+  return null;
 }
 
 export class RekorProvider implements AnchorProvider {
@@ -129,9 +157,8 @@ export class RekorProvider implements AnchorProvider {
 
     let response: Response;
     try {
-      response = await fetchWithTimeout(
+      response = await fetchWithRetry(
         `${this.config.serverUrl.replace(/\/$/, '')}/api/v1/log/entries`,
-        this.config.timeoutMs,
         {
           method: 'POST',
           headers: {
@@ -139,6 +166,11 @@ export class RekorProvider implements AnchorProvider {
             Accept: 'application/json',
           },
           body: JSON.stringify(entry),
+        },
+        {
+          timeoutMs: this.config.timeoutMs,
+          retries: this.config.retries,
+          retryDelayMs: this.config.retryDelayMs,
         },
       );
     } catch (e: unknown) {
@@ -194,7 +226,7 @@ export class RekorProvider implements AnchorProvider {
     return {
       providerId: this.id,
       success: true,
-      externalRef: `rekor:${logIndex}:${uuid}`,
+      externalRef: encodeExternalRef(this.config.serverUrl, logIndex, uuid),
       publishedAt: new Date().toISOString(),
       metadata: {
         serverUrl: this.config.serverUrl,
@@ -214,19 +246,23 @@ export class RekorProvider implements AnchorProvider {
    * `sigstore.verify(bundle)` after this method returns true.
    */
   async verify(anchor: AnchorRecord): Promise<boolean> {
-    if (!anchor.externalRef?.startsWith('rekor:')) return false;
-    const parts = anchor.externalRef.split(':');
-    if (parts.length < 3) return false;
-    const uuid = parts.slice(2).join(':');
+    if (!anchor.externalRef) return false;
+    const decoded = decodeExternalRef(anchor.externalRef, this.config.serverUrl);
+    if (!decoded) return false;
 
     try {
-      const response = await fetchWithTimeout(
-        `${this.config.serverUrl.replace(/\/$/, '')}/api/v1/log/entries/${uuid}`,
-        this.config.timeoutMs,
+      const response = await fetchWithRetry(
+        `${decoded.serverUrl.replace(/\/$/, '')}/api/v1/log/entries/${decoded.uuid}`,
+        undefined,
+        {
+          timeoutMs: this.config.timeoutMs,
+          retries: this.config.retries,
+          retryDelayMs: this.config.retryDelayMs,
+        },
       );
       if (!response.ok) return false;
       const entryMap = (await response.json()) as Record<string, any>;
-      const entry = entryMap[uuid];
+      const entry = entryMap[decoded.uuid];
       if (!entry?.body) return false;
 
       // Body is base64-encoded JSON of the hashedrekord spec.
