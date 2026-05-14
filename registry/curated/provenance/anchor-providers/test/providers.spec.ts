@@ -4,7 +4,7 @@
  * @description Tests for all anchor provider implementations.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { WormSnapshotProvider } from '../src/providers/WormSnapshotProvider.js';
 import { RekorProvider } from '../src/providers/RekorProvider.js';
 import { OpenTimestampsProvider } from '../src/providers/OpenTimestampsProvider.js';
@@ -37,18 +37,21 @@ describe('WormSnapshotProvider', () => {
     expect(provider.proofLevel).toBe('externally-archived');
   });
 
-  it('should return failure flagged notImplemented from stub publish()', async () => {
+  it('publish() returns failure without crashing when the SDK or credentials are unavailable', async () => {
+    // The test environment may or may not have @aws-sdk/client-s3
+    // installed and AWS credentials configured. Either way publish()
+    // must return a structured failure (never throw) so the caller's
+    // fallback chain keeps working.
     const provider = new WormSnapshotProvider({ bucket: 'test', region: 'us-east-1' });
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('worm-snapshot');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not implemented');
-    expect(result.metadata?.notImplemented).toBe(true);
+    expect(typeof result.error).toBe('string');
   });
 
-  it('should return false from stub verify()', async () => {
+  it('verify() returns false for non-s3 externalRef', async () => {
     const provider = new WormSnapshotProvider({ bucket: 'test', region: 'us-east-1' });
-    const valid = await provider.verify(createMockAnchor({ externalRef: 's3://bucket/key' }));
+    const valid = await provider.verify(createMockAnchor({ externalRef: 'not-s3-ref' }));
     expect(valid).toBe(false);
   });
 });
@@ -70,13 +73,66 @@ describe('RekorProvider', () => {
     expect(provider).toBeDefined();
   });
 
-  it('should return failure flagged notImplemented from stub publish()', async () => {
+  it('publish() returns failure when signer config is incomplete', async () => {
     const provider = new RekorProvider();
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('rekor');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not implemented');
-    expect(result.metadata?.notImplemented).toBe(true);
+    expect(result.error).toContain('publicKeyPem');
+  });
+
+  it('publish() submits a hashedrekord entry and returns rekor:logIndex:uuid', async () => {
+    const fetchSpy = vi.fn(async (input: any) => {
+      // First call: POST to /api/v1/log/entries
+      const url = String(input);
+      if (url.endsWith('/api/v1/log/entries')) {
+        return new Response(
+          JSON.stringify({
+            'abc123uuid': {
+              logIndex: 42,
+              integratedTime: 1234567890,
+              verification: { inclusionProof: { logIndex: 42 } },
+              body: Buffer.from(
+                JSON.stringify({
+                  apiVersion: '0.0.1',
+                  kind: 'hashedrekord',
+                  spec: { data: { hash: { algorithm: 'sha256', value: 'deadbeef' } } },
+                }),
+              ).toString('base64'),
+            },
+          }),
+          { status: 201, headers: { 'Content-Type': 'application/json' } },
+        );
+      }
+      throw new Error(`unexpected url: ${url}`);
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const provider = new RekorProvider({
+      publicKeyPem: '-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAEXAMPLE\n-----END PUBLIC KEY-----\n',
+      signArtifact: async () => new Uint8Array(64), // mock sig
+    });
+    const result = await provider.publish(createMockAnchor());
+    expect(result.success).toBe(true);
+    expect(result.externalRef).toBe('rekor:42:abc123uuid');
+    expect(result.metadata?.logIndex).toBe(42);
+    expect(fetchSpy).toHaveBeenCalledOnce();
+  });
+
+  it('publish() surfaces Rekor 400 rejections as structured failures', async () => {
+    const fetchSpy = vi.fn(async () =>
+      new Response('signature verification failed', { status: 400, statusText: 'Bad Request' }),
+    );
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const provider = new RekorProvider({
+      publicKeyPem: '-----BEGIN PUBLIC KEY-----\nEX\n-----END PUBLIC KEY-----\n',
+      signArtifact: async () => new Uint8Array(64),
+    });
+    const result = await provider.publish(createMockAnchor());
+    expect(result.success).toBe(false);
+    expect(result.error).toContain('HTTP 400');
+    expect(result.metadata?.status).toBe(400);
   });
 
   it('should return false from stub verify() without externalRef', async () => {
@@ -91,6 +147,10 @@ describe('RekorProvider', () => {
 // =============================================================================
 
 describe('OpenTimestampsProvider', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should have correct id, name, and proofLevel', () => {
     const provider = new OpenTimestampsProvider();
     expect(provider.id).toBe('opentimestamps');
@@ -98,20 +158,70 @@ describe('OpenTimestampsProvider', () => {
     expect(provider.proofLevel).toBe('publicly-timestamped');
   });
 
-  it('should return failure flagged notImplemented from stub publish()', async () => {
-    const provider = new OpenTimestampsProvider();
-    const result = await provider.publish(createMockAnchor());
-    expect(result.providerId).toBe('opentimestamps');
-    expect(result.success).toBe(false);
-    expect(result.error).toContain('not implemented');
-    expect(result.metadata?.notImplemented).toBe(true);
-  });
-
   it('should accept custom calendar URLs', () => {
     const provider = new OpenTimestampsProvider({
       calendarUrls: ['https://custom.calendar.org'],
     });
     expect(provider).toBeDefined();
+  });
+
+  it('publish() returns success when at least one calendar responds', async () => {
+    const provider = new OpenTimestampsProvider({
+      calendarUrls: ['https://cal-a.test', 'https://cal-b.test'],
+      timeoutMs: 100,
+    });
+    // First calendar returns a canned attestation, second one fails.
+    const fetchSpy = vi.fn(async (input: any) => {
+      const url = String(input);
+      if (url.startsWith('https://cal-a.test')) {
+        return new Response(new Uint8Array([1, 2, 3, 4]), { status: 200 });
+      }
+      throw new Error('unreachable');
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const result = await provider.publish(createMockAnchor());
+    expect(result.providerId).toBe('opentimestamps');
+    expect(result.success).toBe(true);
+    expect(result.externalRef).toMatch(/^ots:/);
+    expect(result.metadata?.succeeded).toBe(1);
+    expect(result.metadata?.total).toBe(2);
+    expect(result.metadata?.pendingBitcoinAttestation).toBe(true);
+  });
+
+  it('publish() returns failure when every calendar fails', async () => {
+    const provider = new OpenTimestampsProvider({
+      calendarUrls: ['https://cal-a.test', 'https://cal-b.test'],
+      timeoutMs: 100,
+    });
+    const fetchSpy = vi.fn(async () => {
+      throw new Error('network error');
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const result = await provider.publish(createMockAnchor());
+    expect(result.success).toBe(false);
+    expect(result.error).toContain('0/2 succeeded');
+    expect(result.metadata?.errors).toHaveLength(2);
+  });
+
+  it('publish() with requireAllCalendars fails on partial success', async () => {
+    const provider = new OpenTimestampsProvider({
+      calendarUrls: ['https://cal-a.test', 'https://cal-b.test'],
+      requireAllCalendars: true,
+      timeoutMs: 100,
+    });
+    const fetchSpy = vi.fn(async (input: any) => {
+      if (String(input).startsWith('https://cal-a.test')) {
+        return new Response(new Uint8Array([1, 2, 3]), { status: 200 });
+      }
+      throw new Error('cal-b unreachable');
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const result = await provider.publish(createMockAnchor());
+    expect(result.success).toBe(false);
+    expect(result.error).toContain('1/2 succeeded');
   });
 });
 
@@ -127,13 +237,12 @@ describe('EthereumProvider', () => {
     expect(provider.proofLevel).toBe('publicly-timestamped');
   });
 
-  it('should return failure flagged notImplemented from stub publish()', async () => {
+  it('publish() returns structured failure when signerPrivateKey is missing', async () => {
     const provider = new EthereumProvider({ rpcUrl: 'https://eth.example.com' });
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('ethereum');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not implemented');
-    expect(result.metadata?.notImplemented).toBe(true);
+    expect(result.error).toContain('signerPrivateKey');
   });
 
   it('should accept chain ID and contract address', () => {

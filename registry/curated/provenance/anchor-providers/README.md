@@ -304,34 +304,37 @@ Computes SHA-256 hex digest of the canonical anchor representation.
 
 ## Implementation Status
 
-| Provider | Status | Notes |
-|----------|--------|-------|
-| WormSnapshotProvider | Stub | Requires `@aws-sdk/client-s3` implementation |
-| RekorProvider | Stub | Requires `sigstore` SDK implementation |
-| OpenTimestampsProvider | Stub | Requires `opentimestamps` implementation |
-| EthereumProvider | Stub | Requires `ethers` implementation |
-| SolanaProvider | Implemented | Requires `@solana/web3.js` (and a funded signer) |
+| Provider | Status | Runtime requirements |
+|----------|--------|----------------------|
+| OpenTimestampsProvider | Implemented (weak verify) | None — uses global `fetch` against public OTS calendars |
+| WormSnapshotProvider | Implemented | `@aws-sdk/client-s3` (dynamic import) + S3 bucket with Object Lock enabled |
+| EthereumProvider | Implemented | `ethers` v6 (dynamic import) + funded signer + RPC endpoint |
+| RekorProvider | Implemented (weak verify) | `publicKeyPem` + `signArtifact` callback (Ed25519 sig over raw hash bytes) |
+| SolanaProvider | Implemented | `@solana/web3.js` (dynamic import) + funded signer |
 
-All providers **except SolanaProvider** currently return `{ success: false }` from `publish()` until their respective SDK integrations are implemented. SolanaProvider is functional when its optional peer dependencies are installed and the configured signer is funded.
+All five providers return `{ success: true, externalRef, metadata: {...} }` on a successful publish. Failed publishes return `{ success: false, error, metadata }` — never throw — so a composite anchor strategy can fall through cleanly.
 
-### Detecting stubbed providers programmatically
+### Verification strength
 
-Stub providers set `metadata.notImplemented: true` on the failure result so callers can distinguish "configured provider is not yet implemented" from "implemented provider failed at runtime". Use this when composing fallback strategies:
+| Provider | Verify behaviour |
+|----------|------------------|
+| OpenTimestampsProvider | Weak — re-POSTs the digest to a stored calendar URL and confirms the returned bytes hash to the stored attestation hash. For full Bitcoin-block proof, parse the stored base64 with `javascript-opentimestamps` and run its `verify()` against Bitcoin. |
+| WormSnapshotProvider | Strong — `HeadObjectCommand` confirms the object still exists, the Object Lock retention is still active, and the stored SHA-256 metadata matches the recomputed canonical anchor hash. |
+| EthereumProvider | Strong — fetches the transaction + receipt by hash, decodes calldata (or contract input via the `anchor(bytes32)` ABI), and asserts equality with the recomputed canonical anchor hash. |
+| RekorProvider | Weak — GETs the entry by UUID, decodes the body, and compares the stored hash with the recomputed canonical anchor hash. The inclusion proof against the signed tree head is not verified here; wire `sigstore.verify(bundle)` afterwards for compliance workflows. |
+| SolanaProvider | Strong — reads the on-chain account, decodes the manifest hash + content hash, and compares both against the recomputed canonical values. |
+
+### Failure detection
+
+Failed publishes set `metadata` with provider-specific diagnostics (bucket / region / chainId / serverUrl etc.). For SDK-missing failures the WORM provider sets `metadata.sdkMissing: true` so callers composing fallback strategies can distinguish "this provider can't run on this machine" from "transient runtime error":
 
 ```ts
 const result = await provider.publish(anchor);
 if (!result.success) {
-  if (result.metadata?.notImplemented === true) {
-    // Skip this provider; fall through to the next one in the
-    // composite without surfacing the failure as a real error.
-    continue;
-  }
-  // Real failure — log, alert, retry.
+  if (result.metadata?.sdkMissing === true) continue; // fall through
   throw new Error(`Anchor publish failed: ${result.error}`);
 }
 ```
-
-The error message also names the missing dependency / configuration in plain text so operator-facing logs are immediately actionable.
 
 ## Testing
 
