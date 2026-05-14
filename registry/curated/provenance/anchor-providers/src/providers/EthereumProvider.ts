@@ -195,7 +195,10 @@ export class EthereumProvider implements AnchorProvider {
       const receipt = await this.withRetry(() => provider.getTransactionReceipt(txHash));
       if (!receipt || receipt.status === 0) return false;
 
-      const expectedHex = `0x${await hashCanonicalAnchor(anchor)}`;
+      // Normalise both sides to lowercase hex with the `0x` prefix so the
+      // comparison is independent of how hashCanonicalAnchor / the on-chain
+      // decoder happens to encode the case.
+      const expectedHex = `0x${(await hashCanonicalAnchor(anchor)).toLowerCase()}`;
       const txData = (tx.data ?? '').toLowerCase();
 
       // Detect mode from tx.data shape rather than from current config —
