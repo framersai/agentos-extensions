@@ -13,7 +13,6 @@
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';
 import type { BaseProviderConfig } from '../types.js';
 import { resolveBaseConfig } from '../types.js';
-import { hashCanonicalAnchor } from '../utils/serialization.js';
 
 export interface OpenTimestampsProviderConfig extends BaseProviderConfig {
   /** OTS calendar server URLs. Default: public OpenTimestamps calendars. */
@@ -44,40 +43,33 @@ export class OpenTimestampsProvider implements AnchorProvider {
     this.baseConfig = resolveBaseConfig(config);
   }
 
-  async publish(anchor: AnchorRecord): Promise<AnchorProviderResult> {
-    // TODO: Implement using opentimestamps npm package
-    //
-    // Implementation outline:
+  async publish(_anchor: AnchorRecord): Promise<AnchorProviderResult> {
+    // Stubbed pending OpenTimestamps protocol wiring. Required steps:
     //   1. Compute SHA-256 of canonical anchor: hashCanonicalAnchor(anchor)
-    //   2. Create a DetachedTimestampFile from the hash
-    //   3. Submit to calendar servers: OpenTimestamps.stamp(detached, { calendars })
-    //   4. Serialize the OTS proof to base64
-    //   5. Return { success: true, externalRef: `ots:${base64Proof}`,
-    //              metadata: { calendarUrls, pendingAttestation: true } }
-    //
-    // Note: OTS proofs are initially "pending" — they confirm after a Bitcoin block
-    // includes the calendar commitment (typically 1-2 hours). A separate verification
-    // step can upgrade pending proofs to confirmed.
-    try {
-      const _hash = await hashCanonicalAnchor(anchor);
-      throw new Error(
-        'OpenTimestampsProvider is not yet implemented. ' +
-        'Install opentimestamps and implement the Bitcoin timestamping integration.',
-      );
-    } catch (e: unknown) {
-      return {
-        providerId: this.id,
-        success: false,
-        error: e instanceof Error ? e.message : String(e),
-      };
-    }
+    //   2. Build a `DetachedTimestampFile` from the hash bytes via the
+    //      `opentimestamps` npm package.
+    //   3. Submit to each calendar in parallel
+    //      (`OpenTimestamps.stamp(detached, { calendars: this.config.calendarUrls })`).
+    //   4. Serialize the resulting OTS proof to base64 and return as
+    //      `externalRef: 'ots:${base64Proof}'`.
+    // OTS proofs are initially "pending" — they confirm after Bitcoin
+    // includes the calendar commitment (~1-2 h). A separate verify pass
+    // upgrades pending to confirmed without re-submission.
+    return {
+      providerId: this.id,
+      success: false,
+      error:
+        'OpenTimestampsProvider not implemented. Pending: `opentimestamps` npm package + DetachedTimestampFile + calendar submit. See provider source for the implementation outline.',
+      metadata: { notImplemented: true, calendarUrls: this.config.calendarUrls },
+    };
   }
 
   async verify(anchor: AnchorRecord): Promise<boolean> {
-    // TODO: Deserialize OTS proof from externalRef, call OpenTimestamps.verify()
-    //   Returns true if the proof is confirmed by a Bitcoin block
+    // Pending implementation. The verify path deserialises the OTS proof
+    // from `anchor.externalRef`, calls `OpenTimestamps.verify(detached)`,
+    // and returns true once a Bitcoin block has committed the calendar
+    // attestation.
     if (!anchor.externalRef) return false;
-    console.warn('[OpenTimestampsProvider] verify() is not yet implemented');
     return false;
   }
 

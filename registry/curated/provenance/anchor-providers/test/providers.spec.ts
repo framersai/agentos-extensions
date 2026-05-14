@@ -37,12 +37,13 @@ describe('WormSnapshotProvider', () => {
     expect(provider.proofLevel).toBe('externally-archived');
   });
 
-  it('should return failure from stub publish()', async () => {
+  it('should return failure flagged notImplemented from stub publish()', async () => {
     const provider = new WormSnapshotProvider({ bucket: 'test', region: 'us-east-1' });
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('worm-snapshot');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not yet implemented');
+    expect(result.error).toContain('not implemented');
+    expect(result.metadata?.notImplemented).toBe(true);
   });
 
   it('should return false from stub verify()', async () => {
@@ -69,12 +70,13 @@ describe('RekorProvider', () => {
     expect(provider).toBeDefined();
   });
 
-  it('should return failure from stub publish()', async () => {
+  it('should return failure flagged notImplemented from stub publish()', async () => {
     const provider = new RekorProvider();
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('rekor');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not yet implemented');
+    expect(result.error).toContain('not implemented');
+    expect(result.metadata?.notImplemented).toBe(true);
   });
 
   it('should return false from stub verify() without externalRef', async () => {
@@ -96,12 +98,13 @@ describe('OpenTimestampsProvider', () => {
     expect(provider.proofLevel).toBe('publicly-timestamped');
   });
 
-  it('should return failure from stub publish()', async () => {
+  it('should return failure flagged notImplemented from stub publish()', async () => {
     const provider = new OpenTimestampsProvider();
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('opentimestamps');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not yet implemented');
+    expect(result.error).toContain('not implemented');
+    expect(result.metadata?.notImplemented).toBe(true);
   });
 
   it('should accept custom calendar URLs', () => {
@@ -124,12 +127,13 @@ describe('EthereumProvider', () => {
     expect(provider.proofLevel).toBe('publicly-timestamped');
   });
 
-  it('should return failure from stub publish()', async () => {
+  it('should return failure flagged notImplemented from stub publish()', async () => {
     const provider = new EthereumProvider({ rpcUrl: 'https://eth.example.com' });
     const result = await provider.publish(createMockAnchor());
     expect(result.providerId).toBe('ethereum');
     expect(result.success).toBe(false);
-    expect(result.error).toContain('not yet implemented');
+    expect(result.error).toContain('not implemented');
+    expect(result.metadata?.notImplemented).toBe(true);
   });
 
   it('should accept chain ID and contract address', () => {

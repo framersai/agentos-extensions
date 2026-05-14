@@ -13,7 +13,6 @@
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';
 import type { BaseProviderConfig } from '../types.js';
 import { resolveBaseConfig } from '../types.js';
-import { hashCanonicalAnchor } from '../utils/serialization.js';
 
 export interface EthereumProviderConfig extends BaseProviderConfig {
   /** JSON-RPC endpoint URL. */
@@ -44,41 +43,39 @@ export class EthereumProvider implements AnchorProvider {
     this.baseConfig = resolveBaseConfig(config);
   }
 
-  async publish(anchor: AnchorRecord): Promise<AnchorProviderResult> {
-    // TODO: Implement using ethers.js or viem
-    //
-    // Implementation outline:
+  async publish(_anchor: AnchorRecord): Promise<AnchorProviderResult> {
+    // Stubbed pending ethers/viem wiring + funded signer. Required steps:
     //   1. Compute SHA-256 of canonical anchor: hashCanonicalAnchor(anchor)
-    //   2. Create ethers.JsonRpcProvider(this.config.rpcUrl)
-    //   3. Create ethers.Wallet(this.config.signerPrivateKey, provider)
-    //   4. If contractAddress is set:
-    //      - ABI-encode call to `anchor(bytes32 merkleRoot)` on the contract
-    //      - Send contract transaction
-    //   5. If no contractAddress (raw calldata):
-    //      - Send self-transfer with 0x + anchorHash as calldata
-    //   6. Wait for transaction receipt (1 confirmation)
-    //   7. Return { success: true, externalRef: `eth:${chainId}:${txHash}`,
-    //              metadata: { blockNumber, blockHash, gasUsed, chainId } }
-    try {
-      const _hash = await hashCanonicalAnchor(anchor);
-      throw new Error(
-        'EthereumProvider is not yet implemented. ' +
-        'Install ethers.js and implement the Ethereum on-chain anchor integration.',
-      );
-    } catch (e: unknown) {
-      return {
-        providerId: this.id,
-        success: false,
-        error: e instanceof Error ? e.message : String(e),
-      };
-    }
+    //   2. `new ethers.JsonRpcProvider(this.config.rpcUrl)`
+    //   3. `new ethers.Wallet(this.config.signerPrivateKey, provider)`
+    //   4. If `contractAddress` is set: ABI-encode `anchor(bytes32)` and
+    //      `wallet.sendTransaction` to it.
+    //      Otherwise: self-transfer with `data: '0x' + hash` as calldata.
+    //   5. Await receipt (1 confirmation by default; configurable).
+    //   6. Return `externalRef: 'eth:${chainId}:${txHash}'` plus
+    //      blockNumber/blockHash/gasUsed in metadata.
+    // Verify path: fetch receipt by tx hash, decode calldata or read the
+    // contract event log, compare against `hashCanonicalAnchor(anchor)`.
+    return {
+      providerId: this.id,
+      success: false,
+      error:
+        'EthereumProvider not implemented. Pending: `ethers` (or `viem`) + funded signer + RPC endpoint. See provider source for the implementation outline.',
+      metadata: {
+        notImplemented: true,
+        chainId: this.config.chainId,
+        rpcUrl: this.config.rpcUrl,
+        hasContract: Boolean(this.config.contractAddress),
+      },
+    };
   }
 
   async verify(anchor: AnchorRecord): Promise<boolean> {
-    // TODO: Parse txHash from externalRef, fetch transaction receipt,
-    //   decode calldata, compare with anchor hash
+    // Pending implementation. Parse the `eth:${chainId}:${txHash}` ref,
+    // fetch the receipt via the configured RPC, decode calldata (or read
+    // the contract event), and compare against the recomputed canonical
+    // anchor hash.
     if (!anchor.externalRef) return false;
-    console.warn('[EthereumProvider] verify() is not yet implemented');
     return false;
   }
 

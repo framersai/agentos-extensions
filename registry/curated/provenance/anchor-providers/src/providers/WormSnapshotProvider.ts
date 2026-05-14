@@ -13,7 +13,6 @@
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';
 import type { BaseProviderConfig } from '../types.js';
 import { resolveBaseConfig } from '../types.js';
-import { canonicalizeAnchor } from '../utils/serialization.js';
 
 export interface WormSnapshotProviderConfig extends BaseProviderConfig {
   /** S3 bucket name (must have Object Lock enabled). */
@@ -46,40 +45,41 @@ export class WormSnapshotProvider implements AnchorProvider {
     this.baseConfig = resolveBaseConfig(config);
   }
 
-  async publish(anchor: AnchorRecord): Promise<AnchorProviderResult> {
-    // TODO: Implement using @aws-sdk/client-s3
-    //
-    // Implementation outline:
-    //   1. Import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-    //   2. Create S3Client with region from config
-    //   3. Serialize anchor via canonicalizeAnchor()
-    //   4. PutObject with:
-    //      - Bucket: this.config.bucket
-    //      - Key: `${this.config.keyPrefix}${anchor.id}.json`
-    //      - Body: canonical JSON
-    //      - ContentType: 'application/json'
-    //      - ObjectLockMode: this.config.retentionMode
-    //      - ObjectLockRetainUntilDate: now + retentionDays
-    //   5. Return { success: true, externalRef: `s3://${bucket}/${key}` }
-    try {
-      const _canonical = canonicalizeAnchor(anchor);
-      throw new Error(
-        'WormSnapshotProvider is not yet implemented. ' +
-        'Install @aws-sdk/client-s3 and implement the S3 Object Lock integration.',
-      );
-    } catch (e: unknown) {
-      return {
-        providerId: this.id,
-        success: false,
-        error: e instanceof Error ? e.message : String(e),
-      };
-    }
+  async publish(_anchor: AnchorRecord): Promise<AnchorProviderResult> {
+    // Stubbed pending @aws-sdk/client-s3 wiring + bucket with Object Lock
+    // enabled. Required steps:
+    //   1. `new S3Client({ region: this.config.region })`
+    //   2. `canonicalizeAnchor(anchor)` -> JSON body.
+    //   3. `PutObjectCommand` with:
+    //        Bucket: this.config.bucket
+    //        Key:    `${this.config.keyPrefix}${anchor.id}.json`
+    //        Body:   canonical JSON
+    //        ContentType: 'application/json'
+    //        ObjectLockMode: this.config.retentionMode
+    //        ObjectLockRetainUntilDate: now + retentionDays
+    //   4. Return `externalRef: 's3://${bucket}/${key}'`.
+    // Verify path: `HeadObjectCommand` to confirm the object still exists
+    // and `Retention.RetainUntilDate` has not passed.
+    return {
+      providerId: this.id,
+      success: false,
+      error:
+        'WormSnapshotProvider not implemented. Pending: `@aws-sdk/client-s3` + S3 bucket with Object Lock enabled + IAM role. See provider source for the implementation outline.',
+      metadata: {
+        notImplemented: true,
+        bucket: this.config.bucket,
+        region: this.config.region,
+        retentionMode: this.config.retentionMode,
+        retentionDays: this.config.retentionDays,
+      },
+    };
   }
 
   async verify(anchor: AnchorRecord): Promise<boolean> {
-    // TODO: Implement using HeadObject to check object exists and retention is active
+    // Pending implementation. `HeadObjectCommand` against the S3 key
+    // encoded in `anchor.externalRef`, then confirm the active
+    // `Retention.RetainUntilDate` is still in the future.
     if (!anchor.externalRef) return false;
-    console.warn('[WormSnapshotProvider] verify() is not yet implemented');
     return false;
   }
 }

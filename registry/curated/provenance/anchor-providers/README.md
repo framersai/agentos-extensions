@@ -314,6 +314,25 @@ Computes SHA-256 hex digest of the canonical anchor representation.
 
 All providers **except SolanaProvider** currently return `{ success: false }` from `publish()` until their respective SDK integrations are implemented. SolanaProvider is functional when its optional peer dependencies are installed and the configured signer is funded.
 
+### Detecting stubbed providers programmatically
+
+Stub providers set `metadata.notImplemented: true` on the failure result so callers can distinguish "configured provider is not yet implemented" from "implemented provider failed at runtime". Use this when composing fallback strategies:
+
+```ts
+const result = await provider.publish(anchor);
+if (!result.success) {
+  if (result.metadata?.notImplemented === true) {
+    // Skip this provider; fall through to the next one in the
+    // composite without surfacing the failure as a real error.
+    continue;
+  }
+  // Real failure — log, alert, retry.
+  throw new Error(`Anchor publish failed: ${result.error}`);
+}
+```
+
+The error message also names the missing dependency / configuration in plain text so operator-facing logs are immediately actionable.
+
 ## Testing
 
 ```bash

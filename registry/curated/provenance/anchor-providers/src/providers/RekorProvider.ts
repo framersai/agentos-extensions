@@ -13,7 +13,6 @@
 import type { AnchorProvider, AnchorRecord, AnchorProviderResult, ProofLevel } from '@framers/agentos';
 import type { BaseProviderConfig } from '../types.js';
 import { resolveBaseConfig } from '../types.js';
-import { hashCanonicalAnchor } from '../utils/serialization.js';
 
 export interface RekorProviderConfig extends BaseProviderConfig {
   /** Rekor server URL. Default: 'https://rekor.sigstore.dev'. */
@@ -40,40 +39,36 @@ export class RekorProvider implements AnchorProvider {
     this.baseConfig = resolveBaseConfig(config);
   }
 
-  async publish(anchor: AnchorRecord): Promise<AnchorProviderResult> {
-    // TODO: Implement using sigstore SDK or direct HTTP to Rekor API
-    //
-    // Implementation outline:
-    //   1. Compute SHA-256 hash of canonical anchor: hashCanonicalAnchor(anchor)
-    //   2. Create a hashedrekord entry:
-    //      POST ${serverUrl}/api/v1/log/entries
-    //      Body: { kind: 'hashedrekord', apiVersion: '0.0.1',
-    //              spec: { data: { hash: { algorithm: 'sha256', value: anchorHash } },
-    //                      signature: { content: anchor.signature, publicKey: { content: ... } } } }
-    //   3. Parse response for log index and entry UUID
-    //   4. Return { success: true, externalRef: `rekor:${logIndex}:${entryUUID}`,
-    //              metadata: { logIndex, serverUrl, inclusionProof } }
-    try {
-      const _hash = await hashCanonicalAnchor(anchor);
-      throw new Error(
-        'RekorProvider is not yet implemented. ' +
-        'Install sigstore SDK and implement the Rekor transparency log integration.',
-      );
-    } catch (e: unknown) {
-      return {
-        providerId: this.id,
-        success: false,
-        error: e instanceof Error ? e.message : String(e),
-      };
-    }
+  async publish(_anchor: AnchorRecord): Promise<AnchorProviderResult> {
+    // Stubbed pending SDK integration. The wiring needs:
+    //   1. A signing function that produces an Ed25519 signature over the
+    //      hashed-artifact bytes (NOT over `_anchor.signature` — Rekor
+    //      verifies sig over the supplied hash, and AgentKeyManager signs
+    //      over the UTF-8 merkleRoot string, so the two are incompatible
+    //      without re-signing).
+    //   2. A PEM-encoded public key for `signature.publicKey.content`.
+    //   3. POST to `${serverUrl}/api/v1/log/entries` with a hashedrekord
+    //      entry (apiVersion 0.0.1).
+    //   4. Parse `logIndex` + entry UUID, return
+    //      `rekor:${logIndex}:${entryUUID}` as externalRef.
+    // The `verify()` path needs the inverse: GET the entry by UUID and
+    // check the inclusion proof against the published tree size.
+    return {
+      providerId: this.id,
+      success: false,
+      error:
+        'RekorProvider not implemented. Pending: PEM public key + Ed25519 signer that signs the artifact bytes (not the merkleRoot string). See provider source for the implementation outline.',
+      metadata: { notImplemented: true, serverUrl: this.config.serverUrl },
+    };
   }
 
   async verify(anchor: AnchorRecord): Promise<boolean> {
-    // TODO: Retrieve entry from Rekor by externalRef and verify inclusion proof
-    //   GET ${serverUrl}/api/v1/log/entries/${entryUUID}
-    //   Verify inclusion proof against the transparency log root
+    // Pending implementation. The verify path is the inverse of publish:
+    //   GET `${serverUrl}/api/v1/log/entries/${entryUUID}` (extracted from
+    //   `anchor.externalRef`), validate the entry's inclusion proof against
+    //   the transparency log's current signed tree head. Sigstore's
+    //   `RekorClient.getEntry` plus its proof verifier covers both steps.
     if (!anchor.externalRef) return false;
-    console.warn('[RekorProvider] verify() is not yet implemented');
     return false;
   }
 
