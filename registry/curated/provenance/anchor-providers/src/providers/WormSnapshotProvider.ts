@@ -62,6 +62,10 @@ export class WormSnapshotProvider implements AnchorProvider {
       retentionMode: config.retentionMode ?? 'GOVERNANCE',
       timeoutMs: config.timeoutMs ?? 30_000,
       retries: config.retries ?? 3,
+      // retryDelayMs is part of BaseProviderConfig but the AWS SDK uses
+      // its own exponential-backoff implementation (configured here via
+      // `maxAttempts` on the S3Client) so this value is intentionally
+      // not applied. Retained for parity with the shared interface.
       retryDelayMs: config.retryDelayMs ?? 1_000,
       credentials: config.credentials,
       endpoint: config.endpoint,

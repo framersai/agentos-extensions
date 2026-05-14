@@ -273,16 +273,40 @@ export class EthereumProvider implements AnchorProvider {
   }
 
   /**
+   * Race an RPC call against `config.timeoutMs` so a stalled provider
+   * connection can't block the publish/verify chain indefinitely.
+   * ethers v6 has internal request timeouts in some paths but doesn't
+   * expose a single knob for them, so we wrap every call explicitly.
+   */
+  private async withTimeout<T>(op: () => Promise<T>): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race<T>([
+        op(),
+        new Promise<T>((_, reject) => {
+          timer = setTimeout(
+            () => reject(new Error(`Ethereum RPC timed out after ${this.config.timeoutMs}ms`)),
+            this.config.timeoutMs,
+          );
+        }),
+      ]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+
+  /**
    * Retry a transient operation up to `config.retries` times with linear
-   * `config.retryDelayMs` backoff. Used to wrap RPC calls that may fail
-   * with network glitches; ethers' internal retry covers some cases but
-   * not all (e.g. socket hangups during long block waits).
+   * `config.retryDelayMs` backoff. Each attempt is bounded by
+   * `config.timeoutMs` via {@link withTimeout}; the timeout counts as a
+   * retryable failure (so a slow node burns one attempt and falls
+   * through, not the whole budget).
    */
   private async withRetry<T>(op: () => Promise<T>): Promise<T> {
     let lastError: unknown;
     for (let attempt = 0; attempt <= this.config.retries; attempt++) {
       try {
-        return await op();
+        return await this.withTimeout(op);
       } catch (e) {
         lastError = e;
         if (attempt < this.config.retries) {
