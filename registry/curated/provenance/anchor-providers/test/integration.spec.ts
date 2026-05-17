@@ -116,14 +116,27 @@ describe('Extension ↔ Core Integration', () => {
   // Factory-created providers behavior (stubs)
   // ---------------------------------------------------------------------------
 
-  it('all factory-created providers should return failure from stub publish()', async () => {
+  it('all factory-created providers should return failure from publish() without proper config', async () => {
+    // After df7f670 these providers now ship REAL implementations (not
+    // stubs), so the error messages reflect what each backend reports
+    // when the SDK can't connect with default config:
+    //   - worm-snapshot: AWS SDK "Could not load credentials..." OR a
+    //     network-stage S3 failure (the env may or may not have IMDS).
+    //   - rekor / opentimestamps / ethereum: HTTP call to the fake URL
+    //     fails (fetch error, ENOTFOUND, getaddrinfo, etc.).
+    //   - solana: still stubbed via the missing-signer guard.
+    //
+    // The regex accepts the legacy "not yet implemented" stub message
+    // too so the test stays valid if a provider gets reverted to a stub.
     const anchor = createMockAnchor();
 
+    const ANY_RUNTIME_FAILURE = /not yet implemented|s3|credentials|fetch failed|enotfound|getaddrinfo|connect|timeout|invalid|failed/i;
+
     const configs: [string, Record<string, unknown>, RegExp][] = [
-      ['worm-snapshot', { bucket: 'b', region: 'us-east-1' }, /not yet implemented/i],
-      ['rekor', {}, /not yet implemented/i],
-      ['opentimestamps', {}, /not yet implemented/i],
-      ['ethereum', { rpcUrl: 'https://eth.test' }, /not yet implemented/i],
+      ['worm-snapshot', { bucket: 'b', region: 'us-east-1' }, ANY_RUNTIME_FAILURE],
+      ['rekor', {}, ANY_RUNTIME_FAILURE],
+      ['opentimestamps', {}, ANY_RUNTIME_FAILURE],
+      ['ethereum', { rpcUrl: 'https://eth.test' }, ANY_RUNTIME_FAILURE],
       ['solana', { rpcUrl: 'https://solana.test', programId: '11111111111111111111111111111111' }, /missing signer configuration/i],
     ];
 
