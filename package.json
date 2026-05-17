@@ -1,13 +1,13 @@
 {
   "name": "@framers/agentos-extensions",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "files": [
     "index.mjs",
     "registry.json",
     "types.d.ts",
     "README.md"
   ],
-  "description": "Extension source for AgentOS \u2014 implementations, templates, and manifests for tools, channel adapters, and integrations. Companion to the @framers/agentos TypeScript AI agent runtime.",
+  "description": "Extension source for AgentOS — implementations, templates, and manifests for tools, channel adapters, and integrations. Companion to the @framers/agentos TypeScript AI agent runtime.",
   "homepage": "https://agentos.sh",
   "bugs": {
     "url": "https://github.com/framersai/agentos-extensions/issues"
