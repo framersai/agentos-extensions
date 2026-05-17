@@ -2,6 +2,7 @@
   "name": "@framers/agentos-extensions",
   "version": "1.0.2",
   "files": [
+    "index.mjs",
     "registry.json",
     "types.d.ts",
     "README.md"
@@ -15,7 +16,7 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./registry.json",
+      "import": "./index.mjs",
       "types": "./types.d.ts"
     },
     "./registry.json": "./registry.json",
