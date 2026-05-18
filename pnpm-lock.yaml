@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@framers/agentos': ^0.6.6
-
 importers:
 
   .:
