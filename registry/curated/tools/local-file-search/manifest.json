@@ -4,7 +4,7 @@
   "name": "Local File Search",
   "version": "0.1.0",
   "description": "Search for files on the local filesystem by fuzzy name matching. Supports denylist filtering and relevance-ranked results.",
-  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "author": { "name": "Frame", "url": "https://frame.dev" },
   "license": "MIT",
   "keywords": ["file", "search", "filesystem", "local", "find"],
   "agentosVersion": "^2.0.0",

@@ -6,7 +6,7 @@
   "deprecated": true,
   "deprecationMessage": "Use the first-class CitationVerifier from @framers/agentos. See https://docs.agentos.sh/features/citation-verification",
   "description": "DEPRECATED — thin tool wrapper around the first-class @framers/agentos CitationVerifier. Kept for backwards compatibility.",
-  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "author": { "name": "Frame", "url": "https://frame.dev" },
   "license": "MIT",
   "keywords": ["citation", "verification", "claims", "grounding", "fact-check"],
   "agentosVersion": "^2.0.0",

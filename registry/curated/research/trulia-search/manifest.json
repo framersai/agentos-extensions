@@ -4,7 +4,7 @@
   "name": "Trulia Property Search",
   "version": "0.1.0",
   "description": "Search real estate properties on Trulia with RapidAPI or Firecrawl scrape fallback.",
-  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "author": { "name": "Frame", "url": "https://frame.dev" },
   "license": "MIT",
   "keywords": ["trulia", "real-estate", "property", "search", "housing"],
   "agentosVersion": "^2.0.0",

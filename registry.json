@@ -2632,8 +2632,8 @@
         "path": "registry/curated/research/citation-verifier",
         "description": "DEPRECATED — thin tool wrapper around the first-class @framers/agentos CitationVerifier. Kept for backwards compatibility.",
         "author": {
-          "name": "Manic Agency LLC",
-          "url": "https://manic.agency"
+          "name": "Frame",
+          "url": "https://frame.dev"
         },
         "features": [
           "citation-verification",
@@ -2810,8 +2810,8 @@
         "path": "registry/curated/research/trulia-search",
         "description": "Search real estate properties on Trulia with RapidAPI or Firecrawl scrape fallback.",
         "author": {
-          "name": "Manic Agency LLC",
-          "url": "https://manic.agency"
+          "name": "Frame",
+          "url": "https://frame.dev"
         },
         "features": [
           "property-search",
@@ -3299,8 +3299,8 @@
         "path": "registry/curated/tools/local-file-search",
         "description": "Search for files on the local filesystem by fuzzy name matching. Supports denylist filtering and relevance-ranked results.",
         "author": {
-          "name": "Manic Agency LLC",
-          "url": "https://manic.agency"
+          "name": "Frame",
+          "url": "https://frame.dev"
         },
         "features": [
           "file-search",
@@ -3409,8 +3409,8 @@
         "path": "registry/curated/tools/send-file-to-channel",
         "description": "Send a local file to the user via the current chat channel with platform-aware size limit enforcement.",
         "author": {
-          "name": "Manic Agency LLC",
-          "url": "https://manic.agency"
+          "name": "Frame",
+          "url": "https://frame.dev"
         },
         "features": [
           "file-transfer",
@@ -3616,8 +3616,8 @@
         "path": "registry/curated/tools/zip-files",
         "description": "Create zip archives from local files for easy sharing via chat channels.",
         "author": {
-          "name": "Manic Agency LLC",
-          "url": "https://manic.agency"
+          "name": "Frame",
+          "url": "https://frame.dev"
         },
         "features": [
           "zip",
