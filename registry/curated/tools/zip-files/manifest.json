@@ -4,7 +4,7 @@
   "name": "Zip Files",
   "version": "0.1.0",
   "description": "Create zip archives from local files for easy sharing via chat channels.",
-  "author": { "name": "Manic Agency LLC", "url": "https://manic.agency" },
+  "author": { "name": "Frame", "url": "https://frame.dev" },
   "license": "MIT",
   "keywords": ["zip", "archive", "compress", "file"],
   "agentosVersion": "^2.0.0",
