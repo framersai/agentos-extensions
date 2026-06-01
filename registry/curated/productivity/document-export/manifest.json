@@ -6,7 +6,7 @@
   "description": "Generate PDF, DOCX, PPTX, CSV, and XLSX documents from structured content",
   "author": {
     "name": "Frame.dev",
-    "url": "https://github.com/framersai"
+    "url": "https://github.com/framerslab"
   },
   "license": "MIT",
   "keywords": ["document", "export", "pdf", "docx", "pptx", "csv", "xlsx"],

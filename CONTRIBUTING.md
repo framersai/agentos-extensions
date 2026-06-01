@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the AgentOS Extensions ecosystem!
 
 ## Getting Started
 
-1. **Fork the repository**: https://github.com/framersai/agentos-extensions
+1. **Fork the repository**: https://github.com/framerslab/agentos-extensions
 2. **Clone your fork**:
    ```bash
    git clone https://github.com/yourusername/agentos-extensions
@@ -150,8 +150,8 @@ See [RELEASING.md](./RELEASING.md) for the full publishing workflow.
 
 ## Getting Help
 
-- **Issues**: Report bugs at https://github.com/framersai/agentos-extensions/issues
-- **Discussions**: Questions at https://github.com/framersai/agentos-extensions/discussions
+- **Issues**: Report bugs at https://github.com/framerslab/agentos-extensions/issues
+- **Discussions**: Questions at https://github.com/framerslab/agentos-extensions/discussions
 - **Email**: team@frame.dev
 
 ## License

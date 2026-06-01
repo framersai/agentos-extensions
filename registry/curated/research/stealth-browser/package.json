@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framerslab/agentos-extensions.git",
     "directory": "registry/curated/research/stealth-browser"
   },
   "peerDependencies": {
@@ -65,8 +65,8 @@
     "typescript": "^5.4.0",
     "vitest": "^1.6.0"
   },
-  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/research/stealth-browser#readme",
+  "homepage": "https://github.com/framerslab/agentos-extensions/tree/master/registry/curated/research/stealth-browser#readme",
   "bugs": {
-    "url": "https://github.com/framersai/agentos-extensions/issues"
+    "url": "https://github.com/framerslab/agentos-extensions/issues"
   }
 }

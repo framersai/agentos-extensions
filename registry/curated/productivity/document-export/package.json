@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framerslab/agentos-extensions.git",
     "directory": "registry/curated/productivity/document-export"
   },
   "publishConfig": {
@@ -75,8 +75,8 @@
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
-  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/productivity/document-export#readme",
+  "homepage": "https://github.com/framerslab/agentos-extensions/tree/master/registry/curated/productivity/document-export#readme",
   "bugs": {
-    "url": "https://github.com/framersai/agentos-extensions/issues"
+    "url": "https://github.com/framerslab/agentos-extensions/issues"
   }
 }

@@ -316,7 +316,7 @@ const agentos = await AgentOS.create({
 ## Support
 
 For help setting up self-hosted registries:
-- GitHub: https://github.com/framersai/agentos
+- GitHub: https://github.com/framerslab/agentos
 - Docs: https://agentos.sh/docs/self-hosted
 - Email: support@frame.dev
 

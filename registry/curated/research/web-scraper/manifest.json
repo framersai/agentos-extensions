@@ -4,7 +4,7 @@
   "name": "Intelligent Web Scraper",
   "version": "0.1.0",
   "description": "Progressive web scraping with fetch, Playwright, stealth, and LLM fallbacks",
-  "author": { "name": "Frame.dev", "url": "https://github.com/framersai" },
+  "author": { "name": "Frame.dev", "url": "https://github.com/framerslab" },
   "license": "MIT",
   "keywords": ["scraper", "web", "extraction", "research"],
   "agentosVersion": "^2.0.0",

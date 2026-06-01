@@ -7,7 +7,7 @@
   "author": {
     "name": "Frame.dev",
     "email": "support@frame.dev",
-    "url": "https://github.com/framersai"
+    "url": "https://github.com/framerslab"
   },
   "license": "MIT",
   "keywords": ["browser", "stealth", "anti-detection", "scraping", "puppeteer-extra", "bot-bypass", "automation"],
@@ -15,7 +15,7 @@
   "categories": ["productivity", "research", "automation"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/framersai/agentos-extensions"
+    "url": "https://github.com/framerslab/agentos-extensions"
   },
   "extensions": [
     {

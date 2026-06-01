@@ -8,7 +8,7 @@
 
 Extension source code for AgentOS — tools, channel adapters, integrations, and starter templates.
 
-[![CI Status](https://github.com/framersai/agentos-extensions/workflows/CI/badge.svg)](https://github.com/framersai/agentos-extensions/actions)
+[![CI Status](https://github.com/framerslab/agentos-extensions/workflows/CI/badge.svg)](https://github.com/framerslab/agentos-extensions/actions)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![API Docs](https://img.shields.io/badge/docs-TypeDoc-blue)](https://framersai.github.io/agentos-extensions/)
 [![npm: registry](https://img.shields.io/npm/v/@framers/agentos-extensions-registry?label=registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry)
@@ -466,16 +466,16 @@ All extensions get free CI/CD via GitHub Actions:
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
-- [Submit New Extension](https://github.com/framersai/agentos-extensions/issues/new?template=new-extension.yml)
-- [Report Bug](https://github.com/framersai/agentos-extensions/issues/new?template=bug-report.yml)
-- [Request Feature](https://github.com/framersai/agentos-extensions/discussions)
+- [Submit New Extension](https://github.com/framerslab/agentos-extensions/issues/new?template=new-extension.yml)
+- [Report Bug](https://github.com/framerslab/agentos-extensions/issues/new?template=bug-report.yml)
+- [Request Feature](https://github.com/framerslab/agentos-extensions/discussions)
 
 ## Links
 
 - **AgentOS**: [agentos.sh](https://agentos.sh)
-- **AgentOS GitHub**: [github.com/framersai/agentos](https://github.com/framersai/agentos)
-- **Extensions GitHub**: [github.com/framersai/agentos-extensions](https://github.com/framersai/agentos-extensions)
-- **Mars Genesis Demo**: [github.com/framersai/mars-genesis-simulation](https://github.com/framersai/mars-genesis-simulation)
+- **AgentOS GitHub**: [github.com/framerslab/agentos](https://github.com/framerslab/agentos)
+- **Extensions GitHub**: [github.com/framerslab/agentos-extensions](https://github.com/framerslab/agentos-extensions)
+- **Mars Genesis Demo**: [github.com/framerslab/mars-genesis-simulation](https://github.com/framerslab/mars-genesis-simulation)
 - **npm**: [@framers](https://www.npmjs.com/org/framers)
 - **API Docs**: [framersai.github.io/agentos-extensions](https://framersai.github.io/agentos-extensions/)
 - **Discord**: [wilds.ai/discord](https://wilds.ai/discord)

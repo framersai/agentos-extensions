@@ -43,11 +43,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framerslab/agentos-extensions.git",
     "directory": "registry/curated/voice/plivo"
   },
-  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/voice/plivo#readme",
+  "homepage": "https://github.com/framerslab/agentos-extensions/tree/master/registry/curated/voice/plivo#readme",
   "bugs": {
-    "url": "https://github.com/framersai/agentos-extensions/issues"
+    "url": "https://github.com/framerslab/agentos-extensions/issues"
   }
 }
