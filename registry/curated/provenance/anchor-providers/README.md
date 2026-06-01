@@ -1,6 +1,6 @@
 # @framers/agentos-ext-anchor-providers
 
-External anchor providers for the [AgentOS](https://github.com/framersai/agentos) provenance system. Extends the built-in signed hash chain with external tamper-evidence backends — WORM storage, transparency logs, and blockchain timestamping.
+External anchor providers for the [AgentOS](https://github.com/framerslab/agentos) provenance system. Extends the built-in signed hash chain with external tamper-evidence backends — WORM storage, transparency logs, and blockchain timestamping.
 
 ## Proof Levels
 
@@ -363,12 +363,12 @@ pnpm test:watch
 
 | Package | Description | Link |
 |---------|-------------|------|
-| `@framers/agentos` | Core AgentOS framework with `AnchorProvider` interface, `AnchorManager`, registry | [packages/agentos](https://github.com/framersai/agentos) |
-| `@framers/agentos` provenance types | `AnchorProvider`, `ProofLevel`, `AnchorProviderResult` interfaces | [`src/core/provenance/types.ts`](https://github.com/framersai/agentos/blob/master/src/core/provenance/types.ts) |
-| `@framers/agentos` factory | `createAnchorProvider()`, `registerAnchorProviderFactory()` | [`src/core/provenance/anchoring/providers/createAnchorProvider.ts`](https://github.com/framersai/agentos/blob/master/src/core/provenance/anchoring/providers/createAnchorProvider.ts) |
-| `@framers/agentos` built-in providers | `NoneProvider`, `CompositeAnchorProvider` | [`src/core/provenance/anchoring/providers/`](https://github.com/framersai/agentos/blob/master/src/core/provenance/anchoring/providers/) |
-| `@framers/agentos` AnchorManager | Periodic anchoring with external provider support | [`src/core/provenance/anchoring/AnchorManager.ts`](https://github.com/framersai/agentos/blob/master/src/core/provenance/anchoring/AnchorManager.ts) |
-| `@framers/agentos` profiles | `sealedAuditable()` convenience profile | [`src/core/provenance/config/PolicyProfiles.ts`](https://github.com/framersai/agentos/blob/master/src/core/provenance/config/PolicyProfiles.ts) |
+| `@framers/agentos` | Core AgentOS framework with `AnchorProvider` interface, `AnchorManager`, registry | [packages/agentos](https://github.com/framerslab/agentos) |
+| `@framers/agentos` provenance types | `AnchorProvider`, `ProofLevel`, `AnchorProviderResult` interfaces | [`src/core/provenance/types.ts`](https://github.com/framerslab/agentos/blob/master/src/core/provenance/types.ts) |
+| `@framers/agentos` factory | `createAnchorProvider()`, `registerAnchorProviderFactory()` | [`src/core/provenance/anchoring/providers/createAnchorProvider.ts`](https://github.com/framerslab/agentos/blob/master/src/core/provenance/anchoring/providers/createAnchorProvider.ts) |
+| `@framers/agentos` built-in providers | `NoneProvider`, `CompositeAnchorProvider` | [`src/core/provenance/anchoring/providers/`](https://github.com/framerslab/agentos/blob/master/src/core/provenance/anchoring/providers/) |
+| `@framers/agentos` AnchorManager | Periodic anchoring with external provider support | [`src/core/provenance/anchoring/AnchorManager.ts`](https://github.com/framerslab/agentos/blob/master/src/core/provenance/anchoring/AnchorManager.ts) |
+| `@framers/agentos` profiles | `sealedAuditable()` convenience profile | [`src/core/provenance/config/PolicyProfiles.ts`](https://github.com/framerslab/agentos/blob/master/src/core/provenance/config/PolicyProfiles.ts) |
 
 ## License
 

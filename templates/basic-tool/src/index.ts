@@ -36,7 +36,7 @@ export function createExtensionPack(context: ExtensionPackContext): ExtensionPac
         metadata: {
           category: 'utility',
           requiresApiKey: true,
-          documentation: 'https://github.com/framersai/agentos-extensions/tree/main/packages/ext-template'
+          documentation: 'https://github.com/framerslab/agentos-extensions/tree/main/packages/ext-template'
         },
         source: context.source,
         onActivate: async (ctx) => {

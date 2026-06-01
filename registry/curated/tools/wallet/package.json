@@ -37,7 +37,7 @@
   "author": {
     "name": "Frame.dev",
     "email": "support@frame.dev",
-    "url": "https://github.com/framersai"
+    "url": "https://github.com/framerslab"
   },
   "license": "MIT",
   "dependencies": {
@@ -68,12 +68,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framerslab/agentos-extensions.git",
     "directory": "registry/curated/tools/wallet"
   },
-  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/registry/curated/tools/wallet#readme",
+  "homepage": "https://github.com/framerslab/agentos-extensions/tree/master/registry/curated/tools/wallet#readme",
   "bugs": {
-    "url": "https://github.com/framersai/agentos-extensions/issues"
+    "url": "https://github.com/framerslab/agentos-extensions/issues"
   },
   "files": [
     "dist",

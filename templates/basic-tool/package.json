@@ -33,7 +33,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/framersai/agentos-extensions.git",
+    "url": "git+https://github.com/framerslab/agentos-extensions.git",
     "directory": "templates/basic-tool"
   },
   "files": [
@@ -50,8 +50,8 @@
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "homepage": "https://github.com/framersai/agentos-extensions/tree/master/templates/basic-tool#readme",
+  "homepage": "https://github.com/framerslab/agentos-extensions/tree/master/templates/basic-tool#readme",
   "bugs": {
-    "url": "https://github.com/framersai/agentos-extensions/issues"
+    "url": "https://github.com/framerslab/agentos-extensions/issues"
   }
 }

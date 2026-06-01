@@ -6,7 +6,7 @@
   "author": {
     "name": "Framers AI",
     "email": "support@frame.dev",
-    "url": "https://github.com/framersai"
+    "url": "https://github.com/framerslab"
   },
   "category": "core",
   "keywords": ["auth", "jwt", "subscription", "permissions", "tiers"],
