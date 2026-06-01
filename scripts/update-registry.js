@@ -66,7 +66,7 @@ function scanExtensions() {
           version: packageJson.version,
           path: `templates/${template}`,
           description: packageJson.description,
-          repository: `https://github.com/framersai/agentos-extensions/tree/master/templates/${template}`
+          repository: `https://github.com/framerslab/agentos-extensions/tree/master/templates/${template}`
         });
         registry.stats.templateCount++;
       }
@@ -102,7 +102,7 @@ function scanExtensions() {
               tools: manifest.extensions?.map(e => e.id) || [],
               keywords: manifest.keywords || packageJson.keywords || [],
               npm: `https://www.npmjs.com/package/${packageJson.name}`,
-              repository: `https://github.com/framersai/agentos-extensions/tree/master/registry/curated/${category}/${extension}`,
+              repository: `https://github.com/framerslab/agentos-extensions/tree/master/registry/curated/${category}/${extension}`,
               verified: true,
               // Verified curated extensions should carry verification metadata
               // so clients can explain the "verified" designation.
@@ -144,7 +144,7 @@ function scanExtensions() {
               author: manifest.author || packageJson.author,
               keywords: manifest.keywords || packageJson.keywords || [],
               npm: `https://www.npmjs.com/package/${packageJson.name}`,
-              repository: `https://github.com/framersai/agentos-extensions/tree/master/registry/community/${category}/${extension}`,
+              repository: `https://github.com/framerslab/agentos-extensions/tree/master/registry/community/${category}/${extension}`,
               downloads: 0
             });
             registry.stats.communityCount++;

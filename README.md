@@ -10,7 +10,7 @@ Extension source code for AgentOS — tools, channel adapters, integrations, and
 
 [![CI Status](https://github.com/framerslab/agentos-extensions/workflows/CI/badge.svg)](https://github.com/framerslab/agentos-extensions/actions)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![API Docs](https://img.shields.io/badge/docs-TypeDoc-blue)](https://framersai.github.io/agentos-extensions/)
+[![API Docs](https://img.shields.io/badge/docs-TypeDoc-blue)](https://framerslab.github.io/agentos-extensions/)
 [![npm: registry](https://img.shields.io/npm/v/@framers/agentos-extensions-registry?label=registry)](https://www.npmjs.com/package/@framers/agentos-extensions-registry)
 [![npm: catalog](https://img.shields.io/npm/v/@framers/agentos-extensions?label=catalog)](https://www.npmjs.com/package/@framers/agentos-extensions)
 
@@ -430,7 +430,7 @@ All extensions get free CI/CD via GitHub Actions:
 
 - **CI** (`ci.yml`): Lint, test, typecheck on every PR
 - **Release** (`release.yml`): Changesets auto-version PRs + npm publish on merge
-- **TypeDoc** (`pages-typedoc.yml`): API docs deployed to [framersai.github.io/agentos-extensions](https://framersai.github.io/agentos-extensions/)
+- **TypeDoc** (`pages-typedoc.yml`): API docs deployed to [framerslab.github.io/agentos-extensions](https://framerslab.github.io/agentos-extensions/)
 - **Extension validation** (`extension-validation.yml`): Manifest & structure checks
 - **Dependabot**: Automated dependency updates with auto-merge for patches
 
@@ -452,7 +452,7 @@ All extensions get free CI/CD via GitHub Actions:
 
 ## Documentation
 
-- [API Reference (TypeDoc)](https://framersai.github.io/agentos-extensions/)
+- [API Reference (TypeDoc)](https://framerslab.github.io/agentos-extensions/)
 - [How Extensions Work](./HOW_EXTENSIONS_WORK.md)
 - [Extension Architecture](./EXTENSION_ARCHITECTURE.md)
 - [Auto-Loading Extensions](./AUTO_LOADING_EXTENSIONS.md)
@@ -477,7 +477,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 - **Extensions GitHub**: [github.com/framerslab/agentos-extensions](https://github.com/framerslab/agentos-extensions)
 - **Mars Genesis Demo**: [github.com/framerslab/mars-genesis-simulation](https://github.com/framerslab/mars-genesis-simulation)
 - **npm**: [@framers](https://www.npmjs.com/org/framers)
-- **API Docs**: [framersai.github.io/agentos-extensions](https://framersai.github.io/agentos-extensions/)
+- **API Docs**: [framerslab.github.io/agentos-extensions](https://framerslab.github.io/agentos-extensions/)
 - **Discord**: [wilds.ai/discord](https://wilds.ai/discord)
 - **Website**: [frame.dev](https://frame.dev)
 - **Contact**: [team@frame.dev](mailto:team@frame.dev)

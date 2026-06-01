@@ -124,7 +124,7 @@ The `.changeset/config.json` controls behavior:
 
 ```json
 {
-  "changelog": ["@changesets/changelog-github", { "repo": "framersai/agentos-extensions" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "framerslab/agentos-extensions" }],
   "access": "public",
   "baseBranch": "master"
 }

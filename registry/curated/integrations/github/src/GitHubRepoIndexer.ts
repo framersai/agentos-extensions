@@ -45,12 +45,12 @@ export interface IndexResult {
  * without arguments.
  */
 export const ECOSYSTEM_REPOS: readonly { owner: string; repo: string }[] = [
-  { owner: 'framersai', repo: 'agentos' },
+  { owner: 'framerslab', repo: 'agentos' },
   { owner: 'jddunn', repo: 'wunderland' },
-  { owner: 'framersai', repo: 'agentos-live-docs' },
+  { owner: 'framerslab', repo: 'agentos-live-docs' },
   { owner: 'jddunn', repo: 'wunderland-live-docs' },
-  { owner: 'framersai', repo: 'agentos-skills-registry' },
-  { owner: 'framersai', repo: 'agentos-extensions' },
+  { owner: 'framerslab', repo: 'agentos-skills-registry' },
+  { owner: 'framerslab', repo: 'agentos-extensions' },
 ] as const;
 
 /**
