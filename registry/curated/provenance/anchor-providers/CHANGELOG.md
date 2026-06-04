@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- [`e6a2eb6`](https://github.com/framersai/agentos-extensions/commit/e6a2eb61145c5715df63668b795fe90720a3c7c1) Thanks [@jddunn](https://github.com/jddunn)! - Initial release of AgentOS extension packages.
+- [`e6a2eb6`](https://github.com/framerslab/agentos-extensions/commit/e6a2eb61145c5715df63668b795fe90720a3c7c1) Thanks [@jddunn](https://github.com/jddunn)! - Initial release of AgentOS extension packages.
 
   - Auth: JWT authentication and subscription management
   - Anchor Providers: Solana on-chain provenance anchoring

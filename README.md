@@ -475,7 +475,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 - **AgentOS**: [agentos.sh](https://agentos.sh)
 - **AgentOS GitHub**: [github.com/framerslab/agentos](https://github.com/framerslab/agentos)
 - **Extensions GitHub**: [github.com/framerslab/agentos-extensions](https://github.com/framerslab/agentos-extensions)
-- **Mars Genesis Demo**: [github.com/framerslab/mars-genesis-simulation](https://github.com/framerslab/mars-genesis-simulation)
+- **Mars Genesis Demo**: [github.com/framersai/mars-genesis-simulation](https://github.com/framersai/mars-genesis-simulation)
 - **npm**: [@framers](https://www.npmjs.com/org/framers)
 - **API Docs**: [framerslab.github.io/agentos-extensions](https://framerslab.github.io/agentos-extensions/)
 - **Discord**: [wilds.ai/discord](https://wilds.ai/discord)
